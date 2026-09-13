@@ -76,8 +76,10 @@ function Invoke-JsonTokenCondenser {
         $MergeCondenserFeedback = $opSignal
         $ReturnRequiredValues = $true
 
-        # TODO: Change this to repeating until it's not making any replacements.
-        for ($tokenCrawlIndex = 0; $tokenCrawlIndex -lt 4; $tokenCrawlIndex++) {
+        $tokenCrawlIndex = 0
+        do {
+            $replacementCount = 0
+
             try {
                 $_result = Invoke-TokenCrawl -MergeCondenserFeedback $MergeCondenserFeedback `
                     -Signal $Signal `
@@ -86,13 +88,16 @@ function Invoke-JsonTokenCondenser {
                     -CurrentObject $result `
                     -ReturnRequiredValues:$ReturnRequiredValues `
                     -HydrationStyle $HydrationStyle `
-                    -RegexPattern $RegexPattern | Select-Object -Last 1
+                    -RegexPattern $RegexPattern `
+                    -ReplacementCount ([ref]$replacementCount) | Select-Object -Last 1
             }
             catch {
                 $opSignal.LogCritical("Invoke-JsonTokenCondenser failed during token crawl pass $tokenCrawlIndex. $($_.Exception.Message)")
                 return $opSignal
             }
-        }
+
+            $tokenCrawlIndex++
+        } while ($replacementCount -gt 0)
 
         #-RegexPattern '^@TKN:'
         #"\[([^\[\]=]+?)/\]"
@@ -131,7 +136,8 @@ function Invoke-TokenCrawl {
         [object]$CurrentObject,
         [bool]$ReturnRequiredValues = $true,
         [string]$HydrationStyle = "",
-        [string]$RegexPattern
+        [string]$RegexPattern,
+        [ref]$ReplacementCount
     )
 
     function Write-TokenCrawlCritical {
@@ -224,6 +230,7 @@ function Invoke-TokenCrawl {
 
             try {
                 $propObject = [PSCustomObject]@{ Name = $Key; Value = $valueSignal.GetResult() }
+                $originalPropertyValue = $propObject.Value
             }
             catch {
                 Write-TokenCrawlCritical -Feedback $MergeCondenserFeedback -Message "Failed while creating token property object for '$Key'. $($_.Exception.Message)"
@@ -281,6 +288,10 @@ function Invoke-TokenCrawl {
 
             try {
                 Add-PathToDictionary -Dictionary $Parent -Path $Key -Value $propertyValue | Select-Object -Last 1 | Out-Null
+
+                if ($null -ne $ReplacementCount -and -not [object]::Equals($originalPropertyValue, $propertyValue)) {
+                    $ReplacementCount.Value++
+                }
             }
             catch {
                 Write-TokenCrawlCritical -Feedback $MergeCondenserFeedback -Message "Failed while writing resolved property '$Key'. $($_.Exception.Message)"

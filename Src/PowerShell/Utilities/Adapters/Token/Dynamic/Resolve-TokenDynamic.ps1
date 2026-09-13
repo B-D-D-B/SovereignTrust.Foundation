@@ -282,7 +282,7 @@ function Resolve-TokenDynamic {
         }
 
         # Last found comma boundary separates raw value from trailing control args.
-        $boundary = $splitIndexes[$TailCount-1]
+        $boundary = $splitIndexes[$TailCount - 1]
 
         $valueText = $Text.Substring(0, $boundary).Trim()
         $tailText = $Text.Substring($boundary + 1).Trim()
@@ -331,6 +331,82 @@ function Resolve-TokenDynamic {
             }
             $s
         }
+    }
+
+    function Indent {
+        param([string]$Text, [int]$Level)
+        $prefix = " " * ($Level * 2)
+        return ($Text -split "`n" | ForEach-Object { $prefix + $_ }) -join "`n"
+    }
+
+    function Format-Scalar {
+        param($Value)
+        if ($null -eq $Value) { return "<null>" }
+        return "$Value"
+    }
+
+    function Format-Object {
+        param(
+            [pscustomobject]$Obj,
+            [int]$IndentLevel = 0
+        )
+
+        $lines = @()
+
+        foreach ($prop in $Obj.PSObject.Properties) {
+            $name  = $prop.Name
+            $value = $prop.Value
+
+            # Array?
+            if ($value -is [System.Collections.IEnumerable] -and $value -isnot [string]) {
+                $formattedItems = @()
+
+                foreach ($item in $value) {
+                    if ($item -is [pscustomobject]) {
+                        $inner = Format-Object -Obj $item -IndentLevel ($IndentLevel + 1)
+                        $formattedItems += (Indent $inner ($IndentLevel + 1))
+                    }
+                    else {
+                        $formattedItems += (Indent (Format-Scalar $item) ($IndentLevel + 1))
+                    }
+                }
+
+                $lines += "$($name):`n$($formattedItems -join "`n")"
+                continue
+            }
+
+            # Nested object?
+            if ($value -is [pscustomobject]) {
+                $inner = Format-Object -Obj $value -IndentLevel ($IndentLevel + 1)
+                $lines += "$($name):`n$(Indent $inner ($IndentLevel + 1))"
+                continue
+            }
+
+            # Scalar
+            $lines += "$($name): $(Format-Scalar $value)"
+        }
+
+        return ($lines -join "`n")
+    }
+
+    function Format-Array {
+        param(
+            [System.Collections.IEnumerable]$Arr,
+            [int]$IndentLevel = 0
+        )
+
+        $blocks = @()
+
+        foreach ($item in $Arr) {
+            if ($item -is [pscustomobject]) {
+                $blocks += (Format-Object -Obj $item -IndentLevel $IndentLevel)
+            }
+            else {
+                $blocks += (Format-Scalar $item)
+            }
+        }
+
+        return ($blocks -join "`n`n")
     }
 
     function Invoke-ParseOffset {
@@ -383,6 +459,23 @@ function Resolve-TokenDynamic {
         $rawArgs = Split-DynamicArgs $raw
 
         switch ($fn) {
+            'formatjsonastext' {
+                $InputObject = $raw | ConvertFrom-Json -Depth 100
+                $combinedText = ""
+
+                    if ($InputObject -is [System.Collections.IEnumerable] -and $InputObject -isnot [string]) {
+                        $combinedText = Format-Array $InputObject
+                    }
+                    elseif ($InputObject -is [pscustomobject]) {
+                        $combinedText = Format-Object $InputObject
+                    }
+                    else {
+                        $combinedText = Format-Scalar $InputObject
+                    }
+
+                    $opSignal.SetResult($combinedText)
+                    break
+                }
             'getfileextension' {
                 if ($rawArgs.Count -ne 1) {
                     throw "GetFileExtension() requires one argument. ($($rawArgs.Count) was supplied)"
@@ -401,6 +494,7 @@ function Resolve-TokenDynamic {
  
             'removequotes' {
                 $result = $raw -replace '"', ''
+                $result = $result -replace "'", ""
                 $opSignal.SetResult($result) 
             }
             'replace' {
@@ -702,7 +796,7 @@ function Resolve-TokenDynamic {
 
                 # Everything before the delimiter is JSON
                 $json = $parsed.ValueText
-                 $jsonObject = $json | ConvertFrom-Json -Depth 10
+                $jsonObject = $json | ConvertFrom-Json -Depth 10
 
                 $values = @()
 

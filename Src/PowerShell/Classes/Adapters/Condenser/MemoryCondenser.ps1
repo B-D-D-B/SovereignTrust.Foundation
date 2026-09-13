@@ -61,7 +61,7 @@ class MemoryCondenser {
                             $HydrationSignal = [Signal]::Start("MemoryCondenser.Invoke.DeferredHydrate", $step) | Select-Object -Last 1
                             $HydrationSignal.SetJacket($StepResultSignal)
 
-                            # Set the Step as the result content of the jacket which is what is going to be hydrated.
+                            # Set the Step as   the result content of the jacket which is what is going to be hydrated.
                             $HydrationSignal.SetJacketResult($step)
                             $HydrationSignal.SetPointer($ItemSignal.GetPointer())
 

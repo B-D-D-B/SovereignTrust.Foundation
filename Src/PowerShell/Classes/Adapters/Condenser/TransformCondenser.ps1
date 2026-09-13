@@ -99,6 +99,7 @@ class TransformCondenser {
                 }
 
                 # Select using a path from an xml or json object.
+                # TODO: We should remove the Path and hydration portions of this and do it through the standard memory condenser. Will need to coordinate with changing the plans that use select.
                 "Select" {
                     $sourceSignal = Resolve-PathFromDictionary -Dictionary $ItemSignal -Path $DefaultPath | Select-Object -Last 1
 
@@ -165,7 +166,7 @@ class TransformCondenser {
                     $sourceSignal = Resolve-PathFromDictionary -Dictionary $ItemSignal -Path $path | Select-Object -Last 1
                     $source = $sourceSignal.GetResult() | ConvertTo-Json -Depth 10 | ConvertFrom-Json -Depth 10
                     
-                    $opSignal.SetResult($source)
+                    $opSignal.SetResult($source )
                     break
                 }
 

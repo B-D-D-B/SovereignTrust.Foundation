@@ -253,34 +253,21 @@ function Invoke-ST {
     # ░▒▓█ START WRAPPER SIGNAL █▓▒░
     $opSignal = [Signal]::Start("Start-SovereignTrust") | Select-Object -Last 1
 
-    # Optionally run a test fusion session
-
-    # Create a global console logger
-    $Global:ConsoleLoggerInstance = [ConsoleLogger]::new()
-    $Global:SignalTelemeter = [SignalTelemeter]::new()
-
-    $environmentSignal = [Signal]::Start("Environment", $opSignal) | Select-Object -Last 1
-    $environmentSignal.SetJacketResult($Environment)
-
-    $conduitSignal = Resolve-Conduit -EnvironmentSignal $environmentSignal | Select-Object -Last 1
-    if ($opSignal.MergeSignalAndVerifyFailure(@($conduitSignal))) {
+    $runtimeSignal = Initialize-STEnvironment -Environment $Environment -ParentSignal $opSignal | Select-Object -Last 1
+    if ($opSignal.MergeSignalAndVerifyFailure(@($runtimeSignal))) {
+        return $opSignal
+    }
+    if (-not $runtimeSignal.HasResult()) {
+        $null = $opSignal.LogCritical("Environment initialization did not return a runtime.")
         return $opSignal
     }
 
-    $conductor = $conduitSignal.GetResult()
-    $conductorSignal = $conductor.Signal
-    
-    $conductorJacketSignal = [Signal]::Start("Conductor", $environmentSignal) | Select-Object -Last 1
-    $conductorJacketSignal.SetJacket($conductorSignal)
-    
-    # Transfer the grid of content created during the environment generation to the base of the ConductorJacketSignal
-    $conductorJacketSignal.SetPointer($environmentSignal.GetPointer())
-
-
-    $opSignal = [Signal]::Start("Invoke-ST: Processor", $Signal) | Select-Object -Last 1
-
-    # Acts as the Conduction Signal with the Conductor
-    $opSignal.SetControl($conductorJacketSignal)
+    $runtime = $runtimeSignal.GetResult()
+    $environmentSignal = $runtime.EnvironmentSignal
+    $conductorSignal = $runtime.ConductorSignal
+    $conductorJacketSignal = $runtime.ConductorJacketSignal
+    $opSignal = $runtime.ConductionSignal
+    $opSignal.Name = "Invoke-ST: Processor"
     $opSignal.LogInformation("Resolving ConductionPlanRoute from RouteOverlay.")
 
 

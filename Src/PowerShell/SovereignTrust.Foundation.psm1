@@ -175,6 +175,7 @@ function Invoke-Telemetry(
 . "$PSScriptRoot/Utilities/Conduction/Start-SovereignTrust.ps1"
 . "$PSScriptRoot/Utilities/Conduction/Start-BondingConduction.ps1"
 . "$PSScriptRoot/Utilities/Conduction/Resolve-Conduit.ps1"
+. "$PSScriptRoot/Utilities/Conduction/Initialize-STEnvironment.ps1"
 . "$PSScriptRoot/Utilities/Conduction/Resolve-Conductor.ps1"
 . "$PSScriptRoot/Utilities/Graph/Convert-GraphToJson.ps1"
 . "$PSScriptRoot/Utilities/Graph/Convert-JsonToGraph.ps1"
@@ -206,6 +207,7 @@ function Invoke-Telemetry(
 
 # Export public utility functions
 Export-ModuleMember -Function Invoke-ST
+Export-ModuleMember -Function Initialize-STEnvironment
 
 Export-ModuleMember -Function Resolve-ClonePlan
 
