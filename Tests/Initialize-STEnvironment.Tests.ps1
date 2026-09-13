@@ -36,7 +36,8 @@ function Invoke-CondenserAdapter {
     }
     if ($Slot -eq 'Memory') {
         $Plan.Config.Marker = 'Hydrated'
-        $null = $ItemSignal.SetPointer([pscustomobject]@{ Marker = 'EnvironmentGraph' })
+        $environmentGraph = ([Graph]::Start('EnvironmentGraph', $null, $false) | Select-Object -Last 1).GetResult()
+        $null = $ItemSignal.SetPointer($environmentGraph)
         if ($script:failureStage -eq 'Transform') {
             $result.SetResult([pscustomobject]@{ Name = 'SourceEnvironment' })
         }
@@ -76,6 +77,10 @@ Assert-True ($definition.Config.Marker -eq 'Original') 'Bootstrap mutated the ca
 Assert-True ([object]::ReferenceEquals($runtime.ConductionSignal.GetControl(), $runtime.ConductorJacketSignal)) 'Conduction control is disconnected.'
 Assert-True ([object]::ReferenceEquals($runtime.ConductorJacketSignal.GetJacket(), $runtime.ConductorSignal)) 'Conductor jacket is disconnected.'
 Assert-True ([object]::ReferenceEquals($runtime.ConductorJacketSignal.GetPointer(), $runtime.EnvironmentSignal.GetPointer())) 'Bootstrap graph was not transferred.'
+Assert-True ([object]::ReferenceEquals($runtime.ConductionSignal.GetPointer(), $runtime.EnvironmentSignal.GetPointer())) 'Conduction pointer is disconnected.'
+Assert-True ($runtime.ConductionSignal.GetPointer().Grid.Contains('EnvironmentDetails')) 'EnvironmentDetails was not registered in the runtime Graph.'
+Assert-True ([object]::ReferenceEquals($runtime.ConductionSignal.GetPointer().Grid['EnvironmentDetails'].GetResult(), $runtime.Environment)) 'EnvironmentDetails does not contain the runtime definition.'
+Assert-True (-not [object]::ReferenceEquals($runtime.ConductionSignal.GetPointer().Grid['EnvironmentDetails'].GetResult(), $definition)) 'EnvironmentDetails reused the caller definition.'
 Assert-True ($script:telemetryCount -eq 0) 'Initialization must not execute the processor lifecycle.'
 
 $second = (Initialize-STEnvironment -Environment $definition).GetResult()

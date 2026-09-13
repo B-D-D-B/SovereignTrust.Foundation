@@ -53,8 +53,20 @@ function Initialize-STEnvironment {
         $null = $conductorJacketSignal.SetJacket($conductorSignal)
         $null = $conductorJacketSignal.SetPointer($environmentSignal.GetPointer())
 
+        $runtimeGraph = $conductorJacketSignal.GetPointer()
+        if ($runtimeGraph -isnot [Graph]) {
+            $null = $opSignal.LogCritical("Environment initialization did not return a runtime Graph pointer.")
+            return $opSignal
+        }
+
         $conductionSignal = [Signal]::Start("Conduction", $opSignal) | Select-Object -Last 1
         $conductionSignal.SetControl($conductorJacketSignal)
+        $null = $conductionSignal.SetPointer($runtimeGraph)
+
+        $environmentDetailsSignal = $runtimeGraph.RegisterResultAsSignal("EnvironmentDetails", $environmentDefinition) | Select-Object -Last 1
+        if ($opSignal.MergeSignalAndVerifyFailure(@($environmentDetailsSignal))) {
+            return $opSignal
+        }
 
         $opSignal.SetResult([PSCustomObject]@{
             Environment            = $environmentDefinition

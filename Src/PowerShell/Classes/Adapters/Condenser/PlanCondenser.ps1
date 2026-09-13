@@ -123,30 +123,180 @@ class PlanCondenser {
                 "IteratePhase" {
                     $iterationArraySignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.IterationArray" | Select-Object -Last 1
                     $iterationNameSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.IterationName" -Default "Iteration" | Select-Object -Last 1
-                    $iterationArray = $iterationArraySignal.GetResult()
+                    if ($opSignal.MergeSignalAndVerifyFailure(@($iterationArraySignal, $iterationNameSignal))) {
+                        return $opSignal
+                    }
 
-                    foreach ($iteration in $iterationArray) {
-                        $iterationPlan = (Resolve-ClonePlan -Plan $Plan | Select-Object -Last 1).GetResult()
-                        
-                        $iterationPlan.Activity = $Plan.Config.Activity
+                    $iterationArray = @($iterationArraySignal.GetResult())
+                    $iterationName = [string]$iterationNameSignal.GetResult()
+                    if ($iterationArray.Count -eq 0) {
+                        break
+                    }
 
-                        # Put the iteration data in a Signal so it can be put in the ItemSignal Graph for later use.
-                        $iterationSignal = [Signal]::Start("Iteration", $ItemSignal) | Select-Object -Last 1
-                        $iterationData = [PSCustomObject]@{
-                            Value = $iteration
-                            IterationArray = $iterationArray
+                    $threading = $Plan.Config.Threading
+                    $warmup = -1
+                    if ($null -ne $threading -and $null -ne $threading.Warmup) {
+                        try {
+                            $warmup = [int]$threading.Warmup
+                        }
+                        catch {
+                            $null = $opSignal.LogCritical("Plan.Config.Threading.Warmup must be an integer.")
+                            return $opSignal
+                        }
+                    }
+                    if ($warmup -lt -1) {
+                        $null = $opSignal.LogCritical("Plan.Config.Threading.Warmup cannot be less than -1.")
+                        return $opSignal
+                    }
+
+                    $runtimeGraph = $ConductionSignal.GetPointer()
+                    $environmentDetails = $null
+                    if ($runtimeGraph -is [Graph] -and $runtimeGraph.Grid.Contains('EnvironmentDetails')) {
+                        $environmentDetails = $runtimeGraph.Grid['EnvironmentDetails'].GetResult()
+                    }
+
+                    $supportParallelism = $false
+                    $maxThreads = 1
+                    try {
+                        if ($null -ne $environmentDetails -and $null -ne $environmentDetails.Config) {
+                            $supportParallelism = [bool]$environmentDetails.Config.SupportParallelism
+                            if ($null -ne $environmentDetails.Config.MaxParallelism) {
+                                $maxThreads = [Math]::Max(1, [int]$environmentDetails.Config.MaxParallelism)
+                            }
+                        }
+                        if ($null -ne $threading -and $null -ne $threading.MaxThreads) {
+                            $maxThreads = [Math]::Max(1, [int]$threading.MaxThreads)
+                        }
+                    }
+                    catch {
+                        $null = $opSignal.LogCritical("Threading MaxThreads and environment MaxParallelism must be integers.")
+                        return $opSignal
+                    }
+
+                    $reuseItemSignalGrid = $false
+                    if ($null -ne $threading -and $null -ne $threading.ReuseItemSignalGrid) {
+                        $reuseItemSignalGrid = [bool]$threading.ReuseItemSignalGrid
+                    }
+
+                    $warmupCount = if ($warmup -eq -1) {
+                        $iterationArray.Count
+                    }
+                    else {
+                        [Math]::Min([Math]::Max(0, $warmup), $iterationArray.Count)
+                    }
+
+                    for ($index = 0; $index -lt $warmupCount; $index++) {
+                        $iterationSignal = Invoke-PlanIteration `
+                            -ConductionSignal $ConductionSignal `
+                            -ItemSignal $ItemSignal `
+                            -Plan $Plan `
+                            -Iteration $iterationArray[$index] `
+                            -IterationIndex $index `
+                            -IterationName $iterationName `
+                            -IterationArray $iterationArray `
+                        | Select-Object -Last 1
+
+                        if ($opSignal.MergeSignalAndVerifyFailure(@($iterationSignal))) {
+                            return $opSignal
+                        }
+                    }
+
+                    $remainingCount = $iterationArray.Count - $warmupCount
+                    if ($remainingCount -le 0) {
+                        break
+                    }
+
+                    $useParallel = $warmup -ne -1 -and $supportParallelism -and $maxThreads -gt 1 -and $remainingCount -gt 1
+                    if (-not $useParallel) {
+                        for ($index = $warmupCount; $index -lt $iterationArray.Count; $index++) {
+                            $iterationSignal = Invoke-PlanIteration `
+                                -ConductionSignal $ConductionSignal `
+                                -ItemSignal $ItemSignal `
+                                -Plan $Plan `
+                                -Iteration $iterationArray[$index] `
+                                -IterationIndex $index `
+                                -IterationName $iterationName `
+                                -IterationArray $iterationArray `
+                            | Select-Object -Last 1
+
+                            if ($opSignal.MergeSignalAndVerifyFailure(@($iterationSignal))) {
+                                return $opSignal
+                            }
                         }
 
-                        $iterationData = $iteration
-                        $iterationSignal.SetResult($iterationData)
-                        $ItemSignal.Pointer.RegisterSignal($iterationNameSignal.GetResult(), $iterationSignal)
-
-                        # This shouldn't reply on always calling a condenser.
-                        $condenserSlot = ($Plan.Adapter -split '\.')[1]
-                        $iterationSignal = Invoke-CondenserAdapter -Slot $condenserSlot -Activity $Plan.Config.Activity -Plan $iterationPlan -Signal $ConductionSignal -ItemSignal $ItemSignal | Select-Object -Last 1
-                        if ($opSignal.MergeSignalAndVerifyFailure($iterationSignal)) { return $opSignal }
+                        break
                     }
-                    #TDB
+
+                    if ($null -eq $environmentDetails) {
+                        $null = $opSignal.LogCritical("Parallel iteration requires Pointer.Grid.EnvironmentDetails.")
+                        return $opSignal
+                    }
+
+                    $workItems = [System.Collections.Generic.List[object]]::new()
+                    for ($index = $warmupCount; $index -lt $iterationArray.Count; $index++) {
+                        $planCloneSignal = Resolve-ClonePlan -Plan $Plan | Select-Object -Last 1
+                        if ($opSignal.MergeSignalAndVerifyFailure(@($planCloneSignal)) -or -not $planCloneSignal.HasResult()) {
+                            return $opSignal
+                        }
+
+                        $workItems.Add([PSCustomObject]@{
+                            Index = $index
+                            Value = $iterationArray[$index]
+                            Plan  = $planCloneSignal.GetResult()
+                        })
+                    }
+
+                    $workerContext = [PSCustomObject]@{
+                        SourceItemSignal    = $ItemSignal
+                        IterationName       = $iterationName
+                        IterationArray      = $iterationArray
+                        ReuseItemSignalGrid = $reuseItemSignalGrid
+                    }
+
+                    $poolSignal = Invoke-STRunspacePool `
+                        -Signal $opSignal `
+                        -EnvironmentDefinition $environmentDetails `
+                        -WorkItems @($workItems) `
+                        -WorkerCommand 'Invoke-PlanIterationWorker' `
+                        -ThrottleLimit $maxThreads `
+                        -WorkerContext $workerContext `
+                    | Select-Object -Last 1
+
+                    if ($opSignal.MergeSignalAndVerifyFailure(@($poolSignal)) -or -not $poolSignal.HasResult()) {
+                        return $opSignal
+                    }
+
+                    foreach ($workerResult in @($poolSignal.GetResult() | Sort-Object -Property Index)) {
+                        if (-not [string]::IsNullOrWhiteSpace([string]$workerResult.Error)) {
+                            $null = $opSignal.LogCritical("Iteration $($workerResult.Index) runspace failed: $($workerResult.Error)")
+                            continue
+                        }
+
+                        if ($null -eq $workerResult.InitializationSignal) {
+                            $null = $opSignal.LogCritical("Iteration $($workerResult.Index) did not return an initialization signal.")
+                            continue
+                        }
+
+                        $null = $opSignal.MergeSignal(@($workerResult.InitializationSignal))
+                        if ([bool]$workerResult.InitializationFailed -or $null -eq $workerResult.WorkerSignal) {
+                            if ([bool]$workerResult.InitializationFailed -and -not $opSignal.Failure()) {
+                                $null = $opSignal.LogCritical("Iteration $($workerResult.Index) environment initialization failed.")
+                            }
+                            if ($null -eq $workerResult.WorkerSignal) {
+                                $null = $opSignal.LogCritical("Iteration $($workerResult.Index) did not return a worker signal.")
+                            }
+                            continue
+                        }
+
+                        $null = $opSignal.MergeSignal(@($workerResult.WorkerSignal))
+                        if ([bool]$workerResult.WorkerFailed -and -not $opSignal.Failure()) {
+                            $null = $opSignal.LogCritical("Iteration $($workerResult.Index) worker failed.")
+                        }
+                    }
+
+                    if ($opSignal.Failure()) {
+                        return $opSignal
+                    }
                     break
                 }
 

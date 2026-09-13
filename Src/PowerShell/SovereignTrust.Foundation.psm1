@@ -60,6 +60,9 @@ function Invoke-Telemetry(
 . "$PSScriptRoot/Utilities/Adapters/Condenser/Rest/Invoke-RestCondenserCore.ps1"
 
 . "$PSScriptRoot/Utilities/Adapters/Condenser/Plan/Resolve-ClonePlan.ps1"
+. "$PSScriptRoot/Utilities/Adapters/Condenser/Plan/Invoke-PlanIteration.ps1"
+. "$PSScriptRoot/Utilities/Adapters/Condenser/Plan/Invoke-PlanIterationWorker.ps1"
+. "$PSScriptRoot/Utilities/Threading/Invoke-STRunspacePool.ps1"
 
 . "$PSScriptRoot/Utilities/Adapters/Storage/Invoke-MappedStorageAdapter.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Invoke-MappedAdapterCore.ps1"
@@ -210,6 +213,8 @@ Export-ModuleMember -Function Invoke-ST
 Export-ModuleMember -Function Initialize-STEnvironment
 
 Export-ModuleMember -Function Resolve-ClonePlan
+Export-ModuleMember -Function Invoke-PlanIterationWorker
+Export-ModuleMember -Function Invoke-STRunspacePool
 
 # Previous set of public exports
 Export-ModuleMember -Function Resolve-Conduit
