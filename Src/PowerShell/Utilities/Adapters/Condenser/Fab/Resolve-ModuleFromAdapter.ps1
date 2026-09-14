@@ -32,7 +32,7 @@ function Resolve-ModuleFromAdapter {
         }
 
         $pathSignal = Resolve-ModulePathFromAdapter -Signal $Signal -Adapter $adapter -Slot $Slot -RelativePath $RelativePath | Select-Object -Last 1
-        $opSignal.MergeSignal($pathSignal)
+#        $opSignal.MergeSignal($pathSignal)
 
         if ($pathSignal.Success()) {
             Import-Module -Name $pathSignal.GetResult() -Force
@@ -40,7 +40,7 @@ function Resolve-ModuleFromAdapter {
 
             #$x = Resolve-Storage_AzureKeyVault | Select-Object -Last 1
             #$x.Construct($null)
-                
+
             $opSignal.LogInformation("✅ Module imported from path: $($pathSignal.GetResult())")
             $opSignal.SetResult($cmd)
         } else {

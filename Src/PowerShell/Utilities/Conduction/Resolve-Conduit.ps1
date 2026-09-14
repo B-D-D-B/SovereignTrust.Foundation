@@ -27,6 +27,14 @@ function Resolve-Conduit {
         if ($opSignal.MergeSignalAndVerifyFailure(@($EnvironmentSourceSignal))) {
             return $opSignal
         }
+
+        $adapterJsonSignal = Resolve-PathFromDictionary -Dictionary $EnvironmentSignal -Path "*.#.Adapters.@.@.#.Content.%.@"  | Select-Object -Last 1
+        
+#        Pointer.Grid.Adapters.GetResult().GetResult().Pointer.Grid.Media -Path "Adapters" | Select-Object -Last 1
+        $adapterJson = ConvertTo-Json -InputObject $adapterJsonSignal.GetResult() -Depth 100 -ErrorAction Stop
+
+        Write-Host("AdapterJson: $adapterJson")
+
         # If the Environment is within the source object, resolve it.
         if ($EnvironmentSourceSignal.HasResult()) {
             $EnvironmentSource = $EnvironmentSourceSignal.GetResult()

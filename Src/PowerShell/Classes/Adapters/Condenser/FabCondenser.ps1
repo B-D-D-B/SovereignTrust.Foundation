@@ -37,6 +37,10 @@ class FabCondenser {
 
         $opSignal.SetResult($Adapter)
 
+#        $VirtualPathSignal = Resolve-PathFromDictionary -Dictionary $ItemSignal -Path "%.@.VirtualPath" | Select-Object -Last 1
+#        $VirtualPath = $VirtualPathSignal.GetResult()
+#        Write-Host "ResolveAdapterSignal $VirtualPath"
+
         $addSignal = Register-AdapterToMappedSlot -ConductorJacketSignal $Signal.GetJacket() -Adapter $ResolveAdapterSignal | Select-Object -Last 1
 
         if ($opSignal.MergeSignalAndVerifyFailure($addSignal)) {

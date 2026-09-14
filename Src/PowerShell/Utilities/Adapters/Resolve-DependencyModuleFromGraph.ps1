@@ -42,11 +42,14 @@ function Resolve-DependencyModuleFromGraph {
         return $opSignal
     }
 
-    if ($isAlreadyLoadedSignal.HasResult()) {
+#    if ($isAlreadyLoadedSignal.HasResult() -or $className -eq "Storage_EmbeddedFileSystem") {
+    if ($className -eq "Storage_EmbeddedFileSystem") {
          $jacketSignal.SetResult($isAlreadyLoadedSignal.GetResult())
         $opSignal.LogInformation("✅ Class '$className' already loaded; skipping import.")
+        Write-Host("✅ Class '$className' already loaded; skipping import.")
     }
     else {
+        Write-Host("❌ Loading Class '$className'...")
         
         $modNameSignal     = Resolve-PathFromDictionary -Dictionary $manifestSignal -Path "@.Name" | Select-Object -Last 1
         $relPathSignal     = Resolve-PathFromDictionary -Dictionary $manifestSignal -Path "@.RelativeFilePath" | Select-Object -Last 1

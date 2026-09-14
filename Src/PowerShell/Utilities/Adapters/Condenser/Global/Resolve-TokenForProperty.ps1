@@ -112,8 +112,7 @@ function Resolve-TokenForProperty {
                     $RegexPattern = "(?s)$RegexPattern"
                 }
 
-                if ($key -like "*ECode*" )
-                {
+                if ($key -like "*ECode*" ) {
                     $a = ""
                 }
                 <#
@@ -148,12 +147,12 @@ function Resolve-TokenForProperty {
                 $replacement = $lookupSignal.GetResult()
 
                 # When a replacement value is a json object, etc, we can't do a replacement and must assume the object is ready to be returned.
-#                if (($replacement -is [PSCustomObject])) {
-#                    $propertyValue = $replacement
-#                }
-           #     elseif ($replacement -is [bool]) {
-           #         $propertyValue = $replacement
-           #     }
+                #                if (($replacement -is [PSCustomObject])) {
+                #                    $propertyValue = $replacement
+                #                }
+                #     elseif ($replacement -is [bool]) {
+                #         $propertyValue = $replacement
+                #     }
                 if (($replacement -is [array] -and (-not ($replacement -is [string]))) -and (-not $replacement -is [string[]])) {
                     $propertyValue = $replacement
                 }
@@ -188,7 +187,7 @@ function Resolve-TokenForProperty {
                                 $replacement = $replacement | ConvertTo-Json -Depth 100 -Compress
                             }
 
-                            if (($replacement -is [ordered])) {
+                            elseif (($replacement -is [ordered])) {
                                 $replacement = $replacement | ConvertTo-Json -Depth 100 -Compress
                             }
 
@@ -196,15 +195,29 @@ function Resolve-TokenForProperty {
                                 $replacement = (@($replacement) | ForEach-Object { "`"$_`"" }) -join ", "
                             }
 
+                            # Handles an array.
+                            elseif ($replacement -is [object[]]) {
+                                # -and
+                                #        $replacement.Count -gt 0) {
+
+                                if ($replacement.Count -eq 0) {
+                                    $replacement = "[]"
+                                }
+                                else {
+                                    # We have an array of arrays
+                                    $replacement = $replacement | ConvertTo-Json -Depth 100 -Compress
+                                }
+                            }
+
                             # Handles an array of arrays, like the ELineage.
                             elseif ($replacement -is [object[]] -and
-                                    $replacement.Count -gt 0 -and
-                                    ($replacement | ForEach-Object { $_ -is [object[]] })) {
+                                $replacement.Count -gt 0 -and
+                                ($replacement | ForEach-Object { $_ -is [object[]] })) {
 
                                 # We have an array of arrays
                                 $replacement = $replacement | ConvertTo-Json -Depth 100 -Compress
                             }
-<#
+                            <#
                             # Handles an array of arrays, like the ELineage.
                             elseif ($replacement -is [object[]] -and
                                     $replacement.Count -gt 0) {

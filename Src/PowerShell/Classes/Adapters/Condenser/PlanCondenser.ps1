@@ -178,11 +178,27 @@ class PlanCondenser {
                         $reuseItemSignalGrid = [bool]$threading.ReuseItemSignalGrid
                     }
 
+                    $debugInline = $false
+                    if ($null -ne $threading -and $null -ne $threading.DebugInline) {
+                        $debugInline = [bool]$threading.DebugInline
+                    }
+
                     $warmupCount = if ($warmup -eq -1) {
                         $iterationArray.Count
                     }
                     else {
                         [Math]::Min([Math]::Max(0, $warmup), $iterationArray.Count)
+                    }
+
+                    $debugWorkItemIndex = $warmupCount
+                    if ($null -ne $threading -and $null -ne $threading.DebugWorkItemIndex) {
+                        try {
+                            $debugWorkItemIndex = [int]$threading.DebugWorkItemIndex
+                        }
+                        catch {
+                            $null = $opSignal.LogCritical("Plan.Config.Threading.DebugWorkItemIndex must be an integer.")
+                            return $opSignal
+                        }
                     }
 
                     for ($index = 0; $index -lt $warmupCount; $index++) {
@@ -206,7 +222,10 @@ class PlanCondenser {
                         break
                     }
 
-                    $useParallel = $warmup -ne -1 -and $supportParallelism -and $maxThreads -gt 1 -and $remainingCount -gt 1
+                    $useParallel = $warmup -ne -1 -and (
+                        $debugInline -or
+                        ($supportParallelism -and $maxThreads -gt 1 -and $remainingCount -gt 1)
+                    )
                     if (-not $useParallel) {
                         for ($index = $warmupCount; $index -lt $iterationArray.Count; $index++) {
                             $iterationSignal = Invoke-PlanIteration `
@@ -260,6 +279,8 @@ class PlanCondenser {
                         -WorkerCommand 'Invoke-PlanIterationWorker' `
                         -ThrottleLimit $maxThreads `
                         -WorkerContext $workerContext `
+                        -DebugInline:$debugInline `
+                        -DebugWorkItemIndex $debugWorkItemIndex `
                     | Select-Object -Last 1
 
                     if ($opSignal.MergeSignalAndVerifyFailure(@($poolSignal)) -or -not $poolSignal.HasResult()) {

@@ -54,4 +54,24 @@ foreach ($result in $results) {
 }
 Assert-True ($mergedSignal.Entries.Count -eq 4) 'Worker signal entries could not be merged in the coordinator runspace.'
 
-Write-Output 'PASS: ordered collection, fresh per-item runtimes, worker context, and runspace throttling.'
+Import-Module $workerModule -Force
+$inlineSignal = Invoke-STRunspacePool `
+    -Signal $signal `
+    -EnvironmentDefinition ([PSCustomObject]@{ Name = 'InlineTestEnvironment' }) `
+    -WorkItems $workItems `
+    -WorkerCommand 'Test-STPoolWorker' `
+    -ThrottleLimit 2 `
+    -FoundationModulePath $workerModule `
+    -WorkerContext ([PSCustomObject]@{ Name = 'InlineContext'; SourceSignal = $sourceSignal }) `
+    -DebugInline `
+    -DebugWorkItemIndex 2 `
+| Select-Object -Last 1
+
+Assert-True (-not $inlineSignal.Failure() -and $inlineSignal.HasResult()) 'Inline worker execution failed.'
+$inlineResults = @($inlineSignal.GetResult())
+Assert-True ($inlineResults.Count -eq 1) 'Inline debugging executed more than the selected work item.'
+Assert-True ($inlineResults[0].Index -eq 2) 'Inline debugging executed the wrong work item.'
+Assert-True ($inlineResults[0].WorkerSignal.Result.ContextName -eq 'InlineContext') 'Inline worker context was not delivered.'
+Assert-True ($inlineResults[0].WorkerSignal.Result.RunspaceId -eq [runspace]::DefaultRunspace.InstanceId.ToString()) 'Inline debugging did not execute in the caller runspace.'
+
+Write-Output 'PASS: ordered collection, fresh per-item runtimes, worker context, runspace throttling, and inline debugging.'

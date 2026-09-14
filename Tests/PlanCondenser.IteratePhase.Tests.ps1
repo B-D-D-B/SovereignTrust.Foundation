@@ -38,7 +38,9 @@ function Invoke-STRunspacePool {
         $WorkItems,
         $WorkerCommand,
         $ThrottleLimit,
-        $WorkerContext
+        $WorkerContext,
+        [switch]$DebugInline,
+        [int]$DebugWorkItemIndex
     )
 
     $script:poolCalls.Add([PSCustomObject]@{
@@ -46,6 +48,8 @@ function Invoke-STRunspacePool {
         WorkerCommand  = $WorkerCommand
         ThrottleLimit  = $ThrottleLimit
         WorkerContext  = $WorkerContext
+        DebugInline     = $DebugInline.IsPresent
+        DebugWorkItemIndex = $DebugWorkItemIndex
     })
 
     $poolSignal = [Signal]::Start('StubPool') | Select-Object -Last 1
@@ -145,10 +149,25 @@ Assert-True (-not $script:poolCalls[0].WorkerContext.ReuseItemSignalGrid) 'Grid 
 
 $script:sequentialIndices.Clear()
 $script:poolCalls.Clear()
+$inlinePlan = New-TestPlan -Threading ([PSCustomObject]@{
+    Warmup            = 1
+    MaxThreads         = 1
+    DebugInline        = $true
+    DebugWorkItemIndex = 3
+})
+$inlineResult = $condenser.Invoke($null, 'IteratePhase', $context.ConductionSignal, $inlinePlan, $context.ItemSignal)
+Assert-True (-not $inlineResult.Failure()) 'Inline debugging dispatch failed.'
+Assert-True (($script:sequentialIndices -join ',') -eq '0') 'Inline debugging did not retain the warmup prefix.'
+Assert-True ($script:poolCalls.Count -eq 1) 'Inline debugging did not dispatch through the runspace helper.'
+Assert-True ($script:poolCalls[0].DebugInline) 'Inline debugging configuration was not forwarded.'
+Assert-True ($script:poolCalls[0].DebugWorkItemIndex -eq 3) 'Inline debugging work-item index was not forwarded.'
+
+$script:sequentialIndices.Clear()
+$script:poolCalls.Clear()
 $clampedPlan = New-TestPlan -Threading ([PSCustomObject]@{ Warmup = 99; MaxThreads = 8 })
 $clampedResult = $condenser.Invoke($null, 'IteratePhase', $context.ConductionSignal, $clampedPlan, $context.ItemSignal)
 Assert-True (-not $clampedResult.Failure()) 'Clamped warmup execution failed.'
 Assert-True (($script:sequentialIndices -join ',') -eq '0,1,2,3,4') 'Warmup was not clamped to the iteration count.'
 Assert-True ($script:poolCalls.Count -eq 0) 'Clamped warmup unexpectedly started a runspace pool.'
 
-Write-Output 'PASS: warmup splitting, parallel dispatch, throttling, grid reuse forwarding, and sequential switches.'
+Write-Output 'PASS: warmup splitting, parallel dispatch, inline debugging, throttling, grid reuse forwarding, and sequential switches.'

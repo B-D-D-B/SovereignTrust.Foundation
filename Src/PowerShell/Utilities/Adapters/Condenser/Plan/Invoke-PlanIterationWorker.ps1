@@ -12,7 +12,7 @@ function Invoke-PlanIterationWorker {
     )
 
     $opSignal = [Signal]::Start("Invoke-PlanIterationWorker:$($WorkItem.Index)", $Runtime.ConductionSignal) | Select-Object -Last 1
-
+Write-Host "Invoke-PlanIterationWorker: $($WorkItem.Index) - $($WorkItem.Value)"
     try {
         $targetGraph = $Runtime.ConductionSignal.GetPointer()
         if ($targetGraph -isnot [Graph]) {
