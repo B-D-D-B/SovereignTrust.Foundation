@@ -44,6 +44,7 @@ class MappedStorageAdapter {
         }
 
         $graph = $this.Signal.GetPointer()
+        $adapterSignal.SetJacket($adapterSignal.GetResult().Signal.GetJacket())
         $registerSignal = $graph.RegisterSignal($Key, $adapterSignal)
         $opSignal.MergeSignal($registerSignal)
 
