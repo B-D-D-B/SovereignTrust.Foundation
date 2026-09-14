@@ -35,14 +35,14 @@ function Resolve-ModuleFromAdapter {
 #        $opSignal.MergeSignal($pathSignal)
 
         if ($pathSignal.Success()) {
-            Import-Module -Name $pathSignal.GetResult() -Force
-            $cmd = Get-Command -Module ModuleName
+            $modulePath = [string]$pathSignal.GetResult()
+            Import-Module -Name $modulePath -Force -ErrorAction Stop
 
-            #$x = Resolve-Storage_AzureKeyVault | Select-Object -Last 1
-            #$x.Construct($null)
-
-            $opSignal.LogInformation("✅ Module imported from path: $($pathSignal.GetResult())")
-            $opSignal.SetResult($cmd)
+            $opSignal.LogInformation("✅ Module imported from path: $modulePath")
+            $opSignal.SetResult([pscustomobject]@{
+                Name = $ModuleName
+                Path = $modulePath
+            })
         } else {
             $opSignal.LogWarning("Could not resolve module path from adapter.")
             $opSignal.SetResult($pathSignal.GetResult())
