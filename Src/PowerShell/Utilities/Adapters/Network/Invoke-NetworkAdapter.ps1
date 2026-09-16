@@ -78,7 +78,16 @@ function Invoke-NetworkAdapter {
             return $opSignal
         }
 
-        $adapter = $adapterSignal.GetResult()
+        $mappedSlotSignal = $adapterSignal.GetResultSignal()
+        $resolvedAdapterSignal = Resolve-MappedAdapter `
+            -AdapterSignal $mappedSlotSignal `
+            -Signal $ConductionSignal `
+            -ConductionContext $MappedAdapterSignal.GetJacket() `
+        | Select-Object -Last 1
+        if ($opSignal.MergeSignalAndVerifyFailure($resolvedAdapterSignal) -or -not $resolvedAdapterSignal.HasResult()) {
+            return $opSignal
+        }
+        $adapter = $resolvedAdapterSignal.GetResult()
         
         $resolvedPathSignal = Resolve-PathWithExtensionFromPath -Signal $opSignal -Path $Path | Select-Object -Last 1
         

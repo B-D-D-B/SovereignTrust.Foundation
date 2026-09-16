@@ -70,7 +70,16 @@ function Invoke-MappedTokenAdapter {
             return $opSignal.LogWarning("Could not resolve adapter for key: $firstKey")
         }
 
-        $adapter = $adapterSignal.GetResult($true)
+        $mappedSlotSignal = $adapterSignal.GetResultSignal()
+        $resolvedAdapterSignal = Resolve-MappedAdapter `
+            -AdapterSignal $mappedSlotSignal `
+            -Signal $Signal `
+            -ConductionContext $MappedAdapter.Signal.GetJacket() `
+        | Select-Object -Last 1
+        if ($opSignal.MergeSignalAndVerifyFailure($resolvedAdapterSignal) -or -not $resolvedAdapterSignal.HasResult()) {
+            return $opSignal
+        }
+        $adapter = $resolvedAdapterSignal.GetResult()
 
 #        while ($adapter -is [Signal]) {
 #            $adapter = $adapter.GetResult()

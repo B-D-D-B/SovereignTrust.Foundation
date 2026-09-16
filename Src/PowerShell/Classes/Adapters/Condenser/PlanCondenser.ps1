@@ -134,7 +134,7 @@ class PlanCondenser {
                     }
 
                     $threading = $Plan.Config.Threading
-                    $warmup = -1
+                    $warmup = 0
                     if ($null -ne $threading -and $null -ne $threading.Warmup) {
                         try {
                             $warmup = [int]$threading.Warmup

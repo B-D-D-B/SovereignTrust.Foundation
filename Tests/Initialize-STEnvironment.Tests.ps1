@@ -1,4 +1,4 @@
-using module ../../SignalGraph/Src/PowerShell/SignalGraph.psd1
+using module ../../SignalGraph/Src/PowerShell/SignalGraph/SignalGraph.psd1
 
 # Run in a fresh pwsh process. Adapter execution is stubbed; no services are started.
 $ErrorActionPreference = 'Stop'

@@ -4,7 +4,11 @@ function Resolve-ConductorAdapters {
         [Signal]$Signal,
 
         [Parameter(Mandatory)]
-        [object]$Conductor
+        [object]$Conductor,
+
+        [switch]$UseLazyLoading,
+
+        [bool]$RetryFailedResolution = $false
     )
 
     $opSignal = [Signal]::Start("ResolveConductorAdapters") | Select-Object -Last 1
@@ -36,6 +40,23 @@ function Resolve-ConductorAdapters {
 
                 if ($opSignal.MergeSignalAndVerifySuccess($nameSignal)) {
                     $name = $nameSignal.GetResult()
+
+                    if ($UseLazyLoading) {
+                        $addSignal = Register-AdapterToMappedSlot `
+                            -ConductorJacketSignal $Conductor.Signal `
+                            -Signal $Signal `
+                            -ConductionContext $Conductor `
+                            -Adapter $jacket `
+                            -Lazy `
+                            -RetryFailedResolution $RetryFailedResolution `
+                        | Select-Object -Last 1
+
+                        if ($opSignal.MergeSignalAndVerifyFailure($addSignal)) {
+                            return $opSignal
+                        }
+                        $opSignal.LogInformation("Adapter '$name' registered for lazy loading.")
+                        continue
+                    }
                 
                     $resolveSignal = Resolve-AdapterFromJacket -Signal $Signal -ConductionContext $Conductor -Jacket $jacket | Select-Object -Last 1
                 
@@ -44,7 +65,12 @@ function Resolve-ConductorAdapters {
                         $resolvedType = $resolvedAdapter.GetType().Name
                         $opSignal.LogVerbose("Adapter '$name' resolved as type '$resolvedType'.")
                 
-                        $addSignal = Register-AdapterToMappedSlot -Conductor $Conductor -Adapter $resolveSignal | Select-Object -Last 1
+                        $addSignal = Register-AdapterToMappedSlot `
+                            -ConductorJacketSignal $Conductor.Signal `
+                            -Signal $Signal `
+                            -ConductionContext $Conductor `
+                            -Adapter $resolveSignal `
+                        | Select-Object -Last 1
                 
                         if ($opSignal.MergeSignalAndVerifySuccess($addSignal)) {
                             $opSignal.LogInformation("Adapter '$name' mounted successfully.")

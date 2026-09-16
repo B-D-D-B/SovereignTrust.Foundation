@@ -3,8 +3,14 @@ function Register-AdapterToMappedSlot {
         [Signal]$ConductorJacketSignal,
         [Signal]$Signal,
 
+        [object]$ConductionContext,
+
         [Parameter(Mandatory)]
-        [object]$Adapter
+        [object]$Adapter,
+
+        [switch]$Lazy,
+
+        [bool]$RetryFailedResolution = $false
     )
 
     #Currently treating these as interchangeable, but will want to limit down to one or the other eventually.
@@ -15,6 +21,31 @@ function Register-AdapterToMappedSlot {
     $opSignal = [Signal]::Start("Register-AdapterToMappedSlot") | Select-Object -Last 1
 
     try {
+        function Resolve-AdapterMetadataValue {
+            param(
+                [object[]]$Candidates,
+                [string[]]$Paths
+            )
+
+            foreach ($candidate in @($Candidates)) {
+                if ($null -eq $candidate) { continue }
+                foreach ($path in $Paths) {
+                    $valueSignal = Resolve-PathFromDictionary `
+                        -Dictionary $candidate `
+                        -Path $path `
+                        -SignalLevel 'Information' `
+                    | Select-Object -Last 1
+                    if ($valueSignal.Success() -and $valueSignal.HasResult()) {
+                        $value = [string]$valueSignal.GetResult()
+                        if (-not [string]::IsNullOrWhiteSpace($value)) {
+                            return $value
+                        }
+                    }
+                }
+            }
+            return $null
+        }
+
         # ░▒▓█ UNWRAP SIGNAL IF NECESSARY █▓▒░
         $resolvedAdapter = if ($Adapter -is [Signal]) {
             $Adapter.GetResult()
@@ -22,26 +53,51 @@ function Register-AdapterToMappedSlot {
             $Adapter
         }
 
-        # ░▒▓█ RESOLVE KIND FROM JACKET █▓▒░
-        $kindSignal = Resolve-PathFromDictionary -Dictionary $resolvedAdapter -Path "$.%.@.Kind" | Select-Object -Last 1
-        if ($opSignal.MergeSignalAndVerifyFailure($kindSignal)) {
-            return $opSignal.LogCritical("Adapter does not contain a resolvable '$.%.@.Kind' path.")
+        $kind = Resolve-AdapterMetadataValue `
+            -Candidates @($Adapter, $resolvedAdapter) `
+            -Paths @('$.%.@.Kind', '@.Kind', 'Kind')
+        $slot = Resolve-AdapterMetadataValue `
+            -Candidates @($Adapter, $resolvedAdapter) `
+            -Paths @('$.%.@.Slot', '@.Slot', 'Slot')
+
+        if ([string]::IsNullOrWhiteSpace($kind) -or [string]::IsNullOrWhiteSpace($slot)) {
+            $virtualPath = Resolve-AdapterMetadataValue `
+                -Candidates @($Adapter, $resolvedAdapter) `
+                -Paths @('$.%.@.VirtualPath', '@.VirtualPath', 'VirtualPath')
+            if (-not [string]::IsNullOrWhiteSpace($virtualPath)) {
+                $virtualPathParts = @($virtualPath -split '\.')
+                if ([string]::IsNullOrWhiteSpace($kind) -and $virtualPathParts.Count -ge 3) {
+                    $kind = $virtualPathParts[2]
+                }
+                if ([string]::IsNullOrWhiteSpace($slot)) {
+                    if ($virtualPathParts.Count -ge 5) {
+                        $slot = $virtualPathParts[4]
+                    }
+                    elseif ($virtualPathParts.Count -ge 4) {
+                        $slot = $virtualPathParts[3]
+                    }
+                }
+            }
         }
 
-        $kind = $kindSignal.GetResult()
         if ([string]::IsNullOrWhiteSpace($kind)) {
-            return $opSignal.LogCritical("Adapter $.%.@.Kind is empty or null.")
+            $null = $opSignal.LogCritical('Adapter does not contain a resolvable Kind or a valid VirtualPath.')
+            return $opSignal
         }
 
-        # ░▒▓█ RESOLVE KIND FROM JACKET █▓▒░
-        $slotSignal = Resolve-PathFromDictionary -Dictionary $resolvedAdapter -Path "$.%.@.Slot" | Select-Object -Last 1
-        if ($opSignal.MergeSignalAndVerifyFailure($slotSignal)) {
-            return $opSignal.LogCritical("Adapter does not contain a resolvable '$.%.@.Slot' path.")
-        }
-
-        $slot = $slotSignal.GetResult()
         if ([string]::IsNullOrWhiteSpace($slot)) {
-            return $opSignal.LogCritical("Adapter $.%.@.Slot is empty or null.")
+            $null = $opSignal.LogCritical('Adapter does not contain a resolvable Slot or a valid VirtualPath.')
+            return $opSignal
+        }
+
+        $registrationValue = $resolvedAdapter
+        if ($Lazy) {
+            $registrationValue = New-AdapterRegistration `
+                -Jacket $Adapter `
+                -Kind $kind `
+                -Slot $slot `
+                -ConductionContext $ConductionContext `
+                -RetryFailedResolution $RetryFailedResolution
         }
 
         # ░▒▓█ RESOLVE MAPPED ATTACHMENT CONTAINER █▓▒░
@@ -58,15 +114,16 @@ function Register-AdapterToMappedSlot {
         }
 
         # ░▒▓█ REGISTER ATTACHMENT █▓▒░
-        $registerSignal = $mappedAdapterContainer.RegisterAdapter($resolvedAdapter, $slot) | Select-Object -Last 1
+        $registerSignal = $mappedAdapterContainer.RegisterAdapter($registrationValue, $slot) | Select-Object -Last 1
         if ($opSignal.MergeSignalAndVerifySuccess($registerSignal)) {
             $opSignal.LogInformation("✅ Adapter registered to MappedAdapter slot '$kind'.")
         } else {
             $opSignal.LogWarning("Adapter registration returned warning or soft failure.")
         }
 
-        # ░▒▓█ RESULT █▓▒░
-        $opSignal.SetResult($mappedAdapterContainer)
+        # Return the value stored in the mapped slot: either an eager adapter
+        # instance or a lazy registration handle.
+        $opSignal.SetResult($registrationValue)
     }
     catch {
         $opSignal.LogCritical("🔥 Exception during MappedAdapter registration: $($_.Exception.Message)", $null, $_)

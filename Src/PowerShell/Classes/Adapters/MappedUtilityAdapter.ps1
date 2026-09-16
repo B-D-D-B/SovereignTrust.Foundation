@@ -74,7 +74,16 @@ class MappedUtilityAdapter {
         $AdapterPath = "*.#.$Slot"
         $adapterSignal = Resolve-PathFromDictionary -Dictionary $this.Signal -Path $AdapterPath | Select-Object -Last 1
 
-        $adapter = $adapterSignal.GetResult($true)
+        $mappedSlotSignal = $adapterSignal.GetResultSignal()
+        $resolvedAdapterSignal = Resolve-MappedAdapter `
+            -AdapterSignal $mappedSlotSignal `
+            -Signal $ConductionSignal `
+            -ConductionContext $this.Signal.GetJacket() `
+        | Select-Object -Last 1
+        if ($opSignal.MergeSignalAndVerifyFailure($resolvedAdapterSignal) -or -not $resolvedAdapterSignal.HasResult()) {
+            return $opSignal
+        }
+        $adapter = $resolvedAdapterSignal.GetResult()
         
         $virtualPathSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.VirtualPath" -SignalLevel "Information" -Default $null | Select-Object -Last 1
         if (-not $virtualPathSignal.HasResult()) {
@@ -119,7 +128,13 @@ class MappedUtilityAdapter {
 
         foreach ($key in $graph.Grid.Keys) {
             $adapterSignal = $graph.Grid[$key]
-            $adapter = $adapterSignal.GetResult()
+            $resolvedAdapterSignal = Resolve-MappedAdapter `
+                -AdapterSignal $adapterSignal `
+                -Signal $this.Signal `
+                -ConductionContext $this.Signal.GetJacket() `
+            | Select-Object -Last 1
+            if ($resolvedAdapterSignal.Failure() -or -not $resolvedAdapterSignal.HasResult()) { continue }
+            $adapter = $resolvedAdapterSignal.GetResult()
 
             if ($null -ne $adapter -and ($adapter | Get-Member -Name $MethodName)) {
                 $result = $adapter.InvokeMethod($MethodName, $Args)

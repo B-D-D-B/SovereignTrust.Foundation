@@ -15,12 +15,29 @@ function Resolve-ModulePathFromAdapter {
             return $opSignal.MergeSignal($root).LogCritical("Could not resolve root address from adapter.")
         }
 
-        $rootAdapter  = $root.GetResult()
+        $rootAdapterSignal = $root.GetResult()
+        if ($rootAdapterSignal -isnot [Signal]) {
+            $rootAdapterSignal = $root.GetResultSignal()
+        }
 
-        $rootAdapter = $rootAdapter.GetResult()
+        $resolvedRootSignal = Resolve-MappedAdapter `
+            -AdapterSignal $rootAdapterSignal `
+            -Signal $Signal `
+            -ConductionContext $Signal `
+        | Select-Object -Last 1
+        if ($opSignal.MergeSignalAndVerifyFailure($resolvedRootSignal) -or -not $resolvedRootSignal.HasResult()) {
+            $opSignal.LogCritical("Could not resolve storage adapter in slot '$Slot'.")
+            return $opSignal
+        }
+
+        $rootAdapter = $resolvedRootSignal.GetResult()
 
         $addressesSignal = Resolve-PathFromDictionary -Dictionary $rootAdapter -Path "$.%.@.Addresses" | Select-Object -Last 1
-        
+        if ($opSignal.MergeSignalAndVerifyFailure($addressesSignal) -or -not $addressesSignal.HasResult()) {
+            $opSignal.LogCritical("Storage adapter in slot '$Slot' does not contain root addresses.")
+            return $opSignal
+        }
+
         $addresses = $addressesSignal.GetResult()
 
         foreach ($address in $addresses) {

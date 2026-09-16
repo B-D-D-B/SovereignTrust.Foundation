@@ -137,10 +137,13 @@ function Invoke-Telemetry(
 . "$PSScriptRoot/Utilities/Json/Invoke-CloneItem.ps1"
 
 . "$PSScriptRoot/Utilities/Adapters/New-MappedCondenserAdapterFromGraph.ps1"
+. "$PSScriptRoot/Utilities/Adapters/New-AdapterRegistration.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Register-AdapterToMappedSlot.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Register-MappedAdapter.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Register-ModuleLoaded.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Resolve-AdaptersFromJacket.ps1"
+. "$PSScriptRoot/Utilities/Adapters/Resolve-RegisteredAdapter.ps1"
+. "$PSScriptRoot/Utilities/Adapters/Resolve-MappedAdapter.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Resolve-ConductorAdapters.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Resolve-DependencyModuleFromGraph.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Test-ModuleLoaded.ps1"
@@ -231,10 +234,13 @@ Export-ModuleMember -Function Invoke-CondenserAdapter
 
 Export-ModuleMember -Function Invoke-CloneItem
 Export-ModuleMember -Function New-MappedCondenserAdapterFromGraph
+Export-ModuleMember -Function New-AdapterRegistration
 Export-ModuleMember -Function Register-AdapterToMappedSlot
 Export-ModuleMember -Function Register-MappedAdapter
 Export-ModuleMember -Function Register-ModuleLoaded
 Export-ModuleMember -Function Resolve-AdaptersFromJacket
+Export-ModuleMember -Function Resolve-RegisteredAdapter
+Export-ModuleMember -Function Resolve-MappedAdapter
 Export-ModuleMember -Function Resolve-ConductorAdapters
 Export-ModuleMember -Function Resolve-DependencyModuleFromGraph
 Export-ModuleMember -Function Test-ModuleLoaded

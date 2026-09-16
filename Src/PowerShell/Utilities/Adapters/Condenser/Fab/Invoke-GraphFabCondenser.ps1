@@ -46,12 +46,47 @@ function Invoke-GraphFabCondenser {
     
     $JacketSignalWrapper = Resolve-PathFromDictionary -Dictionary $ItemSignal -Path "%" | Select-Object -Last 1
     $JacketSignal = $JacketSignalWrapper.GetResult()
-    $ResolveAdapterSignal = Resolve-AdapterFromJacket -Signal $Signal -ConductionContext $Signal -Jacket $JacketSignal | Select-Object -Last 1
-
-    $Adapter = $ResolveAdapterSignal.GetResult() | Select-Object -Last 1
-
     $conductorJacketSignal = Resolve-PathFromDictionary -Dictionary $Signal -Path "%" | Select-Object -Last 1
-    $addSignal = Register-AdapterToMappedSlot -ConductorJacketSignal $conductorJacketSignal.GetResult() -Adapter $ResolveAdapterSignal | Select-Object -Last 1
+    $loadingModeSignal = Resolve-PathFromDictionary `
+        -Dictionary $Plan `
+        -Path 'Config.AdapterLoading.Mode' `
+        -Default 'Lazy' `
+        -SignalLevel 'Information' `
+    | Select-Object -Last 1
+    $retrySignal = Resolve-PathFromDictionary `
+        -Dictionary $Plan `
+        -Path 'Config.AdapterLoading.RetryFailedResolution' `
+        -Default $false `
+        -SignalLevel 'Information' `
+    | Select-Object -Last 1
+
+    if ([string]$loadingModeSignal.GetResult() -ne 'Eager') {
+        $addSignal = Register-AdapterToMappedSlot `
+            -ConductorJacketSignal $conductorJacketSignal.GetResult() `
+            -Signal $Signal `
+            -ConductionContext $Signal `
+            -Adapter $JacketSignal `
+            -Lazy `
+            -RetryFailedResolution ([bool]$retrySignal.GetResult()) `
+        | Select-Object -Last 1
+    }
+    else {
+        $resolveAdapterSignal = Resolve-AdapterFromJacket `
+            -Signal $Signal `
+            -ConductionContext $Signal `
+            -Jacket $JacketSignal `
+        | Select-Object -Last 1
+        if ($opSignal.MergeSignalAndVerifyFailure($resolveAdapterSignal) -or -not $resolveAdapterSignal.HasResult()) {
+            return $opSignal
+        }
+
+        $addSignal = Register-AdapterToMappedSlot `
+            -ConductorJacketSignal $conductorJacketSignal.GetResult() `
+            -Signal $Signal `
+            -ConductionContext $Signal `
+            -Adapter $resolveAdapterSignal `
+        | Select-Object -Last 1
+    }
 
     if ($opSignal.MergeSignalAndVerifyFailure($addSignal)) {
         $opSignal.LogCritical("❌ Failed to add adapter to appropriate Mapped Adapter.")
@@ -59,7 +94,7 @@ function Invoke-GraphFabCondenser {
     }
 
     if ($Plan.TargetWirePath) {
-        $injectSignal = Add-PathToDictionary -Dictionary $ItemSignal -Path $Plan.TargetWirePath -Value $Adapter | Select-Object -Last 1
+        $injectSignal = Add-PathToDictionary -Dictionary $ItemSignal -Path $Plan.TargetWirePath -Value $addSignal.GetResult() | Select-Object -Last 1
         if ($opSignal.MergeSignalAndVerifyFailure($injectSignal)) {
             $opSignal.LogCritical("❌ Failed to inject graph into '$($Plan.TargetWirePath)'")
             return $opSignal

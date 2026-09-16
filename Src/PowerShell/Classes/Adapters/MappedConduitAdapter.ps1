@@ -37,7 +37,7 @@ class MappedConduitAdapter {
         return $opSignal
     }
 
-    [Signal] RegisterAdapter([string]$Key, [object]$ConduitAdapter) {
+    [Signal] RegisterAdapter([object]$ConduitAdapter, [string]$Key) {
         $opSignal = [Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
         $adapterSignal = [Signal]::Start("Adapter:$Key") | Select-Object -Last 1
         $adapterSignal.SetResult($ConduitAdapter)
@@ -62,7 +62,13 @@ class MappedConduitAdapter {
 
         foreach ($key in $graph.Grid.Keys) {
             $subSignal = $graph.Grid[$key]
-            $adapter = $subSignal.GetResult() | Select-Object -Last 1
+            $resolvedAdapterSignal = Resolve-MappedAdapter `
+                -AdapterSignal $subSignal `
+                -Signal $this.Signal `
+                -ConductionContext $this.Signal.GetJacket() `
+            | Select-Object -Last 1
+            if ($resolvedAdapterSignal.Failure() -or -not $resolvedAdapterSignal.HasResult()) { continue }
+            $adapter = $resolvedAdapterSignal.GetResult()
 
             if ($null -ne $adapter -and ($adapter | Get-Member -Name "Invoke")) {
                 $resultSignal = $adapter.Invoke($Context, $Plan) | Select-Object -Last 1

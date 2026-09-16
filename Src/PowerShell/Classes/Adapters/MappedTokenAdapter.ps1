@@ -118,7 +118,13 @@ class MappedTokenAdapter {
 
         foreach ($key in $graph.Grid.Keys) {
             $adapterSignal = $graph.Grid[$key]
-            $adapter = $adapterSignal.GetResult()
+            $resolvedAdapterSignal = Resolve-MappedAdapter `
+                -AdapterSignal $adapterSignal `
+                -Signal $this.Signal `
+                -ConductionContext $this.Signal.GetJacket() `
+            | Select-Object -Last 1
+            if ($resolvedAdapterSignal.Failure() -or -not $resolvedAdapterSignal.HasResult()) { continue }
+            $adapter = $resolvedAdapterSignal.GetResult()
 
             if ($null -ne $adapter -and ($adapter | Get-Member -Name $MethodName)) {
                 $result = $adapter.InvokeMethod($MethodName, $Args)

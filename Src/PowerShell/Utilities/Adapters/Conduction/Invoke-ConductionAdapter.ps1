@@ -28,7 +28,16 @@ function Invoke-ConductionAdapter {
             return $opSignal
         }
         
-        $adapter = $adapterSignal.GetResult()
+        $mappedSlotSignal = $adapterSignal.GetResultSignal()
+        $resolvedAdapterSignal = Resolve-MappedAdapter `
+            -AdapterSignal $mappedSlotSignal `
+            -Signal $ConductionSignal `
+            -ConductionContext $MappedAdapterSignal.GetJacket() `
+        | Select-Object -Last 1
+        if ($opSignal.MergeSignalAndVerifyFailure($resolvedAdapterSignal) -or -not $resolvedAdapterSignal.HasResult()) {
+            return $opSignal
+        }
+        $adapter = $resolvedAdapterSignal.GetResult()
         
         $adapterIvokeSignal = $adapter.Invoke($Slot, $Activity, $ConductionSignal, $Plan, $ItemSignal) | Select-Object -Last 1
         if ($opSignal.MergeSignalAndVerifyFailure($adapterIvokeSignal)) {

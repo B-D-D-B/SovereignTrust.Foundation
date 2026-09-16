@@ -37,7 +37,7 @@ class MappedCondenserAdapter {
         return $opSignal
     }
 
-    [Signal] RegisterAdapter([string]$Key, [object]$CondenserAdapter) {
+    [Signal] RegisterAdapter([object]$CondenserAdapter, [string]$Key) {
         $opSignal = [Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
         $adapterSignal = [Signal]::Start("Adapter:$Key") | Select-Object -Last 1
         $adapterSignal.SetResult($CondenserAdapter)
@@ -66,7 +66,15 @@ class MappedCondenserAdapter {
         $consdenserSignal = Resolve-PathFromDictionary -Dictionary $this.Signal -Path $consdenserPath | Select-Object -Last 1
         if ($opSignal.MergeSignalAndVerifyFailure($consdenserSignal)) { return $opSignal }
 
-        $consdenser = $consdenserSignal.GetResult($true)
+        $resolvedCondenserSignal = Resolve-MappedAdapter `
+            -AdapterSignal $consdenserSignal.GetResultSignal() `
+            -Signal $ConductionSignal `
+            -ConductionContext $this.Signal.GetJacket() `
+        | Select-Object -Last 1
+        if ($opSignal.MergeSignalAndVerifyFailure($resolvedCondenserSignal) -or -not $resolvedCondenserSignal.HasResult()) {
+            return $opSignal
+        }
+        $consdenser = $resolvedCondenserSignal.GetResult()
         
         # ░▒▓█ Run the Conduction Condenser using the Config bits  █▓▒░
         $consdenserIvokeSignal = $consdenser.Invoke($Slot, $Activity, $ConductionSignal, $Plan, $ItemSignal) | Select-Object -Last 1
@@ -91,7 +99,13 @@ class MappedCondenserAdapter {
 
         foreach ($key in $graph.Grid.Keys) {
             $subSignal = $graph.Grid[$key]
-            $adapter = $subSignal.GetResult() | Select-Object -Last 1
+            $resolvedAdapterSignal = Resolve-MappedAdapter `
+                -AdapterSignal $subSignal `
+                -Signal $this.Signal `
+                -ConductionContext $this.Signal.GetJacket() `
+            | Select-Object -Last 1
+            if ($resolvedAdapterSignal.Failure() -or -not $resolvedAdapterSignal.HasResult()) { continue }
+            $adapter = $resolvedAdapterSignal.GetResult()
 
             if ($null -ne $adapter -and ($adapter | Get-Member -Name "Invoke")) {
                 $resultSignal = $adapter.Invoke($Context)
