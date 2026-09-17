@@ -288,30 +288,28 @@ class PlanCondenser {
                     }
 
                     foreach ($workerResult in @($poolSignal.GetResult() | Sort-Object -Property Index)) {
-                        if (-not [string]::IsNullOrWhiteSpace([string]$workerResult.Error)) {
-                            $null = $opSignal.LogCritical("Iteration $($workerResult.Index) runspace failed: $($workerResult.Error)")
-                            continue
-                        }
-
                         if ($null -eq $workerResult.InitializationSignal) {
                             $null = $opSignal.LogCritical("Iteration $($workerResult.Index) did not return an initialization signal.")
-                            continue
                         }
-
-                        $null = $opSignal.MergeSignal(@($workerResult.InitializationSignal))
-                        if ([bool]$workerResult.InitializationFailed -or $null -eq $workerResult.WorkerSignal) {
-                            if ([bool]$workerResult.InitializationFailed -and -not $opSignal.Failure()) {
+                        else {
+                            if ([bool]$workerResult.InitializationFailed -and -not $workerResult.InitializationSignal.Failure()) {
                                 $null = $opSignal.LogCritical("Iteration $($workerResult.Index) environment initialization failed.")
                             }
-                            if ($null -eq $workerResult.WorkerSignal) {
-                                $null = $opSignal.LogCritical("Iteration $($workerResult.Index) did not return a worker signal.")
-                            }
-                            continue
+                            $null = $opSignal.MergeSignal(@($workerResult.InitializationSignal))
                         }
 
-                        $null = $opSignal.MergeSignal(@($workerResult.WorkerSignal))
-                        if ([bool]$workerResult.WorkerFailed -and -not $opSignal.Failure()) {
-                            $null = $opSignal.LogCritical("Iteration $($workerResult.Index) worker failed.")
+                        if ($null -eq $workerResult.WorkerSignal) {
+                            $null = $opSignal.LogCritical("Iteration $($workerResult.Index) did not return a worker signal.")
+                        }
+                        else {
+                            if ([bool]$workerResult.WorkerFailed -and -not $workerResult.WorkerSignal.Failure()) {
+                                $null = $opSignal.LogCritical("Iteration $($workerResult.Index) worker failed.")
+                            }
+                            $null = $opSignal.MergeSignal(@($workerResult.WorkerSignal))
+                        }
+
+                        if (-not [string]::IsNullOrWhiteSpace([string]$workerResult.Error)) {
+                            $null = $opSignal.LogCritical("Iteration $($workerResult.Index) runspace failed: $($workerResult.Error)")
                         }
                     }
 

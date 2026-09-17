@@ -54,6 +54,84 @@ foreach ($result in $results) {
 }
 Assert-True ($mergedSignal.Entries.Count -eq 4) 'Worker signal entries could not be merged in the coordinator runspace.'
 
+$errorStreamSignal = Invoke-STRunspacePool `
+    -Signal $signal `
+    -EnvironmentDefinition ([PSCustomObject]@{ Name = 'ErrorStreamEnvironment' }) `
+    -WorkItems @([PSCustomObject]@{ Index = 10; Value = 'ErrorItem' }) `
+    -WorkerCommand 'Test-STPoolErrorWorker' `
+    -ThrottleLimit 1 `
+    -FoundationModulePath $workerModule `
+    -WorkerContext ([PSCustomObject]@{}) `
+| Select-Object -Last 1
+
+$errorStreamResult = @($errorStreamSignal.GetResult())[0]
+Assert-True ($null -ne $errorStreamResult.InitializationSignal) 'Error-stream result lost its initialization diagnostics.'
+Assert-True ($null -ne $errorStreamResult.WorkerSignal) 'Error-stream result lost its worker diagnostics.'
+Assert-True ($errorStreamResult.Error -like '*Requested test error*') 'Worker error-stream output was not returned.'
+
+$throwSignal = Invoke-STRunspacePool `
+    -Signal $signal `
+    -EnvironmentDefinition ([PSCustomObject]@{ Name = 'ThrowEnvironment' }) `
+    -WorkItems @([PSCustomObject]@{ Index = 11; Value = 'ThrowItem' }) `
+    -WorkerCommand 'Test-STPoolThrowWorker' `
+    -ThrottleLimit 1 `
+    -FoundationModulePath $workerModule `
+    -WorkerContext ([PSCustomObject]@{}) `
+| Select-Object -Last 1
+
+$throwResult = @($throwSignal.GetResult())[0]
+Assert-True ($null -ne $throwResult.InitializationSignal) 'Worker exception lost its initialization diagnostics.'
+Assert-True ($null -eq $throwResult.WorkerSignal) 'Worker exception unexpectedly returned a worker signal.'
+Assert-True ([bool]$throwResult.WorkerFailed) 'Worker exception was not marked failed.'
+Assert-True ($throwResult.Error -like '*Requested test worker exception*') 'Worker exception message was not returned.'
+
+$invalidWorkerSignal = Invoke-STRunspacePool `
+    -Signal $signal `
+    -EnvironmentDefinition ([PSCustomObject]@{ Name = 'InvalidWorkerEnvironment' }) `
+    -WorkItems @([PSCustomObject]@{ Index = 13; Value = 'InvalidWorkerItem' }) `
+    -WorkerCommand 'Test-STPoolInvalidWorker' `
+    -ThrottleLimit 1 `
+    -FoundationModulePath $workerModule `
+    -WorkerContext ([PSCustomObject]@{}) `
+| Select-Object -Last 1
+
+$invalidWorkerResult = @($invalidWorkerSignal.GetResult())[0]
+Assert-True ($null -ne $invalidWorkerResult.InitializationSignal) 'Invalid worker response lost initialization diagnostics.'
+Assert-True ($null -eq $invalidWorkerResult.WorkerSignal) 'Invalid worker response was accepted as a Signal.'
+Assert-True ([bool]$invalidWorkerResult.WorkerFailed) 'Invalid worker response was not marked failed.'
+Assert-True ($invalidWorkerResult.Error -like "*did not return a Signal*") 'Invalid worker response did not return a clear error.'
+
+$initializationFailureSignal = Invoke-STRunspacePool `
+    -Signal $signal `
+    -EnvironmentDefinition ([PSCustomObject]@{ Name = 'InitializationFailure'; FailInitialization = $true }) `
+    -WorkItems @([PSCustomObject]@{ Index = 12; Value = 'InitializationItem' }) `
+    -WorkerCommand 'Test-STPoolWorker' `
+    -ThrottleLimit 1 `
+    -FoundationModulePath $workerModule `
+    -WorkerContext ([PSCustomObject]@{ Name = 'Unused'; SourceSignal = $sourceSignal }) `
+| Select-Object -Last 1
+
+$initializationFailureResult = @($initializationFailureSignal.GetResult())[0]
+Assert-True ($null -ne $initializationFailureResult.InitializationSignal) 'Initialization failure lost its diagnostic signal.'
+Assert-True ([bool]$initializationFailureResult.InitializationFailed) 'Initialization failure was not marked failed.'
+Assert-True ($initializationFailureResult.InitializationSignal.Failure()) 'Initialization critical entry was not reconstructed.'
+Assert-True ($null -eq $initializationFailureResult.WorkerSignal) 'Worker ran after initialization failed.'
+
+$duplicateIndexSignal = Invoke-STRunspacePool `
+    -Signal $signal `
+    -EnvironmentDefinition ([PSCustomObject]@{ Name = 'DuplicateIndexEnvironment' }) `
+    -WorkItems @(
+        [PSCustomObject]@{ Index = 20; Value = 'First' },
+        [PSCustomObject]@{ Index = 20; Value = 'Second' }
+    ) `
+    -WorkerCommand 'Test-STPoolWorker' `
+    -ThrottleLimit 1 `
+    -FoundationModulePath $workerModule `
+    -WorkerContext ([PSCustomObject]@{ Name = 'Duplicate'; SourceSignal = $sourceSignal }) `
+| Select-Object -Last 1
+
+Assert-True ($duplicateIndexSignal.Failure()) 'Duplicate work-item indexes were accepted.'
+
 Import-Module $workerModule -Force
 $inlineSignal = Invoke-STRunspacePool `
     -Signal $signal `
@@ -74,4 +152,4 @@ Assert-True ($inlineResults[0].Index -eq 2) 'Inline debugging executed the wrong
 Assert-True ($inlineResults[0].WorkerSignal.Result.ContextName -eq 'InlineContext') 'Inline worker context was not delivered.'
 Assert-True ($inlineResults[0].WorkerSignal.Result.RunspaceId -eq [runspace]::DefaultRunspace.InstanceId.ToString()) 'Inline debugging did not execute in the caller runspace.'
 
-Write-Output 'PASS: ordered collection, fresh per-item runtimes, worker context, runspace throttling, and inline debugging.'
+Write-Output 'PASS: ordered collection, fresh runtimes, diagnostics, failures, validation, throttling, and inline debugging.'

@@ -4,6 +4,7 @@ $ErrorActionPreference = 'Stop'
 $foundationRoot = Join-Path $PSScriptRoot '../Src/PowerShell'
 . "$foundationRoot/Utilities/Adapters/Condenser/Plan/Resolve-ClonePlan.ps1"
 . "$foundationRoot/Utilities/Adapters/Condenser/Plan/Invoke-PlanIteration.ps1"
+. "$foundationRoot/Utilities/Adapters/Condenser/Plan/Invoke-PlanIterationWorker.ps1"
 
 function Assert-True([bool]$Condition, [string]$Message) {
     if (-not $Condition) { throw $Message }
@@ -51,4 +52,24 @@ Assert-True ($script:invocation.Slot -eq 'Plan' -and $script:invocation.Activity
 Assert-True ($script:invocation.Plan.Activity -eq 'InvokePhase') 'Iteration clone activity was not updated.'
 Assert-True ($plan.Activity -eq 'IteratePhase') 'Iteration execution mutated the caller plan.'
 
-Write-Output 'PASS: plan cloning, iteration registration, metadata, and adapter dispatch.'
+$runtimeConductionSignal = [Signal]::Start('WorkerConduction') | Select-Object -Last 1
+$runtimeGraph = ([Graph]::Start('WorkerGraph', $runtimeConductionSignal, $false) | Select-Object -Last 1).GetResult()
+$null = $runtimeConductionSignal.SetPointer($runtimeGraph)
+$workerSignal = Invoke-PlanIterationWorker `
+    -Runtime ([PSCustomObject]@{ ConductionSignal = $runtimeConductionSignal }) `
+    -WorkItem ([PSCustomObject]@{ Index = 1; Value = 'B'; Plan = $plan }) `
+    -Context ([PSCustomObject]@{
+        SourceItemSignal    = $itemSignal
+        IterationName       = 'CurrentItem'
+        IterationArray      = $iterations
+        ReuseItemSignalGrid = $false
+    }) `
+| Select-Object -Last 1
+
+Assert-True (-not $workerSignal.Failure() -and $workerSignal.HasResult()) 'Plan iteration worker failed.'
+$workerResult = $workerSignal.GetResult()
+Assert-True ($workerResult.Index -eq 1 -and $workerResult.Completed) 'Plan iteration worker returned the wrong status.'
+Assert-True ($workerResult.PSObject.Properties.Name -notcontains 'ItemSignal') 'Plan iteration worker retained its runtime ItemSignal.'
+Assert-True ($workerResult.PSObject.Properties.Name -notcontains 'Signal') 'Plan iteration worker retained its nested execution Signal.'
+
+Write-Output 'PASS: plan cloning, iteration dispatch, metadata, and compact worker results.'

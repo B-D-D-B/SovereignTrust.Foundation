@@ -12,7 +12,7 @@ function Invoke-PlanIterationWorker {
     )
 
     $opSignal = [Signal]::Start("Invoke-PlanIterationWorker:$($WorkItem.Index)", $Runtime.ConductionSignal) | Select-Object -Last 1
-Write-Host "Invoke-PlanIterationWorker: $($WorkItem.Index) - $($WorkItem.Value)"
+    Write-Verbose "Invoke-PlanIterationWorker: $($WorkItem.Index) - $($WorkItem.Value)"
     try {
         $targetGraph = $Runtime.ConductionSignal.GetPointer()
         if ($targetGraph -isnot [Graph]) {
@@ -59,11 +59,10 @@ Write-Host "Invoke-PlanIterationWorker: $($WorkItem.Index) - $($WorkItem.Value)"
             -IterationArray $Context.IterationArray `
         | Select-Object -Last 1
 
-        $null = $opSignal.MergeSignalAndVerifyFailure(@($iterationSignal))
+        $iterationFailed = $opSignal.MergeSignalAndVerifyFailure(@($iterationSignal))
         $opSignal.SetResult([PSCustomObject]@{
-            Index      = [int]$WorkItem.Index
-            ItemSignal = $workerItemSignal
-            Signal     = $iterationSignal
+            Index     = [int]$WorkItem.Index
+            Completed = -not $iterationFailed
         })
     }
     catch {

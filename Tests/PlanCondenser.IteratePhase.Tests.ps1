@@ -15,6 +15,7 @@ function Assert-True([bool]$Condition, [string]$Message) {
 
 $script:sequentialIndices = [System.Collections.Generic.List[int]]::new()
 $script:poolCalls = [System.Collections.Generic.List[object]]::new()
+$script:returnPoolError = $false
 
 function Invoke-PlanIteration {
     param(
@@ -54,13 +55,20 @@ function Invoke-STRunspacePool {
 
     $poolSignal = [Signal]::Start('StubPool') | Select-Object -Last 1
     $poolSignal.SetResult(@($WorkItems | ForEach-Object {
+        $initializationSignal = [Signal]::Start("Initialization:$($_.Index)") | Select-Object -Last 1
+        $workerSignal = [Signal]::Start("Worker:$($_.Index)") | Select-Object -Last 1
+        if ($script:returnPoolError) {
+            $null = $initializationSignal.LogInformation("Initialization diagnostic $($_.Index)")
+            $null = $workerSignal.LogInformation("Worker diagnostic $($_.Index)")
+        }
+
         [PSCustomObject]@{
             Index                = $_.Index
-            InitializationSignal = [Signal]::Start("Initialization:$($_.Index)")
+            InitializationSignal = $initializationSignal
             InitializationFailed = $false
-            WorkerSignal         = [Signal]::Start("Worker:$($_.Index)")
+            WorkerSignal         = $workerSignal
             WorkerFailed         = $false
-            Error                = $null
+            Error                = if ($script:returnPoolError) { "Runspace diagnostic $($_.Index)" } else { $null }
         }
     }))
     return $poolSignal
@@ -170,4 +178,16 @@ Assert-True (-not $clampedResult.Failure()) 'Clamped warmup execution failed.'
 Assert-True (($script:sequentialIndices -join ',') -eq '0,1,2,3,4') 'Warmup was not clamped to the iteration count.'
 Assert-True ($script:poolCalls.Count -eq 0) 'Clamped warmup unexpectedly started a runspace pool.'
 
-Write-Output 'PASS: warmup splitting, parallel dispatch, inline debugging, throttling, grid reuse forwarding, and sequential switches.'
+$script:sequentialIndices.Clear()
+$script:poolCalls.Clear()
+$script:returnPoolError = $true
+$diagnosticPlan = New-TestPlan -Threading ([PSCustomObject]@{ Warmup = 0; MaxThreads = 2 })
+$diagnosticResult = $condenser.Invoke($null, 'IteratePhase', $context.ConductionSignal, $diagnosticPlan, $context.ItemSignal)
+$diagnosticMessages = @($diagnosticResult.Entries | ForEach-Object { [string]$_.Message })
+Assert-True ($diagnosticResult.Failure()) 'Runspace error did not fail the plan iteration.'
+Assert-True ($diagnosticMessages -contains 'Initialization diagnostic 0') 'Runspace error discarded initialization diagnostics.'
+Assert-True ($diagnosticMessages -contains 'Worker diagnostic 0') 'Runspace error discarded worker diagnostics.'
+Assert-True (($diagnosticMessages | Where-Object { $_ -like '*Runspace diagnostic 0*' }).Count -gt 0) 'Runspace error message was not logged.'
+$script:returnPoolError = $false
+
+Write-Output 'PASS: warmup, parallel dispatch, diagnostics, inline debugging, throttling, grid reuse, and sequential switches.'
