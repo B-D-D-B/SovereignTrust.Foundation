@@ -31,7 +31,7 @@ class FabCondenser {
 
         $JacketSignalWrapper = Resolve-PathFromDictionary -Dictionary $ItemSignal -Path "%" | Select-Object -Last 1
         $JacketSignal = $JacketSignalWrapper.GetResult()
-        $loadingMode = 'Lazy'
+        $loadingMode = 'Eager'
         $retryFailedResolution = $false
         if ($null -ne $Plan) {
             $loadingModeSignal = Resolve-PathFromDictionary `

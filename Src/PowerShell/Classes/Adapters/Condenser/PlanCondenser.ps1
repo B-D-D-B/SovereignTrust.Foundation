@@ -123,7 +123,9 @@ class PlanCondenser {
                 "IteratePhase" {
                     $iterationArraySignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.IterationArray" | Select-Object -Last 1
                     $iterationNameSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.IterationName" -Default "Iteration" | Select-Object -Last 1
-                    if ($opSignal.MergeSignalAndVerifyFailure(@($iterationArraySignal, $iterationNameSignal))) {
+                    $threadingEnabledSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.Threading.Enabled" -Default $false | Select-Object -Last 1
+
+                    if ($opSignal.MergeSignalAndVerifyFailure(@($iterationArraySignal, $iterationNameSignal, $threadingEnabledSignal))) {
                         return $opSignal
                     }
 
@@ -133,75 +135,86 @@ class PlanCondenser {
                         break
                     }
 
-                    $threading = $Plan.Config.Threading
-                    $warmup = 0
-                    if ($null -ne $threading -and $null -ne $threading.Warmup) {
+                    if ($threadingEnabledSignal.GetResult() -isnot [bool]) {
+                        $null = $opSignal.LogCritical("Plan.Config.Threading.Enabled must be a boolean.")
+                        return $opSignal
+                    }
+                    $threadingEnabled = $threadingEnabledSignal.GetResult()
+                    $useParallel = $false
+                    $warmupCount = $iterationArray.Count
+                    $environmentDetails = $null
+                    $maxThreads = $null
+                    $reuseItemSignalGrid = $null
+                    $debugInline = $null
+                    $debugWorkItemIndex = $null
+                    if ($threadingEnabled) {
+                        $warmupSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.Threading.Warmup" -Default 0 | Select-Object -Last 1
+                        if ($opSignal.MergeSignalAndVerifyFailure($warmupSignal)) { return $opSignal }
                         try {
-                            $warmup = [int]$threading.Warmup
+                            $warmup = [int]$warmupSignal.GetResult()
                         }
                         catch {
                             $null = $opSignal.LogCritical("Plan.Config.Threading.Warmup must be an integer.")
                             return $opSignal
                         }
-                    }
-                    if ($warmup -lt -1) {
-                        $null = $opSignal.LogCritical("Plan.Config.Threading.Warmup cannot be less than -1.")
-                        return $opSignal
-                    }
+                        if ($warmup -lt 0) {
+                            $null = $opSignal.LogCritical("Plan.Config.Threading.Warmup cannot be less than 0.")
+                            return $opSignal
+                        }
 
-                    $runtimeGraph = $ConductionSignal.GetPointer()
-                    $environmentDetails = $null
-                    if ($runtimeGraph -is [Graph] -and $runtimeGraph.Grid.Contains('EnvironmentDetails')) {
-                        $environmentDetails = $runtimeGraph.Grid['EnvironmentDetails'].GetResult()
-                    }
+                        $environmentDetailsSignal = Resolve-PathFromDictionary -Dictionary $ConductionSignal -Path "*.#.EnvironmentDetails.@" -Default $null | Select-Object -Last 1
+                        $supportParallelismSignal = Resolve-PathFromDictionary -Dictionary $ConductionSignal -Path "*.#.EnvironmentDetails.@.Config.SupportParallelism" -Default $false | Select-Object -Last 1
+                        $maxParallelismSignal = Resolve-PathFromDictionary -Dictionary $ConductionSignal -Path "*.#.EnvironmentDetails.@.Config.MaxParallelism" -Default 1 | Select-Object -Last 1
+                        $reuseItemSignalGridSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.Threading.ReuseItemSignalGrid" -Default $false | Select-Object -Last 1
+                        $debugInlineSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.Threading.DebugInline" -Default $false | Select-Object -Last 1
+                        if ($opSignal.MergeSignalAndVerifyFailure(@($environmentDetailsSignal, $supportParallelismSignal, $maxParallelismSignal, $reuseItemSignalGridSignal, $debugInlineSignal))) {
+                            return $opSignal
+                        }
 
-                    $supportParallelism = $false
-                    $maxThreads = 1
-                    try {
-                        if ($null -ne $environmentDetails -and $null -ne $environmentDetails.Config) {
-                            $supportParallelism = [bool]$environmentDetails.Config.SupportParallelism
-                            if ($null -ne $environmentDetails.Config.MaxParallelism) {
-                                $maxThreads = [Math]::Max(1, [int]$environmentDetails.Config.MaxParallelism)
+                        $environmentDetails = $environmentDetailsSignal.GetResult()
+                        foreach ($booleanSettingSignal in @($supportParallelismSignal, $reuseItemSignalGridSignal, $debugInlineSignal)) {
+                            if ($booleanSettingSignal.GetResult() -isnot [bool]) {
+                                $null = $opSignal.LogCritical("SupportParallelism, ReuseItemSignalGrid, and DebugInline must be booleans.")
+                                return $opSignal
                             }
                         }
-                        if ($null -ne $threading -and $null -ne $threading.MaxThreads) {
-                            $maxThreads = [Math]::Max(1, [int]$threading.MaxThreads)
-                        }
-                    }
-                    catch {
-                        $null = $opSignal.LogCritical("Threading MaxThreads and environment MaxParallelism must be integers.")
-                        return $opSignal
-                    }
-
-                    $reuseItemSignalGrid = $false
-                    if ($null -ne $threading -and $null -ne $threading.ReuseItemSignalGrid) {
-                        $reuseItemSignalGrid = [bool]$threading.ReuseItemSignalGrid
-                    }
-
-                    $debugInline = $false
-                    if ($null -ne $threading -and $null -ne $threading.DebugInline) {
-                        $debugInline = [bool]$threading.DebugInline
-                    }
-
-                    $warmupCount = if ($warmup -eq -1) {
-                        $iterationArray.Count
-                    }
-                    else {
-                        [Math]::Min([Math]::Max(0, $warmup), $iterationArray.Count)
-                    }
-
-                    $debugWorkItemIndex = $warmupCount
-                    if ($null -ne $threading -and $null -ne $threading.DebugWorkItemIndex) {
+                        $supportParallelism = [bool]$supportParallelismSignal.GetResult()
+                        $maxThreadsSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.Threading.MaxThreads" -Default $maxParallelismSignal.GetResult() | Select-Object -Last 1
+                        if ($opSignal.MergeSignalAndVerifyFailure($maxThreadsSignal)) { return $opSignal }
                         try {
-                            $debugWorkItemIndex = [int]$threading.DebugWorkItemIndex
+                            $null = [int]$maxParallelismSignal.GetResult()
+                            $maxThreads = [Math]::Max(1, [int]$maxThreadsSignal.GetResult())
+                        }
+                        catch {
+                            $null = $opSignal.LogCritical("Threading MaxThreads and environment MaxParallelism must be integers.")
+                            return $opSignal
+                        }
+
+                        $reuseItemSignalGrid = [bool]$reuseItemSignalGridSignal.GetResult()
+                        $debugInline = [bool]$debugInlineSignal.GetResult()
+
+                        $warmupCount = [Math]::Min($warmup, $iterationArray.Count)
+
+                        $debugWorkItemIndexSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.Threading.DebugWorkItemIndex" -Default $warmupCount | Select-Object -Last 1
+                        if ($opSignal.MergeSignalAndVerifyFailure($debugWorkItemIndexSignal)) { return $opSignal }
+                        try {
+                            $debugWorkItemIndex = [int]$debugWorkItemIndexSignal.GetResult()
                         }
                         catch {
                             $null = $opSignal.LogCritical("Plan.Config.Threading.DebugWorkItemIndex must be an integer.")
                             return $opSignal
                         }
+
+                        $remainingCount = $iterationArray.Count - $warmupCount
+                        $useParallel = $remainingCount -gt 0 -and (
+                            $debugInline -or
+                            ($supportParallelism -and $maxThreads -gt 1 -and $remainingCount -gt 1)
+                        )
                     }
 
-                    for ($index = 0; $index -lt $warmupCount; $index++) {
+                    # Serial-only execution and serial fallback share the same loop.
+                    $serialCount = if ($useParallel) { $warmupCount } else { $iterationArray.Count }
+                    for ($index = 0; $index -lt $serialCount; $index++) {
                         $iterationSignal = Invoke-PlanIteration `
                             -ConductionSignal $ConductionSignal `
                             -ItemSignal $ItemSignal `
@@ -217,32 +230,7 @@ class PlanCondenser {
                         }
                     }
 
-                    $remainingCount = $iterationArray.Count - $warmupCount
-                    if ($remainingCount -le 0) {
-                        break
-                    }
-
-                    $useParallel = $warmup -ne -1 -and (
-                        $debugInline -or
-                        ($supportParallelism -and $maxThreads -gt 1 -and $remainingCount -gt 1)
-                    )
                     if (-not $useParallel) {
-                        for ($index = $warmupCount; $index -lt $iterationArray.Count; $index++) {
-                            $iterationSignal = Invoke-PlanIteration `
-                                -ConductionSignal $ConductionSignal `
-                                -ItemSignal $ItemSignal `
-                                -Plan $Plan `
-                                -Iteration $iterationArray[$index] `
-                                -IterationIndex $index `
-                                -IterationName $iterationName `
-                                -IterationArray $iterationArray `
-                            | Select-Object -Last 1
-
-                            if ($opSignal.MergeSignalAndVerifyFailure(@($iterationSignal))) {
-                                return $opSignal
-                            }
-                        }
-
                         break
                     }
 
@@ -283,7 +271,8 @@ class PlanCondenser {
                         -DebugWorkItemIndex $debugWorkItemIndex `
                     | Select-Object -Last 1
 
-                    if ($opSignal.MergeSignalAndVerifyFailure(@($poolSignal)) -or -not $poolSignal.HasResult()) {
+                    $null = $opSignal.MergeSignal(@($poolSignal))
+                    if (-not $poolSignal.HasResult()) {
                         return $opSignal
                     }
 

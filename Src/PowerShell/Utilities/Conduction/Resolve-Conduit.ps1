@@ -28,11 +28,19 @@ function Resolve-Conduit {
             return $opSignal
         }
 
-        $adapterJsonSignal = Resolve-PathFromDictionary -Dictionary $EnvironmentSignal -Path "*.#.Adapters.@.@.#.Content.%.@"  | Select-Object -Last 1
-        
-#        Pointer.Grid.Adapters.GetResult().GetResult().Pointer.Grid.Media -Path "Adapters" | Select-Object -Last 1
-        $adapterJson = ConvertTo-Json -InputObject $adapterJsonSignal.GetResult() -Depth 100 -ErrorAction Stop
+        # This won't scale when different runspaces have their own conduit with different adapter sets.
+        $adapterSignal = Resolve-PathFromDictionary -Dictionary $ConductorSignal -Path "*.#.Adapters" -Default $null | Select-Object -Last 1
+        if (-not $adapterSignal.HasResult()) {
+            $adapterSignal = Resolve-PathFromDictionary -Dictionary $EnvironmentSignal -Path "*.#.Adapters.@.@.#"  | Select-Object -Last 1
+            $ConductorSignal.CreateGraph()
+            $ConductorSignal.GetPointer().RegisterSignal("Adapters", $adapterSignal)
+        } else
+        {
+            Write-Host "Adapter Signal Already Mapped"
+        }
 
+        $adapterJsonSignal = Resolve-PathFromDictionary -Dictionary $EnvironmentSignal -Path "*.#.Adapters.@.@.#.Content.%.@"  | Select-Object -Last 1
+        $adapterJson = ConvertTo-Json -InputObject $adapterJsonSignal.GetResult() -Depth 100 -ErrorAction Stop
         Write-Host("AdapterJson: $adapterJson")
 
         # If the Environment is within the source object, resolve it.

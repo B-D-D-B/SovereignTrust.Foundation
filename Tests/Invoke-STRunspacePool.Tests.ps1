@@ -147,9 +147,14 @@ $inlineSignal = Invoke-STRunspacePool `
 
 Assert-True (-not $inlineSignal.Failure() -and $inlineSignal.HasResult()) 'Inline worker execution failed.'
 $inlineResults = @($inlineSignal.GetResult())
-Assert-True ($inlineResults.Count -eq 1) 'Inline debugging executed more than the selected work item.'
-Assert-True ($inlineResults[0].Index -eq 2) 'Inline debugging executed the wrong work item.'
+Assert-True ($inlineResults.Count -eq 4) 'Inline debugging did not execute all work items.'
+Assert-True (($inlineResults.Index -join ',') -eq '0,1,2,3') 'Inline debugging skipped or reordered work items.'
 Assert-True ($inlineResults[0].WorkerSignal.Result.ContextName -eq 'InlineContext') 'Inline worker context was not delivered.'
 Assert-True ($inlineResults[0].WorkerSignal.Result.RunspaceId -eq [runspace]::DefaultRunspace.InstanceId.ToString()) 'Inline debugging did not execute in the caller runspace.'
 
+Assert-True ($throwSignal.Failure()) 'Worker exception did not fail the parent pool signal.'
+Assert-True ($throwResult.Error.Contains('ScriptStackTrace:')) 'Worker exception lost its script stack.'
+Assert-True ($errorStreamSignal.Failure()) 'Error stream did not fail the parent pool signal.'
+Assert-True ($initializationFailureSignal.Failure()) 'Initialization failure did not fail the parent pool signal.'
+Assert-True ((@($inlineResults.WorkerSignal.Result.RuntimeId | Select-Object -Unique)).Count -eq 4) 'Inline items did not initialize fresh runtimes.'
 Write-Output 'PASS: ordered collection, fresh runtimes, diagnostics, failures, validation, throttling, and inline debugging.'

@@ -7,6 +7,8 @@ function Invoke-STRunspacePool {
     The named worker command must be exported by the Foundation module and
     accept Runtime, WorkItem, and Context parameters. Results are collected and
     returned in input-index order; callers remain responsible for merging them.
+    DebugInline executes all work items sequentially in the current runspace.
+    DebugWorkItemIndex is retained for compatibility and no longer filters items.
     #>
     [CmdletBinding()]
     param (
@@ -40,6 +42,45 @@ function Invoke-STRunspacePool {
     $pool = $null
     $jobs = [System.Collections.Generic.List[object]]::new()
     $results = [System.Collections.Generic.List[object]]::new()
+
+    function Format-RunspaceError {
+        param([System.Management.Automation.ErrorRecord]$Record)
+        return (@(
+            ($Record | Out-String).Trim(),
+            $Record.Exception.ToString(),
+            "ScriptStackTrace: $($Record.ScriptStackTrace)"
+        ) -join [Environment]::NewLine)
+    }
+
+    function Receive-RunspaceDiagnostics {
+        foreach ($pendingJob in $jobs) {
+            if ($null -eq $pendingJob.PowerShell) { continue }
+            $errors = $pendingJob.PowerShell.Streams.Error
+            while ($pendingJob.ReportedErrorCount -lt $errors.Count) {
+                $record = $errors[$pendingJob.ReportedErrorCount]
+                $pendingJob.ReportedErrorCount++
+                $null = $opSignal.LogCritical("Worker '$WorkerCommand' index $($pendingJob.Index): $(Format-RunspaceError $record)")
+            }
+            $state = [string]$pendingJob.PowerShell.InvocationStateInfo.State
+            if ($state -ne $pendingJob.LastState) {
+                $pendingJob.LastState = $state
+                $null = $opSignal.LogInformation("Worker '$WorkerCommand' index $($pendingJob.Index) state: $state.")
+                if ($state -in @('Failed', 'Stopped')) {
+                    $null = $opSignal.LogCritical("Worker '$WorkerCommand' index $($pendingJob.Index) $state. Reason: $($pendingJob.PowerShell.InvocationStateInfo.Reason)")
+                }
+            }
+        }
+    }
+
+    function Write-RunspaceResultFailure {
+        param([object]$Result)
+        if ($Result.Error) {
+            $null = $opSignal.LogCritical($Result.Error)
+        }
+        elseif ($Result.InitializationFailed -or $Result.WorkerFailed) {
+            $null = $opSignal.LogCritical("Worker '$WorkerCommand' index $($Result.Index) failed (InitializationFailed=$($Result.InitializationFailed), WorkerFailed=$($Result.WorkerFailed)). See returned signal diagnostics.")
+        }
+    }
 
     function ConvertFrom-RunspaceSignalRecord {
         param([object]$Record)
@@ -218,6 +259,7 @@ function Invoke-STRunspacePool {
                 }
             }
             catch {
+                $workerError = $_
                 $initializationIsSignal = Test-IsRunspaceSignal -InputObject $initializationSignal
                 $workerIsSignal = Test-IsRunspaceSignal -InputObject $workerSignal
                 $initializationRecord = if ($initializationIsSignal) {
@@ -239,35 +281,38 @@ function Invoke-STRunspacePool {
                     InitializationFailed = -not $initializationIsSignal -or $initializationSignal.Failure() -or -not $initializationSignal.HasResult()
                     WorkerSignal         = $workerRecord
                     WorkerFailed         = $true
-                    Error                = $_.Exception.Message
+                    Error                = (@(
+                        "Worker '$WorkerCommand' index $($WorkItem.Index) failed.",
+                        ($workerError | Out-String).Trim(),
+                        $workerError.Exception.ToString(),
+                        "ScriptStackTrace: $($workerError.ScriptStackTrace)"
+                    ) -join [Environment]::NewLine)
                 }
             }
         }
 
         if ($DebugInline) {
-            $debugWorkItems = @($WorkItems | Where-Object { [int]$_.Index -eq $DebugWorkItemIndex })
-            if ($debugWorkItems.Count -ne 1) {
-                $null = $opSignal.LogCritical(
-                    "Inline debug work item index $DebugWorkItemIndex was not found exactly once."
-                )
-                return $opSignal
+            foreach ($inlineWorkItem in $WorkItems) {
+                $null = $opSignal.LogInformation("Inline worker '$WorkerCommand' index $($inlineWorkItem.Index) starting.")
+                $inlineOutput = @(& $workerScript `
+                    -EnvironmentJson $environmentJson `
+                    -WorkItem $inlineWorkItem `
+                    -WorkerCommand $WorkerCommand `
+                    -WorkerContext $WorkerContext)
+
+                if ($inlineOutput.Count -eq 0) {
+                    $null = $opSignal.LogCritical(
+                        "Inline debug work item $($inlineWorkItem.Index) did not return a result."
+                    )
+                    return $opSignal
+                }
+
+                $inlineResult = ConvertFrom-RunspaceResult -Result $inlineOutput[-1] -ExpectedIndex $inlineWorkItem.Index
+                $results.Add($inlineResult)
+                Write-RunspaceResultFailure $inlineResult
+                $null = $opSignal.LogInformation("Inline worker '$WorkerCommand' index $($inlineWorkItem.Index) completed.")
             }
-
-            $inlineOutput = @(& $workerScript `
-                -EnvironmentJson $environmentJson `
-                -WorkItem $debugWorkItems[0] `
-                -WorkerCommand $WorkerCommand `
-                -WorkerContext $WorkerContext)
-
-            if ($inlineOutput.Count -eq 0) {
-                $null = $opSignal.LogCritical(
-                    "Inline debug work item $DebugWorkItemIndex did not return a result."
-                )
-                return $opSignal
-            }
-
-            $inlineResult = ConvertFrom-RunspaceResult -Result $inlineOutput[-1] -ExpectedIndex $DebugWorkItemIndex
-            $opSignal.SetResult(@($inlineResult))
+            $opSignal.SetResult(@($results | Sort-Object -Property Index))
             return $opSignal
         }
 
@@ -301,7 +346,10 @@ function Invoke-STRunspacePool {
                     Index      = [int]$workItem.Index
                     PowerShell = $powerShell
                     Handle     = $handle
+                    ReportedErrorCount = 0
+                    LastState = ''
                 })
+                $null = $opSignal.LogInformation("Worker '$WorkerCommand' index $($workItem.Index) submitted.")
                 $powerShell = $null
             }
             finally {
@@ -313,27 +361,38 @@ function Invoke-STRunspacePool {
 
         foreach ($job in $jobs) {
             try {
+                $null = $opSignal.LogInformation("Awaiting worker '$WorkerCommand' index $($job.Index).")
+                while (-not $job.Handle.IsCompleted) {
+                    Receive-RunspaceDiagnostics
+                    Start-Sleep -Milliseconds 250
+                }
+                Receive-RunspaceDiagnostics
                 $jobOutput = @($job.PowerShell.EndInvoke($job.Handle))
+                Receive-RunspaceDiagnostics
                 $jobErrors = @($job.PowerShell.Streams.Error)
 
                 if ($jobOutput.Count -gt 0) {
                     $result = ConvertFrom-RunspaceResult -Result $jobOutput[-1] -ExpectedIndex $job.Index
                     if ($jobErrors.Count -gt 0) {
-                        $result.Error = ($jobErrors | ForEach-Object { $_.ToString() }) -join [Environment]::NewLine
+                        $result.Error = (@($result.Error) + @($jobErrors | ForEach-Object { Format-RunspaceError $_ }) | Where-Object { $_ }) -join [Environment]::NewLine
                     }
+                    Write-RunspaceResultFailure $result
                     $results.Add($result)
                 }
                 else {
-                    $errorMessage = ($jobErrors | ForEach-Object { $_.ToString() }) -join [Environment]::NewLine
+                    $errorMessage = ($jobErrors | ForEach-Object { Format-RunspaceError $_ }) -join [Environment]::NewLine
                     if ([string]::IsNullOrWhiteSpace($errorMessage)) {
                         $errorMessage = "Runspace work item $($job.Index) did not return a result."
                     }
                     $results.Add((New-RunspaceFailureResult -Index $job.Index -ErrorMessage $errorMessage))
+                    $null = $opSignal.LogCritical($errorMessage)
                 }
+                $null = $opSignal.LogInformation("Worker '$WorkerCommand' index $($job.Index) collected.")
             }
             catch {
-                Write-Verbose "Runspace pool job $($job.Index) failed: $($_.Exception.Message)"
-                $results.Add((New-RunspaceFailureResult -Index $job.Index -ErrorMessage $_.Exception.Message))
+                $errorMessage = "Worker '$WorkerCommand' index $($job.Index): $(Format-RunspaceError $_)"
+                $null = $opSignal.LogCritical($errorMessage)
+                $results.Add((New-RunspaceFailureResult -Index $job.Index -ErrorMessage $errorMessage))
             }
             finally {
                 $job.PowerShell.Dispose()

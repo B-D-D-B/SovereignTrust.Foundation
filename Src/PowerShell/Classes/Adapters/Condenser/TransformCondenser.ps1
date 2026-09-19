@@ -157,6 +157,15 @@ class TransformCondenser {
                     break
                 }
 
+                # Injects using a path to an xml or json object.
+                "RegisterSignal" {
+                    $sourceSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.Content" | Select-Object -Last 1
+                    $keySignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.Key" | Select-Object -Last 1
+
+                    $ItemSignal.GetPointer().RegisterSignal($keySignal.GetResult(), $sourceSignal);
+                    break
+                }
+
                 # Clone using a path to an xml or json object.
                 "Clone" {
                     $pathSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Path" | Select-Object -Last 1

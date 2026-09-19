@@ -105,7 +105,7 @@ function Invoke-TokenMemory {
             }
 
             'adapters' {
-                $dictionarySignal = Resolve-PathFromDictionary -Dictionary $Signal  -Path "%.*.#.Adapters.*.#" | Select-Object -Last 1
+                $dictionarySignal = Resolve-PathFromDictionary -Dictionary $Signal  -Path "*.#.Adapters.@.@.#" | Select-Object -Last 1
                 if ($dictionarySignal.HasResult()) {
                     $dictionary = $dictionarySignal.GetResult()
                 }
@@ -161,7 +161,7 @@ function Invoke-TokenMemory {
 
         if ($null -ne $dictionary) {
             if (-not $path) {
-                $opSignal.SetResult($dictionary)
+                $opSlignal.SetResult($dictionary)
             }
             else {
                 $valueSignal = Resolve-PathFromDictionary -Dictionary $dictionary -Path $path -Default $default -SignalLevel "Warning" | Select-Object -Last 1
