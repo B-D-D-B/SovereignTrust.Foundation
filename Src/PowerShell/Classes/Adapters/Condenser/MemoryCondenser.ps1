@@ -79,11 +79,13 @@ class MemoryCondenser {
                         }
 
                         $IsEnabledSignal = Resolve-PathFromDictionary -Dictionary $step -Path "IsEnabled" -Default $true | Select-Object -Last 1
+                        $IsEnabledOperatorSignal = Resolve-PathFromDictionary -Dictionary $step -Path "IsEnabledOperator" -Default "And" | Select-Object -Last 1
                         if ($opSignal.MergeSignalAndVerifyFailure($IsEnabledSignal)) { return $opSignal }
 
+                        $isEnabledOperator = $IsEnabledOperatorSignal.GetResult()
                         $isEnabledResult = $IsEnabledSignal.GetResult()
 
-                        if (-not $this.TestAllTrue($isEnabledResult)) {
+                        if (-not $this.TestAllTrue($isEnabledResult, $isEnabledOperator)) {
                             $step = $this.GetNextStep($step, $Plan, $ItemSignal, $ConductionSignal) 
                             continue
                         }
@@ -316,35 +318,57 @@ class MemoryCondenser {
         return $itemSignal
     }
 
-    [bool] TestAllTrue($Value) {
-        $values = @($Value)
+[bool] TestAllTrue($Value, $Operator) {
+    $values = @($Value)
 
-        if ($values.Count -eq 0) {
+    if ($values.Count -eq 0) {
+        return $false
+    }
+
+    if ([string]::IsNullOrWhiteSpace($Operator)) {
+        throw "Operator cannot be empty. Supported operators: And, Or."
+    }
+
+    $mode = $Operator.Trim().ToLowerInvariant()
+
+    if ($mode -notin @("and", "or")) {
+        throw "Unsupported operator '$Operator'. Supported operators: And, Or."
+    }
+
+    foreach ($item in $values) {
+        $isTrue = $false
+
+        if ($null -ne $item) {
+            if ($item -is [bool]) {
+                $isTrue = [bool]$item
+            }
+            else {
+                $text = $item.ToString().Trim()
+
+                if ($text -ieq "true") {
+                    $isTrue = $true
+                } elseif ($text -ieq "false") {
+                    $isTrue = $false
+                } else {
+                    # Did not properly hydrate into a true or false value
+                    $isTrue = $false
+                }
+            }
+        }
+
+        # And fails as soon as one value is not true.
+        if ($mode -eq "and" -and -not $isTrue) {
             return $false
         }
 
-        foreach ($item in $values) {
-            if ($null -eq $item) {
-                return $false
-            }
-
-            if ($item -is [bool]) {
-                if (-not $item) {
-                    return $false
-                }
-
-                continue
-            }
-
-            if ($item.ToString().Trim().ToLowerInvariant() -eq "false") {
-                return $false
-            }
-
-            if ($item.ToString().Trim().ToLowerInvariant() -ne "true") {
-                return $false
-            }
+        # Or succeeds as soon as one value is true.
+        if ($mode -eq "or" -and $isTrue) {
+            return $true
         }
-
-        return $true
     }
-}
+
+    # Reaching the end means:
+    # - And found no false values.
+    # - Or found no true values.
+    return ($mode -eq "and")
+}}
