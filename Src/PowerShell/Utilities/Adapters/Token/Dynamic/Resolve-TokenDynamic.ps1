@@ -738,7 +738,7 @@ function Resolve-TokenDynamic {
 
         $fn = $matches['fn'].ToLowerInvariant()
         $raw = ($matches['rawArgs'] ?? '').Trim()
-        $rawArgs = Split-DynamicArgs $raw
+        $rawArgs = @(Split-DynamicArgs $raw)
         $referenceCache = @{}
         $resolvedArgumentSet = Resolve-DynamicArguments -Text $raw -ReferenceCache $referenceCache
         $resolvedArgs = $resolvedArgumentSet.Arguments
@@ -1313,7 +1313,7 @@ function Resolve-TokenDynamic {
                 }
                 else {
                     $hasValue = $raw.Length -gt 0
-                    $value = if ($rawArgs.Count -le 1) { $rawArgs[0] } else { $raw }
+                    $value = if ($rawArgs -and $rawArgs.Count -ge 1) { $rawArgs[0] } else { $raw }
                 }
 
                 $result = -not $hasValue -or $null -eq $value
@@ -1332,7 +1332,7 @@ function Resolve-TokenDynamic {
                 }
                 else {
                     $hasValue = $raw.Length -gt 0
-                    $value = if ($rawArgs.Count -le 1) { $rawArgs[0] } else { $raw }
+                    $value = if ($rawArgs -and $rawArgs.Count -ge 1) { $rawArgs[0] } else { $raw }
                 }
 
                 $result = $hasValue -and $null -ne $value
@@ -1351,7 +1351,7 @@ function Resolve-TokenDynamic {
                 }
                 else {
                     $hasValue = $raw.Length -gt 0
-                    $value = if ($rawArgs.Count -le 1) { $rawArgs[0] } else { $raw }
+                    $value = if ($rawArgs -and $rawArgs.Count -ge 1) { $rawArgs[0] } else { $raw }
                 }
 
                 $result = $hasValue -and -not [string]::IsNullOrEmpty([string]$value)
@@ -1370,7 +1370,7 @@ function Resolve-TokenDynamic {
                 }
                 else {
                     $hasValue = $raw.Length -gt 0
-                    $value = if ($rawArgs.Count -le 1) { $rawArgs[0] } else { $raw }
+                    $value = if ($rawArgs -and $rawArgs.Count -ge 1) { $rawArgs[0] } else { $raw }
                 }
 
                 $result = -not $hasValue -or [string]::IsNullOrEmpty([string]$value)
