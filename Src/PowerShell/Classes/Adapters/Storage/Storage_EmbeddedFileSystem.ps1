@@ -158,6 +158,15 @@ class Storage_EmbeddedFileSystem {
                     break
                 }
 
+                "Delete" {
+                    $callSignal = Invoke-EmbeddedFileSystem_DeleteObject `
+                        -Signal $this.Signal `
+                        -VirtualPath $virtualPath `
+                        -Addresses @($addressSignal.GetResult()) |
+                    Select-Object -Last 1
+                    break
+                }
+
                 default {
                     $opSignal.LogCritical("Unsupported adapter activity '$activity'.")
                     return $opSignal
@@ -166,11 +175,11 @@ class Storage_EmbeddedFileSystem {
 
             if ($opSignal.MergeSignalAndVerifySuccess($callSignal) -and $callSignal.HasResult()) {
                 $opSignal.SetResult($callSignal.GetResult())
-                $opSignal.LogInformation("Successfully read object from virtual path: $virtualPath")   
+                $opSignal.LogInformation("Successfully completed '$activity' for virtual path: $virtualPath")
             }
         }
         catch {
-            $opSignal.LogCritical("Exception in EmbeddedFileSystem.ReadObject: $($_.Exception.Message)", $null, $_)
+            $opSignal.LogCritical("Exception in EmbeddedFileSystem.Invoke: $($_.Exception.Message)", $null, $_)
         }
 
         return $opSignal

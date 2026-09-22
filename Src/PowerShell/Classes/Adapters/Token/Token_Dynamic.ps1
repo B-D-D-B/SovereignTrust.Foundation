@@ -38,7 +38,7 @@ class Token_Dynamic {
 
     try {
             $Path = $Plan.Path
-        $resultSignal = Invoke-TokenDynamic -Slot $Slot -Activity $Activity -Signal $ConductionSignal -ItemSignal $ItemSignal -Plan $Plan | Select-Object -Last 1
+        $resultSignal = Invoke-TokenDynamic -MappedAdapter $this.MappedAdapter -Slot $Slot -Activity $Activity -Signal $ConductionSignal -ItemSignal $ItemSignal -Plan $Plan | Select-Object -Last 1
         $opSignal.MergeSignal($resultSignal)
 
         if ($resultSignal.Success() -and $resultSignal.HasResult()) {

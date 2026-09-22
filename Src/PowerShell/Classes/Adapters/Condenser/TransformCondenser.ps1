@@ -166,6 +166,16 @@ class TransformCondenser {
                     break
                 }
 
+                "UnregisterSignalKeys" {
+                    $pointer = $ItemSignal.GetPointer()
+                    $keysSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.Keys" | Select-Object -Last 1
+
+                    foreach ($key in @($keysSignal.GetResult())) {
+                        $pointer.UnregisterSignal($key)
+                    }
+                    break
+                }
+
                 # Clone using a path to an xml or json object.
                 "Clone" {
                     $pathSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Path" | Select-Object -Last 1
@@ -201,7 +211,7 @@ class TransformCondenser {
                 }
 
                 default {
-                    $opSignal.LogWarning("Unsupported Activity: $Activity")
+                    $opSignal.LogCritical("Unsupported Activity: $Activity")
                     break
                 }
             }

@@ -336,6 +336,10 @@ class MemoryCondenser {
                 continue
             }
 
+            if ($item.ToString().Trim().ToLowerInvariant() -eq "false") {
+                return $false
+            }
+
             if ($item.ToString().Trim().ToLowerInvariant() -ne "true") {
                 return $false
             }

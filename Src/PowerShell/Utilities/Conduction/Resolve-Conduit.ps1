@@ -39,7 +39,7 @@ function Resolve-Conduit {
             Write-Host "Adapter Signal Already Mapped"
         }
 
-        $adapterJsonSignal = Resolve-PathFromDictionary -Dictionary $EnvironmentSignal -Path "*.#.Adapters.@.@.#.Content.%.@"  | Select-Object -Last 1
+        $adapterJsonSignal = Resolve-PathFromDictionary -Dictionary $EnvironmentSignal -Path "*.#.Adapters.@.@.#.Meta.%.@"  | Select-Object -Last 1
         $adapterJson = ConvertTo-Json -InputObject $adapterJsonSignal.GetResult() -Depth 100 -ErrorAction Stop
         Write-Host("AdapterJson: $adapterJson")
 

@@ -134,6 +134,7 @@ function Invoke-Telemetry(
 #. "$PSScriptRoot/Utilities/New-Conductor.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Storage/Invoke-EmbeddedFileSystem_ReadObject.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Storage/Invoke-EmbeddedFileSystem_WriteObject.ps1"
+. "$PSScriptRoot/Utilities/Adapters/Storage/Invoke-EmbeddedFileSystem_DeleteObject.ps1"
 . "$PSScriptRoot/Utilities/Json/Invoke-CloneItem.ps1"
 
 . "$PSScriptRoot/Utilities/Adapters/New-MappedCondenserAdapterFromGraph.ps1"

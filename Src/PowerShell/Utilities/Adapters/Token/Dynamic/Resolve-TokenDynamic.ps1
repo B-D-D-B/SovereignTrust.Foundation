@@ -5,6 +5,15 @@ function Resolve-TokenDynamic {
         [Parameter(Mandatory = $false)]
         [Signal]$Signal,
 
+        [Parameter(Mandatory = $false)]
+        [Signal]$ItemSignal,
+
+        [Parameter(Mandatory = $false)]
+        [MappedTokenAdapter]$MappedAdapter,
+
+        [Parameter(Mandatory = $false)]
+        [object]$Plan,
+
         # Dictionary used by coalesce(...) when it calls Resolve-PathFromDictionary
         [Parameter(Mandatory = $false)]
         [psobject]$Dictionary,
@@ -151,34 +160,70 @@ function Resolve-TokenDynamic {
         return $dt.ToString('h:mm tt', $culture)
     }
 
-    function Split-DynamicArgs {
+    function Split-DynamicArgumentText {
         param([string]$Text)
 
         if ($null -eq $Text -or $Text.Length -eq 0) { return @() }
 
-        $parts = @()
+        $parts = [System.Collections.Generic.List[string]]::new()
         $sb = [System.Text.StringBuilder]::new()
         $inS = $false
         $inD = $false
+        $squareDepth = 0
+        $parenthesisDepth = 0
+        $braceDepth = 0
 
-        foreach ($ch in $Text.ToCharArray()) {
+        for ($index = 0; $index -lt $Text.Length; $index++) {
+            $ch = $Text[$index]
+            $escaped = $index -gt 0 -and $Text[$index - 1] -eq '`'
+
             switch ($ch) {
                 "'" {
-                    if (-not $inD) { $inS = -not $inS }
+                    if (-not $inD -and -not $escaped) { $inS = -not $inS }
                     [void]$sb.Append($ch)
                 }
 
                 '"' {
-                    if (-not $inS) { $inD = -not $inD }
+                    if (-not $inS -and -not $escaped) { $inD = -not $inD }
+                    [void]$sb.Append($ch)
+                }
+
+                '[' {
+                    if (-not $inS -and -not $inD) { $squareDepth++ }
+                    [void]$sb.Append($ch)
+                }
+
+                ']' {
+                    if (-not $inS -and -not $inD -and $squareDepth -gt 0) { $squareDepth-- }
+                    [void]$sb.Append($ch)
+                }
+
+                '(' {
+                    if (-not $inS -and -not $inD) { $parenthesisDepth++ }
+                    [void]$sb.Append($ch)
+                }
+
+                ')' {
+                    if (-not $inS -and -not $inD -and $parenthesisDepth -gt 0) { $parenthesisDepth-- }
+                    [void]$sb.Append($ch)
+                }
+
+                '{' {
+                    if (-not $inS -and -not $inD) { $braceDepth++ }
+                    [void]$sb.Append($ch)
+                }
+
+                '}' {
+                    if (-not $inS -and -not $inD -and $braceDepth -gt 0) { $braceDepth-- }
                     [void]$sb.Append($ch)
                 }
 
                 ',' {
-                    if ($inS -or $inD) {
+                    if ($inS -or $inD -or $squareDepth -gt 0 -or $parenthesisDepth -gt 0 -or $braceDepth -gt 0) {
                         [void]$sb.Append($ch)
                     }
                     else {
-                        $parts += $sb.ToString()
+                        $parts.Add($sb.ToString())
                         [void]$sb.Clear()
                     }
                 }
@@ -189,8 +234,20 @@ function Resolve-TokenDynamic {
             }
         }
 
+        if ($inS -or $inD -or $squareDepth -ne 0 -or $parenthesisDepth -ne 0 -or $braceDepth -ne 0) {
+            throw "Dynamic arguments contain unbalanced quotes or delimiters: '$Text'."
+        }
+
         # Add final argument, even if empty
-        $parts += $sb.ToString()
+        $parts.Add($sb.ToString())
+
+        return $parts.ToArray()
+    }
+
+    function Split-DynamicArgs {
+        param([string]$Text)
+
+        $parts = @(Split-DynamicArgumentText -Text $Text)
 
         return $parts | ForEach-Object {
             $raw = $_
@@ -217,6 +274,224 @@ function Resolve-TokenDynamic {
                 return $raw.Trim()
             }
         }
+    }
+
+    function Resolve-DynamicReference {
+        param(
+            [Parameter(Mandatory)]
+            [string]$ReferencePath
+        )
+
+        if ($null -eq $MappedAdapter) {
+            throw "Dynamic reference '$ReferencePath' cannot be resolved because MappedTokenAdapter was not provided."
+        }
+
+        if ($ReferencePath.StartsWith('Dynamic.', [StringComparison]::OrdinalIgnoreCase)) {
+            throw "Dynamic references cannot target another Dynamic token: '$ReferencePath'."
+        }
+
+        $referencePlan = [pscustomobject]@{
+            Path = $ReferencePath
+        }
+
+        if ($null -ne $Plan -and $null -ne $Plan.Config) {
+            $referencePlan | Add-Member -MemberType NoteProperty -Name Config -Value $Plan.Config
+        }
+
+        $referenceSignal = $MappedAdapter.Invoke(
+            $null,
+            'Get',
+            $Signal,
+            $referencePlan,
+            $ItemSignal
+        ) | Select-Object -Last 1
+
+        $null = $opSignal.MergeSignal($referenceSignal)
+
+        if ($referenceSignal.Failure()) {
+            throw "Dynamic reference '$ReferencePath' failed to resolve."
+        }
+
+        if (-not $referenceSignal.HasResult()) {
+            throw "Dynamic reference '$ReferencePath' was not found or resolved to null."
+        }
+
+        # Wrapping Value prevents PowerShell from enumerating array results.
+        return [pscustomobject]@{
+            Value = $referenceSignal.GetResult()
+        }
+    }
+
+    function Resolve-DynamicArguments {
+        param(
+            [string]$Text,
+            [hashtable]$ReferenceCache
+        )
+
+        $arguments = [System.Collections.Generic.List[object]]::new()
+        $hasReferences = $false
+
+        foreach ($argumentText in @(Split-DynamicArgumentText -Text $Text)) {
+            $check = $argumentText.Trim()
+            $isQuoted = $check.Length -ge 2 -and (
+                ($check.StartsWith("'") -and $check.EndsWith("'")) -or
+                ($check.StartsWith('"') -and $check.EndsWith('"'))
+            )
+
+            if ($isQuoted) {
+                $arguments.Add($check.Substring(1, $check.Length - 2))
+                continue
+            }
+
+            if ($check -match '(?s)^\[(?<path>.+)~\]$') {
+                $referencePath = $matches['path'].Trim()
+                if ([string]::IsNullOrWhiteSpace($referencePath)) {
+                    throw "Dynamic reference path cannot be empty."
+                }
+
+                if (-not $ReferenceCache.ContainsKey($referencePath)) {
+                    $ReferenceCache[$referencePath] = Resolve-DynamicReference -ReferencePath $referencePath
+                }
+
+                $arguments.Add($ReferenceCache[$referencePath].Value)
+                $hasReferences = $true
+                continue
+            }
+
+            if ($check -match '~\]') {
+                throw "Dynamic reference tokens must occupy an entire unquoted argument: '$check'."
+            }
+
+            $arguments.Add($check)
+        }
+
+        return [pscustomobject]@{
+            Arguments     = $arguments
+            HasReferences = $hasReferences
+        }
+    }
+
+    function ConvertTo-DynamicCollection {
+        param(
+            [object]$Value,
+            [Parameter(Mandatory)]
+            [string]$FunctionName
+        )
+
+        if ($null -eq $Value) {
+            return [pscustomobject]@{ Items = [object[]]@() }
+        }
+
+        if ($Value -is [string]) {
+            $trimmedValue = $Value.Trim()
+            if ($trimmedValue.StartsWith('[') -and $trimmedValue.EndsWith(']')) {
+                try {
+                    return [pscustomobject]@{
+                        Items = [object[]]@($trimmedValue | ConvertFrom-Json -Depth 100)
+                    }
+                }
+                catch {
+                    throw "$FunctionName received an invalid JSON array: $Value"
+                }
+            }
+
+            throw "$FunctionName requires an array or collection."
+        }
+
+        if ($Value -isnot [System.Collections.IEnumerable]) {
+            throw "$FunctionName requires an array or collection. ($($Value.GetType().FullName) was supplied)"
+        }
+
+        return [pscustomobject]@{
+            Items = [object[]]@($Value)
+        }
+    }
+
+    function ConvertTo-DynamicObjectValues {
+        param(
+            [object]$Value,
+            [Parameter(Mandatory)]
+            [string]$FunctionName
+        )
+
+        if ($Value -is [string]) {
+            try {
+                $Value = $Value | ConvertFrom-Json -Depth 100
+            }
+            catch {
+                throw "$FunctionName received invalid JSON: $Value"
+            }
+        }
+
+        $values = [System.Collections.Generic.List[object]]::new()
+
+        if ($Value -is [System.Collections.IDictionary]) {
+            foreach ($key in $Value.Keys) {
+                $values.Add($Value[$key])
+            }
+        }
+        elseif ($Value -is [pscustomobject]) {
+            foreach ($property in $Value.PSObject.Properties) {
+                $values.Add($property.Value)
+            }
+        }
+        else {
+            throw "$FunctionName requires a JSON object, dictionary, or PSCustomObject."
+        }
+
+        return [pscustomobject]@{
+            Items = $values
+        }
+    }
+
+    function ConvertTo-DynamicMembershipValues {
+        param(
+            [object]$Value,
+            [bool]$SplitString
+        )
+
+        if ($Value -is [System.Collections.IEnumerable] -and $Value -isnot [string]) {
+            return [pscustomobject]@{ Items = [object[]]@($Value) }
+        }
+
+        if ($Value -is [string]) {
+            $trimmedValue = $Value.Trim()
+            if ($trimmedValue.StartsWith('[') -and $trimmedValue.EndsWith(']')) {
+                try {
+                    return [pscustomobject]@{
+                        Items = [object[]]@($trimmedValue | ConvertFrom-Json -Depth 100)
+                    }
+                }
+                catch {
+                    throw "Membership comparison received an invalid JSON array: $Value"
+                }
+            }
+
+            if ($SplitString) {
+                return [pscustomobject]@{
+                    Items = [object[]]@(
+                        $Value -split ',' |
+                            ForEach-Object { $_.Trim() } |
+                            Where-Object { $_ -ne '' }
+                    )
+                }
+            }
+        }
+
+        return [pscustomobject]@{ Items = [object[]]@($Value) }
+    }
+
+    function ConvertTo-DynamicBoolean {
+        param([object]$Value)
+
+        if ($null -eq $Value) { return $false }
+        if ($Value -is [bool]) { return $Value }
+
+        if ($Value -is [string]) {
+            return $Value.Trim().Equals('true', [StringComparison]::OrdinalIgnoreCase)
+        }
+
+        return [bool]$Value
     }
 
     function Split-DynamicArgsWithTail {
@@ -285,6 +560,13 @@ function Resolve-TokenDynamic {
         $boundary = $splitIndexes[$TailCount - 1]
 
         $valueText = $Text.Substring(0, $boundary).Trim()
+        if ($valueText.Substring(0,1) -eq '"' -and $valueText.Substring($valueText.Length-1,1) -eq '"') {
+            $valueText = $valueText.Substring(1, $valueText.Length-2)
+        }
+        elseif ($valueText.Substring(0,1) -eq "'" -and $valueText.Substring($valueText.Length-1,1) -eq "'") {
+            $valueText = $valueText.Substring(1, $valueText.Length-2)
+        }
+
         $tailText = $Text.Substring($boundary + 1).Trim()
 
         $tailArgs = @(Split-DynamicArgs $tailText)
@@ -410,7 +692,7 @@ function Resolve-TokenDynamic {
     }
 
     function Invoke-ParseOffset {
-        param([string]$Text, $rawArgs)
+        param([string]$Text)
 
         if ([string]::IsNullOrWhiteSpace($Text)) { return [TimeSpan]::Zero }
 
@@ -457,10 +739,20 @@ function Resolve-TokenDynamic {
         $fn = $matches['fn'].ToLowerInvariant()
         $raw = ($matches['rawArgs'] ?? '').Trim()
         $rawArgs = Split-DynamicArgs $raw
+        $referenceCache = @{}
+        $resolvedArgumentSet = Resolve-DynamicArguments -Text $raw -ReferenceCache $referenceCache
+        $resolvedArgs = $resolvedArgumentSet.Arguments
 
         switch ($fn) {
             'formatjsonastext' {
-                $InputObject = $raw | ConvertFrom-Json -Depth 100
+                if ($resolvedArgs.Count -ne 1) {
+                    throw "FormatJsonAsText() requires exactly one argument. ($($resolvedArgs.Count) was supplied)"
+                }
+
+                $InputObject = $resolvedArgs[0]
+                if ($InputObject -is [string]) {
+                    $InputObject = $InputObject | ConvertFrom-Json -Depth 100
+                }
                 $combinedText = ""
 
                     if ($InputObject -is [System.Collections.IEnumerable] -and $InputObject -isnot [string]) {
@@ -477,32 +769,70 @@ function Resolve-TokenDynamic {
                     break
                 }
             'getfileextension' {
-                if ($rawArgs.Count -ne 1) {
-                    throw "GetFileExtension() requires one argument. ($($rawArgs.Count) was supplied)"
+                if ($resolvedArgs.Count -ne 1) {
+                    throw "GetFileExtension() requires one argument. ($($resolvedArgs.Count) was supplied)"
                 }
 
-                $result = [System.IO.Path]::GetExtension([string]@($rawArgs)[0]).TrimStart('.')
+                $result = [System.IO.Path]::GetExtension([string]$resolvedArgs[0]).TrimStart('.')
 
                 $opSignal.SetResult($result)
                 return $opSignal
             }
 
-            'GetInitials' {
-                $result = $raw -creplace '[^A-Z]', ''
+            'getinitials' {
+                if ($resolvedArgumentSet.HasReferences) {
+                    if ($resolvedArgs.Count -ne 1) {
+                        throw "GetInitials() with a typed reference requires one argument. ($($resolvedArgs.Count) was supplied)"
+                    }
+
+                    $value = [string]$resolvedArgs[0]
+                }
+                else {
+                    $value = $raw
+                }
+
+                $result = $value -creplace '[^A-Z]', ''
                 $opSignal.SetResult($result)
+                return $opSignal
             }
  
             'removequotes' {
-                $result = $raw -replace '"', ''
+                if ($resolvedArgumentSet.HasReferences) {
+                    if ($resolvedArgs.Count -ne 1) {
+                        throw "RemoveQuotes() with a typed reference requires one argument. ($($resolvedArgs.Count) was supplied)"
+                    }
+
+                    $value = [string]$resolvedArgs[0]
+                }
+                else {
+                    $value = $raw
+                }
+
+                $result = $value -replace '"', ''
                 $result = $result -replace "'", ""
-                $opSignal.SetResult($result) 
+                $opSignal.SetResult($result)
+                return $opSignal
             }
             'replace' {
-                $parsed = Split-DynamicArgsWithTail -Text $raw -TailCount 2
+                if ($resolvedArgumentSet.HasReferences) {
+                    if ($resolvedArgs.Count -ne 3) {
+                        throw "Replace() with typed references requires exactly three arguments: value, match, and replacement."
+                    }
 
-                $value = $parsed.ValueText
-                $matchValue = $parsed.TailArgs[0]
-                $replaceValue = $parsed.TailArgs[1]
+                    $value = [string]$resolvedArgs[0]
+                    $matchValue = [string]$resolvedArgs[1]
+                    $replaceValue = [string]$resolvedArgs[2]
+                }
+                else {
+                    $parsed = Split-DynamicArgsWithTail -Text $raw -TailCount 2
+                    if ($null -eq $parsed -or $parsed.TailArgs.Count -ne 2) {
+                        throw "Replace() requires a value, match, and replacement argument."
+                    }
+
+                    $value = $parsed.ValueText
+                    $matchValue = $parsed.TailArgs[0]
+                    $replaceValue = $parsed.TailArgs[1]
+                }
 
                 $finalValue = $value -replace [regex]::Escape($matchValue), $replaceValue
 
@@ -521,59 +851,75 @@ function Resolve-TokenDynamic {
             }
 
             'gt' {
-                if ($rawArgs.Count -ne 2) {
-                    throw "GreaterThan() requires two arguments. ($rawArgs.Count was supplied)"
+                if ($resolvedArgs.Count -ne 2) {
+                    throw "GreaterThan() requires two arguments. ($($resolvedArgs.Count) was supplied)"
                 }
 
-                $result = [int]$rawArgs[0] -gt [int]$rawArgs[1]
+                $result = [int]$resolvedArgs[0] -gt [int]$resolvedArgs[1]
 
                 $opSignal.SetResult($result)
                 return $opSignal
             }
 
             'lt' {
-                if ($rawArgs.Count -ne 2) {
-                    throw "LesserThan() requires two arguments. ($rawArgs.Count was supplied)"
+                if ($resolvedArgs.Count -ne 2) {
+                    throw "LesserThan() requires two arguments. ($($resolvedArgs.Count) was supplied)"
                 }
 
-                $result = [int]$rawArgs[0] -lt [int]$rawArgs[1]
+                $result = [int]$resolvedArgs[0] -lt [int]$resolvedArgs[1]
 
                 $opSignal.SetResult($result)
                 return $opSignal
             }
 
             'add' {
-                if ($rawArgs.Count -ne 2) {
-                    throw "Add() requires two arguments. ($rawArgs.Count was supplied)"
+                if ($resolvedArgs.Count -ne 2) {
+                    throw "Add() requires two arguments. ($($resolvedArgs.Count) was supplied)"
                 }
 
-                $result = [int]$rawArgs[0] + [int]$rawArgs[1]
+                $result = [int]$resolvedArgs[0] + [int]$resolvedArgs[1]
 
                 $opSignal.SetResult($result)
                 return $opSignal
             }
 
             'subtract' {
-                if ($rawArgs.Count -ne 2) {
-                    throw "Subtract() requires two arguments. ($rawArgs.Count was supplied)"
+                if ($resolvedArgs.Count -ne 2) {
+                    throw "Subtract() requires two arguments. ($($resolvedArgs.Count) was supplied)"
                 }
 
-                $result = [int]$rawArgs[0] - [int]$rawArgs[1]
+                $result = [int]$resolvedArgs[0] - [int]$resolvedArgs[1]
 
                 $opSignal.SetResult($result)
                 return $opSignal
             }
 
             'if' {
-                $parsed = Split-DynamicArgsWithTail -Text $raw -TailCount 2
+                if ($resolvedArgumentSet.HasReferences) {
+                    if ($resolvedArgs.Count -ne 3) {
+                        throw "If() with typed references requires exactly three arguments: condition, true value, and false value."
+                    }
 
-                $value = $parsed.ValueText.ToLower() -eq "true"
-
-                if ($value) {
-                    $result = $parsed.TailArgs[0]
+                    $value = ConvertTo-DynamicBoolean $resolvedArgs[0]
+                    $trueValue = $resolvedArgs[1]
+                    $falseValue = $resolvedArgs[2]
                 }
                 else {
-                    $result = $parsed.TailArgs[1]
+                    $parsed = Split-DynamicArgsWithTail -Text $raw -TailCount 2
+                    if ($null -eq $parsed -or $parsed.TailArgs.Count -ne 2) {
+                        throw "If() requires a condition, true value, and false value."
+                    }
+
+                    $value = ConvertTo-DynamicBoolean $parsed.ValueText
+                    $trueValue = $parsed.TailArgs[0]
+                    $falseValue = $parsed.TailArgs[1]
+                }
+
+                if ($value) {
+                    $result = $trueValue
+                }
+                else {
+                    $result = $falseValue
                     if ($result -eq 'null') {
                         $result = $null
                     }
@@ -584,35 +930,60 @@ function Resolve-TokenDynamic {
             }
 
             'toarray' {
-                $parsed = Split-DynamicArgsWithTail -Text $raw -TailCount 1
+                if ($resolvedArgumentSet.HasReferences) {
+                    if ($resolvedArgs.Count -ne 2) {
+                        throw "ToArray() with a typed reference requires a source value and one trailing delimiter argument."
+                    }
 
-                if ($null -eq $parsed -or $parsed.TailArgs.Count -ne 1 -or [string]::IsNullOrEmpty($parsed.ValueText)) {
-                    throw "ToArray() requires a source value and one trailing delimiter argument."
+                    $value = $resolvedArgs[0]
+                    $delimiter = [string]$resolvedArgs[1]
                 }
+                else {
+                    $parsed = Split-DynamicArgsWithTail -Text $raw -TailCount 1
+                    if ($null -eq $parsed -or $parsed.TailArgs.Count -ne 1 -or [string]::IsNullOrEmpty($parsed.ValueText)) {
+                        throw "ToArray() requires a source value and one trailing delimiter argument."
+                    }
 
-                $value = $parsed.ValueText
-                $delimiter = $parsed.TailArgs[0]
+                    $value = $parsed.ValueText
+                    $delimiter = $parsed.TailArgs[0]
+                }
 
                 if ([string]::IsNullOrEmpty($delimiter)) {
                     throw "ToArray() delimiter cannot be empty."
                 }
 
-                $result = $value -split [regex]::Escape($delimiter)
+                if ($value -is [System.Collections.IEnumerable] -and $value -isnot [string]) {
+                    $result = [object[]]@($value)
+                }
+                else {
+                    $result = [string]$value -split [regex]::Escape($delimiter)
+                }
 
                 $opSignal.SetResult($result)
                 return $opSignal
             }
 
             'substring' {
-                $parsed = Split-DynamicArgsWithTail -Text $raw -TailCount 2
+                if ($resolvedArgumentSet.HasReferences) {
+                    if ($resolvedArgs.Count -ne 3) {
+                        throw "Substring() with typed references requires exactly three arguments: value, position, and length."
+                    }
 
-                if ($null -eq $parsed -or $parsed.TailArgs.Count -ne 2) {
-                    throw "substring() requires a source value, a position argument, and a trailing length argument."
+                    [string]$value = $resolvedArgs[0]
+                    [string]$positionArgument = $resolvedArgs[1]
+                    [int]$length = $resolvedArgs[2]
                 }
+                else {
+                    $parsed = Split-DynamicArgsWithTail -Text $raw -TailCount 2
 
-                [string]$value = $parsed.ValueText
-                [string]$positionArgument = $parsed.TailArgs[0]
-                [int]$length = $parsed.TailArgs[1]
+                    if ($null -eq $parsed -or $parsed.TailArgs.Count -ne 2) {
+                        throw "Substring() requires a source value, a position argument, and a trailing length argument."
+                    }
+
+                    [string]$value = $parsed.ValueText
+                    [string]$positionArgument = $parsed.TailArgs[0]
+                    [int]$length = $parsed.TailArgs[1]
+                }
 
                 if ($length -lt 0) {
                     throw "substring() length must be >= 0. ($length supplied)"
@@ -655,15 +1026,29 @@ function Resolve-TokenDynamic {
             }
 
             'getindex' {
-                if ($rawArgs.Count -lt 2) {
-                    throw "GetIndex requires at least two arguments. ($($rawArgs.Count) was supplied)"
+                if ($resolvedArgumentSet.HasReferences) {
+                    if ($resolvedArgs.Count -ne 2) {
+                        throw "GetIndex with a typed reference requires exactly two arguments: collection and index. ($($resolvedArgs.Count) was supplied)"
+                    }
+
+                    $source = $resolvedArgs[0]
+                    if ($source -is [string] -or $source -isnot [System.Collections.IEnumerable]) {
+                        throw "GetIndex typed source must be a non-string collection. ($($source.GetType().FullName) was supplied)"
+                    }
+
+                    $array = @($source)
+                    $index = [int]$resolvedArgs[1]
                 }
+                else {
+                    if ($rawArgs.Count -lt 2) {
+                        throw "GetIndex requires at least two arguments. ($($rawArgs.Count) was supplied)"
+                    }
 
-                # Last item is the requested index
-                $index = [int]$rawArgs[-1]
-
-                # Everything before that is the array to index into
-                $array = @($rawArgs[0..($rawArgs.Count - 2)])
+                    # Legacy behavior: the final argument is the index and all
+                    # preceding arguments form the collection.
+                    $index = [int]$rawArgs[-1]
+                    $array = @($rawArgs[0..($rawArgs.Count - 2)])
+                }
 
                 # Convert negative index to reverse lookup
                 # -1 = last item, -2 = second-to-last, etc.
@@ -685,124 +1070,82 @@ function Resolve-TokenDynamic {
             }
 
             'toint' {
+                if ($resolvedArgs.Count -ne 1) {
+                    throw "ToInt() requires one argument. ($($resolvedArgs.Count) was supplied)"
+                }
 
-                $value = $rawArgs[0]
-
-                $result = [int]$value
+                $result = [int]$resolvedArgs[0]
 
                 $opSignal.SetResult($result)
                 return $opSignal
             }
 
             'tojson' {
-                #tbd
-                if ($rawArgs.Count -lt 2) {
-                    throw "ToArray() requires at least two arguments. ($($rawArgs.Count) was supplied)"
+                if ($resolvedArgs.Count -ne 1) {
+                    throw "ToJson() requires one argument. ($($resolvedArgs.Count) was supplied)"
                 }
 
-                # Last item is the index
-                $delimeter = $rawArgs[-1]
-
-                $json = ($rawArgs[0..($rawArgs.Count - 2)]) -join ','
-
-                #$json_object = $json | ConvertTo-Json -Depth 10
-                $json_object = $json | ConvertFrom-Json -Depth 10
-
-                $values = @()
-
-                foreach ($property in $json_object.PSObject.Properties) {
-                    $values += $property.Value
-                }
-
-                $result = $values -join $delimeter
+                $result = ConvertTo-Json -InputObject $resolvedArgs[0] -Depth 100 -Compress
 
                 $opSignal.SetResult($result)
                 return $opSignal
             }
 
             'fromjson' {
-                #tbd
-                # Last item is the index
-                $delimeter = $rawArgs[-1]
-
-                $json = ($rawArgs[0..($rawArgs.Count - 2)]) -join ','
-
-                $json_object = $json | ConvertTo-Json -Depth 10
-                #$json_object = $json | ConvertFrom-Json -Depth 10
-
-                $values = @()
-
-                foreach ($property in $json_object.PSObject.Properties) {
-                    $values += $property.Value
+                if ($resolvedArgs.Count -ne 1) {
+                    throw "FromJson() requires one argument. ($($resolvedArgs.Count) was supplied)"
                 }
 
-                $result = $values -join $delimeter
+                if ($resolvedArgs[0] -isnot [string]) {
+                    throw "FromJson() requires a JSON string. ($($resolvedArgs[0].GetType().FullName) was supplied)"
+                }
+
+                $result = $resolvedArgs[0] | ConvertFrom-Json -Depth 100
 
                 $opSignal.SetResult($result)
                 return $opSignal
             }
 
             'join' {
-                # This is not being used, it needs to be figured out if its necessary
-                # Joins a single array into a string
-                if ($rawArgs.Count -lt 2) {
-                    throw "Join() requires at least two arguments: a JSON array and a delimiter. ($($rawArgs.Count) was supplied)"
+                if ($resolvedArgs.Count -ne 2) {
+                    throw "Join() requires exactly two arguments: an array and a delimiter. ($($resolvedArgs.Count) was supplied)"
                 }
 
-                # Last item is the delimiter
-                $delimiter = $rawArgs[-1]
+                $collection = ConvertTo-DynamicCollection -Value $resolvedArgs[0] -FunctionName 'Join()'
+                $delimiter = [string]$resolvedArgs[1]
 
-                # Everything before the delimiter is JSON
-                # This allows the JSON array itself to contain commas
-                $json = ($rawArgs[0..($rawArgs.Count - 2)]) -join ','
-
-                $jsonObject = $json | ConvertFrom-Json -Depth 10
-
-                # Join the single array using the delimiter
-                $result = @($jsonObject) -join $delimiter
+                $result = $collection.Items -join $delimiter
 
                 $opSignal.SetResult($result)
                 return $opSignal
             }
 
             'joinvalues' {
-                # Joins from Json Objects
-                if ($rawArgs.Count -lt 2) {
-                    throw "ToArray() requires at least two arguments. ($($rawArgs.Count) was supplied)"
+                if ($resolvedArgs.Count -ne 2) {
+                    throw "JoinValues() requires exactly two arguments: an object and a delimiter. ($($resolvedArgs.Count) was supplied)"
                 }
 
-                # Last item is the index
-                $delimeter = $rawArgs[-1]
-
-                $json = ($rawArgs[0..($rawArgs.Count - 2)]) -join ','
-
-                $json_object = $json | ConvertFrom-Json -Depth 10
-
-                $values = @()
-
-                foreach ($property in $json_object.PSObject.Properties) {
-                    $values += $property.Value
-                }
-
-                $result = $values -join $delimeter
+                $objectValues = ConvertTo-DynamicObjectValues -Value $resolvedArgs[0] -FunctionName 'JoinValues()'
+                $delimiter = [string]$resolvedArgs[1]
+                $result = $objectValues.Items -join $delimiter
 
                 $opSignal.SetResult($result)
                 return $opSignal
             }
 
             'joinarrays' {
-                $parsed = Split-DynamicArgsWithTail -Text $raw -TailCount 1
-                $delimiter = $parsed.TailArgs[0]
+                if ($resolvedArgs.Count -ne 2) {
+                    throw "JoinArrays() requires exactly two arguments: nested arrays and a delimiter. ($($resolvedArgs.Count) was supplied)"
+                }
 
-                # Everything before the delimiter is JSON
-                $json = $parsed.ValueText
-                $jsonObject = $json | ConvertFrom-Json -Depth 10
+                $outerCollection = ConvertTo-DynamicCollection -Value $resolvedArgs[0] -FunctionName 'JoinArrays()'
+                $delimiter = [string]$resolvedArgs[1]
 
                 $values = @()
 
-                foreach ($inner in $jsonObject) {
-                    # Join each inner array with nothing
-                    $values += ($inner -join '')
+                foreach ($inner in $outerCollection.Items) {
+                    $innerCollection = ConvertTo-DynamicCollection -Value $inner -FunctionName 'JoinArrays()'
+                    $values += ($innerCollection.Items -join '')
                 }
 
                 # Join all results with the delimiter
@@ -813,12 +1156,12 @@ function Resolve-TokenDynamic {
             }
 
             'filldigits' {
-                if ($rawArgs.Count -ne 2) {
-                    throw "filldigits() requires two arguments: number and digits. ($($rawArgs.Count) was supplied)"
+                if ($resolvedArgs.Count -ne 2) {
+                    throw "FillDigits() requires two arguments: number and digits. ($($resolvedArgs.Count) was supplied)"
                 }
 
-                $number = [int]@($rawArgs)[0]
-                $digits = [int]@($rawArgs)[1]
+                $number = [int]$resolvedArgs[0]
+                $digits = [int]$resolvedArgs[1]
 
                 if ($digits -lt 1) {
                     throw "filldigits() digits must be greater than 0. ($digits was supplied)"
@@ -831,23 +1174,46 @@ function Resolve-TokenDynamic {
             }
 
             'not' {
-                $first = @($rawArgs)[0]
+                if ($resolvedArgumentSet.HasReferences) {
+                    if ($resolvedArgs.Count -ne 1) {
+                        throw "Not() with a typed reference requires one argument. ($($resolvedArgs.Count) was supplied)"
+                    }
 
-                $result = $first.ToLower() -eq "false"
+                    $value = $resolvedArgs[0]
+                }
+                else {
+                    if ($rawArgs.Count -lt 1) {
+                        throw "Not() requires one argument."
+                    }
+
+                    $value = $rawArgs[0]
+                }
+
+                $result = -not (ConvertTo-DynamicBoolean $value)
 
                 $opSignal.SetResult($result)
                 return $opSignal
             }
 
             'notequals' {
-                $parsed = Split-DynamicArgsWithTail -Text $raw -TailCount 1
+                if ($resolvedArgumentSet.HasReferences) {
+                    if ($resolvedArgs.Count -ne 2) {
+                        throw "NotEquals() with typed references requires exactly two arguments."
+                    }
 
-                if ($null -eq $parsed -or $parsed.TailArgs.Count -ne 1) {
-                    throw "notequals() requires a leading value and one trailing comparison argument."
+                    $first = $resolvedArgs[0]
+                    $second = $resolvedArgs[1]
                 }
+                else {
+                    $parsed = Split-DynamicArgsWithTail -Text $raw -TailCount 1
 
-                $first = $parsed.ValueText
-                $second = $parsed.TailArgs[0]
+                    if ($null -eq $parsed -or $parsed.TailArgs.Count -ne 1) {
+                        throw "NotEquals() requires a leading value and one trailing comparison argument."
+                    }
+
+                    $first = $parsed.ValueText
+                    $second = $parsed.TailArgs[0]
+                }
 
                 $result = $first -ne $second
 
@@ -856,14 +1222,24 @@ function Resolve-TokenDynamic {
             }
 
             'equals' {
-                $parsed = Split-DynamicArgsWithTail -Text $raw -TailCount 1
+                if ($resolvedArgumentSet.HasReferences) {
+                    if ($resolvedArgs.Count -ne 2) {
+                        throw "Equals() with typed references requires exactly two arguments."
+                    }
 
-                if ($null -eq $parsed -or $parsed.TailArgs.Count -ne 1) {
-                    throw "equals() requires a leading value and one trailing comparison argument."
+                    $first = $resolvedArgs[0]
+                    $second = $resolvedArgs[1]
                 }
+                else {
+                    $parsed = Split-DynamicArgsWithTail -Text $raw -TailCount 1
 
-                $first = $parsed.ValueText
-                $second = $parsed.TailArgs[0]
+                    if ($null -eq $parsed -or $parsed.TailArgs.Count -ne 1) {
+                        throw "Equals() requires a leading value and one trailing comparison argument."
+                    }
+
+                    $first = $parsed.ValueText
+                    $second = $parsed.TailArgs[0]
+                }
 
                 $result = $first -eq $second
 
@@ -872,40 +1248,13 @@ function Resolve-TokenDynamic {
             }
 
             'notin' {
-                $parsed = Split-DynamicArgsWithTail -Text $raw -TailCount 1
-
-                $value = $parsed.ValueText
-                $allowedRaw = $parsed.TailArgs[0]
-
-                $allowedValues = @(
-                    $allowedRaw -split ',' | ForEach-Object {
-                        $_.Trim()
-                    } | Where-Object {
-                        $_ -ne ''
-                    }
-                )
-
-                # If the value is a JSON-style array string, convert it to an actual array.
-                if ($value -is [string]) {
-                    $trimmedValue = $value.Trim()
-
-                    if ($trimmedValue.StartsWith('[') -and $trimmedValue.EndsWith(']')) {
-                        try {
-                            $value = @(ConvertFrom-Json -InputObject $trimmedValue)
-                        }
-                        catch {
-                            throw "in() received an invalid array value: $value"
-                        }
-                    }
-                    else {
-                        $value = @($value)
-                    }
-                }
-                else {
-                    $value = @($value)
+                if ($resolvedArgs.Count -ne 2) {
+                    throw "NotIn() requires exactly two arguments: a value and allowed values. ($($resolvedArgs.Count) was supplied)"
                 }
 
-                # True when any allowed value exists in the resolved value array.
+                $value = (ConvertTo-DynamicMembershipValues -Value $resolvedArgs[0] -SplitString:$false).Items
+                $allowedValues = (ConvertTo-DynamicMembershipValues -Value $resolvedArgs[1] -SplitString:$true).Items
+
                 $result = @(
                     $allowedValues | Where-Object {
                         $_ -in $value
@@ -917,40 +1266,13 @@ function Resolve-TokenDynamic {
             }
 
             'in' {
-                $parsed = Split-DynamicArgsWithTail -Text $raw -TailCount 1
-
-                $value = $parsed.ValueText
-                $allowedRaw = $parsed.TailArgs[0]
-
-                $allowedValues = @(
-                    $allowedRaw -split ',' | ForEach-Object {
-                        $_.Trim()
-                    } | Where-Object {
-                        $_ -ne ''
-                    }
-                )
-
-                # If the value is a JSON-style array string, convert it to an actual array.
-                if ($value -is [string]) {
-                    $trimmedValue = $value.Trim()
-
-                    if ($trimmedValue.StartsWith('[') -and $trimmedValue.EndsWith(']')) {
-                        try {
-                            $value = @(ConvertFrom-Json -InputObject $trimmedValue)
-                        }
-                        catch {
-                            throw "in() received an invalid array value: $value"
-                        }
-                    }
-                    else {
-                        $value = @($value)
-                    }
-                }
-                else {
-                    $value = @($value)
+                if ($resolvedArgs.Count -ne 2) {
+                    throw "In() requires exactly two arguments: a value and allowed values. ($($resolvedArgs.Count) was supplied)"
                 }
 
-                # True when any allowed value exists in the resolved value array.
+                $value = (ConvertTo-DynamicMembershipValues -Value $resolvedArgs[0] -SplitString:$false).Items
+                $allowedValues = (ConvertTo-DynamicMembershipValues -Value $resolvedArgs[1] -SplitString:$true).Items
+
                 $result = @(
                     $allowedValues | Where-Object {
                         $_ -in $value
@@ -962,8 +1284,9 @@ function Resolve-TokenDynamic {
             }
 
             'and' {
-                $result = ($null -ne $rawArgs) -and ($rawArgs.Count -gt 0) -and `
-                ($rawArgs | ForEach-Object { $_.ToString().ToLower() -eq "true" } | Where-Object { -not $_ } | Measure-Object).Count -eq 0
+                $result = $resolvedArgs.Count -gt 0 -and @(
+                    $resolvedArgs | Where-Object { -not (ConvertTo-DynamicBoolean $_) }
+                ).Count -eq 0
 
                 $opSignal.SetResult($result)
                 return $opSignal
@@ -971,33 +1294,86 @@ function Resolve-TokenDynamic {
             }
 
             'or' {
-                $result = ($null -ne $rawArgs) -and ($rawArgs.Count -gt 0) -and `
-                ($rawArgs | ForEach-Object { $_.ToString().ToLower() -eq "true" } | Where-Object { $_ } | Measure-Object).Count -gt 0
+                $result = $resolvedArgs.Count -gt 0 -and @(
+                    $resolvedArgs | Where-Object { ConvertTo-DynamicBoolean $_ }
+                ).Count -gt 0
 
                 $opSignal.SetResult($result)
                 return $opSignal
             }
 
             'isnull' {
-                $result = $null -eq $rawArgs
+                if ($resolvedArgumentSet.HasReferences) {
+                    if ($resolvedArgs.Count -ne 1) {
+                        throw "IsNull() with a typed reference requires one argument. ($($resolvedArgs.Count) was supplied)"
+                    }
+
+                    $hasValue = $true
+                    $value = $resolvedArgs[0]
+                }
+                else {
+                    $hasValue = $raw.Length -gt 0
+                    $value = if ($rawArgs.Count -le 1) { $rawArgs[0] } else { $raw }
+                }
+
+                $result = -not $hasValue -or $null -eq $value
                 $opSignal.SetResult($result)
                 return $opSignal
             }
 
             'isnotnull' {
-                $result = $null -ne $rawArgs
+                if ($resolvedArgumentSet.HasReferences) {
+                    if ($resolvedArgs.Count -ne 1) {
+                        throw "IsNotNull() with a typed reference requires one argument. ($($resolvedArgs.Count) was supplied)"
+                    }
+
+                    $hasValue = $true
+                    $value = $resolvedArgs[0]
+                }
+                else {
+                    $hasValue = $raw.Length -gt 0
+                    $value = if ($rawArgs.Count -le 1) { $rawArgs[0] } else { $raw }
+                }
+
+                $result = $hasValue -and $null -ne $value
                 $opSignal.SetResult($result)
                 return $opSignal
             }
 
             'isnotnullorempty' {
-                $result = $rawArgs -eq "" -or $null -ne $rawArgs
+                if ($resolvedArgumentSet.HasReferences) {
+                    if ($resolvedArgs.Count -ne 1) {
+                        throw "IsNotNullOrEmpty() with a typed reference requires one argument. ($($resolvedArgs.Count) was supplied)"
+                    }
+
+                    $hasValue = $true
+                    $value = $resolvedArgs[0]
+                }
+                else {
+                    $hasValue = $raw.Length -gt 0
+                    $value = if ($rawArgs.Count -le 1) { $rawArgs[0] } else { $raw }
+                }
+
+                $result = $hasValue -and -not [string]::IsNullOrEmpty([string]$value)
                 $opSignal.SetResult($result)
                 return $opSignal
             }
 
             'isnullorempty' {
-                $result = $null -eq $rawArgs -or $rawArgs -eq ""
+                if ($resolvedArgumentSet.HasReferences) {
+                    if ($resolvedArgs.Count -ne 1) {
+                        throw "IsNullOrEmpty() with a typed reference requires one argument. ($($resolvedArgs.Count) was supplied)"
+                    }
+
+                    $hasValue = $true
+                    $value = $resolvedArgs[0]
+                }
+                else {
+                    $hasValue = $raw.Length -gt 0
+                    $value = if ($rawArgs.Count -le 1) { $rawArgs[0] } else { $raw }
+                }
+
+                $result = -not $hasValue -or [string]::IsNullOrEmpty([string]$value)
                 $opSignal.SetResult($result)
                 return $opSignal
             }
@@ -1010,9 +1386,13 @@ function Resolve-TokenDynamic {
             'utcnow' {
                 # Kusto datetime best practice: UTC ISO 8601 round-trip string ("o") with Z suffix
                 # utcNow([offset])
+                if ($resolvedArgs.Count -gt 1) {
+                    throw "UtcNow() accepts zero or one offset argument. ($($resolvedArgs.Count) was supplied)"
+                }
+
                 $offset = [TimeSpan]::Zero
-                if ($rawArgs.Count -ge 1 -and -not [string]::IsNullOrWhiteSpace($rawArgs[0])) {
-                    $offset = Invoke-ParseOffset $rawArgs $rawArgs
+                if ($resolvedArgs.Count -eq 1 -and -not [string]::IsNullOrWhiteSpace([string]$resolvedArgs[0])) {
+                    $offset = Invoke-ParseOffset -Text ([string]$resolvedArgs[0])
                 }
 
                 $dt = [DateTime]::UtcNow + $offset
@@ -1023,22 +1403,25 @@ function Resolve-TokenDynamic {
             }
 
             'get12hourtime' {
-                if ($rawArgs.Count -ne 1) {
-                    throw "get12hourtime() requires one argument. ($($rawArgs.Count) was supplied)"
+                if ($resolvedArgs.Count -ne 1) {
+                    throw "Get12HourTime() requires one argument. ($($resolvedArgs.Count) was supplied)"
                 }
 
-                $result = Convert-To12HourTime $rawArgs
+                $result = Convert-To12HourTime ([string]$resolvedArgs[0])
 
                 $opSignal.SetResult($result)
                 return $opSignal
             }
 
             'localtoutc' {
-                if ($rawArgs.Count -ne 3) {
-                    throw "get12hourtime() requires 3 arguments. ($($rawArgs.Count) was supplied)"
+                if ($resolvedArgs.Count -ne 3) {
+                    throw "LocalToUtc() requires three arguments: date, local time, and timezone. ($($resolvedArgs.Count) was supplied)"
                 }
 
-                $result = Convert-LocalDateTimeToUtc -Date $rawArgs[0] -LocalTime $rawArgs[1] -TimeZoneId $rawArgs[2]
+                $result = Convert-LocalDateTimeToUtc `
+                    -Date ([string]$resolvedArgs[0]) `
+                    -LocalTime ([string]$resolvedArgs[1]) `
+                    -TimeZoneId ([string]$resolvedArgs[2])
 
                 $opSignal.SetResult($result.UtcDateTime)
                 return $opSignal

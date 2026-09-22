@@ -37,7 +37,16 @@ function Invoke-TokenDynamic {
             return $opSignal
         }
 
-        $valueSignal = Resolve-TokenDynamic -Path $path
+        $valueSignal = Resolve-TokenDynamic `
+            -Path $path `
+            -MappedAdapter $MappedAdapter `
+            -Signal $Signal `
+            -ItemSignal $ItemSignal `
+            -Plan $Plan
+
+        if ($opSignal.MergeSignalAndVerifyFailure($valueSignal)) {
+            return $opSignal
+        }
 
         if ($valueSignal.HasResult()) {
             $opSignal.SetResult($valueSignal.GetResult())
