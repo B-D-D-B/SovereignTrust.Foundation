@@ -314,18 +314,167 @@ class PlanCondenser {
                 }
 
                 "InvokePhase" {
-                     $resolveStepsSignal = $this.ResolveInsertPhaseSteps($opSignal, $ConductionSignal, $Plan, $ItemSignal)
+                    $resolveStepsSignal = $this.ResolveInsertPhaseSteps($opSignal, $ConductionSignal, $Plan, $ItemSignal)
                     if ($opSignal.MergeSignalAndVerifyFailure($resolveStepsSignal) -or (-not $resolveStepsSignal.HasResult())) {
-                         return $opSignal 
+                        return $opSignal
                     }
 
                     $phase = [PSCustomObject]@{
                         Steps = @($resolveStepsSignal.GetResult())
                     }
 
-                    $SourceSignal = Invoke-CondenserAdapter -Slot "Memory" -Activity "Generate" -Signal $ConductionSignal -Plan $phase -ItemSignal $ItemSignal | Select-Object -Last 1
+                    $phaseSignal = Invoke-PlanPhase `
+                        -ConductionSignal $ConductionSignal `
+                        -ItemSignal $ItemSignal `
+                        -Phase $phase |
+                        Select-Object -Last 1
+                    $null = $opSignal.MergeSignal($phaseSignal)
 
-                   break
+                    break
+                }
+
+                "InvokePhaseAsync" {
+                    $resolveStepsSignal = $this.ResolveInsertPhaseSteps($opSignal, $ConductionSignal, $Plan, $ItemSignal)
+                    if ($opSignal.MergeSignalAndVerifyFailure($resolveStepsSignal) -or (-not $resolveStepsSignal.HasResult())) {
+                        return $opSignal
+                    }
+
+                    $environmentSignal = Resolve-PathFromDictionary -Dictionary $ConductionSignal -Path "*.#.EnvironmentDetails.@" -Default $null | Select-Object -Last 1
+                    if ($opSignal.MergeSignalAndVerifyFailure($environmentSignal) -or -not $environmentSignal.HasResult()) {
+                        $null = $opSignal.LogCritical('InvokePhaseAsync requires Pointer.Grid.EnvironmentDetails.')
+                        return $opSignal
+                    }
+                    $supportParallelismSignal = Resolve-PathFromDictionary -Dictionary $environmentSignal.GetResult() -Path 'Config.SupportParallelism' -Default $false | Select-Object -Last 1
+                    if ($opSignal.MergeSignalAndVerifyFailure($supportParallelismSignal)) { return $opSignal }
+                    if ($supportParallelismSignal.GetResult() -isnot [bool]) {
+                        $null = $opSignal.LogCritical('Environment Config.SupportParallelism must be a boolean.')
+                        return $opSignal
+                    }
+                    if (-not [bool]$supportParallelismSignal.GetResult()) {
+                        $null = $opSignal.LogCritical('InvokePhaseAsync requires Environment Config.SupportParallelism to be true.')
+                        return $opSignal
+                    }
+
+                    $snapshotSignal = Export-STSignalGraphSnapshot -ItemSignal $ItemSignal -Signal $opSignal | Select-Object -Last 1
+                    if ($opSignal.MergeSignalAndVerifyFailure($snapshotSignal) -or -not $snapshotSignal.HasResult()) {
+                        return $opSignal
+                    }
+
+                    $taskNameSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path 'Config.TaskName' -Default $Plan.Name | Select-Object -Last 1
+                    $returnKeysSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path 'Config.ReturnKeys' -Default @() | Select-Object -Last 1
+                    $debugInlineSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path 'Config.DebugInline' -Default $false | Select-Object -Last 1
+                    $environmentMaxSignal = Resolve-PathFromDictionary -Dictionary $environmentSignal.GetResult() -Path 'Config.MaxBackgroundPhases' -Default 4 | Select-Object -Last 1
+                    $maxBackgroundSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path 'Config.MaxBackgroundPhases' -Default $environmentMaxSignal.GetResult() | Select-Object -Last 1
+                    if ($opSignal.MergeSignalAndVerifyFailure(@($taskNameSignal, $returnKeysSignal, $debugInlineSignal, $environmentMaxSignal, $maxBackgroundSignal))) {
+                        return $opSignal
+                    }
+                    if ($debugInlineSignal.GetResult() -isnot [bool]) {
+                        $null = $opSignal.LogCritical('Config.DebugInline must be a boolean.')
+                        return $opSignal
+                    }
+                    try { $maxBackgroundPhases = [int]$maxBackgroundSignal.GetResult() }
+                    catch {
+                        $null = $opSignal.LogCritical('Config.MaxBackgroundPhases must be an integer.')
+                        return $opSignal
+                    }
+                    if ($maxBackgroundPhases -lt 1) {
+                        $null = $opSignal.LogCritical('Config.MaxBackgroundPhases must be greater than zero.')
+                        return $opSignal
+                    }
+
+                    $phase = [PSCustomObject]@{ Steps = @($resolveStepsSignal.GetResult()) }
+                    $ownerId = "Item:$([System.Runtime.CompilerServices.RuntimeHelpers]::GetHashCode($ItemSignal))"
+                    $workItem = [PSCustomObject]@{ Index = 0; Phase = $phase }
+                    $workerContext = [PSCustomObject]@{
+                        SnapshotJson = [string]$snapshotSignal.GetResult()
+                        ReturnKeys   = @($returnKeysSignal.GetResult())
+                    }
+
+                    $startSignal = Start-STBackgroundTask `
+                        -Signal $opSignal `
+                        -EnvironmentDefinition $environmentSignal.GetResult() `
+                        -WorkItem $workItem `
+                        -WorkerContext $workerContext `
+                        -WorkerCommand 'Invoke-PlanPhaseWorker' `
+                        -TaskName ([string]$taskNameSignal.GetResult()) `
+                        -OwnerId $ownerId `
+                        -MaxConcurrent $maxBackgroundPhases `
+                        -DebugInline:([bool]$debugInlineSignal.GetResult()) |
+                        Select-Object -Last 1
+                    $null = $opSignal.MergeSignal($startSignal)
+                    if ($startSignal.HasResult()) { $opSignal.SetResult($startSignal.GetResult()) }
+
+                    break
+                }
+
+                "AwaitPhase" {
+                    $taskId = if ($DefaultPath -is [string]) { $DefaultPath } else { [string]$DefaultPath.TaskId }
+                    if ([string]::IsNullOrWhiteSpace($taskId)) {
+                        $null = $opSignal.LogCritical('AwaitPhase requires a task ID in Plan.Path.')
+                        return $opSignal
+                    }
+
+                    $collisionSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path 'Config.ResultCollisionAction' -Default 'Error' | Select-Object -Last 1
+                    if ($opSignal.MergeSignalAndVerifyFailure($collisionSignal)) { return $opSignal }
+                    if ([string]$collisionSignal.GetResult() -notin @('Error', 'PreserveParent', 'OverwriteParent')) {
+                        $null = $opSignal.LogCritical('Config.ResultCollisionAction must be Error, PreserveParent, or OverwriteParent.')
+                        return $opSignal
+                    }
+                    $completeSignal = Complete-PlanPhaseTask `
+                        -TaskId $taskId `
+                        -ItemSignal $ItemSignal `
+                        -Signal $opSignal `
+                        -CollisionAction ([string]$collisionSignal.GetResult()) `
+                        -RemoveAfterReceive |
+                        Select-Object -Last 1
+                    $null = $opSignal.MergeSignal($completeSignal)
+                    if ($completeSignal.HasResult()) { $opSignal.SetResult($completeSignal.GetResult()) }
+
+                    break
+                }
+
+                "AwaitAllPhases" {
+                    $ownerId = "Item:$([System.Runtime.CompilerServices.RuntimeHelpers]::GetHashCode($ItemSignal))"
+                    $collisionSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path 'Config.ResultCollisionAction' -Default 'Error' | Select-Object -Last 1
+                    if ($opSignal.MergeSignalAndVerifyFailure($collisionSignal)) { return $opSignal }
+                    if ([string]$collisionSignal.GetResult() -notin @('Error', 'PreserveParent', 'OverwriteParent')) {
+                        $null = $opSignal.LogCritical('Config.ResultCollisionAction must be Error, PreserveParent, or OverwriteParent.')
+                        return $opSignal
+                    }
+
+                    $waitSignal = Wait-STBackgroundTasks -OwnerId $ownerId -Signal $opSignal | Select-Object -Last 1
+                    $null = $opSignal.MergeSignal($waitSignal)
+                    foreach ($received in @($waitSignal.GetResult())) {
+                        $completeSignal = Complete-PlanPhaseTask `
+                            -TaskId ([string]$received.Status.TaskId) `
+                            -ItemSignal $ItemSignal `
+                            -Signal $opSignal `
+                            -CollisionAction ([string]$collisionSignal.GetResult()) `
+                            -RemoveAfterReceive |
+                            Select-Object -Last 1
+                        $null = $opSignal.MergeSignal($completeSignal)
+                    }
+                    $opSignal.SetResult(@($waitSignal.GetResult() | ForEach-Object Status))
+
+                    break
+                }
+
+                "GetPhaseStatus" {
+                    $taskId = if ($DefaultPath -is [string]) { $DefaultPath } else { [string]$DefaultPath.TaskId }
+                    $statusSignal = Get-STBackgroundTask -TaskId $taskId -Signal $opSignal | Select-Object -Last 1
+                    $null = $opSignal.MergeSignal($statusSignal)
+                    if ($statusSignal.HasResult()) { $opSignal.SetResult($statusSignal.GetResult()) }
+
+                    break
+                }
+
+                "StopPhase" {
+                    $taskId = if ($DefaultPath -is [string]) { $DefaultPath } else { [string]$DefaultPath.TaskId }
+                    $stopSignal = Stop-STBackgroundTask -TaskId $taskId -Signal $opSignal | Select-Object -Last 1
+                    $null = $opSignal.MergeSignal($stopSignal)
+                    if ($stopSignal.HasResult()) { $opSignal.SetResult($stopSignal.GetResult()) }
+
+                    break
                 }
 
                 "InsertPhaseSteps" {

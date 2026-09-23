@@ -202,8 +202,26 @@ class MemoryCondenser {
                             }
                         }
 
+                        # Harvest completed asynchronous phase workers without
+                        # blocking the parent plan. Execution failures remain on
+                        # the task until AwaitPhase/AwaitAllPhases observes them.
+                        $backgroundUpdateSignal = Update-STBackgroundTasks -Signal $opSignal | Select-Object -Last 1
+                        if ($opSignal.MergeSignalAndVerifyFailure($backgroundUpdateSignal)) { return $opSignal }
+
                         $step = $this.GetNextStep($step, $Plan, $ItemSignal, $ConductionSignal)
                     }
+
+                    # Structured-concurrency boundary: the parent was free to
+                    # execute subsequent steps, but this item cannot leave its
+                    # Generate scope with unobserved background phases.
+                    $backgroundOwnerId = "Item:$([System.Runtime.CompilerServices.RuntimeHelpers]::GetHashCode($ItemSignal))"
+                    $backgroundWaitSignal = Wait-STBackgroundTasks `
+                        -OwnerId $backgroundOwnerId `
+                        -Signal $opSignal `
+                        -RemoveAfterReceive `
+                        -MergeWorkerSignals |
+                        Select-Object -Last 1
+                    if ($opSignal.MergeSignalAndVerifyFailure($backgroundWaitSignal)) { return $opSignal }
                     break
                 }
 

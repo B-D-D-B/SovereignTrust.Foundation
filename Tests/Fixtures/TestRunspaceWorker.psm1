@@ -94,4 +94,22 @@ function Test-STPoolInvalidWorker {
     return [PSCustomObject]@{ Index = [int]$WorkItem.Index }
 }
 
-Export-ModuleMember -Function Initialize-STEnvironment, Test-STPoolWorker, Test-STPoolErrorWorker, Test-STPoolThrowWorker, Test-STPoolInvalidWorker
+function Test-STBackgroundWorker {
+    param(
+        [object]$Runtime,
+        [object]$WorkItem,
+        [object]$Context
+    )
+
+    Start-Sleep -Milliseconds ([int]$WorkItem.DelayMilliseconds)
+    $signal = [Signal]::Start("TestBackgroundWorker:$($WorkItem.Index)") | Select-Object -Last 1
+    $null = $signal.LogInformation("Completed background worker $($WorkItem.Index).")
+    $signal.SetResult([PSCustomObject]@{
+        Index       = [int]$WorkItem.Index
+        Value       = $WorkItem.Value
+        ContextName = $Context.Name
+    })
+    return $signal
+}
+
+Export-ModuleMember -Function Initialize-STEnvironment, Test-STPoolWorker, Test-STPoolErrorWorker, Test-STPoolThrowWorker, Test-STPoolInvalidWorker, Test-STBackgroundWorker

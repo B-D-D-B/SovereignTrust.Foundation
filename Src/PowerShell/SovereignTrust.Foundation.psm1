@@ -62,7 +62,11 @@ function Invoke-Telemetry(
 . "$PSScriptRoot/Utilities/Adapters/Condenser/Plan/Resolve-ClonePlan.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Condenser/Plan/Invoke-PlanIteration.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Condenser/Plan/Invoke-PlanIterationWorker.ps1"
+. "$PSScriptRoot/Utilities/Adapters/Condenser/Plan/Invoke-PlanPhase.ps1"
+. "$PSScriptRoot/Utilities/Adapters/Condenser/Plan/Invoke-PlanPhaseWorker.ps1"
+. "$PSScriptRoot/Utilities/Adapters/Condenser/Plan/Complete-PlanPhaseTask.ps1"
 . "$PSScriptRoot/Utilities/Threading/Invoke-STRunspacePool.ps1"
+. "$PSScriptRoot/Utilities/Threading/STBackgroundTasks.ps1"
 
 . "$PSScriptRoot/Utilities/Adapters/Storage/Invoke-MappedStorageAdapter.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Invoke-MappedAdapterCore.ps1"
@@ -186,6 +190,8 @@ function Invoke-Telemetry(
 . "$PSScriptRoot/Utilities/Conduction/Resolve-Conductor.ps1"
 . "$PSScriptRoot/Utilities/Graph/Convert-GraphToJson.ps1"
 . "$PSScriptRoot/Utilities/Graph/Convert-JsonToGraph.ps1"
+. "$PSScriptRoot/Utilities/Graph/Export-STSignalGraphSnapshot.ps1"
+. "$PSScriptRoot/Utilities/Graph/Import-STSignalGraphSnapshot.ps1"
 . "$PSScriptRoot/Utilities/Graph/Resolve-PathGraph.ps1"
 . "$PSScriptRoot/Utilities/Graph/Resolve-PathGraphCondenserAdapter.ps1"
 . "$PSScriptRoot/Utilities/Graph/Resolve-PathGraphTokenAdapter.ps1"
@@ -218,7 +224,14 @@ Export-ModuleMember -Function Initialize-STEnvironment
 
 Export-ModuleMember -Function Resolve-ClonePlan
 Export-ModuleMember -Function Invoke-PlanIterationWorker
+Export-ModuleMember -Function Invoke-PlanPhaseWorker
 Export-ModuleMember -Function Invoke-STRunspacePool
+Export-ModuleMember -Function Start-STBackgroundTask
+Export-ModuleMember -Function Get-STBackgroundTask
+Export-ModuleMember -Function Update-STBackgroundTasks
+Export-ModuleMember -Function Receive-STBackgroundTask
+Export-ModuleMember -Function Wait-STBackgroundTasks
+Export-ModuleMember -Function Stop-STBackgroundTask
 
 # Previous set of public exports
 Export-ModuleMember -Function Resolve-Conduit
