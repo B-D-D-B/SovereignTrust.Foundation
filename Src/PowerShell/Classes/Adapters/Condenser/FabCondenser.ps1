@@ -1,6 +1,6 @@
 # =============================================================================
 # 🧩 FabCondenser (Symbolic Mapping + Contextual Replacement)
-#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists / BDDB
+#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists. Current copyright holder: BDDB LLC.
 #  Authors: Shadow PhanTom ☠️🧁👾️/🤖 • Neural Alchemist ⚗️☣️🐲 • Last Updated: 07/12/2025
 # =============================================================================
 # Performs template condensation using dynamic mappings and embedded context.

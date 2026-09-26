@@ -1,6 +1,11 @@
 # Sovereign Trust -> Sovereign Agent Mesh Protocol
 # SovereignTrust.Foundation -> Reference Implementation
-Sovereign Trust Foundation provides the Sovereign Trust protocol helpers, commands, and signal infrastructure powering all SovereignTrust components, providing the core functionality for the Sovereign Trust reference runtime by SDA.
+Sovereign Trust Foundation provides the Sovereign Trust protocol helpers, commands, and signal infrastructure powering all SovereignTrust components, providing the core functionality for the Sovereign Trust reference runtime.
+
+## Ownership and collaboration
+
+BDDB LLC is the current copyright holder for the rights it owns in this project. Silicon Dream Artists SPC collaborates on the project. Licensed under MIT.
+
 ```plaintext
 ███████╗      ████████╗
 ██╔════╝      ╚══██╔══╝
@@ -52,7 +57,7 @@ Neural Alchemist April 2025 🐲☣️⚗️
 
 If you plan to use, fork, or build upon this repository in your own project, we kindly ask that you register your intent by forking this GitHub repository or opening a public issue noting your use:
 
-🔗 https://github.com/silicondreamartists/SovereignTrust.Foundation
+🔗 https://github.com/B-D-D-B/SovereignTrust.Foundation
 
 While this is not a legal requirement under the MIT License, it supports traceable development lineage, honors the spirit of sovereign collaboration, and helps maintain the living memory of the network.
 

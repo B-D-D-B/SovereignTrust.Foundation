@@ -2,7 +2,7 @@
 # 🔄 TransformCondenser (
 #       Select: Performs a select from a text based format
 #       Project: Performs across an axis in order to create a recordset from another recordset using a default content set. (Can this be done by the MergeCondenser?))
-#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists / BDDB
+#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists. Current copyright holder: BDDB LLC.
 #  Authors: Shadow PhanTom ☠️🧁👾️/🤖 • Neural Alchemist ⚗️☣️🐲 • Last Updated: 05/20/2025
 # =============================================================================
 # Performs recursive, additive overlay merging between structured sovereign memory types.

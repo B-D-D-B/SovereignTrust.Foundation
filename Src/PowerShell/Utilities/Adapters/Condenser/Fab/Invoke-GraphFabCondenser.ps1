@@ -1,6 +1,6 @@
 # =============================================================================
 # 📍 Invoke-GraphFabCondenser (Declarative Graph Builder + Injector)
-#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists / BDDB
+#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists. Current copyright holder: BDDB LLC.
 #  Authors: Shadow PhanTom ☠️🧁👾️/🤖 • Neural Alchemist ⚗️☣️🐲 • Last Generated: 06/25/2025
 # =============================================================================
 # This function performs a single declarative execution of a graph plan over a 

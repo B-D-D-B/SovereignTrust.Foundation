@@ -1,6 +1,6 @@
 # =============================================================================
 # 🚦 Invoke-JsonTokenCondenser
-#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists / BDDB
+#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists. Current copyright holder: BDDB LLC.
 #  Authors: Shadow PhanTom ☚️🐝🤖/ • Neural Alchemist ⚗️☣️🐲 • Version: 2025.5.22
 # =============================================================================
 # Invokes Conduction phase processing using a sovereign Graph structure and

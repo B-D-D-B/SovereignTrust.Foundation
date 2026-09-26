@@ -78,6 +78,7 @@ function Invoke-MappedAdapter {
         # Contract: .Invoke($opSignal, $Signal, $ItemSignal)
         $invokeSignal = $mappedAdapter.Invoke($adapterSlot, $Activity, $Signal, $Plan, $ItemSignal) | Select-Object -Last 1
         if ($opSignal.MergeSignalAndVerifyFailure($invokeSignal)) {
+            if ($invokeSignal.HasResult()) { $opSignal.SetResult($invokeSignal.GetResult()) }
             $opSignal.LogCritical("Storage adapter invoke failed (Adapter: $Adapter).")
             return $opSignal
         }

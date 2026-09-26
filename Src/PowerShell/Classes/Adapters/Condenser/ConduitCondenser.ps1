@@ -1,6 +1,6 @@
 # =============================================================================
 # 🧪 GraphCondenser (Declarative Multi-Plan Graph Launcher)
-#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists / BDDB
+#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists. Current copyright holder: BDDB LLC.
 #  Authors: Shadow PhanTom ☠️🧁👾️/🤖 • Neural Alchemist ⚗️☣️🐲 • Last Generated: 06/25/2025
 # =============================================================================
 # The GraphCondenser is a memory-driven execution class that consumes
