@@ -14,7 +14,7 @@ New-ModuleManifest -Path ./SovereignTrust.Foundation.psd1 `
   -LicenseUri 'https://opensource.org/licenses/MIT' `
   -ProjectUri 'https://github.com/B-D-D-B/SovereignTrust.Foundation' `
   -CompatiblePSEditions 'Core' `
-  -PowerShellVersion '5.1'
+  -PowerShellVersion '7.0'
 
   Invoke-GenerateModuleFile -OutputFile 'SovereignTrust.Foundation.psm1' -Root $PSScriptRoot
   
