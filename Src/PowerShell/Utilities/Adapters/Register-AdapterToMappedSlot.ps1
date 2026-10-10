@@ -121,8 +121,8 @@ function Register-AdapterToMappedSlot {
             $opSignal.LogWarning("Adapter registration returned warning or soft failure.")
         }
 
-        # Return the value stored in the mapped slot: either an eager adapter
-        # instance or a lazy registration handle.
+        # Return the attempted eager adapter or lazy registration handle;
+        # a result after soft failure does not confirm mapped-slot storage.
         $opSignal.SetResult($registrationValue)
     }
     catch {

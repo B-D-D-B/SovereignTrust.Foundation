@@ -1,3 +1,4 @@
+
 function Resolve-PathGraphTokenAdapter {
     [CmdletBinding()]
     param (

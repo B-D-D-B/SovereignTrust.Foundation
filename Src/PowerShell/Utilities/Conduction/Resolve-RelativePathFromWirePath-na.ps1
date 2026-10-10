@@ -1,3 +1,4 @@
+
 function Resolve-RelativePathFromWirePath {
     param (
         [Parameter(Mandatory)] [string]$VirtualPath,

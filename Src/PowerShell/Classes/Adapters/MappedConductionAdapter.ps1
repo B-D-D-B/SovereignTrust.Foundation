@@ -1,3 +1,4 @@
+
 class MappedConductionAdapter {
     [Signal]$Signal
 

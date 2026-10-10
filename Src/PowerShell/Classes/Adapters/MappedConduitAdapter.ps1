@@ -1,3 +1,4 @@
+
 class MappedConduitAdapter {
     [Signal]$Signal
 

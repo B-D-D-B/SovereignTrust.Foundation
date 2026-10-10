@@ -1,3 +1,4 @@
+
 class SignalTelemeter {
     [void] Invoke([Signal] $signal, [SignalEntry] $entry){
         $this.Log($entry.Level, $entry.Message, $entry.Exception)

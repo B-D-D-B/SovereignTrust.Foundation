@@ -3,6 +3,7 @@
     Conduit is essentially a signal with a Conductor that's been resolved with the passed in Environment Jacket. 
     It provides a full scripted environment with all of the appropriate scripts and modules loaded to be used in stand-alone and silo parallel environments.
 #>
+
 function Resolve-Conduit {
     [CmdletBinding()]
     param (

@@ -1,3 +1,4 @@
+
 function Resolve-PathGraphForConduction {
     [CmdletBinding()]
     param (
@@ -50,41 +51,15 @@ function Resolve-PathGraphForConduction {
     return $opSignal
 }
 <#
-[Signal] $opSignal
-│
-├── .Name = "Resolve-PathGraphForConduction"
-├── .ReversePointer = $ConductionSignal
-├── .Result = $graph (Graph)
-│   ├── .SignalGrid = @{
-│   │     "Conduction:Environment" = [Signal]
-│   │     │   ├── .Name = "Conduction:Environment"
-│   │     │   ├── .Jacket = $conduction.Jacket (environment object)
-│   │     │   └── .Pointer = $null
-│   │     │
-│   │     "Conduction:Conductor" = [Signal]
-│   │     │   ├── .Name = "Conduction:Conductor"
-│   │     │   ├── .Jacket = $conduction.Conductor
-│   │     │   └── .Pointer = $null
-│   │     │
-│   │     "Conduction:Conduit" = [Signal]
-│   │     │   ├── .Name = "Conduction:Conduit"
-│   │     │   ├── .Jacket = $conduction.Conduit
-│   │     │   └── .Pointer = $null
-│   │     │
-│   │     "Conduction:Context" = [Signal]
-│   │     │   ├── .Name = "Conduction:Context"
-│   │     │   ├── .Jacket = $conduction.Context
-│   │     │   └── .Pointer = $null
-│   │     │
-│   │     "Conduction:Graph" = [Signal]
-│   │         ├── .Name = "Conduction:Graph"
-│   │         ├── .Jacket = $conduction.Graph
-│   │         └── .Pointer = $null
-│   └── .Finalized = $true
-├── .Entries = [SignalEntry[]]
- 
-Description
-$opSignal contains the Graph as its .Result, built from the flat parts of the Conduction object.
-Each Conduction:<Part> is a Signal that wraps the respective value and is inserted into the .SignalGrid of the Graph.
-All .Pointer values are left null for now — they can be set later via phase routing or Condensers.
+SOURCE-PATH NOTE
+This function reads the ConductionSignal result and returns an operation Signal
+with a critical log when that result is null. Otherwise it starts a Graph,
+takes the graph pointer, and considers Jacket, Conductor, Conduit, Context, and
+Graph values. For each nonnull value it starts a Signal named
+Conduction:<Part> and calls RegisterSignal; null values receive a warning.
+It finalizes the Graph and sets that Graph as the operation Signal result.
+
+The former diagram's SignalGrid member, per-node Jacket assignments, and
+null-pointer layout are not established by these statements. Runtime object
+shape and method effects remain unverified.
 #>

@@ -1,3 +1,4 @@
+
 class MappedTokenAdapter {
     [Signal]$Signal
 

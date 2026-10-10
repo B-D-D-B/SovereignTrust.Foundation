@@ -1,3 +1,4 @@
+
 class MappedStorageAdapter {
     [Signal]$Signal
 

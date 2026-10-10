@@ -1,3 +1,16 @@
+
+<#
+.SYNOPSIS
+Initializes the supplied environment and runs the selected conduction plan route.
+.DESCRIPTION
+The active source resolves a route and process identifiers, then runs the plan through nested helpers. This source-only description does not establish runtime success. The declared ConductionContext parameter is not used by the active top-level route.
+.PARAMETER Environment
+Environment definition passed to initialization.
+.PARAMETER ConductionPlanRoute
+Route overlay used to resolve plan content.
+.PARAMETER ConductionContext
+Declared input. The inspected active route does not use this argument.
+#>
 function Invoke-ST {
     [CmdletBinding()]
     param (

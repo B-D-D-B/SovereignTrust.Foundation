@@ -1,4 +1,6 @@
 # Sovereign Trust -> Sovereign Agent Mesh Protocol
+
+Shared explanations formerly under Content/Documentation now live in [BDDB platform documentation](https://github.com/B-D-D-B/BDDB.Documentation/blob/main/Architecture/README.md). See [source references](https://github.com/B-D-D-B/BDDB.Documentation/blob/main/Reference/Source/SovereignTrust.Foundation/README.md) and the [historical documentation catalog](https://github.com/B-D-D-B/BDDB.Documentation/blob/main/Catalogs/SovereignTrust.Foundation.json). The embedded ST-DOC JSON blocks have been removed from source; other source comments remain.
 # SovereignTrust.Foundation -> Reference Implementation
 Sovereign Trust Foundation provides the Sovereign Trust protocol helpers, commands, and signal infrastructure powering all SovereignTrust components, providing the core functionality for the Sovereign Trust reference runtime.
 

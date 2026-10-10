@@ -1,3 +1,4 @@
+
 function Resolve-PathGraph {
     param (
         [Parameter(Mandatory)][string]$WirePath,
@@ -49,37 +50,16 @@ function Resolve-PathGraph {
 
 
 <#
-░▒▓█ █▓▒░
-🧠 SOVEREIGN TRUST MODULE • PATH FORMULA GRAPH RESOLVER
-────────────────────────────────────────────────────────────────────
-📂 File: Resolve-PathGraph.ps1
-📘 Purpose: Build a structured memory Graph based on an addressable formula
-           (usually a WirePath), populating key sections like Manifest,
-           Adapter metadata, and Source lineage.
+HISTORICAL DESIGN NOTE (2025.5.3)
+Earlier path-formula prose described a Graph preloaded with Manifest, Source,
+AdapterJacket, and deep hydration. That was design intent; this function body
+does not construct or hydrate those fields.
 
-🔧 Role:
-This resolver builds a **modular memory Graph** structure based on a known
-path formula, typically a `WirePath`, but extensible to any directed input
-that maps to resolvable memory segments.
+Observed source path: dispatch Publisher, Module, or Condenser; obtain the
+selected inner Signal; and, when its merge reports success, set the operation
+Signal result to a hashtable with Strategy, WirePath, and Graph. The Module
+branch delegates to Resolve-ModulePathSignal, whose source prepares a module
+path Signal without hydration or file access. Runtime outcomes remain unverified.
 
-🧱 Output:
-Returns a living `Graph` object preloaded with:
-    • `Manifest` – the formal declaration from the module's psd1 or metadata
-    • `Grid` – lifecycle trace for resolution
-    • `Source` – original WirePath or identifier
-    • Optional `AdapterJacket` metadata if sourced from a condenser adapter
-
-This approach supports **dynamic Graph composition**, modular memory layering,
-and recursive adapter loading. Ideal for use in:
-    • Module bootstrapping
-    • Sovereign adapter registration
-    • Runtime introspection or mutation
-
-📐 Design Traits:
-• Composable Graph memory with optional deep hydration
-• Trace-wrapped via `Signal` returns
-• Aligned to SovereignTrust Graph Execution Doctrine
-
-📆 Version: 2025.5.3
 Signature: ∞⟲⟁⚡ (Recursive Builder Flow)
 #>

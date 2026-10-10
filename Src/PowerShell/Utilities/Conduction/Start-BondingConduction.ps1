@@ -1,15 +1,18 @@
+
 <#
 .SYNOPSIS
 Initializes a Bonding Conduction with full sovereign memory handling.
 
 .DESCRIPTION
-Takes a Signal whose `.Result` is a fully constructed GSG (Graph Signal Graph),
-uses that as the `.Jacket`, and creates a new empty Graph as `.Pointer`.
-
-This produces a clean signal structure to execute memory-bound processes.
+Reads the input Signal result and, when non-null, attaches it as the Jacket
+of a new conduction Signal. Creates a Graph and uses its result as that nested
+Signal's Pointer. Returns the operation Signal with the conduction Signal in
+its Result; this function does not execute a conduction phase.
 
 .OUTPUTS
-Signal – A new Signal with `.Jacket = GSG`, `.Pointer = working Graph`, and `.Result = $null`
+Signal – The operation Signal with the nested conduction Signal in its Result.
+The nested Signal carries the input result as Jacket and the Graph as Pointer.
+For a null input result, returns the output of LogCritical instead.
 #>
 function Start-BondingConduction {
     [CmdletBinding()]

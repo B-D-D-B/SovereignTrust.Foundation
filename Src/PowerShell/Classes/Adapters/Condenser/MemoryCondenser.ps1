@@ -76,6 +76,10 @@ class MemoryCondenser {
                             $StepHydrateResultSignal = Invoke-CondenserAdapter -Slot "Hydration" -Plan $HydrationPlan -Signal $ConductionSignal -ItemSignal $HydrationSignal | Select-Object -Last 1
                             if ($opSignal.MergeSignalAndVerifyFailure($StepHydrateResultSignal)) { return $opSignal }
                             $step = $StepHydrateResultSignal.GetResult()
+
+                            if ($breakSignal.GetResult()) {
+                                $Check = ""
+                            }
                         }
 
                         $IsEnabledSignal = Resolve-PathFromDictionary -Dictionary $step -Path "IsEnabled" -Default $true | Select-Object -Last 1

@@ -1,3 +1,4 @@
+
 class MappedNetworkAdapter {
     [Signal]$Signal
 

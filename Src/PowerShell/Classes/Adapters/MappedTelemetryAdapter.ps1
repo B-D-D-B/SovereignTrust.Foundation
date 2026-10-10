@@ -1,3 +1,4 @@
+
 class MappedTelemetryAdapter {
     [Signal]$Signal
 

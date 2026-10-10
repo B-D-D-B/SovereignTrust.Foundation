@@ -1,3 +1,4 @@
+
 function Export-STSignalGraphSnapshot {
     [CmdletBinding()]
     param(

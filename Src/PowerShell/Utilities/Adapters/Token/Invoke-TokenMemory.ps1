@@ -171,6 +171,9 @@ function Invoke-TokenMemory {
 
                 if ($valueSignal.HasResult()) {
                     $opSignal.SetResult($valueSignal.GetResult())
+                } else
+                {
+                    $a = ""
                 }
             }
         }

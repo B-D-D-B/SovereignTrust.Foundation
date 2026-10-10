@@ -1,3 +1,4 @@
+
 <# This should be moved to be the core of the Invoke-FabricateAdapter method? #>
 function Resolve-AdapterFromJacket {
     param (

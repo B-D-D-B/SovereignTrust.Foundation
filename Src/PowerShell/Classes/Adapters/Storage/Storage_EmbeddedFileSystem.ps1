@@ -1,3 +1,4 @@
+
 class Storage_EmbeddedFileSystem {
     [MappedStorageAdapter]$MappedAdapter
     [Signal]$Signal

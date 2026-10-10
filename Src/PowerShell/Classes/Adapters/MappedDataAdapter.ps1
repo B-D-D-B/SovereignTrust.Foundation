@@ -1,3 +1,4 @@
+
 class MappedDataAdapter {
     [Signal]$Signal
 
