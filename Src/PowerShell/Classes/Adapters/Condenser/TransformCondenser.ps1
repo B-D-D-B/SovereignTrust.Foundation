@@ -2,7 +2,7 @@
 # 🔄 TransformCondenser (
 #       Select: Performs a select from a text based format
 #       Project: Performs across an axis in order to create a recordset from another recordset using a default content set. (Can this be done by the MergeCondenser?))
-#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists / BDDB
+#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists. Current copyright holder: BDDB LLC.
 #  Authors: Shadow PhanTom ☠️🧁👾️/🤖 • Neural Alchemist ⚗️☣️🐲 • Last Updated: 05/20/2025
 # =============================================================================
 # Performs recursive, additive overlay merging between structured sovereign memory types.
@@ -99,6 +99,7 @@ class TransformCondenser {
                 }
 
                 # Select using a path from an xml or json object.
+                # TODO: We should remove the Path and hydration portions of this and do it through the standard memory condenser. Will need to coordinate with changing the plans that use select.
                 "Select" {
                     $sourceSignal = Resolve-PathFromDictionary -Dictionary $ItemSignal -Path $DefaultPath | Select-Object -Last 1
 
@@ -156,6 +157,25 @@ class TransformCondenser {
                     break
                 }
 
+                # Injects using a path to an xml or json object.
+                "RegisterSignal" {
+                    $sourceSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.Content" | Select-Object -Last 1
+                    $keySignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.Key" | Select-Object -Last 1
+
+                    $ItemSignal.GetPointer().RegisterSignal($keySignal.GetResult(), $sourceSignal);
+                    break
+                }
+
+                "UnregisterSignalKeys" {
+                    $pointer = $ItemSignal.GetPointer()
+                    $keysSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.Keys" | Select-Object -Last 1
+
+                    foreach ($key in @($keysSignal.GetResult())) {
+                        $pointer.UnregisterSignal($key)
+                    }
+                    break
+                }
+
                 # Clone using a path to an xml or json object.
                 "Clone" {
                     $pathSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Path" | Select-Object -Last 1
@@ -165,7 +185,7 @@ class TransformCondenser {
                     $sourceSignal = Resolve-PathFromDictionary -Dictionary $ItemSignal -Path $path | Select-Object -Last 1
                     $source = $sourceSignal.GetResult() | ConvertTo-Json -Depth 10 | ConvertFrom-Json -Depth 10
                     
-                    $opSignal.SetResult($source)
+                    $opSignal.SetResult($source )
                     break
                 }
 
@@ -191,7 +211,7 @@ class TransformCondenser {
                 }
 
                 default {
-                    $opSignal.LogWarning("Unsupported Activity: $Activity")
+                    $opSignal.LogCritical("Unsupported Activity: $Activity")
                     break
                 }
             }

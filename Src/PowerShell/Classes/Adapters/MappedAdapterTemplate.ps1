@@ -1,3 +1,4 @@
+
 class MappedAdapterTemplate {
     [Signal]$Signal  # Sovereign runtime container
 

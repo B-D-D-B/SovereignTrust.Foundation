@@ -1,3 +1,4 @@
+
 class MappedQueueAdapter {
     [Signal]$Signal
 

@@ -1,3 +1,4 @@
+
 <# This should be moved to be the core of the Invoke-FabricateAdapter method? #>
 function Resolve-AdapterFromJacket {
     param (
@@ -97,7 +98,7 @@ function Resolve-AdapterFromJacket {
         }
 
         $mergeServiceSignal = Resolve-PathFromDictionary -Dictionary $ConductionContext -Path "%.*.#.Adapters.*.#.MappedCondenser.@.$.*.#.MergeCondenser.@" | Select-Object -Last 1
-        if ($opSignal.MergeSignalAndVerifyFailure($mergeServiceSignal)) {
+        if ($opSignal.MergeSignalAndVerifyFailure($mergeServiceSignal) -or -not $mergeServiceSignal.HasResult()) {
             $opSignal.LogCritical("MergeCondenser not available on ConductionContext.")
             return $opSignal
         }
@@ -112,6 +113,10 @@ function Resolve-AdapterFromJacket {
         Add-PathToDictionary -Dictionary $mergeItemSignal -Path "@.Overlay" -Value $Jacket.GetResult($true)  | Select-Object 
 
         $mergeService = $mergeServiceSignal.GetResult()
+        if ($null -eq $mergeService -or -not ($mergeService | Get-Member -Name 'Invoke' -MemberType Method)) {
+            $opSignal.LogCritical("MergeCondenser resolved without an invokable adapter instance.")
+            return $opSignal
+        }
         $mergeItemSignalJacket = [Signal]::Start("MergeSignal") | Select-Object -Last 1
         $mergeItemSignalJacket.SetJacket($mergeItemSignal)
 

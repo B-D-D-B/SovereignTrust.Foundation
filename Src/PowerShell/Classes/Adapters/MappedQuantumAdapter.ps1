@@ -1,3 +1,4 @@
+
 class MappedQuantumAdapter {
     [Signal]$Signal
 

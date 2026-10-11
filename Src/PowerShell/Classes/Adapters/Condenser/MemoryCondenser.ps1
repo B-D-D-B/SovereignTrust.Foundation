@@ -1,7 +1,7 @@
 # =============================================================================
 # 🧠 SDA MemoryCondenser
 #  SovereignTrust Memory Interface for performing Invoke-MemoryCondenser calls
-#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists / BDDB
+#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists. Current copyright holder: BDDB LLC.
 #  Authors: Shadow PhanTom 🤖/☠️🧁👾️ • Neural Alchemist ⚗️☣️🐲 • Version: 2025.5.4.8
 # =============================================================================
 
@@ -61,7 +61,7 @@ class MemoryCondenser {
                             $HydrationSignal = [Signal]::Start("MemoryCondenser.Invoke.DeferredHydrate", $step) | Select-Object -Last 1
                             $HydrationSignal.SetJacket($StepResultSignal)
 
-                            # Set the Step as the result content of the jacket which is what is going to be hydrated.
+                            # Set the Step as   the result content of the jacket which is what is going to be hydrated.
                             $HydrationSignal.SetJacketResult($step)
                             $HydrationSignal.SetPointer($ItemSignal.GetPointer())
 
@@ -76,14 +76,20 @@ class MemoryCondenser {
                             $StepHydrateResultSignal = Invoke-CondenserAdapter -Slot "Hydration" -Plan $HydrationPlan -Signal $ConductionSignal -ItemSignal $HydrationSignal | Select-Object -Last 1
                             if ($opSignal.MergeSignalAndVerifyFailure($StepHydrateResultSignal)) { return $opSignal }
                             $step = $StepHydrateResultSignal.GetResult()
+
+                            if ($breakSignal.GetResult()) {
+                                $Check = ""
+                            }
                         }
 
                         $IsEnabledSignal = Resolve-PathFromDictionary -Dictionary $step -Path "IsEnabled" -Default $true | Select-Object -Last 1
+                        $IsEnabledOperatorSignal = Resolve-PathFromDictionary -Dictionary $step -Path "IsEnabledOperator" -Default "And" | Select-Object -Last 1
                         if ($opSignal.MergeSignalAndVerifyFailure($IsEnabledSignal)) { return $opSignal }
 
+                        $isEnabledOperator = $IsEnabledOperatorSignal.GetResult()
                         $isEnabledResult = $IsEnabledSignal.GetResult()
 
-                        if (-not $this.TestAllTrue($isEnabledResult)) {
+                        if (-not $this.TestAllTrue($isEnabledResult, $isEnabledOperator)) {
                             $step = $this.GetNextStep($step, $Plan, $ItemSignal, $ConductionSignal) 
                             continue
                         }
@@ -200,8 +206,26 @@ class MemoryCondenser {
                             }
                         }
 
+                        # Harvest completed asynchronous phase workers without
+                        # blocking the parent plan. Execution failures remain on
+                        # the task until AwaitPhase/AwaitAllPhases observes them.
+                        $backgroundUpdateSignal = Update-STBackgroundTasks -Signal $opSignal | Select-Object -Last 1
+                        if ($opSignal.MergeSignalAndVerifyFailure($backgroundUpdateSignal)) { return $opSignal }
+
                         $step = $this.GetNextStep($step, $Plan, $ItemSignal, $ConductionSignal)
                     }
+
+                    # Structured-concurrency boundary: the parent was free to
+                    # execute subsequent steps, but this item cannot leave its
+                    # Generate scope with unobserved background phases.
+                    $backgroundOwnerId = "Item:$([System.Runtime.CompilerServices.RuntimeHelpers]::GetHashCode($ItemSignal))"
+                    $backgroundWaitSignal = Wait-STBackgroundTasks `
+                        -OwnerId $backgroundOwnerId `
+                        -Signal $opSignal `
+                        -RemoveAfterReceive `
+                        -MergeWorkerSignals |
+                        Select-Object -Last 1
+                    if ($opSignal.MergeSignalAndVerifyFailure($backgroundWaitSignal)) { return $opSignal }
                     break
                 }
 
@@ -316,31 +340,57 @@ class MemoryCondenser {
         return $itemSignal
     }
 
-    [bool] TestAllTrue($Value) {
-        $values = @($Value)
+[bool] TestAllTrue($Value, $Operator) {
+    $values = @($Value)
 
-        if ($values.Count -eq 0) {
+    if ($values.Count -eq 0) {
+        return $false
+    }
+
+    if ([string]::IsNullOrWhiteSpace($Operator)) {
+        throw "Operator cannot be empty. Supported operators: And, Or."
+    }
+
+    $mode = $Operator.Trim().ToLowerInvariant()
+
+    if ($mode -notin @("and", "or")) {
+        throw "Unsupported operator '$Operator'. Supported operators: And, Or."
+    }
+
+    foreach ($item in $values) {
+        $isTrue = $false
+
+        if ($null -ne $item) {
+            if ($item -is [bool]) {
+                $isTrue = [bool]$item
+            }
+            else {
+                $text = $item.ToString().Trim()
+
+                if ($text -ieq "true") {
+                    $isTrue = $true
+                } elseif ($text -ieq "false") {
+                    $isTrue = $false
+                } else {
+                    # Did not properly hydrate into a true or false value
+                    $isTrue = $false
+                }
+            }
+        }
+
+        # And fails as soon as one value is not true.
+        if ($mode -eq "and" -and -not $isTrue) {
             return $false
         }
 
-        foreach ($item in $values) {
-            if ($null -eq $item) {
-                return $false
-            }
-
-            if ($item -is [bool]) {
-                if (-not $item) {
-                    return $false
-                }
-
-                continue
-            }
-
-            if ($item.ToString().Trim().ToLowerInvariant() -ne "true") {
-                return $false
-            }
+        # Or succeeds as soon as one value is true.
+        if ($mode -eq "or" -and $isTrue) {
+            return $true
         }
-
-        return $true
     }
-}
+
+    # Reaching the end means:
+    # - And found no false values.
+    # - Or found no true values.
+    return ($mode -eq "and")
+}}

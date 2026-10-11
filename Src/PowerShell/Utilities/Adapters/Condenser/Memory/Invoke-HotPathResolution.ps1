@@ -1,7 +1,7 @@
 # =============================================================================
 # 🧠 Invoke-HotPathResolution
 #  Delegated logic for Hot Path, Hydration, and Memory Resolution
-#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists / BDDB
+#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists. Current copyright holder: BDDB LLC.
 #  Authors: Shadow PhanTom 🤖/☠️🏋️😾️ • Neural Alchemist ⚗️☣️🐲 • Version: 2025.5.4.8
 # =============================================================================
 
@@ -31,7 +31,7 @@
 #    QuipPack    – Theme-based or agent-defined shortcut bundles
 #    QuipMode    – UI state allowing direct emoji path interaction
 #
-#  License: MIT License • © 2025 Silicon Dream Artists / BDDB
+#  License: MIT License • © 2025 Silicon Dream Artists. Current copyright holder: BDDB LLC.
 #  Authors: Shadow PhanTom 🤖/☠️🧁👾️ • Neural Alchemist ⚗️☣️🐲
 # =============================================================================
 

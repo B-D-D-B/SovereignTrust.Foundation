@@ -1,6 +1,6 @@
 # =============================================================================
 # 💧 HydrationCondenser (Context Import + Token Resolver)
-#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists / BDDB
+#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists. Current copyright holder: BDDB LLC.
 #  Authors: Shadow PhanTom ☠️🧁👾️/🤖 • Neural Alchemist ⚗️☣️🐲 • Last Updated: 05/20/2025
 # =============================================================================
 # Condenser for resolving tokens, importing graph memory, and applying contextual

@@ -60,6 +60,13 @@ function Invoke-Telemetry(
 . "$PSScriptRoot/Utilities/Adapters/Condenser/Rest/Invoke-RestCondenserCore.ps1"
 
 . "$PSScriptRoot/Utilities/Adapters/Condenser/Plan/Resolve-ClonePlan.ps1"
+. "$PSScriptRoot/Utilities/Adapters/Condenser/Plan/Invoke-PlanIteration.ps1"
+. "$PSScriptRoot/Utilities/Adapters/Condenser/Plan/Invoke-PlanIterationWorker.ps1"
+. "$PSScriptRoot/Utilities/Adapters/Condenser/Plan/Invoke-PlanPhase.ps1"
+. "$PSScriptRoot/Utilities/Adapters/Condenser/Plan/Invoke-PlanPhaseWorker.ps1"
+. "$PSScriptRoot/Utilities/Adapters/Condenser/Plan/Complete-PlanPhaseTask.ps1"
+. "$PSScriptRoot/Utilities/Threading/Invoke-STRunspacePool.ps1"
+. "$PSScriptRoot/Utilities/Threading/STBackgroundTasks.ps1"
 
 . "$PSScriptRoot/Utilities/Adapters/Storage/Invoke-MappedStorageAdapter.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Invoke-MappedAdapterCore.ps1"
@@ -131,13 +138,17 @@ function Invoke-Telemetry(
 #. "$PSScriptRoot/Utilities/New-Conductor.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Storage/Invoke-EmbeddedFileSystem_ReadObject.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Storage/Invoke-EmbeddedFileSystem_WriteObject.ps1"
+. "$PSScriptRoot/Utilities/Adapters/Storage/Invoke-EmbeddedFileSystem_DeleteObject.ps1"
 . "$PSScriptRoot/Utilities/Json/Invoke-CloneItem.ps1"
 
 . "$PSScriptRoot/Utilities/Adapters/New-MappedCondenserAdapterFromGraph.ps1"
+. "$PSScriptRoot/Utilities/Adapters/New-AdapterRegistration.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Register-AdapterToMappedSlot.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Register-MappedAdapter.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Register-ModuleLoaded.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Resolve-AdaptersFromJacket.ps1"
+. "$PSScriptRoot/Utilities/Adapters/Resolve-RegisteredAdapter.ps1"
+. "$PSScriptRoot/Utilities/Adapters/Resolve-MappedAdapter.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Resolve-ConductorAdapters.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Resolve-DependencyModuleFromGraph.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Test-ModuleLoaded.ps1"
@@ -175,9 +186,12 @@ function Invoke-Telemetry(
 . "$PSScriptRoot/Utilities/Conduction/Start-SovereignTrust.ps1"
 . "$PSScriptRoot/Utilities/Conduction/Start-BondingConduction.ps1"
 . "$PSScriptRoot/Utilities/Conduction/Resolve-Conduit.ps1"
+. "$PSScriptRoot/Utilities/Conduction/Initialize-STEnvironment.ps1"
 . "$PSScriptRoot/Utilities/Conduction/Resolve-Conductor.ps1"
 . "$PSScriptRoot/Utilities/Graph/Convert-GraphToJson.ps1"
 . "$PSScriptRoot/Utilities/Graph/Convert-JsonToGraph.ps1"
+. "$PSScriptRoot/Utilities/Graph/Export-STSignalGraphSnapshot.ps1"
+. "$PSScriptRoot/Utilities/Graph/Import-STSignalGraphSnapshot.ps1"
 . "$PSScriptRoot/Utilities/Graph/Resolve-PathGraph.ps1"
 . "$PSScriptRoot/Utilities/Graph/Resolve-PathGraphCondenserAdapter.ps1"
 . "$PSScriptRoot/Utilities/Graph/Resolve-PathGraphTokenAdapter.ps1"
@@ -206,8 +220,18 @@ function Invoke-Telemetry(
 
 # Export public utility functions
 Export-ModuleMember -Function Invoke-ST
+Export-ModuleMember -Function Initialize-STEnvironment
 
 Export-ModuleMember -Function Resolve-ClonePlan
+Export-ModuleMember -Function Invoke-PlanIterationWorker
+Export-ModuleMember -Function Invoke-PlanPhaseWorker
+Export-ModuleMember -Function Invoke-STRunspacePool
+Export-ModuleMember -Function Start-STBackgroundTask
+Export-ModuleMember -Function Get-STBackgroundTask
+Export-ModuleMember -Function Update-STBackgroundTasks
+Export-ModuleMember -Function Receive-STBackgroundTask
+Export-ModuleMember -Function Wait-STBackgroundTasks
+Export-ModuleMember -Function Stop-STBackgroundTask
 
 # Previous set of public exports
 Export-ModuleMember -Function Resolve-Conduit
@@ -224,10 +248,13 @@ Export-ModuleMember -Function Invoke-CondenserAdapter
 
 Export-ModuleMember -Function Invoke-CloneItem
 Export-ModuleMember -Function New-MappedCondenserAdapterFromGraph
+Export-ModuleMember -Function New-AdapterRegistration
 Export-ModuleMember -Function Register-AdapterToMappedSlot
 Export-ModuleMember -Function Register-MappedAdapter
 Export-ModuleMember -Function Register-ModuleLoaded
 Export-ModuleMember -Function Resolve-AdaptersFromJacket
+Export-ModuleMember -Function Resolve-RegisteredAdapter
+Export-ModuleMember -Function Resolve-MappedAdapter
 Export-ModuleMember -Function Resolve-ConductorAdapters
 Export-ModuleMember -Function Resolve-DependencyModuleFromGraph
 Export-ModuleMember -Function Test-ModuleLoaded

@@ -1,6 +1,6 @@
 # =============================================================================
 # 🧩 FabCondenser (Symbolic Mapping + Contextual Replacement)
-#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists / BDDB
+#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists. Current copyright holder: BDDB LLC.
 #  Authors: Shadow PhanTom ☠️🧁👾️/🤖 • Neural Alchemist ⚗️☣️🐲 • Last Updated: 07/12/2025
 # =============================================================================
 # Performs template condensation using dynamic mappings and embedded context.
@@ -31,18 +31,64 @@ class FabCondenser {
 
         $JacketSignalWrapper = Resolve-PathFromDictionary -Dictionary $ItemSignal -Path "%" | Select-Object -Last 1
         $JacketSignal = $JacketSignalWrapper.GetResult()
-        $ResolveAdapterSignal = Resolve-AdapterFromJacket -Signal $Signal -ConductionContext $Signal -Jacket $JacketSignal | Select-Object -Last 1
+        $loadingMode = 'Lazy'
+        $retryFailedResolution = $false
+        if ($null -ne $Plan) {
+            $loadingModeSignal = Resolve-PathFromDictionary `
+                -Dictionary $Plan `
+                -Path 'Config.AdapterLoading.Mode' `
+                -Default $loadingMode `
+                -SignalLevel 'Information' `
+            | Select-Object -Last 1
+            $retrySignal = Resolve-PathFromDictionary `
+                -Dictionary $Plan `
+                -Path 'Config.AdapterLoading.RetryFailedResolution' `
+                -Default $retryFailedResolution `
+                -SignalLevel 'Information' `
+            | Select-Object -Last 1
+            if ($opSignal.MergeSignalAndVerifyFailure(@($loadingModeSignal, $retrySignal))) {
+                return $opSignal
+            }
 
-        $Adapter = $ResolveAdapterSignal.GetResult() | Select-Object -Last 1
+            $loadingMode = [string]$loadingModeSignal.GetResult()
+            $retryFailedResolution = [bool]$retrySignal.GetResult()
+        }
 
-        $opSignal.SetResult($Adapter)
+        $useLazyLoading = $loadingMode -ne 'Eager'
+        if ($useLazyLoading) {
+            $addSignal = Register-AdapterToMappedSlot `
+                -ConductorJacketSignal $Signal.GetJacket() `
+                -Signal $Signal `
+                -ConductionContext $Signal `
+                -Adapter $JacketSignal `
+                -Lazy `
+                -RetryFailedResolution $retryFailedResolution `
+            | Select-Object -Last 1
+        }
+        else {
+            $resolveAdapterSignal = Resolve-AdapterFromJacket `
+                -Signal $Signal `
+                -ConductionContext $Signal `
+                -Jacket $JacketSignal `
+            | Select-Object -Last 1
+            if ($opSignal.MergeSignalAndVerifyFailure($resolveAdapterSignal) -or -not $resolveAdapterSignal.HasResult()) {
+                return $opSignal
+            }
 
-        $addSignal = Register-AdapterToMappedSlot -ConductorJacketSignal $Signal.GetJacket() -Adapter $ResolveAdapterSignal | Select-Object -Last 1
+            $addSignal = Register-AdapterToMappedSlot `
+                -ConductorJacketSignal $Signal.GetJacket() `
+                -Signal $Signal `
+                -ConductionContext $Signal `
+                -Adapter $resolveAdapterSignal `
+            | Select-Object -Last 1
+        }
 
         if ($opSignal.MergeSignalAndVerifyFailure($addSignal)) {
             $opSignal.LogCritical("Failed to add adapter to appropriate Mapped Adapter.")
             return $opSignal
         }
+
+        $opSignal.SetResult($addSignal.GetResult())
 
         return $opSignal
     }

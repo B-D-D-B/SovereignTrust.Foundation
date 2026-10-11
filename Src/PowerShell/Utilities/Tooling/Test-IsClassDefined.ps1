@@ -16,16 +16,36 @@ function Test-IsClassDefined {
 
     $opSignal = [Signal]::Start("Test-IsClassDefined:$ClassName") | Select-Object -Last 1
 
+    function Test-IsFunctionDefined {
+        param (
+            [Parameter(Mandatory)]
+            [string]$FunctionName
+        )
+
+        return $null -ne (Get-Command `
+            -Name $FunctionName `
+            -CommandType Function `
+            -ErrorAction SilentlyContinue `
+        | Select-Object -First 1)
+    }
+
     try {
+        $resolverFunctionName = "Resolve-$ClassName"
+
         # ░▒▓█ TYPE DIRECT QUERY █▓▒░
         $type = [Type]::GetType($ClassName, $false)
         if ($type) {
-            $opSignal.LogVerbose("✅ Class found via [Type]::GetType(): $ClassName")
-            $opSignal.SetResult($true)
+            if (Test-IsFunctionDefined -FunctionName $resolverFunctionName) {
+                $opSignal.LogVerbose("✅ Class and resolver function found: $ClassName, $resolverFunctionName")
+                $opSignal.SetResult($true)
+            }
+            else {
+                $opSignal.LogWarning("Class found but resolver function was not found: $resolverFunctionName")
+            }
             return $opSignal
         }
 
-        $types = [AppDomain]::CurrentDomain.GetAssemblies() 
+#        $types = [AppDomain]::CurrentDomain.GetAssemblies() 
         
         # ░▒▓█ ASSEMBLY SCAN █▓▒░
         $opSignal.LogVerbose("🔍 Scanning assemblies for class: $ClassName")
@@ -34,9 +54,12 @@ function Test-IsClassDefined {
             Where-Object { $_ -ne $null } |
             Select-Object -First 1
 
-        if ($type) {
-            $opSignal.LogVerbose("✅ Class found in assembly: $($type.Assembly.FullName)")
+        if ($type -and (Test-IsFunctionDefined -FunctionName $resolverFunctionName)) {
+            $opSignal.LogVerbose("✅ Class found in assembly with resolver function '$resolverFunctionName': $($type.Assembly.FullName)")
             $opSignal.SetResult($type)
+        }
+        elseif ($type) {
+            $opSignal.LogWarning("Class found but resolver function was not found: $resolverFunctionName")
         }
         else {
             $opSignal.LogWarning("Class not found: $ClassName")

@@ -1,3 +1,4 @@
+
 function Resolve-PathGraphForPublisher {
     param (
         [Parameter(Mandatory)][string]$WirePath,

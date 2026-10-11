@@ -1,3 +1,4 @@
+
 function Resolve-PathGraphCondenserAdapter {
     [CmdletBinding()]
     param (

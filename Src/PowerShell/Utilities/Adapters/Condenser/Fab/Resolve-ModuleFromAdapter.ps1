@@ -32,21 +32,19 @@ function Resolve-ModuleFromAdapter {
         }
 
         $pathSignal = Resolve-ModulePathFromAdapter -Signal $Signal -Adapter $adapter -Slot $Slot -RelativePath $RelativePath | Select-Object -Last 1
-        $opSignal.MergeSignal($pathSignal)
-
-        if ($pathSignal.Success()) {
-            Import-Module -Name $pathSignal.GetResult() -Force
-            $cmd = Get-Command -Module ModuleName
-
-            #$x = Resolve-Storage_AzureKeyVault | Select-Object -Last 1
-            #$x.Construct($null)
-                
-            $opSignal.LogInformation("✅ Module imported from path: $($pathSignal.GetResult())")
-            $opSignal.SetResult($cmd)
-        } else {
-            $opSignal.LogWarning("Could not resolve module path from adapter.")
-            $opSignal.SetResult($pathSignal.GetResult())
+        if ($opSignal.MergeSignalAndVerifyFailure($pathSignal) -or -not $pathSignal.HasResult()) {
+            $opSignal.LogCritical("Could not resolve module path from adapter.")
+            return $opSignal
         }
+
+        $modulePath = [string]$pathSignal.GetResult()
+        Import-Module -Name $modulePath -Force -ErrorAction Stop
+
+        $opSignal.LogInformation("✅ Module imported from path: $modulePath")
+        $opSignal.SetResult([pscustomobject]@{
+            Name = $ModuleName
+            Path = $modulePath
+        })
     }
     catch {
         $opSignal.LogCritical("🔥 Exception in Resolve-ModuleFromAdapter: $($_.Exception.Message)", $null, $_)

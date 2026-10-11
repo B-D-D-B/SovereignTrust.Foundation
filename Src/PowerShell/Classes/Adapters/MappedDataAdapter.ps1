@@ -1,3 +1,4 @@
+
 class MappedDataAdapter {
     [Signal]$Signal
 
@@ -63,6 +64,7 @@ class MappedDataAdapter {
         $resultSignal = Invoke-MappedAdapterCore -MappedAdapterSignal $this.Signal -ConductionSignal $ConductionSignal -Slot $Slot -Activity $Activity -Plan $Plan -ItemSignal $ItemSignal | Select-Object -Last 1
 
         if ($opSignal.MergeSignalAndVerifyFailure($resultSignal)){
+            if ($resultSignal.HasResult()) { $opSignal.SetResult($resultSignal.GetResult()) }
             return $opSignal
         }
 

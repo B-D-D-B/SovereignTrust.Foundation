@@ -84,4 +84,4 @@ function Invoke-FabricateAdapter  {
     return $opSignal
 }
 
-Write-Host "Invoke-FabricateAdapter loaded." -ForegroundColor Green
+#Write-Host "Invoke-FabricateAdapter loaded." -ForegroundColor Green

@@ -1,4 +1,5 @@
 
+
 function Resolve-Conductor {
     [CmdletBinding()]
     param (
@@ -32,7 +33,7 @@ function Resolve-Conductor {
             return $opSignal
         }
 
-        $resolveSignal = Resolve-ConductorAdapters -Conductor $bondingConductor | Select-Object -Last 1
+        $resolveSignal = Resolve-ConductorAdapters -Signal $Signal -Conductor $bondingConductor -UseLazyLoading | Select-Object -Last 1
         if ($opSignal.MergeSignalAndVerifyFailure($resolveSignal)) {
             $opSignal.LogCritical("Conductor adapter resolution failed.")                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       n 
             

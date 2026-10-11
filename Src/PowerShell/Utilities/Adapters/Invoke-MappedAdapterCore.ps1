@@ -34,10 +34,21 @@ function Invoke-MappedAdapterCore {
             return $opSignal
         }
         
-        $adapter = $adapterSignal.GetResult()
+        $mappedSlotSignal = $adapterSignal.GetResultSignal()
+        $resolvedAdapterSignal = Resolve-MappedAdapter `
+            -AdapterSignal $mappedSlotSignal `
+            -Signal $ConductionSignal `
+            -ConductionContext $MappedAdapterSignal.GetJacket() `
+        | Select-Object -Last 1
+        if ($opSignal.MergeSignalAndVerifyFailure($resolvedAdapterSignal) -or -not $resolvedAdapterSignal.HasResult()) {
+            return $opSignal
+        }
+        $adapter = $resolvedAdapterSignal.GetResult()
         
         $adapterIvokeSignal = $adapter.Invoke($Slot, $Activity, $ConductionSignal, $Plan, $ItemSignal) | Select-Object -Last 1
         if ($opSignal.MergeSignalAndVerifyFailure($adapterIvokeSignal)) {
+            # Retain adapter-owned structured failure evidence without clearing failure.
+            if ($adapterIvokeSignal.HasResult()) { $opSignal.SetResult($adapterIvokeSignal.GetResult()) }
             $opSignal.LogCritical("Adapter failed to resolve path '$Path' using slot '$Slot'.")
         }
         elseif (-not $adapterIvokeSignal.HasResult()) {

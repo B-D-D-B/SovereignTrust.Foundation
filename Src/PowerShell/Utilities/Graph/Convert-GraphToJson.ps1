@@ -1,3 +1,4 @@
+
 function Convert-GraphToJson {
     param (
         [Parameter(Mandatory = $true)]

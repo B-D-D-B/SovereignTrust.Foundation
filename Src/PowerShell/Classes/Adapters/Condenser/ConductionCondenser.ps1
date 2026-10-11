@@ -1,6 +1,6 @@
 # =============================================================================
 # 🚦 ConductionCondenser (SovereignTrust Declarative Command Processor)
-#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists / BDDB
+#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists. Current copyright holder: BDDB LLC.
 #  Authors: Shadow PhanTom 🤖/☠️🌻🚀️ • Neural Alchemist ⚗️☣️🐲 • Last Generated: 05/20/2025
 # =============================================================================
 # The ConductionCondenser processes declarative ConductionPlans using signal-safe

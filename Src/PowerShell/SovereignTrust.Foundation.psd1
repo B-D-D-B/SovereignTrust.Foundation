@@ -27,13 +27,13 @@ Author = 'Silicon Dream Artists'
 CompanyName = 'Silicon Dream Artists'
 
 # Copyright statement for this module
-Copyright = '(c) Silicon Dream Artists. All rights reserved.'
+Copyright = '(c) Silicon Dream Artists. Current copyright holder: BDDB LLC.'
 
 # Description of the functionality provided by this module
 Description = 'Native PowerShell implementation for the core components for SovereignTrust.'
 
 # Minimum version of the PowerShell engine required by this module
-PowerShellVersion = '5.1'
+PowerShellVersion = '7.0'
 
 # Name of the PowerShell host required by this module
 # PowerShellHostName = ''
@@ -101,7 +101,7 @@ PrivateData = @{
         LicenseUri = 'https://opensource.org/licenses/MIT'
 
         # A URL to the main website for this project.
-        ProjectUri = 'https://github.com/SiliconDreamArtists/SovereignTrust.Foundation'
+        ProjectUri = 'https://github.com/B-D-D-B/SovereignTrust.Foundation'
 
         # A URL to an icon representing this module.
         # IconUri = ''
