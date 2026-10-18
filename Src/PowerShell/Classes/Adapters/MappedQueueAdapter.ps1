@@ -1,3 +1,13 @@
+<#
+Class: MappedQueueAdapter
+Purpose: Route a queue slot through Invoke-MappedAdapterCore.
+Activities: Provider-defined; the wrapper forwards Activity.
+- AzureStorageQueue: PeekBatch (ReadBatch alias with visibility-timeout
+  behavior, not a guaranteed non-consuming peek), HandleMessage (process a
+  message), ReadBatch (read messages), WriteItem (enqueue an item), AckItem
+  (acknowledge/delete an item).
+- DeferItem has a dispatch branch but is not implemented.
+#>
 
 class MappedQueueAdapter {
     [Signal]$Signal

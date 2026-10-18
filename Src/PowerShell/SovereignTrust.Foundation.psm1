@@ -14,7 +14,7 @@ function Invoke-Telemetry(
     [Signal]$Signal,
     [Signal]$ItemSignal
 ){
-    Invoke-MappedAdapter -Adapter "Network.Telemetry" -Activity "EmitSignalFull" -Signal $Signal -Plan ([pscustomobject]@{}) -ItemSignal $ItemSignal
+    Invoke-MappedAdapter -Adapter "Satellite.Telemetry" -Activity "EmitSignalFull" -Signal $Signal -Plan ([pscustomobject]@{}) -ItemSignal $ItemSignal
 }
 
 # Load all files (functions + classes)
@@ -38,10 +38,14 @@ function Invoke-Telemetry(
 . "$PSScriptRoot/Classes/Adapters/MappedConductionAdapter.ps1"
 . "$PSScriptRoot/Classes/Adapters/MappedCondenserAdapter.ps1"
 . "$PSScriptRoot/Classes/Adapters/MappedConduitAdapter.ps1"
+
+
+. "$PSScriptRoot/Classes/Adapters/MappedQuantumAdapter.ps1"
+. "$PSScriptRoot/Classes/Adapters/MappedIntelligenceAdapter.ps1"
+. "$PSScriptRoot/Classes/Adapters/MappedSatelliteAdapter.ps1"
 . "$PSScriptRoot/Classes/Adapters/MappedNetworkAdapter.ps1"
 . "$PSScriptRoot/Classes/Adapters/MappedQueueAdapter.ps1"
-. "$PSScriptRoot/Classes/Adapters/MappedQuantumAdapter.ps1"
-. "$PSScriptRoot/Classes/Adapters/MappedTelemetryAdapter.ps1"
+
 . "$PSScriptRoot/Classes/Adapters/MappedSessionAdapter.ps1"
 . "$PSScriptRoot/Classes/Adapters/MappedUtilityAdapter.ps1"
 . "$PSScriptRoot/Classes/Conduction/Conduit.ps1"

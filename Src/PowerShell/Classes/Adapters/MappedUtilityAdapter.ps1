@@ -1,3 +1,10 @@
+<#
+Class: MappedUtilityAdapter
+Purpose: Route a utility slot to its provider and derive a virtual path.
+Activities: Provider-defined; the five-argument Invoke forwards Activity.
+InvokeWithPlan and InvokeAdapterMethod are separate entry points, not
+Activity values.
+#>
 
 class MappedUtilityAdapter {
     [Signal]$Signal

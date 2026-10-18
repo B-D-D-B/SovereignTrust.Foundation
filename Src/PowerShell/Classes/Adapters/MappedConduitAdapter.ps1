@@ -1,3 +1,8 @@
+<#
+Class: MappedConduitAdapter
+Purpose: Try registered conduits until Invoke(Context, Plan) succeeds.
+Activities: No named Activity dispatch; invocation takes context and plan.
+#>
 
 class MappedConduitAdapter {
     [Signal]$Signal

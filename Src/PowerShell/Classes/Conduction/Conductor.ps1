@@ -79,7 +79,8 @@ class Conductor {
             @{ Name = "MappedNetwork"; Instance = [MappedNetworkAdapter]::Start($this) },
             @{ Name = "MappedData"; Instance = [MappedDataAdapter]::Start($this) },
             @{ Name = "MappedQueue"; Instance = [MappedQueueAdapter]::Start($this) },
-            @{ Name = "MappedTelemetry"; Instance = [MappedTelemetryAdapter]::Start($this) }
+            @{ Name = "MappedIntelligence"; Instance = [MappedIntelligenceAdapter]::Start($this) },
+            @{ Name = "MappedSatellite"; Instance = [MappedSatelliteAdapter]::Start($this) },
             @{ Name = "MappedSession"; Instance = [MappedSessionAdapter]::Start($this) }
             @{ Name = "MappedUtility"; Instance = [MappedUtilityAdapter]::Start($this) }
         )

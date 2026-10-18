@@ -1,3 +1,9 @@
+<#
+Class: MappedSessionAdapter
+Purpose: Route a session slot through Invoke-MappedAdapterCore.
+Activities: Provider-defined; Activity passes to the selected service.
+The ST provider forwards Activity without a fixed activity list.
+#>
 
 class MappedSessionAdapter {
     [Signal]$Signal

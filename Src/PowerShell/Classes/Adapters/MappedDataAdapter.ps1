@@ -1,6 +1,12 @@
 <#
-MappedDataAdapter forwards Activity to the registered data provider without validating it.
-The current AzureSql provider supports Write, Query, Delete, and Admin activities.
+Class: MappedDataAdapter
+Purpose: Route a data slot through Invoke-MappedAdapterCore.
+Activities: Provider-defined; the wrapper forwards Activity.
+- AzureSql Write: run a configured write procedure.
+- AzureSql Query: run a configured read query.
+- AzureSql Delete: run a configured delete command.
+- AzureSql Admin: run a configured administration command.
+These are AzureSql operations, not a universal data API.
 #>
 
 class MappedDataAdapter {

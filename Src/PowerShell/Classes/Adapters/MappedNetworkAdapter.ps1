@@ -1,3 +1,11 @@
+<#
+Class: MappedNetworkAdapter
+Purpose: Route a network slot through Invoke-MappedAdapterCore.
+Activities: Provider-defined; the five-argument Invoke forwards Activity.
+- DiscordBot: SendFile (send a file), SendMessage (send a message),
+  ReadBatch (read messages), HandleMessage (handle message content).
+Invoke(Slot, Context, Plan) has no Activity parameter.
+#>
 
 class MappedNetworkAdapter {
     [Signal]$Signal

@@ -1,44 +1,12 @@
 <#
-================================================================================
-📦 MappedStorageAdapter • AI Trainer Block (Doctrine v1.0)
-================================================================================
-
-MappedStorageAdapter is the sovereign abstraction layer for accessing
-memory-bearing storage services. It is responsible for routing all storage
-requests — such as loading JSON, XML, text, deleting files, or listing folders —
-through a signal-aware fallback mechanism across all registered services.
-
-Four mapped activities:
-- Write — top-level Container/Resource and Config.Content; check a nonempty
-  returned path or URI for the selected provider.
-- Read — same Container/Resource; parse JSON and compare Data with the fixture.
-- Delete — same Container/Resource; require a true result.
-- Exists — same Container/Resource after deletion; require a false result.
-
-This abstraction obeys the SovereignTrust Doctrine:
-
-🧠 Memory is Sovereign.
-Storage is not assumed. Each request resolves through the memory space 
-of attached services, each carrying its own jacket, slot, and lineage.
-
-📡 Signals are Living.
-All operations return Signals — traceable, mergeable, and idempotent.
-Failures are not silent. All fallback is logged and lineage-aware.
-
-🔁 Adapters are Evolving.
-Each registered service is a dynamic adapter. Services can be replaced,
-mutated, or upgraded without altering the conduction flow above.
-
-♾️ Recursion is Home.
-This object can defer to its owning Conductor. The Conductor can fall back
-to its HostConductor. Together, they form the recursive memory fabric that
-bootstraps Sovereign execution.
-
-MappedStorageAdapter enables runtime access to all sovereign plans,
-templates, modules, and data — using only memory and WirePath.
-
-> “When memory becomes sovereign, storage becomes signal.”
-
+Class: MappedStorageAdapter
+Purpose: Route a storage slot to its registered provider.
+Activities: Provider-dependent. Storage_EmbeddedFileSystem dispatches:
+- Read: retrieve content.
+- Write: store content.
+- Delete: remove a resource.
+- Exists: test whether a resource is present.
+The wrapper forwards Activity; these verbs are not guaranteed for every provider.
 #>
 class MappedStorageAdapter {
     [Signal]$Signal

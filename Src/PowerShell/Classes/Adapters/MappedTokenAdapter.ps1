@@ -1,3 +1,11 @@
+<#
+Class: MappedTokenAdapter
+Purpose: Resolve tokens through selected providers or invoke methods by name.
+Activities: Provider-defined; the five-argument Invoke forwards Activity.
+- Get: used by the mapped-token utility to retrieve a token.
+Invoke(Path) and InvokeAdapterMethod(MethodName, Args) are separate entry
+points, not Activity values.
+#>
 
 class MappedTokenAdapter {
     [Signal]$Signal

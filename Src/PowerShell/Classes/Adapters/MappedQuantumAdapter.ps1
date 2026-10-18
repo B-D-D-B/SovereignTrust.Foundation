@@ -1,3 +1,10 @@
+<#
+Class: MappedQuantumAdapter
+Purpose: Submit a circuit to a provider implementing SubmitCircuit.
+Activities: No named Activity dispatch.
+- SubmitQuantumJob(CircuitName, QuantumJobParameters): submit a
+  provider-specific circuit or job.
+#>
 
 class MappedQuantumAdapter {
     [Signal]$Signal

@@ -1,3 +1,9 @@
+<#
+Class: MappedConductionAdapter
+Purpose: Route a conduction slot through Invoke-MappedAdapterCore.
+Activities: Provider-defined; Activity passes to the selected service.
+The ST provider forwards Activity without a fixed activity list.
+#>
 
 class MappedConductionAdapter {
     [Signal]$Signal
