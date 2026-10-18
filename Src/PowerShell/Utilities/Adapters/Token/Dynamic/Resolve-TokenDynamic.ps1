@@ -1383,6 +1383,36 @@ function Resolve-TokenDynamic {
                 return $opSignal
             }
 
+            'formatdatetime' {
+                if ($resolvedArgs.Count -ne 2) {
+                    throw "FormatDateTime() requires exactly two arguments: date and format. ($($resolvedArgs.Count) was supplied)"
+                }
+
+                $culture = [System.Globalization.CultureInfo]::InvariantCulture
+                $date = $resolvedArgs[0]
+                if ($date -isnot [DateTime] -and $date -isnot [DateTimeOffset]) {
+                    $dateText = [string]$date
+                    if ([string]::IsNullOrWhiteSpace($dateText)) {
+                        throw 'FormatDateTime() requires a nonempty date.'
+                    }
+                    $parsedDate = [DateTimeOffset]::MinValue
+                    if (-not [DateTimeOffset]::TryParse($dateText, $culture, [System.Globalization.DateTimeStyles]::AssumeUniversal, [ref]$parsedDate)) {
+                        throw "FormatDateTime() could not parse date '$dateText'."
+                    }
+                    $date = $parsedDate
+                }
+
+                $format = [string]$resolvedArgs[1]
+                if ([string]::IsNullOrWhiteSpace($format)) {
+                    throw 'FormatDateTime() requires a nonempty format.'
+                }
+                if ($format -ieq 'filedate') { $format = 'MM-dd-yyyy--HH-mm-ss' }
+                if ($format -ceq 'U' -and $date -is [DateTimeOffset]) { $date = $date.UtcDateTime }
+
+                $opSignal.SetResult($date.ToString($format, $culture))
+                return $opSignal
+            }
+
             'utcnow' {
                 # Kusto datetime best practice: UTC ISO 8601 round-trip string ("o") with Z suffix
                 # utcNow([offset])

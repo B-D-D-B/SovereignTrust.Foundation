@@ -1,13 +1,31 @@
 # =============================================================================
-# 🔄 TransformCondenser (
-#       Select: Performs a select from a text based format
-#       Project: Performs across an axis in order to create a recordset from another recordset using a default content set. (Can this be done by the MergeCondenser?))
+# 🔄 TransformCondenser
 #  License: MIT License • Copyright (c) 2025 Silicon Dream Artists. Current copyright holder: BDDB LLC.
-#  Authors: Shadow PhanTom ☠️🧁👾️/🤖 • Neural Alchemist ⚗️☣️🐲 • Last Updated: 05/20/2025
+#  Authors: Shadow PhanTom ☠️🧁👾️/🤖 • Neural Alchemist ⚗️☣️🐲 • Last Updated: 10/16/2026
 # =============================================================================
-# Performs recursive, additive overlay merging between structured sovereign memory types.
+# Transforms content and manages registered signals.
 #
-# This is used to perform conversions, similar to Format
+# Supported activities:
+# • Project: Finds source nodes in ItemSignal using Plan.Key, retrieves shared
+#   content from Token.Memory at Plan.Path, and applies deferred hydration to
+#   each node using Plan.Config. Returns the collected hydration results.
+# • Select: Reads content from ItemSignal at Config.DefaultPath (default: %.@)
+#   and selects Plan.Path through Invoke-TransformSelect using Plan.Format and
+#   Plan.HtmlDecode (default: true). Config.Hydrate optionally applies deferred
+#   hydration with Plan.Config before returning the selected content.
+# • Inject: Appends Config.Content to ItemSignal at Plan.Path.
+# • RegisterSignal: Registers the signal returned by resolving Config.Content
+#   on the ItemSignal pointer under Config.Key.
+# • UnregisterSignalKeys: Removes each key in Config.Keys from the ItemSignal
+#   pointer's registered signals.
+# • Clone: Resolves Plan.Path from ItemSignal and returns a copy produced by
+#   a JSON round trip with serialization and deserialization depth set to 10.
+# • Merge: Merges Base and Overlay from ItemSignal beneath Config.DefaultPath
+#   (default: %.@) through Invoke-MergeJson. Reads MergeArrayHandling (default:
+#   Merge), MergeNullValueHandling (default: Ignore), and Depth (default: 100)
+#   from the same source location and returns the merged result on success.
+#
+# Invoke returns an operation Signal; unsupported activities log a critical error.
 #
 # Check Doctrine Alignment:
 # • Sovereign Memory: ✅

@@ -75,6 +75,7 @@ Assert-True ($runtime.ConductorSignal.GetResult().Config.ContentRootPath -eq 'Te
 Assert-True ($runtime.Environment.Config.Marker -eq 'Hydrated') 'Bootstrap did not execute environment steps.'
 Assert-True ($definition.Config.Marker -eq 'Original') 'Bootstrap mutated the caller definition.'
 Assert-True ([object]::ReferenceEquals($runtime.ConductionSignal.GetControl(), $runtime.ConductorJacketSignal)) 'Conduction control is disconnected.'
+Assert-True ([object]::ReferenceEquals($runtime.ConductionSignal.GetJacket(), $runtime.ConductorJacketSignal)) 'Conduction jacket is disconnected.'
 Assert-True ([object]::ReferenceEquals($runtime.ConductorJacketSignal.GetJacket(), $runtime.ConductorSignal)) 'Conductor jacket is disconnected.'
 Assert-True ([object]::ReferenceEquals($runtime.ConductorJacketSignal.GetPointer(), $runtime.EnvironmentSignal.GetPointer())) 'Bootstrap graph was not transferred.'
 Assert-True ([object]::ReferenceEquals($runtime.ConductionSignal.GetPointer(), $runtime.EnvironmentSignal.GetPointer())) 'Conduction pointer is disconnected.'

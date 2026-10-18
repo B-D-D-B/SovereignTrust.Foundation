@@ -111,15 +111,19 @@ class Storage_EmbeddedFileSystem {
             $callSignal = $null
             switch ($activity) {
                 "Read" {
+                    $targetPathSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path 'Config.TargetPath' -SignalLevel 'Warning' | Select-Object -Last 1
+                    $hasTargetPath = $null -ne $Plan.Config -and $null -ne $Plan.Config.PSObject.Properties['TargetPath']
                     $callSignal = Invoke-EmbeddedFileSystem_ReadObject `
                         -Signal $this.Signal `
                         -VirtualPath $virtualPath `
+                        -TargetPath $(if ($hasTargetPath) { [string]$targetPathSignal.GetResult() } else { $null }) `
+                        -TargetPathProvided:$hasTargetPath `
                         -SignalLevel $signalLevelSignal.GetResult() `
                         -Addresses @($addressSignal.GetResult()) |
                     Select-Object -Last 1
 
                     # TODO: Move to Storage Adapter so it works across implementations. 5-17-26
-                    if ($callSignal.Failure()) {
+                    if ($callSignal.Failure() -and -not $hasTargetPath) {
                         $contentSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.Content" -SignalLevel "Warning" | Select-Object -Last 1
                         if ($contentSignal.HasResult()) {
                             $content = $contentSignal.GetResult()
@@ -147,12 +151,15 @@ class Storage_EmbeddedFileSystem {
                 }
 
                 "Write" {
-                    $contentSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.Content" | Select-Object -Last 1
-                    $content = $contentSignal.GetResult()
+                    $contentSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.Content" -SignalLevel "Warning" | Select-Object -Last 1
+                    $sourcePathSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.SourcePath" -SignalLevel "Warning" | Select-Object -Last 1
+                    $content = if ($contentSignal.HasResult()) { $contentSignal.GetResult() } else { $null }
+                    $sourcePath = if ($sourcePathSignal.HasResult()) { [string]$sourcePathSignal.GetResult() } else { $null }
 
                     $callSignal = Invoke-EmbeddedFileSystem_WriteObject `
                         -Signal $this.Signal `
                         -Content $content `
+                        -SourcePath $sourcePath `
                         -VirtualPath $virtualPath `
                         -Addresses @($addressSignal.GetResult()) |
                     Select-Object -Last 1
@@ -163,6 +170,17 @@ class Storage_EmbeddedFileSystem {
                     $callSignal = Invoke-EmbeddedFileSystem_DeleteObject `
                         -Signal $this.Signal `
                         -VirtualPath $virtualPath `
+                        -Addresses @($addressSignal.GetResult()) |
+                    Select-Object -Last 1
+                    break
+                }
+                "Exists" {
+                    $pathSuffixSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path 'Config.PathSuffix' -Default $null -SignalLevel 'Warning' | Select-Object -Last 1
+                    $pathSuffix = if ($pathSuffixSignal.HasResult()) { [string]$pathSuffixSignal.GetResult() } else { $null }
+                    $callSignal = Invoke-EmbeddedFileSystem_ExistsObject `
+                        -Signal $this.Signal `
+                        -VirtualPath $virtualPath `
+                        -PathSuffix $pathSuffix `
                         -Addresses @($addressSignal.GetResult()) |
                     Select-Object -Last 1
                     break

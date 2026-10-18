@@ -62,6 +62,7 @@ function Initialize-STEnvironment {
 
         $conductionSignal = [Signal]::Start("Conduction", $opSignal) | Select-Object -Last 1
         $conductionSignal.SetControl($conductorJacketSignal)
+        $null = $conductionSignal.SetJacket($conductorJacketSignal)
         $null = $conductionSignal.SetPointer($runtimeGraph)
 
         $environmentDetailsSignal = $runtimeGraph.RegisterResultAsSignal("EnvironmentDetails", $environmentDefinition) | Select-Object -Last 1

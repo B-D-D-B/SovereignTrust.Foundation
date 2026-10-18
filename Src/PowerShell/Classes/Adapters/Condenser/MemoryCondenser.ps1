@@ -47,6 +47,10 @@ class MemoryCondenser {
 
                     $step = $this.GetNextStep($null, $Plan, $ItemSignal, $ConductionSignal)
                     while ($step) {
+                        $stTrace = Enter-STExecutionTrace -BoundaryKind 'Step' -Name ([string]$step.Name) -Adapter ([string]$step.Adapter) -Activity ([string]$step.Activity)
+                        $stThrew=$false
+                        $stStatus=$null
+                        try {
                         $breakSignal = Resolve-PathFromDictionary -Dictionary $step -Path "Config.Break" -Default $false | Select-Object -Last 1
                         if ($breakSignal.GetResult()) {
                             $Check = ""
@@ -89,7 +93,11 @@ class MemoryCondenser {
                         $isEnabledOperator = $IsEnabledOperatorSignal.GetResult()
                         $isEnabledResult = $IsEnabledSignal.GetResult()
 
-                        if (-not $this.TestAllTrue($isEnabledResult, $isEnabledOperator)) {
+                        $stEnabled=$this.TestAllTrue($isEnabledResult, $isEnabledOperator)
+                        Write-STExecutionTraceDecision $stTrace 'IsEnabled' $stEnabled
+                        if (-not $stEnabled) {
+                            $stStatus='Skipped'
+                            Write-STExecutionTraceDecision $stTrace 'IsEnabled' $false 'Conditional' 'ConditionFalse'
                             $step = $this.GetNextStep($step, $Plan, $ItemSignal, $ConductionSignal) 
                             continue
                         }
@@ -213,6 +221,8 @@ class MemoryCondenser {
                         if ($opSignal.MergeSignalAndVerifyFailure($backgroundUpdateSignal)) { return $opSignal }
 
                         $step = $this.GetNextStep($step, $Plan, $ItemSignal, $ConductionSignal)
+                        } catch { $stThrew=$true; throw }
+                        finally { Exit-STExecutionTrace $stTrace $opSignal $stThrew $stStatus }
                     }
 
                     # Structured-concurrency boundary: the parent was free to

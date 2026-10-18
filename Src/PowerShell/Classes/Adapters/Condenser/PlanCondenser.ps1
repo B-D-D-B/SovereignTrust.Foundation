@@ -115,6 +115,10 @@ class PlanCondenser {
     [Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
         $opSignal = [Signal]::Start("PlanCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
 
+        Assert-STExecutionTraceSerial ($Activity -in @('InvokePhaseAsync','AwaitPhase','AwaitAllPhases','GetPhaseStatus','StopPhase'))
+        $stPlanTrace=Enter-STExecutionTrace -BoundaryKind 'Plan' -Name ([string]$Plan.Name) -Adapter 'Condenser.Plan' -Activity $Activity
+        $stPlanThrew=$false
+        try {
         $PlanPathSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Path" | Select-Object -Last 1
         $DefaultPath = $PlanPathSignal.GetResult()
 
@@ -131,6 +135,7 @@ class PlanCondenser {
 
                     $iterationArray = @($iterationArraySignal.GetResult())
                     $iterationName = [string]$iterationNameSignal.GetResult()
+                    Write-STExecutionTraceDecision $stPlanTrace 'IterationArray' ($iterationArray.Count -gt 0) 'Required' $null $null $iterationArray.Count
                     if ($iterationArray.Count -eq 0) {
                         break
                     }
@@ -212,6 +217,7 @@ class PlanCondenser {
                         )
                     }
 
+                    Assert-STExecutionTraceSerial $useParallel
                     # Serial-only execution and serial fallback share the same loop.
                     $serialCount = if ($useParallel) { $warmupCount } else { $iterationArray.Count }
                     for ($index = 0; $index -lt $serialCount; $index++) {
@@ -320,6 +326,7 @@ class PlanCondenser {
                     }
 
                     $phase = [PSCustomObject]@{
+                        Name = [string]$Plan.Name
                         Steps = @($resolveStepsSignal.GetResult())
                     }
 
@@ -540,6 +547,8 @@ class PlanCondenser {
             }
         }
 
+        } catch { $stPlanThrew=$true; throw }
+        finally { Exit-STExecutionTrace $stPlanTrace $opSignal $stPlanThrew }
         return $opSignal
     }
 }

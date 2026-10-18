@@ -48,12 +48,26 @@ function Invoke-ProcessConduitCondenser {
     #    $mySignal = Remove-ReversePointersFromSignal -RootSignal $Signal
     #    $Signalx = $mySignal | ConvertTo-Json -Depth 100 
 
+    Assert-STExecutionTraceSerial ($SupportParallelism -and $SourceData.Grid.Count -ne 1)
+    $stIndex=0
+    $stSetHash=$null
+    if($null -ne $script:STExecutionTraceState){
+        $stSetHash=Get-STExecutionTraceInputHash @($SourceData.Grid.Keys)
+        Write-STExecutionTraceDecision $script:STExecutionTraceState.Stack[-1].InvocationId 'ConduitItems' ($SourceData.Grid.Count -gt 0) 'Required' $null $null $SourceData.Grid.Count
+    }
     if (-not $SupportParallelism -or $SourceData.Grid.Count -eq 1) {
         foreach ($item in $SourceData.Grid.GetEnumerator()) {
             if ($isFailed) {
                 break
             }
 
+            $stIteration=$null
+            if($null -ne $script:STExecutionTraceState){
+                $stIteration=@{IterationTemplateId='Conduit/'+$Plan.Name;IterationIndex=$stIndex;IterationKey=[string]$item.Key;InputSetSha256=$stSetHash;Cardinality=$SourceData.Grid.Count}
+            }
+            $stTrace=Enter-STExecutionTrace -BoundaryKind 'Iteration' -Name 'Conduit' -Adapter $SourceAdapter -Activity $SourceActivity -Iteration $stIteration
+            $stThrew=$false;$stResult=$null
+            try {
             $plan = ($item.Value).HasResult() ? ($item.Value).GetResult() : $Plan
             $MappingResultSignal = Invoke-MappedAdapter `
                 -Signal $Signal `
@@ -63,6 +77,10 @@ function Invoke-ProcessConduitCondenser {
                 -ItemSignal $item.Value
             | Select-Object -Last 1
 
+            $stResult=$MappingResultSignal
+            } catch { $stThrew=$true; throw }
+            finally { Exit-STExecutionTrace $stTrace $stResult $stThrew }
+            $stIndex++
             <#
             $cloneStatus = Resolve-PathFromDictionary -Dictionary $cloneStep -Path "Status"
             $Success = $cloneStatus -eq "Success" -or $innerStatus -eq "Skipped"

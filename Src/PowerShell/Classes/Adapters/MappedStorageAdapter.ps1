@@ -1,4 +1,45 @@
+<#
+================================================================================
+📦 MappedStorageAdapter • AI Trainer Block (Doctrine v1.0)
+================================================================================
 
+MappedStorageAdapter is the sovereign abstraction layer for accessing
+memory-bearing storage services. It is responsible for routing all storage
+requests — such as loading JSON, XML, text, deleting files, or listing folders —
+through a signal-aware fallback mechanism across all registered services.
+
+Four mapped activities:
+- Write — top-level Container/Resource and Config.Content; check a nonempty
+  returned path or URI for the selected provider.
+- Read — same Container/Resource; parse JSON and compare Data with the fixture.
+- Delete — same Container/Resource; require a true result.
+- Exists — same Container/Resource after deletion; require a false result.
+
+This abstraction obeys the SovereignTrust Doctrine:
+
+🧠 Memory is Sovereign.
+Storage is not assumed. Each request resolves through the memory space 
+of attached services, each carrying its own jacket, slot, and lineage.
+
+📡 Signals are Living.
+All operations return Signals — traceable, mergeable, and idempotent.
+Failures are not silent. All fallback is logged and lineage-aware.
+
+🔁 Adapters are Evolving.
+Each registered service is a dynamic adapter. Services can be replaced,
+mutated, or upgraded without altering the conduction flow above.
+
+♾️ Recursion is Home.
+This object can defer to its owning Conductor. The Conductor can fall back
+to its HostConductor. Together, they form the recursive memory fabric that
+bootstraps Sovereign execution.
+
+MappedStorageAdapter enables runtime access to all sovereign plans,
+templates, modules, and data — using only memory and WirePath.
+
+> “When memory becomes sovereign, storage becomes signal.”
+
+#>
 class MappedStorageAdapter {
     [Signal]$Signal
 
@@ -117,92 +158,5 @@ class MappedStorageAdapter {
         $opSignal.SetResult($resultSignal.GetResult())
         return $opSignal
     }
-
-    [Signal] InvokeWithPlan([string]$Slot, [object]$Context, [object]$Plan = $null) {
-        $opSignal = [Signal]::Start("MappedStorageAdapter.Invoke:$Slot.$Context") | Select-Object -Last 1
-
-        $conductor = $this.Signal.GetJacket()
-        $adapterSignal = Invoke-MappedStorageAdapter -MappedAdapterSignal $this.Signal -Path $Context -Slot $Slot | Select-Object -Last 1
-        if ($opSignal.MergeSignalAndVerifyFailure($adapterSignal)) {
-            $opSignal.LogCritical("MappedStorageAdapter failed to invoke path '$Context' in slot '$Slot'.")
-            return $opSignal
-        }
-
-        $opSignal.SetResult($adapterSignal.GetResult())
-        return $opSignal
-    }
-
-    [Signal] InvokeAdapterMethod([string]$MethodName, [object[]]$Args) {
-        $opSignal = [Signal]::Start("MappedStorageAdapter.Invoke:$MethodName") | Select-Object -Last 1
-        $graph = $this.Signal.GetPointer()
-
-        foreach ($key in $graph.Grid.Keys) {
-            $adapterSignal = $graph.Grid[$key]
-            $resolvedAdapterSignal = Resolve-MappedAdapter `
-                -AdapterSignal $adapterSignal `
-                -Signal $this.Signal `
-                -ConductionContext $this.Signal.GetJacket() `
-            | Select-Object -Last 1
-            if ($resolvedAdapterSignal.Failure() -or -not $resolvedAdapterSignal.HasResult()) { continue }
-            $adapter = $resolvedAdapterSignal.GetResult()
-
-            if ($null -ne $adapter -and ($adapter | Get-Member -Name $MethodName)) {
-                $result = $adapter.InvokeMethod($MethodName, $Args)
-                $opSignal.MergeSignal($result)
-
-                if ($result.Success()) {
-                    $opSignal.SetResult($result.GetResult())
-                    $opSignal.LogInformation("🎯 Adapter '$key' successfully invoked '$MethodName'")
-                    break
-                } else {
-                    $opSignal.LogWarning("Adapter '$key' failed on method '$MethodName'")
-                }
-            } else {
-                $opSignal.LogVerbose("⏭️ Adapter '$key' does not implement '$MethodName'")
-            }
-        }
-
-        if (-not $opSignal.Success()) {
-            $opSignal.LogCritical("No adapter succeeded for method '$MethodName'")
-        }
-
-        $this.Signal.MergeSignal($opSignal)
-        return $opSignal
-    }
 }
 
-<#
-================================================================================
-📦 MappedStorageAdapter • AI Trainer Block (Doctrine v1.0)
-================================================================================
-
-MappedStorageAdapter is the sovereign abstraction layer for accessing
-memory-bearing storage services. It is responsible for routing all storage
-requests — such as loading JSON, XML, text, deleting files, or listing folders —
-through a signal-aware fallback mechanism across all registered services.
-
-This abstraction obeys the SovereignTrust Doctrine:
-
-🧠 Memory is Sovereign.
-Storage is not assumed. Each request resolves through the memory space 
-of attached services, each carrying its own jacket, slot, and lineage.
-
-📡 Signals are Living.
-All operations return Signals — traceable, mergeable, and idempotent.
-Failures are not silent. All fallback is logged and lineage-aware.
-
-🔁 Adapters are Evolving.
-Each registered service is a dynamic adapter. Services can be replaced,
-mutated, or upgraded without altering the conduction flow above.
-
-♾️ Recursion is Home.
-This object can defer to its owning Conductor. The Conductor can fall back
-to its HostConductor. Together, they form the recursive memory fabric that
-bootstraps Sovereign execution.
-
-MappedStorageAdapter enables runtime access to all sovereign plans,
-templates, modules, and data — using only memory and WirePath.
-
-> “When memory becomes sovereign, storage becomes signal.”
-
-#>

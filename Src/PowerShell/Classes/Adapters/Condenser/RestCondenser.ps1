@@ -37,6 +37,14 @@ class RestCondenser {
         $skipBearerTokenSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.SkipBearerToken" -Default $false | Select-Object -Last 1
 
         $bearerTokenSignal = $skipBearerTokenSignal.GetResult() ? $null : $this.ResolveBearerToken($ConductionSignal, $Plan, $false)
+        if (-not [bool]$skipBearerTokenSignal.GetResult() -and
+            ($null -eq $bearerTokenSignal -or $bearerTokenSignal.Failure() -or
+             -not $bearerTokenSignal.HasResult() -or
+             [string]::IsNullOrWhiteSpace([string]$bearerTokenSignal.GetResult()))) {
+            if ($null -ne $bearerTokenSignal) { $null = $opSignal.MergeSignal($bearerTokenSignal) }
+            if (-not $opSignal.Failure()) { $null = $opSignal.LogCritical('Bearer token resolution failed before REST invocation.') }
+            return $opSignal
+        }
         $headersSignal = $this.GetStorageVersionHeaders($ConductionSignal, $Plan)
 
         # Clone Plan before Mutate
@@ -59,7 +67,13 @@ class RestCondenser {
 
         if ($resultSignal.HasResult()) {
             # TODO: Use Resolve-PathFromDictionary with $resultSignal for dictionary and "@.Response"
-            $opSignal.SetResult($resultSignal.GetResult().Response)
+            $returnHttpStatusSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.ReturnHttpStatus" -Default $false | Select-Object -Last 1
+            if ([bool]$returnHttpStatusSignal.GetResult()) {
+                $opSignal.SetResult($resultSignal.GetResult())
+            }
+            else {
+                $opSignal.SetResult($resultSignal.GetResult().Response)
+            }
         }
 
         return $opSignal

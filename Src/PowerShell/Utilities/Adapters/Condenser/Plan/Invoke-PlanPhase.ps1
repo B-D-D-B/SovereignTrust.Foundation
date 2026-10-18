@@ -7,6 +7,8 @@ function Invoke-PlanPhase {
         [string[]]$ReturnKeys = @()
     )
 
+    $stTrace = Enter-STExecutionTrace -BoundaryKind 'Phase' -Name ([string]$Phase.Name) -Adapter 'Condenser.Memory' -Activity 'Generate'
+    $stThrew=$false
     $opSignal = [Signal]::Start('Invoke-PlanPhase', $ItemSignal) | Select-Object -Last 1
     try {
         $phaseSignal = Invoke-CondenserAdapter `
@@ -44,7 +46,9 @@ function Invoke-PlanPhase {
         })
     }
     catch {
+        $stThrew=$true
         $null = $opSignal.LogCritical("Phase execution failed: $($_.Exception.Message)", $null, $_)
     }
+    finally { Exit-STExecutionTrace $stTrace $opSignal $stThrew }
     return $opSignal
 }

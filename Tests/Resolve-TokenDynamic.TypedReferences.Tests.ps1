@@ -88,6 +88,8 @@ $adapter = [MappedTokenAdapter]::new(@{
     'Memory.Plan.Config.TimeText' = '17:30'
     'Memory.Plan.Config.Offset' = '+1h'
     'Memory.Plan.Config.DateText' = '2024-12-01'
+    'Memory.Plan.Config.UtcDate' = [DateTime]::SpecifyKind([DateTime]::new(2024, 12, 1, 17, 30, 0), [DateTimeKind]::Utc)
+    'Memory.Plan.Config.DateOffset' = [DateTimeOffset]::new(2024, 12, 1, 17, 30, 0, [TimeSpan]::FromMinutes(330))
     'Memory.Plan.Config.TimeZone' = 'UTC'
 })
 
@@ -172,6 +174,15 @@ Assert-True ((Invoke-TestDynamic -Path 'IsNotNull([Memory.Plan.Config.Integer~])
 Assert-True ((Invoke-TestDynamic -Path 'IsNullOrEmpty([Memory.Plan.Config.EmptyText~])' -MappedAdapter $adapter).GetResult()) 'IsNullOrEmpty did not consume a typed empty string.'
 Assert-True (-not (Invoke-TestDynamic -Path 'IsNotNullOrEmpty([Memory.Plan.Config.EmptyText~])' -MappedAdapter $adapter).GetResult()) 'IsNotNullOrEmpty mishandled a typed empty string.'
 Assert-True ((Invoke-TestDynamic -Path 'Get12HourTime([Memory.Plan.Config.TimeText~])' -MappedAdapter $adapter).GetResult() -eq '5:30 PM') 'Get12HourTime did not consume a typed time string.'
+
+Assert-True ((Invoke-TestDynamic -Path 'FormatDateTime([Memory.Plan.Config.DateOffset~],o)' -MappedAdapter $adapter).GetResult() -eq '2024-12-01T17:30:00.0000000+05:30') 'FormatDateTime did not preserve a typed date offset with a standard .NET format.'
+Assert-True ((Invoke-TestDynamic -Path 'FormatDateTime([Memory.Plan.Config.UtcDate~],o)' -MappedAdapter $adapter).GetResult() -eq '2024-12-01T17:30:00.0000000Z') 'FormatDateTime did not preserve a typed UTC DateTime.'
+Assert-True ((Invoke-TestDynamic -Path 'FormatDateTime([Memory.Plan.Config.DateOffset~],U)' -MappedAdapter $adapter).GetResult() -eq 'Sunday, 01 December 2024 12:00:00') 'FormatDateTime did not support the universal full date/time format.'
+Assert-True ((Invoke-TestDynamic -Path 'FormatDateTime([Memory.Plan.Config.DateText~],yyyy/MM/dd)' -MappedAdapter $adapter).GetResult() -eq '2024/12/01') 'FormatDateTime did not apply a custom .NET format to a date string.'
+Assert-True ((Invoke-TestDynamic -Path 'FormatDateTime(2024-12-01T17:30:45Z,filedate)' -MappedAdapter $adapter).GetResult() -eq '20241201173045') 'FormatDateTime did not include hour, minute, and second in filedate.'
+Assert-True ((Invoke-TestDynamic -Path 'FormatDateTime(2024-12-01,D)' -MappedAdapter $adapter).GetResult() -eq 'Sunday, 01 December 2024') 'FormatDateTime did not apply an invariant standard date format.'
+Assert-True ((Invoke-TestDynamic -Path 'FormatDateTime(invalid,yyyyMMdd)' -MappedAdapter $adapter).Failure()) 'FormatDateTime accepted an invalid date.'
+Assert-True ((Invoke-TestDynamic -Path 'FormatDateTime(2024-12-01)' -MappedAdapter $adapter).Failure()) 'FormatDateTime accepted a missing format.'
 
 $utcNowSignal = Invoke-TestDynamic -Path 'UtcNow([Memory.Plan.Config.Offset~])' -MappedAdapter $adapter
 Assert-True (-not $utcNowSignal.Failure() -and $utcNowSignal.GetResult() -match 'Z$') 'UtcNow did not consume a typed offset.'

@@ -25,6 +25,7 @@ function Invoke-MappedTokenAdapter {
 
     $opSignal = [Signal]::Start("Invoke-MappedTokenAdapter") | Select-Object -Last 1
 
+    $stTrace=$null;$stThrew=$false
     try {
 
         if (-not $Path) { $Path = $Plan.Path }
@@ -58,6 +59,7 @@ function Invoke-MappedTokenAdapter {
         }
 
         $firstKey = $parts[0]
+        $stTrace=Enter-STExecutionTrace -BoundaryKind 'Token' -Name ("Token."+$firstKey) -Adapter ("Token."+$firstKey) -Activity 'Get'
 
         # Look in the MappedAdapter Signal's graph for the corresponding key
         $graph = $MappedAdapter.Signal.GetPointer()
@@ -113,9 +115,11 @@ function Invoke-MappedTokenAdapter {
         }
     }
     catch {
+        $stThrew=$true
         $opSignal.LogCritical("🔥 Exception in Invoke-MappedTokenAdapter: $($_.Exception.Message)", $null, $_)
     }
 
+    finally { Exit-STExecutionTrace $stTrace $opSignal $stThrew }
     return $opSignal
 }
 8

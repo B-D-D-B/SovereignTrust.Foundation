@@ -1,3 +1,7 @@
+<#
+MappedDataAdapter forwards Activity to the registered data provider without validating it.
+The current AzureSql provider supports Write, Query, Delete, and Admin activities.
+#>
 
 class MappedDataAdapter {
     [Signal]$Signal

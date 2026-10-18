@@ -23,6 +23,12 @@ function Invoke-PlanIteration {
         [object[]]$IterationArray
     )
 
+    $stIteration = $null
+    if($null -ne $script:STExecutionTraceState){
+        $stIteration=@{IterationTemplateId='Plan/'+$Plan.Name;IterationIndex=$IterationIndex;IterationKey=[string]$IterationIndex;Cardinality=@($IterationArray).Count;InputSetSha256=(Get-STExecutionTraceInputHash @('Plan:'+ $Plan.Name,'Count:'+ @($IterationArray).Count))}
+    }
+    $stTrace = Enter-STExecutionTrace -BoundaryKind 'PlanIteration' -Name $IterationName -Adapter ([string]$Plan.Adapter) -Activity ([string]$Plan.Config.Activity) -Iteration $stIteration
+    $stThrew=$false
     $opSignal = [Signal]::Start("Invoke-PlanIteration:$IterationIndex", $ItemSignal) | Select-Object -Last 1
 
     try {
@@ -72,8 +78,10 @@ function Invoke-PlanIteration {
         })
     }
     catch {
+        $stThrew=$true
         $null = $opSignal.LogCritical("Iteration $IterationIndex failed: $($_.Exception.Message)", $null, $_)
     }
+    finally { Exit-STExecutionTrace $stTrace $opSignal $stThrew }
 
     return $opSignal
 }
