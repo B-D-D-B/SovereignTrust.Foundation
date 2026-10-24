@@ -1,0 +1,8 @@
+{
+  "mappedAdapter": "MappedConduitAdapter",
+  "condenser": null,
+  "activities": [],
+  "emptyGroups": [
+    "MappedConduitAdapter"
+  ]
+}

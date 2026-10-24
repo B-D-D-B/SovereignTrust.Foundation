@@ -8,6 +8,26 @@
 # flows, token graph processing, and context-sensitive publishing.
 # =============================================================================
 
+<#
+Class: PlanCondenser
+Purpose: Perform plan condenser operations.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- IteratePhase: Iterate a phase.
+- InvokePlan: Reserved plan invocation activity; its current branch has no implementation.
+- InvokePhase: Invoke a phase.
+- InvokePhaseAsync: Start a phase asynchronously.
+- AwaitPhase: Wait for a phase.
+- AwaitAllPhases: Wait for all phases.
+- GetPhaseStatus: Read phase status.
+- StopPhase: Stop a phase.
+- InsertPhaseSteps: Insert phase steps.
+- AddPhaseSteps: Add phase steps.
+ActivityValidation: OnInvoke, BeforeDispatch
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+#>
 class PlanCondenser {
     [Conductor]$Conductor
     [MappedCondenserAdapter]$MappedCondenserAdapter
@@ -114,6 +134,11 @@ class PlanCondenser {
 
     [Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
         $opSignal = [Signal]::Start("PlanCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
+
+        if ($Activity -notin @('IteratePhase', 'InvokePlan', 'InvokePhase', 'InvokePhaseAsync', 'AwaitPhase', 'AwaitAllPhases', 'GetPhaseStatus', 'StopPhase', 'InsertPhaseSteps', 'AddPhaseSteps')) {
+            $opSignal.LogCritical("Unsupported PlanCondenser activity: '$Activity'.")
+            return $opSignal
+        }
 
         Assert-STExecutionTraceSerial ($Activity -in @('InvokePhaseAsync','AwaitPhase','AwaitAllPhases','GetPhaseStatus','StopPhase'))
         $stPlanTrace=Enter-STExecutionTrace -BoundaryKind 'Plan' -Name ([string]$Plan.Name) -Adapter 'Condenser.Plan' -Activity $Activity

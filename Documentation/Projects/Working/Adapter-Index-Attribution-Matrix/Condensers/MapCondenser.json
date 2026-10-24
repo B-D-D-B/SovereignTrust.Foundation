@@ -1,0 +1,445 @@
+{
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "MapCondenser",
+  "activities": [
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "MapCondenser",
+      "name": "Invoke",
+      "description": "Invoke a condenser operation.",
+      "coverage": [
+        {
+          "adapter": "MapCondenser",
+          "status": "reads",
+          "notes": "The validated Invoke branch forwards original Plan through JSON token crawl helpers. ReturnItemSignal below the branch return is unreachable and excluded; dynamic token lookups target ItemSignal content or other adapters, not incoming Plan children.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "MapCondenser",
+              "lines": [
+                41,
+                46,
+                62,
+                84,
+                128,
+                132
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Forward the configuration object into a constructed token lookup plan.",
+          "adapters": [
+            "MapCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MapCondenser",
+              "references": [
+                {
+                  "sourceId": "token-property",
+                  "lines": [
+                    39,
+                    124,
+                    128,
+                    129,
+                    130,
+                    134
+                  ]
+                }
+              ],
+              "trace": "Original Plan passes through Invoke-TokenCrawl and Resolve-TokenForProperty. The helper resolves Config and copies it to TokenPlan.Config. Its apparent Resolve-ClonePlan call is inside a block comment and excluded.",
+              "conditional": true,
+              "condition": "Invoke when token matching reaches the adapter-lookup branch in Resolve-TokenForProperty."
+            }
+          ]
+        },
+        {
+          "path": "HydrationStyle",
+          "description": "Select deferred token delimiters when the style is Deferred.",
+          "adapters": [
+            "MapCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MapCondenser",
+              "references": [
+                {
+                  "sourceId": "json-token",
+                  "lines": [
+                    26,
+                    36,
+                    46,
+                    72,
+                    88,
+                    92
+                  ]
+                }
+              ],
+              "trace": "The JSON token helper receives original Plan and resolves HydrationStyle without a supplied Default, then forwards the style into crawling.",
+              "conditional": true,
+              "condition": "Invoke after source Path resolution succeeds."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Locate source content in ItemSignal for token substitution and writeback.",
+          "adapters": [
+            "MapCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MapCondenser",
+              "references": [
+                {
+                  "sourceId": "MapCondenser",
+                  "lines": [
+                    62,
+                    66,
+                    79,
+                    84,
+                    94
+                  ]
+                }
+              ],
+              "trace": "Original Path is read by the class and again by Invoke-JsonTokenCondenser line 26; actual target data lives in ItemSignal.",
+              "conditional": true,
+              "condition": "Map Invoke, subject to preceding resolver success."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "MapCondenser",
+      "name": "Map",
+      "description": "Map values.",
+      "coverage": [
+        {
+          "adapter": "MapCondenser",
+          "status": "reads",
+          "notes": "When incoming Plan is non-null it aliases ProposalSignal and, in Template mode, Proposal. If Plan is null, fallback comes from ItemSignal and is not attributed as incoming Plan. @. paths retain their Signal payload-root semantics. The branch comment says not currently functional; this inventory documents actual reads without runtime acceptance.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "MapCondenser",
+              "lines": [
+                41,
+                46,
+                100,
+                101,
+                102,
+                113,
+                128,
+                132
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "@.CondenserMode",
+          "description": "Select Direct or Template mapping from the incoming proposal signal payload.",
+          "adapters": [
+            "MapCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MapCondenser",
+              "references": [
+                {
+                  "sourceId": "map-invoke",
+                  "lines": [
+                    5,
+                    11,
+                    16,
+                    18,
+                    21,
+                    22,
+                    26,
+                    28,
+                    41
+                  ]
+                }
+              ],
+              "trace": "Map passes the exact non-null incoming Plan as ProposalSignal. Resolver path @.CondenserMode dereferences that incoming signal payload; retain @. rather than flattening it. Missing/blank mode becomes Direct by code, not resolver Default.",
+              "conditional": true,
+              "condition": "Map with non-null incoming Plan whose ProposalSignal.HasResult() succeeds."
+            }
+          ]
+        },
+        {
+          "path": "@.Content",
+          "description": "Read the incoming proposal signal payload content for direct substitution.",
+          "adapters": [
+            "MapCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MapCondenser",
+              "references": [
+                {
+                  "sourceId": "map-direct",
+                  "lines": [
+                    4,
+                    11,
+                    12,
+                    24,
+                    26
+                  ]
+                }
+              ],
+              "trace": "Direct mode receives original Plan as ProposalSignal and resolves literal @.Content. Its payload is therefore derived from original Plan; @. is retained.",
+              "conditional": true,
+              "condition": "Map Direct mode with a non-null incoming proposal signal."
+            }
+          ]
+        },
+        {
+          "path": "@.ReplacementType",
+          "description": "Select the direct-substitution tag format from the proposal signal payload.",
+          "adapters": [
+            "MapCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MapCondenser",
+              "references": [
+                {
+                  "sourceId": "map-direct",
+                  "lines": [
+                    18,
+                    19,
+                    20,
+                    21,
+                    26
+                  ]
+                }
+              ],
+              "trace": "Direct helper resolves @.ReplacementType without Default; local initial AtAt is not a resolver-supplied fallback.",
+              "conditional": true,
+              "condition": "Map Direct mode after content resolution succeeds."
+            }
+          ]
+        },
+        {
+          "path": "Content",
+          "description": "Validate template content, derive tags and return substituted content.",
+          "adapters": [
+            "MapCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MapCondenser",
+              "references": [
+                {
+                  "sourceId": "map-template",
+                  "lines": [
+                    11,
+                    16,
+                    28,
+                    38
+                  ]
+                }
+              ],
+              "trace": "Invoke-MapCondenser passes original non-null Plan as Proposal directly in Template mode (line 41). These are direct members of that same object; unlike Direct mode, no @. dereference is implied. Reads after replacement may see locally modified Content.",
+              "conditional": true,
+              "condition": "Map Template mode with non-null incoming Plan and successful proposal/content checks; loop-member reads require matching tags and relay sources."
+            }
+          ]
+        },
+        {
+          "path": "MappingType",
+          "description": "Select the mapping behavior passed to replacement.",
+          "adapters": [
+            "MapCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MapCondenser",
+              "references": [
+                {
+                  "sourceId": "map-template",
+                  "lines": [
+                    31
+                  ]
+                }
+              ],
+              "trace": "Invoke-MapCondenser passes original non-null Plan as Proposal directly in Template mode (line 41). These are direct members of that same object; unlike Direct mode, no @. dereference is implied. Reads after replacement may see locally modified Content.",
+              "conditional": true,
+              "condition": "Map Template mode with non-null incoming Plan and successful proposal/content checks; loop-member reads require matching tags and relay sources."
+            }
+          ]
+        },
+        {
+          "path": "RelayData",
+          "description": "Select relay entries associated with each requested source.",
+          "adapters": [
+            "MapCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MapCondenser",
+              "references": [
+                {
+                  "sourceId": "map-template",
+                  "lines": [
+                    20
+                  ]
+                }
+              ],
+              "trace": "Invoke-MapCondenser passes original non-null Plan as Proposal directly in Template mode (line 41). These are direct members of that same object; unlike Direct mode, no @. dereference is implied. Reads after replacement may see locally modified Content.",
+              "conditional": true,
+              "condition": "Map Template mode with non-null incoming Plan and successful proposal/content checks; loop-member reads require matching tags and relay sources."
+            }
+          ]
+        },
+        {
+          "path": "RelayData.Key.RelayFilename",
+          "description": "Match each relay entry filename against the current source.",
+          "adapters": [
+            "MapCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MapCondenser",
+              "references": [
+                {
+                  "sourceId": "map-template",
+                  "lines": [
+                    20
+                  ]
+                }
+              ],
+              "trace": "Invoke-MapCondenser passes original non-null Plan as Proposal directly in Template mode (line 41). These are direct members of that same object; unlike Direct mode, no @. dereference is implied. Reads after replacement may see locally modified Content.",
+              "conditional": true,
+              "condition": "Map Template mode with non-null incoming Plan and successful proposal/content checks; loop-member reads require matching tags and relay sources."
+            }
+          ]
+        },
+        {
+          "path": "RelayData.Value",
+          "description": "Test and read each selected relay value object before resolving a tag.",
+          "adapters": [
+            "MapCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MapCondenser",
+              "references": [
+                {
+                  "sourceId": "map-template",
+                  "lines": [
+                    22,
+                    23,
+                    29
+                  ]
+                }
+              ],
+              "trace": "Invoke-MapCondenser passes original non-null Plan as Proposal directly in Template mode (line 41). These are direct members of that same object; unlike Direct mode, no @. dereference is implied. Reads after replacement may see locally modified Content.",
+              "conditional": true,
+              "condition": "Map Template mode with non-null incoming Plan and successful proposal/content checks; loop-member reads require matching tags and relay sources."
+            }
+          ]
+        },
+        {
+          "path": "RelayData[*].Value[$tag]",
+          "description": "Resolve each runtime template tag against selected incoming relay data values.",
+          "adapters": [
+            "MapCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MapCondenser",
+              "references": [
+                {
+                  "sourceId": "map-template",
+                  "lines": [
+                    16,
+                    18,
+                    19,
+                    20,
+                    22,
+                    23
+                  ]
+                }
+              ],
+              "trace": "Proposal aliases original Plan; tags derive from Proposal.Content via Get-MapCondenserVariableTags, sources from SourceRelayList, selected entries from RelayData by Key.RelayFilename. The exact lookup is Resolve-PathFromDictionary -Dictionary $relayData.Value -Path $tag. No finite literal child-name set or resolver fallback is supplied.",
+              "conditional": true,
+              "condition": "Map Template mode with non-null incoming Plan, a template tag, matching relay source and truthy relayData.Value."
+            }
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $relayData.Value -Path $tag"
+        },
+        {
+          "path": "ReplacementType",
+          "description": "Choose template tag parsing and replacement syntax.",
+          "adapters": [
+            "MapCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MapCondenser",
+              "references": [
+                {
+                  "sourceId": "map-template",
+                  "lines": [
+                    16,
+                    32
+                  ]
+                }
+              ],
+              "trace": "Invoke-MapCondenser passes original non-null Plan as Proposal directly in Template mode (line 41). These are direct members of that same object; unlike Direct mode, no @. dereference is implied. Reads after replacement may see locally modified Content.",
+              "conditional": true,
+              "condition": "Map Template mode with non-null incoming Plan and successful proposal/content checks; loop-member reads require matching tags and relay sources."
+            }
+          ]
+        },
+        {
+          "path": "SourceRelayList",
+          "description": "Enumerate the relay sources for each template tag.",
+          "adapters": [
+            "MapCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MapCondenser",
+              "references": [
+                {
+                  "sourceId": "map-template",
+                  "lines": [
+                    19
+                  ]
+                }
+              ],
+              "trace": "Invoke-MapCondenser passes original non-null Plan as Proposal directly in Template mode (line 41). These are direct members of that same object; unlike Direct mode, no @. dereference is implied. Reads after replacement may see locally modified Content.",
+              "conditional": true,
+              "condition": "Map Template mode with non-null incoming Plan and successful proposal/content checks; loop-member reads require matching tags and relay sources."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

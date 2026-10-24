@@ -110,7 +110,6 @@ function Invoke-Telemetry(
 
 . "$PSScriptRoot/Utilities/Adapters/Condenser/Transform/Invoke-TransformCondenserCore.ps1"
 
-. "$PSScriptRoot/Utilities/Adapters/Condenser/Fab/Invoke-FabricateAdapter.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Condenser/Fab/Invoke-GraphFabCondenser.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Condenser/Fab/Resolve-ModuleFromAdapter.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Condenser/Conduit/Invoke-ProcessConduitCondenser.ps1"
@@ -247,9 +246,9 @@ Export-ModuleMember -Function Invoke-TokenCondenser
 Export-ModuleMember -Function Invoke-MappedAdapter
 Export-ModuleMember -Function Invoke-CondenserAdapter
 
+Export-ModuleMember -Function Resolve-BearerToken
 
 # TODO: Don't Export internal functions, only export wrappers and their subsequent invoker.
-#Export-ModuleMember -Function Invoke-FabricateAdapter
 
 Export-ModuleMember -Function Invoke-CloneItem
 Export-ModuleMember -Function New-MappedCondenserAdapterFromGraph

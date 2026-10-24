@@ -1,4 +1,10 @@
 
+<#
+Class: BaseAdapter
+Purpose: Define Start and Stop lifecycle methods for adapters.
+ActivityScope: None
+Activities: None; this base class has no Invoke method.
+#>
 class BaseAdapter {
     [string]$Name
 

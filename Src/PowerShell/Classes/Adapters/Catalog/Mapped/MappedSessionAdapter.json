@@ -1,0 +1,32 @@
+{
+  "name": "MappedSessionAdapter",
+  "activities": [
+    {
+      "name": "RequestOrRegister",
+      "description": "Return an existing session or register a new one.",
+      "properties": [
+        {
+          "path": "Name",
+          "description": "Name the session operation for diagnostics.",
+          "adapters": [
+            "Session_ST"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Locate an existing session or register the item jacket at that location.",
+          "adapters": [
+            "Session_ST"
+          ]
+        }
+      ]
+    }
+  ],
+  "concreteAdapters": [
+    {
+      "name": "Session_ST",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Session/ST/PowerShell/Session_ST.psm1"
+    }
+  ]
+}

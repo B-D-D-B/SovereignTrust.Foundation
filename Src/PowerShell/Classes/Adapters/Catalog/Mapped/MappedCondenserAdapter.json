@@ -1,0 +1,58 @@
+{
+  "name": "MappedCondenserAdapter",
+  "activities": [],
+  "concreteAdapters": [
+    {
+      "name": "ConductionCondenser",
+      "file": "../Condensers/ConductionCondenser.json"
+    },
+    {
+      "name": "ConduitCondenser",
+      "file": "../Condensers/ConduitCondenser.json"
+    },
+    {
+      "name": "FabCondenser",
+      "file": "../Condensers/FabCondenser.json"
+    },
+    {
+      "name": "FormatCondenser",
+      "file": "../Condensers/FormatCondenser.json"
+    },
+    {
+      "name": "GraphCondenser",
+      "file": "../Condensers/GraphCondenser.json"
+    },
+    {
+      "name": "HydrationCondenser",
+      "file": "../Condensers/HydrationCondenser.json"
+    },
+    {
+      "name": "MapCondenser",
+      "file": "../Condensers/MapCondenser.json"
+    },
+    {
+      "name": "MemoryCondenser",
+      "file": "../Condensers/MemoryCondenser.json"
+    },
+    {
+      "name": "MergeCondenser",
+      "file": "../Condensers/MergeCondenser.json"
+    },
+    {
+      "name": "PlanCondenser",
+      "file": "../Condensers/PlanCondenser.json"
+    },
+    {
+      "name": "RestCondenser",
+      "file": "../Condensers/RestCondenser.json"
+    },
+    {
+      "name": "TokenCondenser",
+      "file": "../Condensers/TokenCondenser.json"
+    },
+    {
+      "name": "TransformCondenser",
+      "file": "../Condensers/TransformCondenser.json"
+    }
+  ]
+}

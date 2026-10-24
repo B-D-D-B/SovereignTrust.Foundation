@@ -1,0 +1,129 @@
+{
+  "name": "MappedNetworkAdapter",
+  "activities": [
+    {
+      "name": "SendFile",
+      "description": "Send a file through a network service.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Read the configuration object and warn when it is absent or false-valued.",
+          "adapters": [
+            "Network_DiscordBot"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Provide text serialized into the multipart message payload when sending a file.",
+          "adapters": [
+            "Network_DiscordBot"
+          ]
+        },
+        {
+          "path": "Config.FullPath",
+          "description": "Provide the attachment file path used in the multipart file upload.",
+          "adapters": [
+            "Network_DiscordBot"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SendMessage",
+      "description": "Send a message.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Read the configuration object and warn when it is absent or false-valued.",
+          "adapters": [
+            "Network_DiscordBot"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Provide message text split into chunks of at most 2000 characters and sent as message bodies.",
+          "adapters": [
+            "Network_DiscordBot"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ReadBatch",
+      "description": "Read a batch of messages.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Read the configuration object and warn when it is absent or false-valued.",
+          "adapters": [
+            "Network_DiscordBot"
+          ]
+        },
+        {
+          "path": "Config.MessageLimit",
+          "description": "Set the message limit query parameter for the batch request.",
+          "adapters": [
+            "Network_DiscordBot"
+          ],
+          "default": {
+            "Network_DiscordBot": 10
+          }
+        },
+        {
+          "path": "Config.PollingDelayMS",
+          "description": "Set the delay in milliseconds between polling iterations when polling continues.",
+          "adapters": [
+            "Network_DiscordBot"
+          ],
+          "default": {
+            "Network_DiscordBot": 5000
+          }
+        },
+        {
+          "path": "Config.PollUntilResponse",
+          "description": "Control whether batch polling continues after a response unless a matching reply ends the operation.",
+          "adapters": [
+            "Network_DiscordBot"
+          ],
+          "default": {
+            "Network_DiscordBot": false
+          }
+        },
+        {
+          "path": "Path",
+          "description": "Optionally locate prior messages in ItemSignal to match replies in the fetched batch.",
+          "adapters": [
+            "Network_DiscordBot"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HandleMessage",
+      "description": "Process message content.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Read the configuration object and warn when it is absent or false-valued.",
+          "adapters": [
+            "Network_DiscordBot"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Select message content from ItemSignal for the activity result.",
+          "adapters": [
+            "Network_DiscordBot"
+          ]
+        }
+      ]
+    }
+  ],
+  "concreteAdapters": [
+    {
+      "name": "Network_DiscordBot",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Network/DiscordBot/PowerShell/Network_DiscordBot.psm1"
+    }
+  ]
+}

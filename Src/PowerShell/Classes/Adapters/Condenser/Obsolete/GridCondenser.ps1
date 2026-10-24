@@ -37,6 +37,18 @@
 #   - Declarative runtime orchestration of multi-phase graph systems
 
 
+<#
+Class: GridCondenser
+Purpose: Legacy grid condenser operations.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Process: Process a plan through a conduit.
+- Graph: Build a phase graph.
+ActivityValidation: OnInvoke, BeforeDispatch
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+#>
 class GridCondenser {
     [Conductor]$Conductor
     [MappedCondenserAdapter]$MappedCondenserAdapter
@@ -56,6 +68,11 @@ class GridCondenser {
     
     [Signal]Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
         $opSignal = [Signal]::Start("TransformCondenser.Invoke") | Select-Object -Last 1
+
+        if ($Activity -notin @('Process', 'Graph')) {
+            $opSignal.LogCritical("Unsupported GridCondenser activity: '$Activity'.")
+            return $opSignal
+        }
 
         if ($Activity) {
             switch ($Activity) {

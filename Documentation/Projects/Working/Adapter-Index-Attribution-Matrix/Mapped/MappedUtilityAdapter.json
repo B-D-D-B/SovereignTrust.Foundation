@@ -1,0 +1,1246 @@
+{
+  "mappedAdapter": "MappedUtilityAdapter",
+  "condenser": null,
+  "activities": [
+    {
+      "mappedAdapter": "MappedUtilityAdapter",
+      "condenser": null,
+      "name": "Resize",
+      "description": "Resize an image.",
+      "coverage": [
+        {
+          "adapter": "Utility_Media",
+          "status": "reads",
+          "notes": "Mapped Resize/Overlay validation precedes provider dispatch. Both share Config.VirtualPath/Container/Resource pre-dispatch reads and Path/context clone reads. Image helpers use original Config children only when not replaced by jacket append. Null-coalescing/function-parameter fallbacks are not resolver -Default values. No image processing was executed.",
+          "references": [
+            {
+              "sourceId": "utility-mapped",
+              "lines": [
+                82,
+                86,
+                107,
+                109,
+                110,
+                115,
+                119
+              ]
+            },
+            {
+              "sourceId": "Utility_Media",
+              "lines": [
+                44,
+                48,
+                50,
+                51,
+                52,
+                53,
+                57,
+                61,
+                66
+              ]
+            },
+            {
+              "sourceId": "sda-config-append",
+              "lines": [
+                216,
+                226,
+                231,
+                240,
+                252
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config.Density",
+          "description": "Configure image resize Density.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    50,
+                    51,
+                    53,
+                    61
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "media-resize",
+                  "lines": [
+                    190
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "Resize helper reached and relevant original Config child survives jacket merge; no resolver default."
+            }
+          ]
+        },
+        {
+          "path": "Config.InputFullPath",
+          "description": "Configure image resize InputFullPath.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    50,
+                    51,
+                    53,
+                    61
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "media-resize",
+                  "lines": [
+                    183
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "Resize helper reached and relevant original Config child survives jacket merge; no resolver default."
+            }
+          ]
+        },
+        {
+          "path": "Config.OutputFullPath",
+          "description": "Configure image resize OutputFullPath.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    50,
+                    51,
+                    53,
+                    61
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "media-resize",
+                  "lines": [
+                    184
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "Resize helper reached and relevant original Config child survives jacket merge; no resolver default."
+            }
+          ]
+        },
+        {
+          "path": "Config.Overwrite",
+          "description": "Configure image resize Overwrite.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    50,
+                    51,
+                    53,
+                    61
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "media-resize",
+                  "lines": [
+                    189
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "Resize helper reached and relevant original Config child survives jacket merge; no resolver default."
+            }
+          ]
+        },
+        {
+          "path": "Config.Quality",
+          "description": "Configure image resize Quality.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    50,
+                    51,
+                    53,
+                    61
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "media-resize",
+                  "lines": [
+                    188
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "Resize helper reached and relevant original Config child survives jacket merge; no resolver default."
+            }
+          ]
+        },
+        {
+          "path": "Config.TargetHeight",
+          "description": "Configure image resize TargetHeight.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    50,
+                    51,
+                    53,
+                    61
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "media-resize",
+                  "lines": [
+                    186
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "Resize helper reached and relevant original Config child survives jacket merge; no resolver default."
+            }
+          ]
+        },
+        {
+          "path": "Config.TargetLongest",
+          "description": "Configure image resize TargetLongest.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    50,
+                    51,
+                    53,
+                    61
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "media-resize",
+                  "lines": [
+                    187
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "Resize helper reached and relevant original Config child survives jacket merge; no resolver default."
+            }
+          ]
+        },
+        {
+          "path": "Config.TargetWidth",
+          "description": "Configure image resize TargetWidth.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    50,
+                    51,
+                    53,
+                    61
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "media-resize",
+                  "lines": [
+                    185
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "Resize helper reached and relevant original Config child survives jacket merge; no resolver default."
+            }
+          ]
+        },
+        {
+          "path": "Config.VirtualPath",
+          "description": "Check for an explicit utility virtual path before synthesizing a top-level path.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "utility-mapped",
+                  "lines": [
+                    107,
+                    108,
+                    115
+                  ]
+                }
+              ],
+              "trace": "Mapped adapter reads original Config.VirtualPath with explicit null default; generated VirtualPath is writes-only for this concrete dispatch.",
+              "conditional": true,
+              "condition": "Mapped activity validation and provider resolution pass."
+            }
+          ],
+          "default": {
+            "Utility_Media": null
+          }
+        },
+        {
+          "path": "Container",
+          "description": "Build the generated utility virtual path when no explicit path is resolved.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "utility-mapped",
+                  "lines": [
+                    107,
+                    108,
+                    110,
+                    114,
+                    115
+                  ]
+                }
+              ],
+              "trace": "Original field feeds mapped generation; top-level VirtualPath is not an additional caller read.",
+              "conditional": true,
+              "condition": "Config.VirtualPath resolver has no result."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Read the image-operation path passed to the selected helper.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    48,
+                    61,
+                    66
+                  ]
+                }
+              ],
+              "trace": "Original Path is read before cloning; helper accepts Path but image settings come from Config.",
+              "conditional": true,
+              "condition": "Concrete utility invocation reached."
+            }
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context while cloning the image plan.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    50
+                  ]
+                },
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    13
+                  ]
+                }
+              ],
+              "trace": "Resolve-ClonePlan reads original top-level references before JSON cloning.",
+              "conditional": true,
+              "condition": "Concrete utility reaches cloning."
+            }
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context while cloning the image plan.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    50
+                  ]
+                },
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    13
+                  ]
+                }
+              ],
+              "trace": "Resolve-ClonePlan reads original top-level references before JSON cloning.",
+              "conditional": true,
+              "condition": "Concrete utility reaches cloning."
+            }
+          ]
+        },
+        {
+          "path": "Resource",
+          "description": "Build the generated utility virtual path when no explicit path is resolved.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "utility-mapped",
+                  "lines": [
+                    107,
+                    108,
+                    109,
+                    114,
+                    115
+                  ]
+                }
+              ],
+              "trace": "Original field feeds mapped generation; top-level VirtualPath is not an additional caller read.",
+              "conditional": true,
+              "condition": "Config.VirtualPath resolver has no result."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedUtilityAdapter",
+      "condenser": null,
+      "name": "Overlay",
+      "description": "Overlay one image on another.",
+      "coverage": [
+        {
+          "adapter": "Utility_Media",
+          "status": "reads",
+          "notes": "Mapped Resize/Overlay validation precedes provider dispatch. Both share Config.VirtualPath/Container/Resource pre-dispatch reads and Path/context clone reads. Image helpers use original Config children only when not replaced by jacket append. Null-coalescing/function-parameter fallbacks are not resolver -Default values. No image processing was executed.",
+          "references": [
+            {
+              "sourceId": "utility-mapped",
+              "lines": [
+                82,
+                86,
+                107,
+                109,
+                110,
+                115,
+                119
+              ]
+            },
+            {
+              "sourceId": "Utility_Media",
+              "lines": [
+                44,
+                48,
+                50,
+                51,
+                52,
+                53,
+                57,
+                61,
+                66
+              ]
+            },
+            {
+              "sourceId": "sda-config-append",
+              "lines": [
+                216,
+                226,
+                231,
+                240,
+                252
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config.InputFullPath",
+          "description": "Configure image overlay InputFullPath.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    50,
+                    53,
+                    66
+                  ]
+                },
+                {
+                  "sourceId": "media-overlay",
+                  "lines": [
+                    286,
+                    307,
+                    311
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "Overlay helper reached and original Config child survives merge."
+            }
+          ]
+        },
+        {
+          "path": "Config.Location",
+          "description": "Configure the legacy single overlay Location.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    53,
+                    66
+                  ]
+                },
+                {
+                  "sourceId": "media-overlay",
+                  "lines": [
+                    290,
+                    295,
+                    300
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "No non-null Overlays entries; legacy original Config child survives jacket merge. Constructed singleton overlay is generated, not independently attributed."
+            }
+          ]
+        },
+        {
+          "path": "Config.Opacity",
+          "description": "Configure the legacy single overlay Opacity.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    53,
+                    66
+                  ]
+                },
+                {
+                  "sourceId": "media-overlay",
+                  "lines": [
+                    290,
+                    295,
+                    299
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "No non-null Overlays entries; legacy original Config child survives jacket merge. Constructed singleton overlay is generated, not independently attributed."
+            }
+          ]
+        },
+        {
+          "path": "Config.OutputFullPath",
+          "description": "Configure image overlay OutputFullPath.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    50,
+                    53,
+                    66
+                  ]
+                },
+                {
+                  "sourceId": "media-overlay",
+                  "lines": [
+                    287,
+                    307,
+                    311
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "Overlay helper reached and original Config child survives merge."
+            }
+          ]
+        },
+        {
+          "path": "Config.OverlayFullPath",
+          "description": "Configure the legacy single overlay OverlayFullPath.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    53,
+                    66
+                  ]
+                },
+                {
+                  "sourceId": "media-overlay",
+                  "lines": [
+                    290,
+                    295,
+                    298
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "No non-null Overlays entries; legacy original Config child survives jacket merge. Constructed singleton overlay is generated, not independently attributed."
+            }
+          ]
+        },
+        {
+          "path": "Config.Overlays",
+          "description": "Configure image overlay Overlays.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    50,
+                    53,
+                    66
+                  ]
+                },
+                {
+                  "sourceId": "media-overlay",
+                  "lines": [
+                    290,
+                    307,
+                    311
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "Overlay helper reached and original Config child survives merge."
+            }
+          ]
+        },
+        {
+          "path": "Config.Overlays[*].Location",
+          "description": "Configure a supplied overlay entry Location.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    53,
+                    66
+                  ]
+                },
+                {
+                  "sourceId": "media-overlay",
+                  "lines": [
+                    66,
+                    87,
+                    290,
+                    291,
+                    295,
+                    307,
+                    311
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "Non-null original Config.Overlays entries survive jacket merge; helper enumerates them before normalization. Exclude generated legacy singleton and normalized overlay objects."
+            }
+          ]
+        },
+        {
+          "path": "Config.Overlays[*].Opacity",
+          "description": "Configure a supplied overlay entry Opacity.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    53,
+                    66
+                  ]
+                },
+                {
+                  "sourceId": "media-overlay",
+                  "lines": [
+                    66,
+                    82,
+                    290,
+                    291,
+                    295,
+                    307,
+                    311
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "Non-null original Config.Overlays entries survive jacket merge; helper enumerates them before normalization. Exclude generated legacy singleton and normalized overlay objects."
+            }
+          ]
+        },
+        {
+          "path": "Config.Overlays[*].OverlayFullPath",
+          "description": "Configure a supplied overlay entry OverlayFullPath.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    53,
+                    66
+                  ]
+                },
+                {
+                  "sourceId": "media-overlay",
+                  "lines": [
+                    66,
+                    73,
+                    290,
+                    291,
+                    295,
+                    307,
+                    311
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "Non-null original Config.Overlays entries survive jacket merge; helper enumerates them before normalization. Exclude generated legacy singleton and normalized overlay objects."
+            }
+          ]
+        },
+        {
+          "path": "Config.Overlays[*].ResizeX",
+          "description": "Configure a supplied overlay entry ResizeX.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    53,
+                    66
+                  ]
+                },
+                {
+                  "sourceId": "media-overlay",
+                  "lines": [
+                    66,
+                    96,
+                    290,
+                    291,
+                    295,
+                    307,
+                    311
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "Non-null original Config.Overlays entries survive jacket merge; helper enumerates them before normalization. Exclude generated legacy singleton and normalized overlay objects."
+            }
+          ]
+        },
+        {
+          "path": "Config.Overlays[*].ResizeY",
+          "description": "Configure a supplied overlay entry ResizeY.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    53,
+                    66
+                  ]
+                },
+                {
+                  "sourceId": "media-overlay",
+                  "lines": [
+                    66,
+                    97,
+                    290,
+                    291,
+                    295,
+                    307,
+                    311
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "Non-null original Config.Overlays entries survive jacket merge; helper enumerates them before normalization. Exclude generated legacy singleton and normalized overlay objects."
+            }
+          ]
+        },
+        {
+          "path": "Config.Overwrite",
+          "description": "Configure image overlay Overwrite.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    50,
+                    53,
+                    66
+                  ]
+                },
+                {
+                  "sourceId": "media-overlay",
+                  "lines": [
+                    288,
+                    307,
+                    311
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "Overlay helper reached and original Config child survives merge."
+            }
+          ]
+        },
+        {
+          "path": "Config.ResizeX",
+          "description": "Configure the legacy single overlay ResizeX.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    53,
+                    66
+                  ]
+                },
+                {
+                  "sourceId": "media-overlay",
+                  "lines": [
+                    290,
+                    295,
+                    301
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "No non-null Overlays entries; legacy original Config child survives jacket merge. Constructed singleton overlay is generated, not independently attributed."
+            }
+          ]
+        },
+        {
+          "path": "Config.ResizeY",
+          "description": "Configure the legacy single overlay ResizeY.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    53,
+                    66
+                  ]
+                },
+                {
+                  "sourceId": "media-overlay",
+                  "lines": [
+                    290,
+                    295,
+                    302
+                  ]
+                }
+              ],
+              "trace": "Mapped utility forwards original Plan after optional VirtualPath generation. Concrete reads Path and clones Plan; optional jacket Config append can overwrite children. Image-helper Config attribution is limited to original children surviving that merge; locally normalized/generated image objects are excluded.",
+              "conditional": true,
+              "condition": "No non-null Overlays entries; legacy original Config child survives jacket merge. Constructed singleton overlay is generated, not independently attributed."
+            }
+          ]
+        },
+        {
+          "path": "Config.VirtualPath",
+          "description": "Check for an explicit utility virtual path before synthesizing a top-level path.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "utility-mapped",
+                  "lines": [
+                    107,
+                    108,
+                    115
+                  ]
+                }
+              ],
+              "trace": "Mapped adapter reads original Config.VirtualPath with explicit null default; generated VirtualPath is writes-only for this concrete dispatch.",
+              "conditional": true,
+              "condition": "Mapped activity validation and provider resolution pass."
+            }
+          ],
+          "default": {
+            "Utility_Media": null
+          }
+        },
+        {
+          "path": "Container",
+          "description": "Build the generated utility virtual path when no explicit path is resolved.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "utility-mapped",
+                  "lines": [
+                    107,
+                    108,
+                    110,
+                    114,
+                    115
+                  ]
+                }
+              ],
+              "trace": "Original field feeds mapped generation; top-level VirtualPath is not an additional caller read.",
+              "conditional": true,
+              "condition": "Config.VirtualPath resolver has no result."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Read the image-operation path passed to the selected helper.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    48,
+                    61,
+                    66
+                  ]
+                }
+              ],
+              "trace": "Original Path is read before cloning; helper accepts Path but image settings come from Config.",
+              "conditional": true,
+              "condition": "Concrete utility invocation reached."
+            }
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context while cloning the image plan.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    50
+                  ]
+                },
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    13
+                  ]
+                }
+              ],
+              "trace": "Resolve-ClonePlan reads original top-level references before JSON cloning.",
+              "conditional": true,
+              "condition": "Concrete utility reaches cloning."
+            }
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context while cloning the image plan.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "Utility_Media",
+                  "lines": [
+                    50
+                  ]
+                },
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    13
+                  ]
+                }
+              ],
+              "trace": "Resolve-ClonePlan reads original top-level references before JSON cloning.",
+              "conditional": true,
+              "condition": "Concrete utility reaches cloning."
+            }
+          ]
+        },
+        {
+          "path": "Resource",
+          "description": "Build the generated utility virtual path when no explicit path is resolved.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "evidence": [
+            {
+              "adapter": "Utility_Media",
+              "references": [
+                {
+                  "sourceId": "utility-mapped",
+                  "lines": [
+                    107,
+                    108,
+                    109,
+                    114,
+                    115
+                  ]
+                }
+              ],
+              "trace": "Original field feeds mapped generation; top-level VirtualPath is not an additional caller read.",
+              "conditional": true,
+              "condition": "Config.VirtualPath resolver has no result."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

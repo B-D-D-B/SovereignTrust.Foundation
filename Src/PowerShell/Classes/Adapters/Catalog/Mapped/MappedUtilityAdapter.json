@@ -1,0 +1,268 @@
+{
+  "name": "MappedUtilityAdapter",
+  "activities": [
+    {
+      "name": "Resize",
+      "description": "Resize an image.",
+      "properties": [
+        {
+          "path": "Config.Density",
+          "description": "Configure image resize Density.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.InputFullPath",
+          "description": "Configure image resize InputFullPath.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.OutputFullPath",
+          "description": "Configure image resize OutputFullPath.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.Overwrite",
+          "description": "Configure image resize Overwrite.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.Quality",
+          "description": "Configure image resize Quality.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.TargetHeight",
+          "description": "Configure image resize TargetHeight.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.TargetLongest",
+          "description": "Configure image resize TargetLongest.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.TargetWidth",
+          "description": "Configure image resize TargetWidth.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.VirtualPath",
+          "description": "Check for an explicit utility virtual path before synthesizing a top-level path.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "default": {
+            "Utility_Media": null
+          }
+        },
+        {
+          "path": "Container",
+          "description": "Build the generated utility virtual path when no explicit path is resolved.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Read the image-operation path passed to the selected helper.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context while cloning the image plan.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context while cloning the image plan.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Resource",
+          "description": "Build the generated utility virtual path when no explicit path is resolved.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Overlay",
+      "description": "Overlay one image on another.",
+      "properties": [
+        {
+          "path": "Config.InputFullPath",
+          "description": "Configure image overlay InputFullPath.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.Location",
+          "description": "Configure the legacy single overlay Location.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.Opacity",
+          "description": "Configure the legacy single overlay Opacity.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.OutputFullPath",
+          "description": "Configure image overlay OutputFullPath.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.OverlayFullPath",
+          "description": "Configure the legacy single overlay OverlayFullPath.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.Overlays",
+          "description": "Configure image overlay Overlays.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.Overlays[*].Location",
+          "description": "Configure a supplied overlay entry Location.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.Overlays[*].Opacity",
+          "description": "Configure a supplied overlay entry Opacity.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.Overlays[*].OverlayFullPath",
+          "description": "Configure a supplied overlay entry OverlayFullPath.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.Overlays[*].ResizeX",
+          "description": "Configure a supplied overlay entry ResizeX.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.Overlays[*].ResizeY",
+          "description": "Configure a supplied overlay entry ResizeY.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.Overwrite",
+          "description": "Configure image overlay Overwrite.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.ResizeX",
+          "description": "Configure the legacy single overlay ResizeX.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.ResizeY",
+          "description": "Configure the legacy single overlay ResizeY.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Config.VirtualPath",
+          "description": "Check for an explicit utility virtual path before synthesizing a top-level path.",
+          "adapters": [
+            "Utility_Media"
+          ],
+          "default": {
+            "Utility_Media": null
+          }
+        },
+        {
+          "path": "Container",
+          "description": "Build the generated utility virtual path when no explicit path is resolved.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Read the image-operation path passed to the selected helper.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context while cloning the image plan.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context while cloning the image plan.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "Resource",
+          "description": "Build the generated utility virtual path when no explicit path is resolved.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        }
+      ]
+    }
+  ],
+  "concreteAdapters": [
+    {
+      "name": "Utility_Media",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Utility/Media/PowerShell/Utility_Media.psm1"
+    }
+  ]
+}

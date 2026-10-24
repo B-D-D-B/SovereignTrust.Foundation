@@ -1,0 +1,257 @@
+{
+  "name": "MemoryCondenser",
+  "repository": "SovereignTrust.Foundation",
+  "path": "Src/PowerShell/Classes/Adapters/Condenser/MemoryCondenser.ps1",
+  "activities": [
+    {
+      "name": "Persist",
+      "description": "Reserved memory persistence activity; its current branch has no implementation.",
+      "properties": [
+        {
+          "path": "ReturnItemSignal",
+          "description": "Return ItemSignal after the reserved Persist branch when requested.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "default": {
+            "MemoryCondenser": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Generate",
+      "description": "Generate memory content.",
+      "properties": [
+        {
+          "path": "ReturnItemSignal",
+          "description": "Return ItemSignal after generating all steps when requested.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "default": {
+            "MemoryCondenser": false
+          }
+        },
+        {
+          "path": "Steps",
+          "description": "Enumerate phase steps for execution and step-to-step navigation.",
+          "adapters": [
+            "MemoryCondenser"
+          ]
+        },
+        {
+          "path": "Steps[*].Activity",
+          "description": "Identify step tracing and select the dispatched activity or Goto control flow.",
+          "adapters": [
+            "MemoryCondenser"
+          ]
+        },
+        {
+          "path": "Steps[*].Adapter",
+          "description": "Identify step tracing and select the mapped adapter or goto branch.",
+          "adapters": [
+            "MemoryCondenser"
+          ]
+        },
+        {
+          "path": "Steps[*].Config",
+          "description": "Forward the step configuration into its constructed deferred hydration plan.",
+          "adapters": [
+            "MemoryCondenser"
+          ]
+        },
+        {
+          "path": "Steps[*].Config.Break",
+          "description": "Evaluate a diagnostic break condition for each step.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "default": {
+            "MemoryCondenser": false
+          }
+        },
+        {
+          "path": "Steps[*].Config.Iteration",
+          "description": "Read the previous iteration counter before incrementing the original selected step.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "default": {
+            "MemoryCondenser": 0
+          }
+        },
+        {
+          "path": "Steps[*].Config.PreventReclone",
+          "description": "Decide whether to track an execution iteration before cloning the selected step.",
+          "adapters": [
+            "MemoryCondenser"
+          ]
+        },
+        {
+          "path": "Steps[*].Config.SkipSteps",
+          "description": "Offset the selected Goto target; a direct null-coalescing expression uses zero when null.",
+          "adapters": [
+            "MemoryCondenser"
+          ]
+        },
+        {
+          "path": "Steps[*].Container",
+          "description": "Read the container used in missing-transform-result diagnostics.",
+          "adapters": [
+            "MemoryCondenser"
+          ]
+        },
+        {
+          "path": "Steps[*].ContentFormat",
+          "description": "Select optional formatting of final step content.",
+          "adapters": [
+            "MemoryCondenser"
+          ]
+        },
+        {
+          "path": "Steps[*].DeferredHydrationPlan",
+          "description": "Select deferred hydration applied before step execution.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "default": {
+            "MemoryCondenser": null
+          }
+        },
+        {
+          "path": "Steps[*].ExitAfterAdapter",
+          "description": "Skip post-adapter formatting/transform/hydration when true.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "default": {
+            "MemoryCondenser": false
+          }
+        },
+        {
+          "path": "Steps[*].ExitAfterAdapterNoResult",
+          "description": "Return early when the adapter has no result and this flag is true.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "default": {
+            "MemoryCondenser": false
+          }
+        },
+        {
+          "path": "Steps[*].Format",
+          "description": "Select optional formatting before transformation.",
+          "adapters": [
+            "MemoryCondenser"
+          ]
+        },
+        {
+          "path": "Steps[*].HydrationPlan",
+          "description": "Select optional post-adapter hydration.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "default": {
+            "MemoryCondenser": null
+          }
+        },
+        {
+          "path": "Steps[*].IsEnabled",
+          "description": "Check enablement before following a Goto target.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "default": {
+            "MemoryCondenser": true
+          }
+        },
+        {
+          "path": "Steps[*].IsEnabled",
+          "description": "Evaluate whether the step executes.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "default": {
+            "MemoryCondenser": true
+          }
+        },
+        {
+          "path": "Steps[*].IsEnabledOperator",
+          "description": "Choose how step enablement values are combined.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "default": {
+            "MemoryCondenser": "And"
+          }
+        },
+        {
+          "path": "Steps[*].Key",
+          "description": "Choose the key used to register step results.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "default": {
+            "MemoryCondenser": null
+          }
+        },
+        {
+          "path": "Steps[*].Mode",
+          "description": "Choose the transform activity when a step Path is present.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "default": {
+            "MemoryCondenser": "Select"
+          }
+        },
+        {
+          "path": "Steps[*].Name",
+          "description": "Identify step tracing and match names during next-step and goto selection.",
+          "adapters": [
+            "MemoryCondenser"
+          ]
+        },
+        {
+          "path": "Steps[*].Path",
+          "description": "Select transformation data and the target name for Goto navigation.",
+          "adapters": [
+            "MemoryCondenser"
+          ]
+        },
+        {
+          "path": "Steps[*].Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "adapters": [
+            "MemoryCondenser"
+          ]
+        },
+        {
+          "path": "Steps[*].Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "adapters": [
+            "MemoryCondenser"
+          ]
+        },
+        {
+          "path": "Steps[*].Resource",
+          "description": "Read the resource used in missing-transform-result diagnostics.",
+          "adapters": [
+            "MemoryCondenser"
+          ]
+        },
+        {
+          "path": "Steps[*].Type",
+          "description": "Choose the transform condenser slot when a step Path is present.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "default": {
+            "MemoryCondenser": "Transform"
+          }
+        }
+      ]
+    }
+  ]
+}

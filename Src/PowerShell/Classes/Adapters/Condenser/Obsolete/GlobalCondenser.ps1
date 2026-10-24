@@ -1,3 +1,9 @@
+<#
+Class: GlobalCondenser
+Purpose: Legacy proposal condenser.
+ActivityScope: None
+Activities: None; Invoke takes a proposal without Activity.
+#>
 class GlobalCondenser {
     [object]$MappedCondenserAdapter
     [object]$Conductor

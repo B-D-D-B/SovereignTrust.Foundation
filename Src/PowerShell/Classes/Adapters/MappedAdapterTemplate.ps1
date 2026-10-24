@@ -1,4 +1,10 @@
 
+<#
+Class: MappedAdapterTemplate
+Purpose: Invoke registered sub-adapters until one succeeds.
+ActivityScope: None
+Activities: None; Invoke takes a slot, context, and plan without Activity.
+#>
 class MappedAdapterTemplate {
     [Signal]$Signal  # Sovereign runtime container
 

@@ -18,27 +18,29 @@ $run.SetPointer($conductor.Signal.GetPointer()) | Out-Null
 $item = [Signal]::Start('FamilyRouting.Item') | Select-Object -Last 1
 $item.SetPointer($conductor.Signal.GetPointer()) | Out-Null
 
+$familyActivities = @{ Intelligence='SendMessage'; Satellite='EmitSignal'; Network='SendMessage'; Queue='ReadBatch' }
 foreach ($family in @('Intelligence','Satellite','Network','Queue')) {
     $adapter = [pscustomobject]@{ Kind=$family; Slot="Probe$family"; VirtualPath="SovereignTrust.Adapters.$family.Fixture.Probe$family" }
     $adapter | Add-Member -MemberType ScriptMethod -Name Invoke -Value {
         param($slot,$activity,$signal,$plan,$itemSignal)
         $result = [Signal]::Start("FamilyRouting.$slot") | Select-Object -Last 1
-        if ($activity -eq 'Fail') { $result.LogCritical('Expected provider failure.') | Out-Null }
+        if ($plan.Fail) { $result.LogCritical('Expected provider failure.') | Out-Null }
         else { $result.SetResult([pscustomobject]@{ Kind=$this.Kind; Slot=$slot; Activity=$activity; Plan=$plan; Item=$itemSignal }) | Out-Null }
         return $result
     }
     $registration = Register-AdapterToMappedSlot -ConductorJacketSignal $conductor.Signal -Signal $run -ConductionContext $conductor.Signal -Adapter $adapter | Select-Object -Last 1
     Assert (-not $registration.Failure()) "$family registration failed."
-    $plan = [pscustomobject]@{ Adapter="$family.Probe$family"; Activity='Probe' }
+    $plan = [pscustomobject]@{ Adapter="$family.Probe$family"; Activity=$familyActivities[$family]; Fail=$false }
     $invoked = Invoke-MappedAdapter -Adapter $plan.Adapter -Activity $plan.Activity -Signal $run -Plan $plan -ItemSignal $item | Select-Object -Last 1
     Assert (-not $invoked.Failure() -and $invoked.HasResult()) "$family route failed."
     $result = $invoked.GetResult()
-    Assert ($result.Kind -ceq $family -and $result.Slot -ceq "Probe$family" -and $result.Activity -ceq 'Probe' -and [object]::ReferenceEquals($result.Plan,$plan) -and [object]::ReferenceEquals($result.Item,$item)) "$family payload crossed family or changed."
-    $failed = Invoke-MappedAdapter -Adapter $plan.Adapter -Activity 'Fail' -Signal $run -Plan $plan -ItemSignal $item | Select-Object -Last 1
+    Assert ($result.Kind -ceq $family -and $result.Slot -ceq "Probe$family" -and $result.Activity -ceq $plan.Activity -and [object]::ReferenceEquals($result.Plan,$plan) -and [object]::ReferenceEquals($result.Item,$item)) "$family payload crossed family or changed."
+    $plan.Fail = $true
+    $failed = Invoke-MappedAdapter -Adapter $plan.Adapter -Activity $plan.Activity -Signal $run -Plan $plan -ItemSignal $item | Select-Object -Last 1
     Assert ($failed.Failure()) "$family provider failure was lost."
 }
 foreach ($old in @('Network.ProbeIntelligence','Network.ProbeSatellite','Telemetry.ProbeSatellite')) {
-    $route = Invoke-MappedAdapter -Adapter $old -Activity 'Probe' -Signal $run -Plan ([pscustomobject]@{}) -ItemSignal $item | Select-Object -Last 1
+    $route = Invoke-MappedAdapter -Adapter $old -Activity 'SendMessage' -Signal $run -Plan ([pscustomobject]@{}) -ItemSignal $item | Select-Object -Last 1
     Assert ($route.Failure()) "Old or cross-family route $old succeeded."
 }
 $missingTelemetry = Invoke-Telemetry -Signal $run -ItemSignal $item | Select-Object -Last 1
@@ -83,14 +85,14 @@ foreach ($family in @('Intelligence','Satellite')) {
     $registration = Register-AdapterToMappedSlot -ConductorJacketSignal $conductor.Signal -Signal $run -ConductionContext $conductor.Signal -Adapter $jacket -Lazy | Select-Object -Last 1
     Assert (-not $registration.Failure()) "$family lazy registration failed."
     Assert (-not $global:FamilyLazyResolutionCount.ContainsKey($family)) "$family resolved during registration."
-    $plan = [pscustomobject]@{ Adapter="$family.$slot"; Activity='Probe' }
+    $plan = [pscustomobject]@{ Adapter="$family.$slot"; Activity=$familyActivities[$family] }
     $first = Invoke-MappedAdapter -Adapter $plan.Adapter -Activity $plan.Activity -Signal $run -Plan $plan -ItemSignal $item | Select-Object -Last 1
     Assert (-not $first.Failure() -and $first.HasResult() -and $global:FamilyLazyResolutionCount[$family] -eq 1) "$family did not resolve exactly once on first use."
     $firstResult = $first.GetResult()
-    Assert ($firstResult.Kind -ceq $family -and $firstResult.Slot -ceq $slot -and $firstResult.Activity -ceq 'Probe' -and [object]::ReferenceEquals($firstResult.Signal,$run) -and [object]::ReferenceEquals($firstResult.Plan,$plan) -and [object]::ReferenceEquals($firstResult.Item,$item)) "$family lazy invocation lost five-argument identity."
+    Assert ($firstResult.Kind -ceq $family -and $firstResult.Slot -ceq $slot -and $firstResult.Activity -ceq $plan.Activity -and [object]::ReferenceEquals($firstResult.Signal,$run) -and [object]::ReferenceEquals($firstResult.Plan,$plan) -and [object]::ReferenceEquals($firstResult.Item,$item)) "$family lazy invocation lost five-argument identity."
     $second = Invoke-MappedAdapter -Adapter $plan.Adapter -Activity $plan.Activity -Signal $run -Plan $plan -ItemSignal $item | Select-Object -Last 1
     Assert (-not $second.Failure() -and $global:FamilyLazyResolutionCount[$family] -eq 1 -and $second.GetResult().Id -ceq $firstResult.Id) "$family lazy cached reuse failed."
-    $cross = Invoke-MappedAdapter -Adapter "Network.$slot" -Activity 'Probe' -Signal $run -Plan $plan -ItemSignal $item | Select-Object -Last 1
+    $cross = Invoke-MappedAdapter -Adapter "Network.$slot" -Activity 'SendMessage' -Signal $run -Plan $plan -ItemSignal $item | Select-Object -Last 1
     Assert ($cross.Failure()) "$family lazy slot resolved through Network."
 }
 Write-Output 'PASS: Intelligence and Satellite lazy first use, cached reuse, payload identity and isolation.'

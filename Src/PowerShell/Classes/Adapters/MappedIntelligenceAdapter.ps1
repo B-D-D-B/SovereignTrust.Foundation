@@ -1,11 +1,16 @@
 <#
 Class: MappedIntelligenceAdapter
 Purpose: Route an intelligence slot through Invoke-MappedAdapterCore.
-Activities: Provider-defined; the wrapper forwards Activity.
-- CodexCLI: SendMessage (execute a prompt), HandleMessage (resolve and
-  optionally format a message).
-- AzureFoundry: SendMessage (submit a message), SendMessageOriginal
-  (submit the original message with optional formatting).
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- SendMessage: Send a request to an intelligence service.
+- SendMessageOriginal: Send the original message without prior transformation.
+- HandleMessage: Resolve and optionally format a message.
+ActivityValidation: OnInvoke, BeforeProviderResolution
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+ActivityForwarding: Canonical
 #>
 
 class MappedIntelligenceAdapter {
@@ -70,6 +75,15 @@ class MappedIntelligenceAdapter {
 
     [Signal] Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
         $opSignal = [Signal]::Start("MappedIntelligenceAdapter.Invoke:$Slot") | Select-Object -Last 1
+
+        $allowedActivities = @('SendMessage', 'SendMessageOriginal', 'HandleMessage')
+        if ($Activity -notin $allowedActivities) {
+            $opSignal.LogCritical("Unsupported MappedIntelligenceAdapter activity: '$Activity'.")
+            return $opSignal
+        }
+        foreach ($allowedActivity in $allowedActivities) {
+            if ($Activity -eq $allowedActivity) { $Activity = $allowedActivity; break }
+        }
 
         $resultSignal = Invoke-MappedAdapterCore -MappedAdapterSignal $this.Signal -ConductionSignal $ConductionSignal -Slot $Slot -Activity $Activity -Plan $Plan -ItemSignal $ItemSignal | Select-Object -Last 1
 

@@ -1,8 +1,15 @@
 <#
 Class: MappedConductionAdapter
 Purpose: Route a conduction slot through Invoke-MappedAdapterCore.
-Activities: Provider-defined; Activity passes to the selected service.
-The ST provider forwards Activity without a fixed activity list.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Invoke: Execute a conduction plan.
+- Run: Run a conduction plan.
+- ST: Execute a SovereignTrust conduction plan.
+ActivityValidation: OnInvoke, BeforeProviderResolution
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
 #>
 
 class MappedConductionAdapter {
@@ -66,6 +73,11 @@ class MappedConductionAdapter {
 
     [Signal] Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
         $opSignal = [Signal]::Start("MappedConductionAdapter.Invoke:$Slot") | Select-Object -Last 1
+
+        if ($Activity -notin @('Invoke', 'Run', 'ST')) {
+            $opSignal.LogCritical("Unsupported MappedConductionAdapter activity: '$Activity'.")
+            return $opSignal
+        }
 
         $resultSignal = Invoke-MappedAdapterCore -MappedAdapterSignal $this.Signal -ConductionSignal $ConductionSignal -Slot $Slot -Activity $Activity -Plan $Plan -ItemSignal $ItemSignal | Select-Object -Last 1
 

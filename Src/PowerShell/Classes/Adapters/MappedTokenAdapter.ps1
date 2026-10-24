@@ -1,10 +1,14 @@
 <#
 Class: MappedTokenAdapter
 Purpose: Resolve tokens through selected providers or invoke methods by name.
-Activities: Provider-defined; the five-argument Invoke forwards Activity.
-- Get: used by the mapped-token utility to retrieve a token.
-Invoke(Path) and InvokeAdapterMethod(MethodName, Args) are separate entry
-points, not Activity values.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Get: Resolve a token value from a path.
+ActivityValidation: OnInvoke, BeforeProviderResolution
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+The path and method Invoke overloads have no Activity parameter.
 #>
 
 class MappedTokenAdapter {
@@ -73,6 +77,11 @@ class MappedTokenAdapter {
 
     [Signal] Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
         $opSignal = [Signal]::Start("MappedTokenAdapter.Invoke") | Select-Object -Last 1
+
+        if ($Activity -notin @('Get','Read')) {
+            $opSignal.LogCritical("Unsupported MappedTokenAdapter activity: '$Activity'.")
+            return $opSignal
+        }
 
         try {
             $Path = $Plan.Path

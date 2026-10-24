@@ -1,0 +1,993 @@
+{
+  "mappedAdapter": "MappedQueueAdapter",
+  "condenser": null,
+  "activities": [
+    {
+      "mappedAdapter": "MappedQueueAdapter",
+      "condenser": null,
+      "name": "PeekBatch",
+      "description": "Read messages using provider visibility behavior.",
+      "coverage": [
+        {
+          "adapter": "Queue_AzureStorageQueue",
+          "status": "reads",
+          "notes": "Concrete has this activity branch; PeekBatch forwards original Plan into ReadBatch, inheriting its visibility behavior and reads. HandleMessage can parse fallback Config.MessageText, but decoded payload fields are generated data, not incoming Plan children. Signal/jacket addresses, messages, service responses and recursive other-adapter reads are excluded.",
+          "references": [
+            {
+              "sourceId": "queue-mapped",
+              "lines": [
+                78,
+                81,
+                86
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "Queue_AzureStorageQueue",
+              "lines": [
+                245,
+                255,
+                262,
+                269,
+                281,
+                287,
+                288,
+                292,
+                505,
+                562,
+                614,
+                663,
+                667,
+                683,
+                686,
+                687
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract queue request configuration and warn when absent.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    269,
+                    270,
+                    272,
+                    276
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "Concrete has a ConductionSignal and nonempty activity; shared before branch dispatch."
+            }
+          ]
+        },
+        {
+          "path": "Config.PeekDepth",
+          "description": "Choose how many messages to read.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    287,
+                    288,
+                    505,
+                    506,
+                    507,
+                    510
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "ReadBatch reached directly or through PeekBatch."
+            }
+          ],
+          "default": {
+            "Queue_AzureStorageQueue": 1
+          }
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context while cloning the queue request.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    514
+                  ]
+                },
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    13
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "Queue PeekBatch branch reaches cloning after relevant input validation; PeekBatch delegates to ReadBatch."
+            }
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context while cloning the queue request.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    514
+                  ]
+                },
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    13
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "Queue PeekBatch branch reaches cloning after relevant input validation; PeekBatch delegates to ReadBatch."
+            }
+          ]
+        },
+        {
+          "path": "Visibilitytimeout",
+          "description": "Set the queue read visibility timeout.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    288,
+                    508,
+                    509,
+                    510,
+                    515
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "ReadBatch reached directly or through PeekBatch; property is top-level, not Config.Visibilitytimeout."
+            }
+          ],
+          "default": {
+            "Queue_AzureStorageQueue": 10
+          }
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedQueueAdapter",
+      "condenser": null,
+      "name": "HandleMessage",
+      "description": "Process a message.",
+      "coverage": [
+        {
+          "adapter": "Queue_AzureStorageQueue",
+          "status": "reads",
+          "notes": "Concrete has this activity branch; PeekBatch forwards original Plan into ReadBatch, inheriting its visibility behavior and reads. HandleMessage can parse fallback Config.MessageText, but decoded payload fields are generated data, not incoming Plan children. Signal/jacket addresses, messages, service responses and recursive other-adapter reads are excluded.",
+          "references": [
+            {
+              "sourceId": "queue-mapped",
+              "lines": [
+                78,
+                81,
+                86
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "Queue_AzureStorageQueue",
+              "lines": [
+                245,
+                255,
+                262,
+                269,
+                281,
+                287,
+                288,
+                292,
+                505,
+                562,
+                614,
+                663,
+                667,
+                683,
+                686,
+                687
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract queue request configuration and warn when absent.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    269,
+                    270,
+                    272,
+                    276
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "Concrete has a ConductionSignal and nonempty activity; shared before branch dispatch."
+            }
+          ]
+        },
+        {
+          "path": "Config.MessageText",
+          "description": "Use configured message text when the item jacket has none.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    293,
+                    294,
+                    295,
+                    297,
+                    301,
+                    302,
+                    308
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "ItemSignal message text is missing or whitespace; fallback resolver has explicit null default."
+            }
+          ],
+          "default": {
+            "Queue_AzureStorageQueue": null
+          }
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedQueueAdapter",
+      "condenser": null,
+      "name": "ReadBatch",
+      "description": "Read a batch of messages.",
+      "coverage": [
+        {
+          "adapter": "Queue_AzureStorageQueue",
+          "status": "reads",
+          "notes": "Concrete has this activity branch; PeekBatch forwards original Plan into ReadBatch, inheriting its visibility behavior and reads. HandleMessage can parse fallback Config.MessageText, but decoded payload fields are generated data, not incoming Plan children. Signal/jacket addresses, messages, service responses and recursive other-adapter reads are excluded.",
+          "references": [
+            {
+              "sourceId": "queue-mapped",
+              "lines": [
+                78,
+                81,
+                86
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "Queue_AzureStorageQueue",
+              "lines": [
+                245,
+                255,
+                262,
+                269,
+                281,
+                287,
+                288,
+                292,
+                505,
+                562,
+                614,
+                663,
+                667,
+                683,
+                686,
+                687
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract queue request configuration and warn when absent.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    269,
+                    270,
+                    272,
+                    276
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "Concrete has a ConductionSignal and nonempty activity; shared before branch dispatch."
+            }
+          ]
+        },
+        {
+          "path": "Config.PeekDepth",
+          "description": "Choose how many messages to read.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    287,
+                    288,
+                    505,
+                    506,
+                    507,
+                    510
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "ReadBatch reached directly or through PeekBatch."
+            }
+          ],
+          "default": {
+            "Queue_AzureStorageQueue": 1
+          }
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context while cloning the queue request.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    514
+                  ]
+                },
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    13
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "Queue ReadBatch branch reaches cloning after relevant input validation; PeekBatch delegates to ReadBatch."
+            }
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context while cloning the queue request.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    514
+                  ]
+                },
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    13
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "Queue ReadBatch branch reaches cloning after relevant input validation; PeekBatch delegates to ReadBatch."
+            }
+          ]
+        },
+        {
+          "path": "Visibilitytimeout",
+          "description": "Set the queue read visibility timeout.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    288,
+                    508,
+                    509,
+                    510,
+                    515
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "ReadBatch reached directly or through PeekBatch; property is top-level, not Config.Visibilitytimeout."
+            }
+          ],
+          "default": {
+            "Queue_AzureStorageQueue": 10
+          }
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedQueueAdapter",
+      "condenser": null,
+      "name": "WriteItem",
+      "description": "Enqueue an item.",
+      "coverage": [
+        {
+          "adapter": "Queue_AzureStorageQueue",
+          "status": "reads",
+          "notes": "Concrete has this activity branch; PeekBatch forwards original Plan into ReadBatch, inheriting its visibility behavior and reads. HandleMessage can parse fallback Config.MessageText, but decoded payload fields are generated data, not incoming Plan children. Signal/jacket addresses, messages, service responses and recursive other-adapter reads are excluded.",
+          "references": [
+            {
+              "sourceId": "queue-mapped",
+              "lines": [
+                78,
+                81,
+                86
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "Queue_AzureStorageQueue",
+              "lines": [
+                245,
+                255,
+                262,
+                269,
+                281,
+                287,
+                288,
+                292,
+                505,
+                562,
+                614,
+                663,
+                667,
+                683,
+                686,
+                687
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract queue request configuration and warn when absent.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    269,
+                    270,
+                    272,
+                    276
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "Concrete has a ConductionSignal and nonempty activity; shared before branch dispatch."
+            }
+          ]
+        },
+        {
+          "path": "Config.MessageText",
+          "description": "Serialize and enqueue the supplied message text or object.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    563,
+                    564,
+                    565,
+                    566,
+                    568,
+                    575
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "WriteItem branch; no resolver -Default supplied. Serialized object descendants are not independently read here."
+            }
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context while cloning the queue request.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    577
+                  ]
+                },
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    13
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "Queue WriteItem branch reaches cloning after relevant input validation; PeekBatch delegates to ReadBatch."
+            }
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context while cloning the queue request.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    577
+                  ]
+                },
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    13
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "Queue WriteItem branch reaches cloning after relevant input validation; PeekBatch delegates to ReadBatch."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedQueueAdapter",
+      "condenser": null,
+      "name": "AckItem",
+      "description": "Acknowledge an item.",
+      "coverage": [
+        {
+          "adapter": "Queue_AzureStorageQueue",
+          "status": "reads",
+          "notes": "Concrete has this activity branch; PeekBatch forwards original Plan into ReadBatch, inheriting its visibility behavior and reads. HandleMessage can parse fallback Config.MessageText, but decoded payload fields are generated data, not incoming Plan children. Signal/jacket addresses, messages, service responses and recursive other-adapter reads are excluded.",
+          "references": [
+            {
+              "sourceId": "queue-mapped",
+              "lines": [
+                78,
+                81,
+                86
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "Queue_AzureStorageQueue",
+              "lines": [
+                245,
+                255,
+                262,
+                269,
+                281,
+                287,
+                288,
+                292,
+                505,
+                562,
+                614,
+                663,
+                667,
+                683,
+                686,
+                687
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract queue request configuration and warn when absent.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    269,
+                    270,
+                    272,
+                    276
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "Concrete has a ConductionSignal and nonempty activity; shared before branch dispatch."
+            }
+          ]
+        },
+        {
+          "path": "Config.MessageId",
+          "description": "Identify the queue message MessageId for acknowledgement.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    618,
+                    620,
+                    621,
+                    623,
+                    624,
+                    627,
+                    628,
+                    629
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "AckItem reads Config first, then falls back to ItemSignal when no result; fallback signal fields are excluded."
+            }
+          ]
+        },
+        {
+          "path": "Config.PopReceipt",
+          "description": "Identify the queue message PopReceipt for acknowledgement.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    619,
+                    620,
+                    621,
+                    623,
+                    624,
+                    627,
+                    628,
+                    629
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "AckItem reads Config first, then falls back to ItemSignal when no result; fallback signal fields are excluded."
+            }
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context while cloning the queue request.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    638
+                  ]
+                },
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    13
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "Queue AckItem branch reaches cloning after relevant input validation; PeekBatch delegates to ReadBatch."
+            }
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context while cloning the queue request.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    638
+                  ]
+                },
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    13
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "Queue AckItem branch reaches cloning after relevant input validation; PeekBatch delegates to ReadBatch."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedQueueAdapter",
+      "condenser": null,
+      "name": "DeferItem",
+      "description": "Defer an item; the current provider branch is unfinished.",
+      "coverage": [
+        {
+          "adapter": "Queue_AzureStorageQueue",
+          "status": "reserved-no-op",
+          "notes": "Unfinished/reserved DeferItem performs shared Config and Visibilitytimeout reads, then returns an unresolved signal; the actual update call is commented out. It is not zero-read or an implemented defer operation.",
+          "references": [
+            {
+              "sourceId": "queue-mapped",
+              "lines": [
+                78,
+                81,
+                86
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "Queue_AzureStorageQueue",
+              "lines": [
+                245,
+                255,
+                262,
+                269,
+                281,
+                287,
+                288,
+                292,
+                505,
+                562,
+                614,
+                663,
+                667,
+                683,
+                686,
+                687
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract queue request configuration and warn when absent.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    269,
+                    270,
+                    272,
+                    276
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "Concrete has a ConductionSignal and nonempty activity; shared before branch dispatch."
+            }
+          ]
+        },
+        {
+          "path": "Visibilitytimeout",
+          "description": "Read the intended defer visibility timeout in the unfinished branch.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "evidence": [
+            {
+              "adapter": "Queue_AzureStorageQueue",
+              "references": [
+                {
+                  "sourceId": "Queue_AzureStorageQueue",
+                  "lines": [
+                    663,
+                    667,
+                    668,
+                    670,
+                    683,
+                    686
+                  ]
+                }
+              ],
+              "trace": "Mapped core forwards incoming Plan unchanged. Concrete reads original fields or calls Resolve-ClonePlan with that Plan; locally constructed REST/Session/Conduction plans and parsed message payloads are excluded.",
+              "conditional": true,
+              "condition": "DeferItem branch reaches resolver; no update is implemented."
+            }
+          ],
+          "default": {
+            "Queue_AzureStorageQueue": 30
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,3 +1,14 @@
+<#
+Class: Token_Memory
+Purpose: Resolve memory token values.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Get: Resolve a token value from the requested path.
+ActivityValidation: OnInvoke, BeforeDispatch
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+#>
 class Token_Memory {
     [Signal]$Signal
     [Conductor]$Conductor
@@ -35,6 +46,11 @@ class Token_Memory {
 
     [Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
         $opSignal = [Signal]::Start("Token_Memory.Invoke") | Select-Object -Last 1
+
+        if ($Activity -notin @('Get')) {
+            $opSignal.LogCritical("Unsupported Token_Memory activity: '$Activity'.")
+            return $opSignal
+        }
 
         try {
             $Path = $Plan.Path

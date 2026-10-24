@@ -8,6 +8,24 @@
 # flows, Rest graph processing, and context-sensitive publishing.
 # =============================================================================
 
+<#
+Class: RestCondenser
+Purpose: Perform rest condenser operations.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Get: Identify a REST retrieval operation.
+- Head: Identify a REST metadata request.
+- Post: Identify a REST creation or submission operation.
+- Put: Identify a REST replacement operation.
+- Patch: Identify a REST partial update operation.
+- Delete: Identify a REST deletion operation.
+- Options: Identify a REST capability request.
+ActivityDispatchNote: Plan.Config.Method selects the actual HTTP method.
+ActivityValidation: OnInvoke, BeforeDispatch
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+#>
 class RestCondenser {
     [Conductor]$Conductor
     [MappedCondenserAdapter]$MappedCondenserAdapter
@@ -33,6 +51,11 @@ class RestCondenser {
         [Signal]$ItemSignal
     ) {
         $opSignal = [Signal]::Start("RestCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
+
+        if ($Activity -notin @('Get', 'Head', 'Post', 'Put', 'Patch', 'Delete', 'Options')) {
+            $opSignal.LogCritical("Unsupported RestCondenser activity: '$Activity'.")
+            return $opSignal
+        }
 
         $skipBearerTokenSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.SkipBearerToken" -Default $false | Select-Object -Last 1
 

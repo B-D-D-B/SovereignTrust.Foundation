@@ -1,0 +1,227 @@
+{
+  "name": "MappedQueueAdapter",
+  "activities": [
+    {
+      "name": "PeekBatch",
+      "description": "Read messages using provider visibility behavior.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract queue request configuration and warn when absent.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "Config.PeekDepth",
+          "description": "Choose how many messages to read.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "default": {
+            "Queue_AzureStorageQueue": 1
+          }
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context while cloning the queue request.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context while cloning the queue request.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "Visibilitytimeout",
+          "description": "Set the queue read visibility timeout.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "default": {
+            "Queue_AzureStorageQueue": 10
+          }
+        }
+      ]
+    },
+    {
+      "name": "HandleMessage",
+      "description": "Process a message.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract queue request configuration and warn when absent.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "Config.MessageText",
+          "description": "Use configured message text when the item jacket has none.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "default": {
+            "Queue_AzureStorageQueue": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "ReadBatch",
+      "description": "Read a batch of messages.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract queue request configuration and warn when absent.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "Config.PeekDepth",
+          "description": "Choose how many messages to read.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "default": {
+            "Queue_AzureStorageQueue": 1
+          }
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context while cloning the queue request.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context while cloning the queue request.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "Visibilitytimeout",
+          "description": "Set the queue read visibility timeout.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "default": {
+            "Queue_AzureStorageQueue": 10
+          }
+        }
+      ]
+    },
+    {
+      "name": "WriteItem",
+      "description": "Enqueue an item.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract queue request configuration and warn when absent.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "Config.MessageText",
+          "description": "Serialize and enqueue the supplied message text or object.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context while cloning the queue request.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context while cloning the queue request.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AckItem",
+      "description": "Acknowledge an item.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract queue request configuration and warn when absent.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "Config.MessageId",
+          "description": "Identify the queue message MessageId for acknowledgement.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "Config.PopReceipt",
+          "description": "Identify the queue message PopReceipt for acknowledgement.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context while cloning the queue request.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context while cloning the queue request.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DeferItem",
+      "description": "Defer an item; the current provider branch is unfinished.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract queue request configuration and warn when absent.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "Visibilitytimeout",
+          "description": "Read the intended defer visibility timeout in the unfinished branch.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ],
+          "default": {
+            "Queue_AzureStorageQueue": 30
+          }
+        }
+      ]
+    }
+  ],
+  "concreteAdapters": [
+    {
+      "name": "Queue_AzureStorageQueue",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Queue/AzureStorageQueue/PowerShell/Queue_AzureStorageQueue.psm1"
+    }
+  ]
+}

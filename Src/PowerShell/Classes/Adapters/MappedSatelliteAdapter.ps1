@@ -1,11 +1,17 @@
 <#
 Class: MappedSatelliteAdapter
 Purpose: Route a satellite slot through Invoke-MappedAdapterCore.
-Activities: Provider-defined; the wrapper forwards Activity.
-- AzureApplicationInsights: EmitEntries and EmitSignal (resolve configured
-  plan tokens and run an emission conduction plan), SendMessage (post a
-  telemetry message through REST), EmitSignalFull (mark entries Skip only;
-  it does not dispatch an emission plan).
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- EmitEntries: Emit telemetry entries and forward the stored { ItemsReceived, ItemsAccepted, Result } outcome, including on failure.
+- EmitSignal: Emit a signal and forward the stored { ItemsReceived, ItemsAccepted, Result } outcome, including on failure.
+- SendMessage: Count outbound JSON envelopes on the item graph, post the unchanged body, and return the raw REST receipt.
+- HandleResponse: Provider-free normalization of Config.RawResponse and Config.ItemsSent into { ItemsReceived, ItemsAccepted, Result }; Result is exactly ItemsAccepted == ItemsSent regardless of errors. Store at Config.HandledResultKey before LogCritical per error; a count match with errors retains Result true in a failed Signal.
+- EmitSignalFull: Mark entries to skip; the current branch does not emit them.
+ActivityValidation: OnInvoke, BeforeProviderResolution
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
 #>
 
 class MappedSatelliteAdapter {
@@ -71,15 +77,19 @@ class MappedSatelliteAdapter {
     [Signal] Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
         $opSignal = [Signal]::Start("MappedSatelliteAdapter.Invoke:$Slot") | Select-Object -Last 1
 
-        $resultSignal = Invoke-MappedAdapterCore -MappedAdapterSignal $this.Signal -ConductionSignal $ConductionSignal -Slot $Slot -Activity $Activity -Plan $Plan -ItemSignal $ItemSignal | Select-Object -Last 1
-
-        if ($opSignal.MergeSignalAndVerifyFailure($resultSignal)) {
+        if ($Activity -notin @('EmitEntries', 'EmitSignal', 'SendMessage', 'HandleResponse', 'EmitSignalFull')) {
+            $opSignal.LogCritical("Unsupported MappedSatelliteAdapter activity: '$Activity'.")
             return $opSignal
         }
 
+        $resultSignal = Invoke-MappedAdapterCore -MappedAdapterSignal $this.Signal -ConductionSignal $ConductionSignal -Slot $Slot -Activity $Activity -Plan $Plan -ItemSignal $ItemSignal | Select-Object -Last 1
+
+        $failed = $opSignal.MergeSignalAndVerifyFailure($resultSignal)
         if ($resultSignal.HasResult()) {
             $opSignal.SetResult($resultSignal.GetResult($true))
         }
+
+        if ($failed) { return $opSignal }
 
         return $opSignal
     }

@@ -21,6 +21,17 @@
 # • Temporal Recursion: ✅
 # =============================================================================
 
+<#
+Class: MergeCondenser
+Purpose: Perform merge condenser operations.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Merge: Merge base and overlay content.
+ActivityValidation: OnInvoke, BeforeDispatch
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+#>
 class MergeCondenser {
     [Conductor]$Conductor
     [MappedCondenserAdapter]$MappedCondenserAdapter
@@ -44,7 +55,12 @@ class MergeCondenser {
     [object]$Plan,
     [Signal]$ItemSignal
 ) {
-    $opSignal = [Signal]::Start("MemoryCondenser.Invoke:Transform.Merge", $ItemSignal) | Select-Object -Last 1
+        $opSignal = [Signal]::Start("MemoryCondenser.Invoke:Transform.Merge", $ItemSignal) | Select-Object -Last 1
+
+        if ($Activity -notin @('Merge')) {
+            $opSignal.LogCritical("Unsupported MergeCondenser activity: '$Activity'.")
+            return $opSignal
+        }
 
     try {
         # ---- Resolve plan options (with sane defaults) ----

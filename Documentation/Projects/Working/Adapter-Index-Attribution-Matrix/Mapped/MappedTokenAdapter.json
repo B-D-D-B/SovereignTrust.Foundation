@@ -1,0 +1,2624 @@
+{
+  "mappedAdapter": "MappedTokenAdapter",
+  "condenser": null,
+  "activities": [
+    {
+      "mappedAdapter": "MappedTokenAdapter",
+      "condenser": null,
+      "name": "Get",
+      "description": "Resolve a token value from a path.",
+      "coverage": [
+        {
+          "adapter": "Token_Conduction",
+          "status": "reads",
+          "notes": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties. All Get pairs have shared mapped reads; no pair is zero-read or reserved-no-op. Concrete validates Get and reads constructed Path. Its local helper accepts Plan but reads no Plan properties; operation text comes from the derived Path parameter.",
+          "references": [
+            {
+              "sourceId": "token-mapped",
+              "lines": [
+                78,
+                81,
+                87,
+                89
+              ]
+            },
+            {
+              "sourceId": "token-dispatch",
+              "lines": [
+                31,
+                38,
+                39,
+                91,
+                95,
+                98,
+                101
+              ]
+            },
+            {
+              "sourceId": "Token_Conduction",
+              "lines": [
+                47,
+                50,
+                56,
+                57
+              ]
+            },
+            {
+              "sourceId": "token-Conduction",
+              "lines": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "adapter": "Token_Dynamic",
+          "status": "reads",
+          "notes": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties. All Get pairs have shared mapped reads; no pair is zero-read or reserved-no-op. Concrete validates Get and reads constructed Path. Helper Key fallback is unreachable on mapped success because constructed Path is nonempty; nested reference dispatch copies Config but creates its own Path. Other adapter internals are opaque.",
+          "references": [
+            {
+              "sourceId": "token-mapped",
+              "lines": [
+                78,
+                81,
+                87,
+                89
+              ]
+            },
+            {
+              "sourceId": "token-dispatch",
+              "lines": [
+                31,
+                38,
+                39,
+                91,
+                95,
+                98,
+                101
+              ]
+            },
+            {
+              "sourceId": "Token_Dynamic",
+              "lines": [
+                47,
+                50,
+                56,
+                57
+              ]
+            },
+            {
+              "sourceId": "token-Dynamic",
+              "lines": [
+                1
+              ]
+            },
+            {
+              "sourceId": "token-Dynamic",
+              "lines": [
+                25,
+                26,
+                27,
+                40,
+                45
+              ]
+            },
+            {
+              "sourceId": "dynamic-resolve",
+              "lines": [
+                293,
+                297,
+                298,
+                301,
+                305,
+                306
+              ]
+            }
+          ]
+        },
+        {
+          "adapter": "Token_Environment",
+          "status": "reads",
+          "notes": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties. All Get pairs have shared mapped reads; no pair is zero-read or reserved-no-op. Concrete validates Get and reads constructed Path. Its local helper accepts Plan but reads no Plan properties; operation text comes from the derived Path parameter.",
+          "references": [
+            {
+              "sourceId": "token-mapped",
+              "lines": [
+                78,
+                81,
+                87,
+                89
+              ]
+            },
+            {
+              "sourceId": "token-dispatch",
+              "lines": [
+                31,
+                38,
+                39,
+                91,
+                95,
+                98,
+                101
+              ]
+            },
+            {
+              "sourceId": "Token_Environment",
+              "lines": [
+                47,
+                50,
+                56,
+                57
+              ]
+            },
+            {
+              "sourceId": "token-Environment",
+              "lines": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "adapter": "Token_Formatter",
+          "status": "reads",
+          "notes": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties. All Get pairs have shared mapped reads; no pair is zero-read or reserved-no-op. Concrete validates Get and reads constructed Path. Available Formatter subhandlers use Path and do not read Plan children.",
+          "references": [
+            {
+              "sourceId": "token-mapped",
+              "lines": [
+                78,
+                81,
+                87,
+                89
+              ]
+            },
+            {
+              "sourceId": "token-dispatch",
+              "lines": [
+                31,
+                38,
+                39,
+                91,
+                95,
+                98,
+                101
+              ]
+            },
+            {
+              "sourceId": "Token_Formatter",
+              "lines": [
+                47,
+                50,
+                56,
+                57
+              ]
+            },
+            {
+              "sourceId": "token-Formatter",
+              "lines": [
+                1
+              ]
+            },
+            {
+              "sourceId": "token-Formatter",
+              "lines": [
+                29,
+                30,
+                32,
+                38
+              ]
+            },
+            {
+              "sourceId": "token-FormatterFilePath",
+              "lines": [
+                1,
+                4,
+                11
+              ]
+            },
+            {
+              "sourceId": "token-FormatterJson",
+              "lines": [
+                1,
+                4,
+                11
+              ]
+            },
+            {
+              "sourceId": "token-FormatterString",
+              "lines": [
+                1,
+                4,
+                11
+              ]
+            },
+            {
+              "sourceId": "token-FormatterVirtualFolder",
+              "lines": [
+                1,
+                4,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "adapter": "Token_Generator",
+          "status": "reads",
+          "notes": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties. All Get pairs have shared mapped reads; no pair is zero-read or reserved-no-op. Concrete validates Get and reads constructed Path. Its local helper accepts Plan but reads no Plan properties; operation text comes from the derived Path parameter.",
+          "references": [
+            {
+              "sourceId": "token-mapped",
+              "lines": [
+                78,
+                81,
+                87,
+                89
+              ]
+            },
+            {
+              "sourceId": "token-dispatch",
+              "lines": [
+                31,
+                38,
+                39,
+                91,
+                95,
+                98,
+                101
+              ]
+            },
+            {
+              "sourceId": "Token_Generator",
+              "lines": [
+                47,
+                50,
+                56,
+                57
+              ]
+            },
+            {
+              "sourceId": "token-Generator",
+              "lines": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "adapter": "Token_Memory",
+          "status": "reads",
+          "notes": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties. All Get pairs have shared mapped reads; no pair is zero-read or reserved-no-op. Concrete validates Get and reads constructed Path. Dynamic plan-scope lookup is separately inventoried only for original forwarded Config descendants; other dictionary scopes are Signal-rooted.",
+          "references": [
+            {
+              "sourceId": "token-mapped",
+              "lines": [
+                78,
+                81,
+                87,
+                89
+              ]
+            },
+            {
+              "sourceId": "token-dispatch",
+              "lines": [
+                31,
+                38,
+                39,
+                91,
+                95,
+                98,
+                101
+              ]
+            },
+            {
+              "sourceId": "Token_Memory",
+              "lines": [
+                47,
+                50,
+                56,
+                57
+              ]
+            },
+            {
+              "sourceId": "token-Memory",
+              "lines": [
+                1
+              ]
+            },
+            {
+              "sourceId": "token-Memory",
+              "lines": [
+                26,
+                33,
+                43,
+                50,
+                54,
+                61,
+                69,
+                131,
+                132,
+                167
+              ]
+            }
+          ]
+        },
+        {
+          "adapter": "Token_Navigator",
+          "status": "reads",
+          "notes": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties. All Get pairs have shared mapped reads; no pair is zero-read or reserved-no-op. Concrete validates Get and reads constructed Path. Both local definitions named Invoke-TokenNavigator inspect Path only; neither reads Plan properties.",
+          "references": [
+            {
+              "sourceId": "token-mapped",
+              "lines": [
+                78,
+                81,
+                87,
+                89
+              ]
+            },
+            {
+              "sourceId": "token-dispatch",
+              "lines": [
+                31,
+                38,
+                39,
+                91,
+                95,
+                98,
+                101
+              ]
+            },
+            {
+              "sourceId": "Token_Navigator",
+              "lines": [
+                47,
+                50,
+                56,
+                57
+              ]
+            },
+            {
+              "sourceId": "token-Navigator",
+              "lines": [
+                1
+              ]
+            },
+            {
+              "sourceId": "token-XmlNavigator",
+              "lines": [
+                1,
+                7,
+                22
+              ]
+            }
+          ]
+        },
+        {
+          "adapter": "Token_Storage",
+          "status": "reads",
+          "notes": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties. All Get pairs have shared mapped reads; no pair is zero-read or reserved-no-op. Concrete validates Get and reads constructed Path. Config.VirtualPath may be locally assigned from derived Path. Subsequent mapped-adapter dispatch is opaque, not recursive property inventory.",
+          "references": [
+            {
+              "sourceId": "token-mapped",
+              "lines": [
+                78,
+                81,
+                87,
+                89
+              ]
+            },
+            {
+              "sourceId": "token-dispatch",
+              "lines": [
+                31,
+                38,
+                39,
+                91,
+                95,
+                98,
+                101
+              ]
+            },
+            {
+              "sourceId": "Token_Storage",
+              "lines": [
+                47,
+                50,
+                56,
+                57
+              ]
+            },
+            {
+              "sourceId": "token-Storage",
+              "lines": [
+                1
+              ]
+            },
+            {
+              "sourceId": "Token_Storage",
+              "lines": [
+                59,
+                64,
+                67
+              ]
+            },
+            {
+              "sourceId": "token-Storage",
+              "lines": [
+                24,
+                25,
+                39,
+                43,
+                51
+              ]
+            }
+          ]
+        },
+        {
+          "adapter": "Token_System",
+          "status": "reads",
+          "notes": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties. All Get pairs have shared mapped reads; no pair is zero-read or reserved-no-op. Concrete validates Get and reads constructed Path. Its local helper accepts Plan but reads no Plan properties; operation text comes from the derived Path parameter.",
+          "references": [
+            {
+              "sourceId": "token-mapped",
+              "lines": [
+                78,
+                81,
+                87,
+                89
+              ]
+            },
+            {
+              "sourceId": "token-dispatch",
+              "lines": [
+                31,
+                38,
+                39,
+                91,
+                95,
+                98,
+                101
+              ]
+            },
+            {
+              "sourceId": "Token_System",
+              "lines": [
+                47,
+                50,
+                56,
+                57
+              ]
+            },
+            {
+              "sourceId": "token-System",
+              "lines": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "adapter": "Token_SDA",
+          "status": "reads",
+          "notes": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties. All Get pairs have shared mapped reads; no pair is zero-read or reserved-no-op. SDA does not validate Activity locally, but mapped dispatch fixes Get. It clones TokenPlan and appends jacket Config, overwriting matching top-level Config children. Descendant attribution below is conditional on preservation; Plan/Phase clone reads are not original fields because dispatch never forwards them. Dynamic handler names are selected from Path; ImageDimensions and EntityLevel handlers add no Plan property reads. The commented StoreItemIcondentity call is not executed.",
+          "references": [
+            {
+              "sourceId": "token-mapped",
+              "lines": [
+                78,
+                81,
+                87,
+                89
+              ]
+            },
+            {
+              "sourceId": "token-dispatch",
+              "lines": [
+                31,
+                38,
+                39,
+                91,
+                95,
+                98,
+                101
+              ]
+            },
+            {
+              "sourceId": "Token_SDA",
+              "lines": [
+                44,
+                48,
+                50,
+                51,
+                53,
+                55
+              ]
+            },
+            {
+              "sourceId": "sda-dispatch",
+              "lines": [
+                19,
+                25,
+                26,
+                28,
+                34
+              ]
+            },
+            {
+              "sourceId": "sda-config-append",
+              "lines": [
+                216,
+                220,
+                226,
+                231,
+                237,
+                240,
+                252
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "[$path]",
+          "description": "Resolve a dynamically selected descendant of the original forwarded configuration.",
+          "adapters": [
+            "Token_Memory"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_Memory",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    91,
+                    92,
+                    95,
+                    98,
+                    101
+                  ]
+                },
+                {
+                  "sourceId": "token-Memory",
+                  "lines": [
+                    26,
+                    33,
+                    34,
+                    37,
+                    43,
+                    44,
+                    50,
+                    54,
+                    55,
+                    56,
+                    57,
+                    61,
+                    62,
+                    63,
+                    64,
+                    69,
+                    131,
+                    132,
+                    162,
+                    167
+                  ]
+                }
+              ],
+              "trace": "Memory.plan scope assigns dictionary=constructed TokenPlan. path comes from the selected token suffix; default starts null and may become the string after | or =. Attribution is only to descendants of original forwarded Config; generated Path, other Plan fields and cache/generation/item/Signal scopes are excluded. Symbolic [$path] is a full TokenPlan-relative expression, not a fixed literal child.",
+              "conditional": true,
+              "condition": "Memory.plan scope selects an original Config descendant and reaches the resolver; no claim of arbitrary original Plan forwarding."
+            }
+          ],
+          "default": {
+            "Token_Memory": {
+              "expression": "$default",
+              "representation": "powershell-expression"
+            }
+          },
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $dictionary -Path $path -Default $default -SignalLevel \"Warning\" | Select-Object -Last 1"
+        },
+        {
+          "path": "Config",
+          "description": "Forward the incoming configuration object into the constructed concrete token plan.",
+          "adapters": [
+            "Token_Conduction",
+            "Token_Dynamic",
+            "Token_Environment",
+            "Token_Formatter",
+            "Token_Generator",
+            "Token_Memory",
+            "Token_Navigator",
+            "Token_Storage",
+            "Token_System",
+            "Token_SDA"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_Conduction",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    90,
+                    91,
+                    95,
+                    96,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "Original Config is resolved and conditionally attached to TokenPlan. No other original Plan fields are forwarded.",
+              "conditional": true,
+              "condition": "A valid token path resolves a provider with Invoke."
+            },
+            {
+              "adapter": "Token_Dynamic",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    90,
+                    91,
+                    95,
+                    96,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "Original Config is resolved and conditionally attached to TokenPlan. No other original Plan fields are forwarded.",
+              "conditional": true,
+              "condition": "A valid token path resolves a provider with Invoke."
+            },
+            {
+              "adapter": "Token_Environment",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    90,
+                    91,
+                    95,
+                    96,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "Original Config is resolved and conditionally attached to TokenPlan. No other original Plan fields are forwarded.",
+              "conditional": true,
+              "condition": "A valid token path resolves a provider with Invoke."
+            },
+            {
+              "adapter": "Token_Formatter",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    90,
+                    91,
+                    95,
+                    96,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "Original Config is resolved and conditionally attached to TokenPlan. No other original Plan fields are forwarded.",
+              "conditional": true,
+              "condition": "A valid token path resolves a provider with Invoke."
+            },
+            {
+              "adapter": "Token_Generator",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    90,
+                    91,
+                    95,
+                    96,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "Original Config is resolved and conditionally attached to TokenPlan. No other original Plan fields are forwarded.",
+              "conditional": true,
+              "condition": "A valid token path resolves a provider with Invoke."
+            },
+            {
+              "adapter": "Token_Memory",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    90,
+                    91,
+                    95,
+                    96,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "Original Config is resolved and conditionally attached to TokenPlan. No other original Plan fields are forwarded.",
+              "conditional": true,
+              "condition": "A valid token path resolves a provider with Invoke."
+            },
+            {
+              "adapter": "Token_Navigator",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    90,
+                    91,
+                    95,
+                    96,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "Original Config is resolved and conditionally attached to TokenPlan. No other original Plan fields are forwarded.",
+              "conditional": true,
+              "condition": "A valid token path resolves a provider with Invoke."
+            },
+            {
+              "adapter": "Token_Storage",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    90,
+                    91,
+                    95,
+                    96,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "Original Config is resolved and conditionally attached to TokenPlan. No other original Plan fields are forwarded.",
+              "conditional": true,
+              "condition": "A valid token path resolves a provider with Invoke."
+            },
+            {
+              "adapter": "Token_System",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    90,
+                    91,
+                    95,
+                    96,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "Original Config is resolved and conditionally attached to TokenPlan. No other original Plan fields are forwarded.",
+              "conditional": true,
+              "condition": "A valid token path resolves a provider with Invoke."
+            },
+            {
+              "adapter": "Token_SDA",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    90,
+                    91,
+                    95,
+                    96,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "Original Config is resolved and conditionally attached to TokenPlan. No other original Plan fields are forwarded.",
+              "conditional": true,
+              "condition": "A valid token path resolves a provider with Invoke."
+            }
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Preserve configuration for a nested dynamic token reference.",
+          "adapters": [
+            "Token_Dynamic"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_Dynamic",
+              "references": [
+                {
+                  "sourceId": "token-Dynamic",
+                  "lines": [
+                    40,
+                    45
+                  ]
+                },
+                {
+                  "sourceId": "dynamic-resolve",
+                  "lines": [
+                    279,
+                    293,
+                    297,
+                    298,
+                    301,
+                    305,
+                    306
+                  ]
+                }
+              ],
+              "trace": "Resolve-DynamicReference closes over the concrete TokenPlan and copies its forwarded original Config to a fresh referencePlan. Other token adapter inventories are not recursively included.",
+              "conditional": true,
+              "condition": "Dynamic expression evaluates a non-Dynamic reference and has forwarded Config."
+            }
+          ]
+        },
+        {
+          "path": "Config.Content.Meta.Type",
+          "description": "Fall back to the content entity type while generating an ID code.",
+          "adapters": [
+            "Token_SDA"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_SDA",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    91,
+                    95,
+                    98,
+                    101
+                  ]
+                },
+                {
+                  "sourceId": "Token_SDA",
+                  "lines": [
+                    48,
+                    50,
+                    51,
+                    53,
+                    55
+                  ]
+                },
+                {
+                  "sourceId": "sda-dispatch",
+                  "lines": [
+                    19,
+                    25,
+                    26,
+                    34
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    226,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "sda-invoke-ID",
+                  "lines": [
+                    9
+                  ]
+                },
+                {
+                  "sourceId": "sda-add-ID",
+                  "lines": [
+                    182
+                  ]
+                }
+              ],
+              "trace": "Mapped dispatch copies only original Config into TokenPlan; Token_SDA clones it, appends jacket Config and dispatches local SDA handler by Path. Only relevant original Config children surviving jacket overwrite are attributable. Local generated plans, ItemSignal lookups and later writes are excluded.",
+              "conditional": true,
+              "condition": "SDA provider selected; relevant incoming Config child survives jacket merge. ID code-generation branch reaches null-coalescing expression and Config.EntityType is null."
+            }
+          ]
+        },
+        {
+          "path": "Config.EmojiSets.MasterEmojiList",
+          "description": "Use the configured non-artifact master emoji sheet before loading it from storage.",
+          "adapters": [
+            "Token_SDA"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_SDA",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    91,
+                    95,
+                    98,
+                    101
+                  ]
+                },
+                {
+                  "sourceId": "Token_SDA",
+                  "lines": [
+                    48,
+                    50,
+                    51,
+                    53,
+                    55
+                  ]
+                },
+                {
+                  "sourceId": "sda-dispatch",
+                  "lines": [
+                    19,
+                    25,
+                    26,
+                    34
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    226,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "sda-enroll",
+                  "lines": [
+                    36,
+                    38,
+                    39,
+                    42,
+                    43,
+                    44,
+                    71
+                  ]
+                }
+              ],
+              "trace": "Mapped dispatch copies only original Config into TokenPlan; Token_SDA clones it, appends jacket Config and dispatches local SDA handler by Path. Only relevant original Config children surviving jacket overwrite are attributable. Local generated plans, ItemSignal lookups and later writes are excluded.",
+              "conditional": true,
+              "condition": "SDA provider selected; relevant incoming Config child survives jacket merge. OCIID enrollment, EntityType is not Artifact, and this original child survives the jacket merge; only the initial lookup is attributed, not its later local replacement."
+            }
+          ]
+        },
+        {
+          "path": "Config.EmojiSets.MasterEmojiList_Artifact",
+          "description": "Use the configured artifact master emoji sheet before loading it from storage.",
+          "adapters": [
+            "Token_SDA"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_SDA",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    91,
+                    95,
+                    98,
+                    101
+                  ]
+                },
+                {
+                  "sourceId": "Token_SDA",
+                  "lines": [
+                    48,
+                    50,
+                    51,
+                    53,
+                    55
+                  ]
+                },
+                {
+                  "sourceId": "sda-dispatch",
+                  "lines": [
+                    19,
+                    25,
+                    26,
+                    34
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    226,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "sda-enroll",
+                  "lines": [
+                    36,
+                    38,
+                    39,
+                    42,
+                    43,
+                    44,
+                    71
+                  ]
+                }
+              ],
+              "trace": "Mapped dispatch copies only original Config into TokenPlan; Token_SDA clones it, appends jacket Config and dispatches local SDA handler by Path. Only relevant original Config children surviving jacket overwrite are attributable. Local generated plans, ItemSignal lookups and later writes are excluded.",
+              "conditional": true,
+              "condition": "SDA provider selected; relevant incoming Config child survives jacket merge. OCIID enrollment, EntityType is Artifact, and this original child survives the jacket merge; only the initial lookup is attributed, not its later local replacement."
+            }
+          ]
+        },
+        {
+          "path": "Config.EmojiSets[$emojiSheetName]",
+          "description": "Resolve the selected emoji sheet from preserved incoming configuration.",
+          "adapters": [
+            "Token_SDA"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_SDA",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    91,
+                    95,
+                    98,
+                    101
+                  ]
+                },
+                {
+                  "sourceId": "Token_SDA",
+                  "lines": [
+                    48,
+                    50,
+                    51,
+                    53,
+                    55
+                  ]
+                },
+                {
+                  "sourceId": "sda-dispatch",
+                  "lines": [
+                    19,
+                    25,
+                    26,
+                    34
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    226,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "sda-add-OCIID",
+                  "lines": [
+                    23,
+                    28
+                  ]
+                },
+                {
+                  "sourceId": "sda-enroll",
+                  "lines": [
+                    198,
+                    199,
+                    200,
+                    258,
+                    259,
+                    260,
+                    261,
+                    265,
+                    266,
+                    267,
+                    268,
+                    339,
+                    340,
+                    343,
+                    344,
+                    372
+                  ]
+                }
+              ],
+              "trace": "Mapped dispatch copies only original Config into TokenPlan; Token_SDA clones it, appends jacket Config and dispatches local SDA handler by Path. Only relevant original Config children surviving jacket overwrite are attributable. Local generated plans, ItemSignal lookups and later writes are excluded.",
+              "conditional": true,
+              "condition": "SDA provider selected; relevant incoming Config child survives jacket merge. OCIID enrollment reaches the selected-sheet lookup; sheet name comes from ItemSignal ancestry or finite master fallback. Only original descendants surviving the jacket merge and any earlier master-sheet local write count; exclude values subsequently loaded/written locally."
+            }
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Path \"Config.EmojiSets.$($emojiSheetName)\" -Dictionary $Plan -SignalLevel \"Information\" | Select-Object -Last 1"
+        },
+        {
+          "path": "Config.EmojiSetSources",
+          "description": "Read configured emoji-set sources during OCIID enrollment.",
+          "adapters": [
+            "Token_SDA"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_SDA",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    91,
+                    95,
+                    98,
+                    101
+                  ]
+                },
+                {
+                  "sourceId": "Token_SDA",
+                  "lines": [
+                    48,
+                    50,
+                    51,
+                    53,
+                    55
+                  ]
+                },
+                {
+                  "sourceId": "sda-dispatch",
+                  "lines": [
+                    19,
+                    25,
+                    26,
+                    34
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    226,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "sda-add-OCIID",
+                  "lines": [
+                    23,
+                    28
+                  ]
+                },
+                {
+                  "sourceId": "sda-enroll",
+                  "lines": [
+                    121,
+                    123
+                  ]
+                }
+              ],
+              "trace": "Mapped dispatch copies only original Config into TokenPlan; Token_SDA clones it, appends jacket Config and dispatches local SDA handler by Path. Only relevant original Config children surviving jacket overwrite are attributable. Local generated plans, ItemSignal lookups and later writes are excluded.",
+              "conditional": true,
+              "condition": "SDA provider selected; relevant incoming Config child survives jacket merge. OCIID enrollment reaches this assignment; the local alias is not subsequently consumed, but the original direct read executes."
+            }
+          ]
+        },
+        {
+          "path": "Config.EntityType",
+          "description": "Select entity-specific enrollment, context, reference-tag, ID, lineage and emoji behavior.",
+          "adapters": [
+            "Token_SDA"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_SDA",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    91,
+                    95,
+                    98,
+                    101
+                  ]
+                },
+                {
+                  "sourceId": "Token_SDA",
+                  "lines": [
+                    48,
+                    50,
+                    51,
+                    53,
+                    55
+                  ]
+                },
+                {
+                  "sourceId": "sda-dispatch",
+                  "lines": [
+                    19,
+                    25,
+                    26,
+                    34
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    226,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "sda-invoke-Enrollment",
+                  "lines": [
+                    12
+                  ]
+                },
+                {
+                  "sourceId": "sda-add-AIContext",
+                  "lines": [
+                    20
+                  ]
+                },
+                {
+                  "sourceId": "sda-add-RefTag",
+                  "lines": [
+                    33,
+                    37,
+                    150,
+                    154,
+                    169
+                  ]
+                },
+                {
+                  "sourceId": "sda-add-ID",
+                  "lines": [
+                    182
+                  ]
+                },
+                {
+                  "sourceId": "sda-add-Lineage",
+                  "lines": [
+                    23
+                  ]
+                },
+                {
+                  "sourceId": "sda-enroll",
+                  "lines": [
+                    31,
+                    38,
+                    79,
+                    121,
+                    133,
+                    263,
+                    272,
+                    296
+                  ]
+                }
+              ],
+              "trace": "Mapped dispatch copies only original Config into TokenPlan; Token_SDA clones it, appends jacket Config and dispatches local SDA handler by Path. Only relevant original Config children surviving jacket overwrite are attributable. Local generated plans, ItemSignal lookups and later writes are excluded.",
+              "conditional": true,
+              "condition": "SDA provider selected; relevant incoming Config child survives jacket merge. Path selects Enrollment, AIContext, RefTag, ID, Lineage or OCIID handler; conditional branch reaches the named read. ID uses Content.Meta.Type only when EntityType is null."
+            }
+          ]
+        },
+        {
+          "path": "Config.Hours",
+          "description": "Provide the hourly weather observations used for closest-time selection.",
+          "adapters": [
+            "Token_SDA"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_SDA",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    91,
+                    95,
+                    98,
+                    101
+                  ]
+                },
+                {
+                  "sourceId": "Token_SDA",
+                  "lines": [
+                    48,
+                    50,
+                    51,
+                    53,
+                    55
+                  ]
+                },
+                {
+                  "sourceId": "sda-dispatch",
+                  "lines": [
+                    19,
+                    25,
+                    26,
+                    34
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    226,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "sda-invoke-WeatherVaults",
+                  "lines": [
+                    9,
+                    10,
+                    12,
+                    13
+                  ]
+                },
+                {
+                  "sourceId": "sda-weather",
+                  "lines": [
+                    33,
+                    34,
+                    42
+                  ]
+                }
+              ],
+              "trace": "Mapped dispatch copies only original Config into TokenPlan; Token_SDA clones it, appends jacket Config and dispatches local SDA handler by Path. Only relevant original Config children surviving jacket overwrite are attributable. Local generated plans, ItemSignal lookups and later writes are excluded.",
+              "conditional": true,
+              "condition": "SDA provider selected; relevant incoming Config child survives jacket merge. Path selects SDA.WeatherVaults.SelectWeather."
+            }
+          ],
+          "default": {
+            "Token_SDA": ""
+          }
+        },
+        {
+          "path": "Config.PrimaryAttributeName",
+          "description": "Build the ItemSignal lookup for the existing primary attribute.",
+          "adapters": [
+            "Token_SDA"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_SDA",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    91,
+                    95,
+                    98,
+                    101
+                  ]
+                },
+                {
+                  "sourceId": "Token_SDA",
+                  "lines": [
+                    48,
+                    50,
+                    51,
+                    53,
+                    55
+                  ]
+                },
+                {
+                  "sourceId": "sda-dispatch",
+                  "lines": [
+                    19,
+                    25,
+                    26,
+                    34
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    226,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "sda-add-OCIID",
+                  "lines": [
+                    21,
+                    23,
+                    26,
+                    28
+                  ]
+                },
+                {
+                  "sourceId": "sda-enroll",
+                  "lines": [
+                    117,
+                    118
+                  ]
+                }
+              ],
+              "trace": "Mapped dispatch copies only original Config into TokenPlan; Token_SDA clones it, appends jacket Config and dispatches local SDA handler by Path. Only relevant original Config children surviving jacket overwrite are attributable. Local generated plans, ItemSignal lookups and later writes are excluded.",
+              "conditional": true,
+              "condition": "SDA provider selected; relevant incoming Config child survives jacket merge. OCIID EID/ECodeSet enrollment reaches primary-attribute lookup after entity validation."
+            }
+          ]
+        },
+        {
+          "path": "Config.SpecifiedTime",
+          "description": "Select the weather observation nearest the requested time.",
+          "adapters": [
+            "Token_SDA"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_SDA",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    91,
+                    95,
+                    98,
+                    101
+                  ]
+                },
+                {
+                  "sourceId": "Token_SDA",
+                  "lines": [
+                    48,
+                    50,
+                    51,
+                    53,
+                    55
+                  ]
+                },
+                {
+                  "sourceId": "sda-dispatch",
+                  "lines": [
+                    19,
+                    25,
+                    26,
+                    34
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    226,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "sda-invoke-WeatherVaults",
+                  "lines": [
+                    12,
+                    13
+                  ]
+                },
+                {
+                  "sourceId": "sda-weather",
+                  "lines": [
+                    39,
+                    40,
+                    42
+                  ]
+                }
+              ],
+              "trace": "Mapped dispatch copies only original Config into TokenPlan; Token_SDA clones it, appends jacket Config and dispatches local SDA handler by Path. Only relevant original Config children surviving jacket overwrite are attributable. Local generated plans, ItemSignal lookups and later writes are excluded.",
+              "conditional": true,
+              "condition": "SDA provider selected; relevant incoming Config child survives jacket merge. Path selects SDA.WeatherVaults.SelectWeather."
+            }
+          ],
+          "default": {
+            "Token_SDA": ""
+          }
+        },
+        {
+          "path": "Config.StateFile",
+          "description": "Name state resources and reverse-index files, or describe the OCIID write.",
+          "adapters": [
+            "Token_SDA"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_SDA",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    91,
+                    95,
+                    98,
+                    101
+                  ]
+                },
+                {
+                  "sourceId": "Token_SDA",
+                  "lines": [
+                    48,
+                    50,
+                    51,
+                    53,
+                    55
+                  ]
+                },
+                {
+                  "sourceId": "sda-dispatch",
+                  "lines": [
+                    19,
+                    25,
+                    26,
+                    34
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    226,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "sda-add-ID",
+                  "lines": [
+                    59,
+                    70,
+                    214,
+                    274
+                  ]
+                },
+                {
+                  "sourceId": "sda-add-RefTag",
+                  "lines": [
+                    74,
+                    109,
+                    142
+                  ]
+                },
+                {
+                  "sourceId": "sda-enroll",
+                  "lines": [
+                    564
+                  ]
+                }
+              ],
+              "trace": "Mapped dispatch copies only original Config into TokenPlan; Token_SDA clones it, appends jacket Config and dispatches local SDA handler by Path. Only relevant original Config children surviving jacket overwrite are attributable. Local generated plans, ItemSignal lookups and later writes are excluded.",
+              "conditional": true,
+              "condition": "SDA provider selected; relevant incoming Config child survives jacket merge. Path selects ID, RefTag or OCIID and reaches the corresponding branch. Dead ID alternate branch at line76 is excluded; OCIID interpolation is an actual description read in a constructed plan."
+            }
+          ]
+        },
+        {
+          "path": "Config.StatePath",
+          "description": "Name the state entry used when reading and incrementing the ID index.",
+          "adapters": [
+            "Token_SDA"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_SDA",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    91,
+                    95,
+                    98,
+                    101
+                  ]
+                },
+                {
+                  "sourceId": "Token_SDA",
+                  "lines": [
+                    48,
+                    50,
+                    51,
+                    53,
+                    55
+                  ]
+                },
+                {
+                  "sourceId": "sda-dispatch",
+                  "lines": [
+                    19,
+                    25,
+                    26,
+                    34
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    226,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "sda-invoke-ID",
+                  "lines": [
+                    9
+                  ]
+                },
+                {
+                  "sourceId": "sda-add-ID",
+                  "lines": [
+                    39,
+                    49,
+                    59,
+                    61,
+                    67,
+                    68
+                  ]
+                }
+              ],
+              "trace": "Mapped dispatch copies only original Config into TokenPlan; Token_SDA clones it, appends jacket Config and dispatches local SDA handler by Path. Only relevant original Config children surviving jacket overwrite are attributable. Local generated plans, ItemSignal lookups and later writes are excluded.",
+              "conditional": true,
+              "condition": "SDA provider selected; relevant incoming Config child survives jacket merge. Path selects SDA.ID.ID and processing passes the skip directive check; the active always-true index branch executes."
+            }
+          ]
+        },
+        {
+          "path": "Config.Stations",
+          "description": "Attach station information to the selected weather result.",
+          "adapters": [
+            "Token_SDA"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_SDA",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    91,
+                    95,
+                    98,
+                    101
+                  ]
+                },
+                {
+                  "sourceId": "Token_SDA",
+                  "lines": [
+                    48,
+                    50,
+                    51,
+                    53,
+                    55
+                  ]
+                },
+                {
+                  "sourceId": "sda-dispatch",
+                  "lines": [
+                    19,
+                    25,
+                    26,
+                    34
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    226,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "sda-invoke-WeatherVaults",
+                  "lines": [
+                    12,
+                    13
+                  ]
+                },
+                {
+                  "sourceId": "sda-weather",
+                  "lines": [
+                    36,
+                    37,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Mapped dispatch copies only original Config into TokenPlan; Token_SDA clones it, appends jacket Config and dispatches local SDA handler by Path. Only relevant original Config children surviving jacket overwrite are attributable. Local generated plans, ItemSignal lookups and later writes are excluded.",
+              "conditional": true,
+              "condition": "SDA provider selected; relevant incoming Config child survives jacket merge. Path selects SDA.WeatherVaults.SelectWeather."
+            }
+          ],
+          "default": {
+            "Token_SDA": ""
+          }
+        },
+        {
+          "path": "Config.UserEntry",
+          "description": "Read an explicit user entry or generation directive for ID, reference-tag or OCIID processing.",
+          "adapters": [
+            "Token_SDA"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_SDA",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    91,
+                    95,
+                    98,
+                    101
+                  ]
+                },
+                {
+                  "sourceId": "Token_SDA",
+                  "lines": [
+                    48,
+                    50,
+                    51,
+                    53,
+                    55
+                  ]
+                },
+                {
+                  "sourceId": "sda-dispatch",
+                  "lines": [
+                    19,
+                    25,
+                    26,
+                    34
+                  ]
+                },
+                {
+                  "sourceId": "sda-config-append",
+                  "lines": [
+                    216,
+                    226,
+                    231,
+                    240,
+                    252
+                  ]
+                },
+                {
+                  "sourceId": "sda-add-ID",
+                  "lines": [
+                    19,
+                    21,
+                    23,
+                    25
+                  ]
+                },
+                {
+                  "sourceId": "sda-add-RefTag",
+                  "lines": [
+                    30
+                  ]
+                },
+                {
+                  "sourceId": "sda-add-OCIID",
+                  "lines": [
+                    11,
+                    14,
+                    21,
+                    23,
+                    26,
+                    28
+                  ]
+                },
+                {
+                  "sourceId": "sda-enroll",
+                  "lines": [
+                    79,
+                    87,
+                    89,
+                    98
+                  ]
+                }
+              ],
+              "trace": "Mapped dispatch copies only original Config into TokenPlan; Token_SDA clones it, appends jacket Config and dispatches local SDA handler by Path. Only relevant original Config children surviving jacket overwrite are attributable. Local generated plans, ItemSignal lookups and later writes are excluded.",
+              "conditional": true,
+              "condition": "SDA provider selected; relevant incoming Config child survives jacket merge. Path selects ID, RefTag or OCIID. ID and enrollment fallback reads occur only when their ItemSignal automation lookup has no result; enrollment fallback additionally excludes Artifact."
+            }
+          ],
+          "default": {
+            "Token_SDA": ""
+          }
+        },
+        {
+          "path": "Config.VirtualPath",
+          "description": "Use an existing virtual storage path before deriving one from the token expression.",
+          "adapters": [
+            "Token_Storage"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_Storage",
+              "references": [
+                {
+                  "sourceId": "Token_Storage",
+                  "lines": [
+                    56,
+                    59,
+                    60,
+                    64,
+                    67
+                  ]
+                }
+              ],
+              "trace": "Resolver reads forwarded original Config.VirtualPath with no -Default; absent result triggers a local write which is excluded from incoming attribution.",
+              "conditional": true,
+              "condition": "Token provider Storage is selected."
+            }
+          ]
+        },
+        {
+          "path": "Container",
+          "description": "Override the token expression with a memory container/resource path when both values exist.",
+          "adapters": [
+            "Token_Conduction",
+            "Token_Dynamic",
+            "Token_Environment",
+            "Token_Formatter",
+            "Token_Generator",
+            "Token_Memory",
+            "Token_Navigator",
+            "Token_Storage",
+            "Token_System",
+            "Token_SDA"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_Conduction",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Container is read before provider selection; it participates in a generated Memory path only with Resource.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            },
+            {
+              "adapter": "Token_Dynamic",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Container is read before provider selection; it participates in a generated Memory path only with Resource.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            },
+            {
+              "adapter": "Token_Environment",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Container is read before provider selection; it participates in a generated Memory path only with Resource.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            },
+            {
+              "adapter": "Token_Formatter",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Container is read before provider selection; it participates in a generated Memory path only with Resource.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            },
+            {
+              "adapter": "Token_Generator",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Container is read before provider selection; it participates in a generated Memory path only with Resource.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            },
+            {
+              "adapter": "Token_Memory",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Container is read before provider selection; it participates in a generated Memory path only with Resource.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            },
+            {
+              "adapter": "Token_Navigator",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Container is read before provider selection; it participates in a generated Memory path only with Resource.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            },
+            {
+              "adapter": "Token_Storage",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Container is read before provider selection; it participates in a generated Memory path only with Resource.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            },
+            {
+              "adapter": "Token_System",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Container is read before provider selection; it participates in a generated Memory path only with Resource.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            },
+            {
+              "adapter": "Token_SDA",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Container is read before provider selection; it participates in a generated Memory path only with Resource.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Select the token provider and expression, and describe the resolution in diagnostics.",
+          "adapters": [
+            "Token_Conduction",
+            "Token_Dynamic",
+            "Token_Environment",
+            "Token_Formatter",
+            "Token_Generator",
+            "Token_Memory",
+            "Token_Navigator",
+            "Token_Storage",
+            "Token_System",
+            "Token_SDA"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_Conduction",
+              "references": [
+                {
+                  "sourceId": "token-mapped",
+                  "lines": [
+                    78,
+                    81,
+                    87,
+                    89,
+                    94,
+                    95
+                  ]
+                },
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    31,
+                    43,
+                    52,
+                    55,
+                    61,
+                    91,
+                    92,
+                    95,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties.",
+              "conditional": true,
+              "condition": "Mapped Get validation passes; Container/Resource can override the effective token path."
+            },
+            {
+              "adapter": "Token_Dynamic",
+              "references": [
+                {
+                  "sourceId": "token-mapped",
+                  "lines": [
+                    78,
+                    81,
+                    87,
+                    89,
+                    94,
+                    95
+                  ]
+                },
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    31,
+                    43,
+                    52,
+                    55,
+                    61,
+                    91,
+                    92,
+                    95,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties.",
+              "conditional": true,
+              "condition": "Mapped Get validation passes; Container/Resource can override the effective token path."
+            },
+            {
+              "adapter": "Token_Environment",
+              "references": [
+                {
+                  "sourceId": "token-mapped",
+                  "lines": [
+                    78,
+                    81,
+                    87,
+                    89,
+                    94,
+                    95
+                  ]
+                },
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    31,
+                    43,
+                    52,
+                    55,
+                    61,
+                    91,
+                    92,
+                    95,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties.",
+              "conditional": true,
+              "condition": "Mapped Get validation passes; Container/Resource can override the effective token path."
+            },
+            {
+              "adapter": "Token_Formatter",
+              "references": [
+                {
+                  "sourceId": "token-mapped",
+                  "lines": [
+                    78,
+                    81,
+                    87,
+                    89,
+                    94,
+                    95
+                  ]
+                },
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    31,
+                    43,
+                    52,
+                    55,
+                    61,
+                    91,
+                    92,
+                    95,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties.",
+              "conditional": true,
+              "condition": "Mapped Get validation passes; Container/Resource can override the effective token path."
+            },
+            {
+              "adapter": "Token_Generator",
+              "references": [
+                {
+                  "sourceId": "token-mapped",
+                  "lines": [
+                    78,
+                    81,
+                    87,
+                    89,
+                    94,
+                    95
+                  ]
+                },
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    31,
+                    43,
+                    52,
+                    55,
+                    61,
+                    91,
+                    92,
+                    95,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties.",
+              "conditional": true,
+              "condition": "Mapped Get validation passes; Container/Resource can override the effective token path."
+            },
+            {
+              "adapter": "Token_Memory",
+              "references": [
+                {
+                  "sourceId": "token-mapped",
+                  "lines": [
+                    78,
+                    81,
+                    87,
+                    89,
+                    94,
+                    95
+                  ]
+                },
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    31,
+                    43,
+                    52,
+                    55,
+                    61,
+                    91,
+                    92,
+                    95,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties.",
+              "conditional": true,
+              "condition": "Mapped Get validation passes; Container/Resource can override the effective token path."
+            },
+            {
+              "adapter": "Token_Navigator",
+              "references": [
+                {
+                  "sourceId": "token-mapped",
+                  "lines": [
+                    78,
+                    81,
+                    87,
+                    89,
+                    94,
+                    95
+                  ]
+                },
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    31,
+                    43,
+                    52,
+                    55,
+                    61,
+                    91,
+                    92,
+                    95,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties.",
+              "conditional": true,
+              "condition": "Mapped Get validation passes; Container/Resource can override the effective token path."
+            },
+            {
+              "adapter": "Token_Storage",
+              "references": [
+                {
+                  "sourceId": "token-mapped",
+                  "lines": [
+                    78,
+                    81,
+                    87,
+                    89,
+                    94,
+                    95
+                  ]
+                },
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    31,
+                    43,
+                    52,
+                    55,
+                    61,
+                    91,
+                    92,
+                    95,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties.",
+              "conditional": true,
+              "condition": "Mapped Get validation passes; Container/Resource can override the effective token path."
+            },
+            {
+              "adapter": "Token_System",
+              "references": [
+                {
+                  "sourceId": "token-mapped",
+                  "lines": [
+                    78,
+                    81,
+                    87,
+                    89,
+                    94,
+                    95
+                  ]
+                },
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    31,
+                    43,
+                    52,
+                    55,
+                    61,
+                    91,
+                    92,
+                    95,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties.",
+              "conditional": true,
+              "condition": "Mapped Get validation passes; Container/Resource can override the effective token path."
+            },
+            {
+              "adapter": "Token_SDA",
+              "references": [
+                {
+                  "sourceId": "token-mapped",
+                  "lines": [
+                    78,
+                    81,
+                    87,
+                    89,
+                    94,
+                    95
+                  ]
+                },
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    31,
+                    43,
+                    52,
+                    55,
+                    61,
+                    91,
+                    92,
+                    95,
+                    98,
+                    101
+                  ]
+                }
+              ],
+              "trace": "MappedTokenAdapter reads original Plan.Path. Invoke-MappedTokenAdapter derives trimmed Path (or replaces it from Container/Resource), creates a new TokenPlan with only Path, and conditionally copies original Config. Concrete Path reads consume that derived value, not additional original properties.",
+              "conditional": true,
+              "condition": "Mapped Get validation passes; Container/Resource can override the effective token path."
+            }
+          ]
+        },
+        {
+          "path": "Resource",
+          "description": "Override the token expression with a memory container/resource path when both values exist.",
+          "adapters": [
+            "Token_Conduction",
+            "Token_Dynamic",
+            "Token_Environment",
+            "Token_Formatter",
+            "Token_Generator",
+            "Token_Memory",
+            "Token_Navigator",
+            "Token_Storage",
+            "Token_System",
+            "Token_SDA"
+          ],
+          "evidence": [
+            {
+              "adapter": "Token_Conduction",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Resource is read before provider selection; it participates in a generated Memory path only with Container.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            },
+            {
+              "adapter": "Token_Dynamic",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Resource is read before provider selection; it participates in a generated Memory path only with Container.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            },
+            {
+              "adapter": "Token_Environment",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Resource is read before provider selection; it participates in a generated Memory path only with Container.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            },
+            {
+              "adapter": "Token_Formatter",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Resource is read before provider selection; it participates in a generated Memory path only with Container.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            },
+            {
+              "adapter": "Token_Generator",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Resource is read before provider selection; it participates in a generated Memory path only with Container.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            },
+            {
+              "adapter": "Token_Memory",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Resource is read before provider selection; it participates in a generated Memory path only with Container.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            },
+            {
+              "adapter": "Token_Navigator",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Resource is read before provider selection; it participates in a generated Memory path only with Container.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            },
+            {
+              "adapter": "Token_Storage",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Resource is read before provider selection; it participates in a generated Memory path only with Container.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            },
+            {
+              "adapter": "Token_System",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Resource is read before provider selection; it participates in a generated Memory path only with Container.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            },
+            {
+              "adapter": "Token_SDA",
+              "references": [
+                {
+                  "sourceId": "token-dispatch",
+                  "lines": [
+                    38,
+                    39,
+                    41,
+                    43
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Resource is read before provider selection; it participates in a generated Memory path only with Container.",
+              "conditional": true,
+              "condition": "Mapped token helper reached."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

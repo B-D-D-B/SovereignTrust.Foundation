@@ -1,0 +1,226 @@
+{
+  "name": "TransformCondenser",
+  "repository": "SovereignTrust.Foundation",
+  "path": "Src/PowerShell/Classes/Adapters/Condenser/TransformCondenser.ps1",
+  "activities": [
+    {
+      "name": "Project",
+      "description": "Project signal data.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Forward the incoming configuration into each constructed hydration plan.",
+          "adapters": [
+            "TransformCondenser"
+          ]
+        },
+        {
+          "path": "Config.DefaultPath",
+          "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "default": {
+            "TransformCondenser": "%.@"
+          }
+        },
+        {
+          "path": "Key",
+          "description": "Select the registered source transform nodes.",
+          "adapters": [
+            "TransformCondenser"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Supply the content lookup path forwarded to Token.Memory.",
+          "adapters": [
+            "TransformCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Select",
+      "description": "Select signal data.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Forward configuration into the constructed hydration plan for the selected result.",
+          "adapters": [
+            "TransformCondenser"
+          ]
+        },
+        {
+          "path": "Config.DefaultPath",
+          "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "default": {
+            "TransformCondenser": "%.@"
+          }
+        },
+        {
+          "path": "Config.Hydrate",
+          "description": "Request hydration of the selected result.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "default": {
+            "TransformCondenser": false
+          }
+        },
+        {
+          "path": "Format",
+          "description": "Identify the source content format used by selection.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "default": {
+            "TransformCondenser": ""
+          }
+        },
+        {
+          "path": "HtmlDecode",
+          "description": "Control HTML decoding of selected source content.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "default": {
+            "TransformCondenser": true
+          }
+        },
+        {
+          "path": "Path",
+          "description": "Select the requested path within resolved source content.",
+          "adapters": [
+            "TransformCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Inject",
+      "description": "Inject signal data.",
+      "properties": [
+        {
+          "path": "Config.Content",
+          "description": "Provide content appended into ItemSignal.",
+          "adapters": [
+            "TransformCondenser"
+          ]
+        },
+        {
+          "path": "Config.DefaultPath",
+          "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "default": {
+            "TransformCondenser": "%.@"
+          }
+        },
+        {
+          "path": "Path",
+          "description": "Choose the ItemSignal destination for appended content.",
+          "adapters": [
+            "TransformCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "RegisterSignal",
+      "description": "Register a signal.",
+      "properties": [
+        {
+          "path": "Config.Content",
+          "description": "Provide the content signal registered in the ItemSignal graph.",
+          "adapters": [
+            "TransformCondenser"
+          ]
+        },
+        {
+          "path": "Config.DefaultPath",
+          "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "default": {
+            "TransformCondenser": "%.@"
+          }
+        },
+        {
+          "path": "Config.Key",
+          "description": "Name the graph registration key.",
+          "adapters": [
+            "TransformCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "UnregisterSignalKeys",
+      "description": "Remove registered signal keys.",
+      "properties": [
+        {
+          "path": "Config.DefaultPath",
+          "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "default": {
+            "TransformCondenser": "%.@"
+          }
+        },
+        {
+          "path": "Config.Keys",
+          "description": "Choose graph keys to unregister.",
+          "adapters": [
+            "TransformCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Clone",
+      "description": "Clone signal data.",
+      "properties": [
+        {
+          "path": "Config.DefaultPath",
+          "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "default": {
+            "TransformCondenser": "%.@"
+          }
+        },
+        {
+          "path": "Path",
+          "description": "Select ItemSignal content to clone through JSON serialization.",
+          "adapters": [
+            "TransformCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Merge",
+      "description": "Merge signal data.",
+      "properties": [
+        {
+          "path": "Config.DefaultPath",
+          "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "default": {
+            "TransformCondenser": "%.@"
+          }
+        }
+      ]
+    }
+  ]
+}

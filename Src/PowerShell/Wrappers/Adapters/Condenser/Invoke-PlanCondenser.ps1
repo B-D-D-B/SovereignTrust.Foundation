@@ -3,7 +3,8 @@ function Invoke-PlanCondenser {
     param (
         [Signal]$Signal,
         [Signal]$ItemSignal,
-        [object]$Plan
+        [object]$Plan,
+        [string]$Activity = 'InvokePlan'
     )
 
     # ░▒▓█ SIGNAL START █▓▒░
@@ -27,7 +28,7 @@ function Invoke-PlanCondenser {
         }
 
         # ░▒▓█ Run the Conduction Condenser using the Config bits  █▓▒░
-        $consdenserIvokeSignal = $consdenser.Invoke($null, $null, $Signal, $Plan , $ItemSignal) | Select-Object -Last 1
+        $consdenserIvokeSignal = $consdenser.Invoke($null, $Activity, $Signal, $Plan , $ItemSignal) | Select-Object -Last 1
         if ($opSignal.MergeSignalAndVerifyFailure($consdenserIvokeSignal)) {
             $opSignal.LogCritical("Fab consdenser failed.")
             return $opSignal

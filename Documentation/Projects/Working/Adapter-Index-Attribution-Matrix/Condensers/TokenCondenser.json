@@ -1,0 +1,44 @@
+{
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "TokenCondenser",
+  "activities": [
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "TokenCondenser",
+      "name": "Parse",
+      "description": "Resolve a token through the token condenser.",
+      "coverage": [
+        {
+          "adapter": "TokenCondenser",
+          "status": "zero-read",
+          "notes": "Incoming Plan is unused in the supported Parse path. Path comes from ItemSignal Result/Jacket and enters a newly constructed TokenAdapterPlan. Code referencing incoming Plan below the unconditional return is unreachable legacy code and excluded.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "TokenCondenser",
+              "lines": [
+                42,
+                45,
+                52,
+                54,
+                55,
+                56,
+                59,
+                66,
+                83
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": []
+    }
+  ]
+}

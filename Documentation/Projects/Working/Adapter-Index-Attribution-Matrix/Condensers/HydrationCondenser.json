@@ -1,0 +1,71 @@
+{
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "HydrationCondenser",
+  "activities": [
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "HydrationCondenser",
+      "name": "Invoke",
+      "description": "Invoke a condenser operation.",
+      "coverage": [
+        {
+          "adapter": "HydrationCondenser",
+          "status": "reads",
+          "notes": "Forwards original Plan to the local hydration helper. Recursive ^ repeats the same incoming Plan; symbol dispatch to another named condenser is not recursively inventoried. Commented HydrationStyle lookup is excluded.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "HydrationCondenser",
+              "lines": [
+                39,
+                42,
+                48
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "HydrationPlan",
+          "description": "Choose the sequence of hydration dispatch symbols; ^ repeats hydration until the compared result stabilizes.",
+          "adapters": [
+            "HydrationCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "HydrationCondenser",
+              "references": [
+                {
+                  "sourceId": "hydration-apply",
+                  "lines": [
+                    17,
+                    34,
+                    40,
+                    42,
+                    44,
+                    48,
+                    55
+                  ]
+                }
+              ],
+              "trace": "The helper receives original Plan and resolves HydrationPlan with literal -Default \"^\". Source shows ^ recursively calls the same helper with unchanged Plan; documentation does not claim successful termination.",
+              "conditional": true,
+              "condition": "Validated Invoke reaching the hydration helper."
+            }
+          ],
+          "default": {
+            "HydrationCondenser": "^"
+          }
+        }
+      ]
+    }
+  ]
+}

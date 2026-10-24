@@ -1,0 +1,43 @@
+{
+  "name": "FabCondenser",
+  "repository": "SovereignTrust.Foundation",
+  "path": "Src/PowerShell/Classes/Adapters/Condenser/FabCondenser.ps1",
+  "activities": [
+    {
+      "name": "Invoke",
+      "description": "Invoke a condenser operation.",
+      "properties": [
+        {
+          "path": "Config.AdapterLoading.Mode",
+          "description": "Choose lazy registration unless the loading mode is Eager.",
+          "adapters": [
+            "FabCondenser"
+          ],
+          "default": {
+            "FabCondenser": "Lazy"
+          }
+        },
+        {
+          "path": "Config.AdapterLoading.RetryFailedResolution",
+          "description": "Allow a failed lazy adapter resolution to be retried.",
+          "adapters": [
+            "FabCondenser"
+          ],
+          "default": {
+            "FabCondenser": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "ObserveMappedAdapter",
+      "description": "Resolve a selected mapped adapter and report its Fab-retained source mapping, loaded module, instance class, slot, constructed jacket path and absent-slot graph membership. Invoke retains only source Kind, Slot and VirtualPath on the mapped slot signal after verified registration. First observation may import and construct the adapter and update its registration cache. No provider activity is invoked. Missing or ambiguous provenance and failed resolution return a failed signal with no observation.",
+      "properties": [
+        { "path": "Config.Kind", "description": "Required mapped adapter kind.", "adapters": ["FabCondenser"] },
+        { "path": "Config.Slot", "description": "Required selected mapped slot.", "adapters": ["FabCondenser"] },
+        { "path": "Config.AbsentSlot", "description": "Required distinct slot to inspect for absence without resolving it.", "adapters": ["FabCondenser"] }
+      ],
+      "result": ["SourceMapping", "ModuleName", "ClassName", "MappedSlot", "JacketVirtualPath", "MissingSlotAbsent"]
+    }
+  ]
+}

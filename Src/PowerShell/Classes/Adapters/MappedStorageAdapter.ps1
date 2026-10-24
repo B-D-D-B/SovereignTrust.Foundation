@@ -1,12 +1,17 @@
 <#
 Class: MappedStorageAdapter
 Purpose: Route a storage slot to its registered provider.
-Activities: Provider-dependent. Storage_EmbeddedFileSystem dispatches:
-- Read: retrieve content.
-- Write: store content.
-- Delete: remove a resource.
-- Exists: test whether a resource is present.
-The wrapper forwards Activity; these verbs are not guaranteed for every provider.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Read: Retrieve content from a resource.
+- Write: Store content in a resource.
+- Delete: Remove a resource.
+- Exists: Check whether a resource is present.
+- List: Enumerate resource metadata with optional filter, type and sort.
+ActivityValidation: OnInvoke, BeforeProviderResolution
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
 #>
 class MappedStorageAdapter {
     [Signal]$Signal
@@ -87,6 +92,11 @@ class MappedStorageAdapter {
     [Signal]Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
 
         $opSignal = [Signal]::Start("MappedStorageAdapter.Invoke:$Slot") | Select-Object -Last 1
+
+        if ($Activity -notin @('Read', 'Write', 'Delete', 'Exists', 'List')) {
+            $opSignal.LogCritical("Unsupported MappedStorageAdapter activity: '$Activity'.")
+            return $opSignal
+        }
 
         # TODO: Add Rule System for managing when multiple slots should be tried and if results should be aggregated or return on exists.
 

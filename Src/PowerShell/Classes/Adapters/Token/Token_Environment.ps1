@@ -1,3 +1,14 @@
+<#
+Class: Token_Environment
+Purpose: Resolve environment token values.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Get: Resolve a token value from the requested path.
+ActivityValidation: OnInvoke, BeforeDispatch
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+#>
 class Token_Environment {
     [Signal]$Signal
     [Conductor]$Conductor
@@ -34,7 +45,12 @@ class Token_Environment {
     }
 
     [Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
-    $opSignal = [Signal]::Start("Token_Environment.Invoke") | Select-Object -Last 1
+        $opSignal = [Signal]::Start("Token_Environment.Invoke") | Select-Object -Last 1
+
+        if ($Activity -notin @('Get')) {
+            $opSignal.LogCritical("Unsupported Token_Environment activity: '$Activity'.")
+            return $opSignal
+        }
 
     try {
             $Path = $Plan.Path

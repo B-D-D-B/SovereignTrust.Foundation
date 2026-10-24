@@ -1,0 +1,688 @@
+{
+  "name": "PlanCondenser",
+  "repository": "SovereignTrust.Foundation",
+  "path": "Src/PowerShell/Classes/Adapters/Condenser/PlanCondenser.ps1",
+  "activities": [
+    {
+      "name": "IteratePhase",
+      "description": "Iterate a plan phase.",
+      "properties": [
+        {
+          "path": "Adapter",
+          "description": "Identify the iteration trace adapter and select the condenser slot for the cloned iteration plan.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Config.Activity",
+          "description": "Name the iteration trace activity and select the activity executed for the cloned iteration plan.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Config.IterationArray",
+          "description": "Supply the iteration values and cardinality used to select serial and parallel work.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Config.IterationName",
+          "description": "Name the registered iteration signal.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": "Iteration"
+          }
+        },
+        {
+          "path": "Config.Threading.DebugInline",
+          "description": "Select inline debug execution when deciding and invoking parallel work.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Config.Threading.DebugWorkItemIndex",
+          "description": "Select the work-item index for inline debugging.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": {
+              "expression": "$warmupCount",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Threading.Enabled",
+          "description": "Enable consideration of threaded iteration and validate that the option is boolean.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Config.Threading.MaxThreads",
+          "description": "Set the iteration worker throttle, clamped to at least one.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": {
+              "expression": "$maxParallelismSignal.GetResult()",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Threading.ReuseItemSignalGrid",
+          "description": "Request reuse of the source ItemSignal grid in iteration workers.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Config.Threading.Warmup",
+          "description": "Set the nonnegative number of warmup iterations before parallel work, capped by the iteration count.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": 0
+          }
+        },
+        {
+          "path": "Name",
+          "description": "Identify the iteration template and input hash in execution tracing.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Temporarily preserve the parent-phase reference while cloning the iteration plan.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Temporarily preserve the parent-plan reference while cloning the iteration plan.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "InvokePlan",
+      "description": "Reserved plan invocation activity; its current branch has no implementation.",
+      "properties": [
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "InvokePhase",
+      "description": "Invoke a phase.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Forward the incoming configuration object into the constructed hydration plan.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Config.Break",
+          "description": "Evaluate the helper diagnostic break condition before cloning injected steps.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Config.Iteration",
+          "description": "Read the iteration number to decide whether repeated step cloning should be skipped; a null value is treated as zero by the direct expression.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Config.PreventReclone",
+          "description": "Control the repeated-cloning guard; when enabled, iterations greater than one return before step resolution.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Config.SkipRename",
+          "description": "Skip prefixing injected step names when true.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Name",
+          "description": "Name the locally constructed phase passed to Invoke-PlanPhase.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Prefix injected step names and evaluate the ManageLineage diagnostic condition.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Locate the steps to inject from ItemSignal.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "InvokePhaseAsync",
+      "description": "Start a phase asynchronously.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Forward the incoming configuration object into the constructed hydration plan.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Config.Break",
+          "description": "Evaluate the helper diagnostic break condition before cloning injected steps.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Config.DebugInline",
+          "description": "Select inline execution for the background phase task.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Config.Iteration",
+          "description": "Read the iteration number to decide whether repeated step cloning should be skipped; a null value is treated as zero by the direct expression.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Config.MaxBackgroundPhases",
+          "description": "Limit concurrent background phase tasks to a positive integer.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": {
+              "expression": "$environmentMaxSignal.GetResult()",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.PreventReclone",
+          "description": "Control the repeated-cloning guard; when enabled, iterations greater than one return before step resolution.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Config.ReturnKeys",
+          "description": "Select result keys to export from the background phase.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": []
+          }
+        },
+        {
+          "path": "Config.SkipRename",
+          "description": "Skip prefixing injected step names when true.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Config.TaskName",
+          "description": "Name the background phase task.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": {
+              "expression": "$Plan.Name",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Prefix injected step names and evaluate the ManageLineage diagnostic condition.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Supply the fallback expression evaluated for the background task name.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Locate the steps to inject from ItemSignal.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AwaitPhase",
+      "description": "Wait for a phase.",
+      "properties": [
+        {
+          "path": "Config.ResultCollisionAction",
+          "description": "Choose Error, PreserveParent or OverwriteParent when merging completed phase results.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": "Error"
+          }
+        },
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Use a string Path directly as the background task identifier.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path.TaskId",
+          "description": "Read the task identifier when Path is an object rather than a string.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AwaitAllPhases",
+      "description": "Wait for all phases.",
+      "properties": [
+        {
+          "path": "Config.ResultCollisionAction",
+          "description": "Choose Error, PreserveParent or OverwriteParent when merging all completed phase results.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": "Error"
+          }
+        },
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "GetPhaseStatus",
+      "description": "Read a phase status.",
+      "properties": [
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Use a string Path directly as the background task identifier.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path.TaskId",
+          "description": "Read the task identifier when Path is an object rather than a string.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "StopPhase",
+      "description": "Stop a phase.",
+      "properties": [
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Use a string Path directly as the background task identifier.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path.TaskId",
+          "description": "Read the task identifier when Path is an object rather than a string.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "InsertPhaseSteps",
+      "description": "Insert phase steps.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Forward the incoming configuration object into the constructed hydration plan.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Config.Break",
+          "description": "Evaluate the helper diagnostic break condition before cloning injected steps.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Config.Iteration",
+          "description": "Read the iteration number to decide whether repeated step cloning should be skipped; a null value is treated as zero by the direct expression.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Config.PreventReclone",
+          "description": "Control the repeated-cloning guard; when enabled, iterations greater than one return before step resolution.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Config.SkipRename",
+          "description": "Skip prefixing injected step names when true.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Name",
+          "description": "Find the current step in the existing phase steps.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Prefix injected step names and evaluate the ManageLineage diagnostic condition.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Locate the steps to inject from ItemSignal.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Phase.Steps",
+          "description": "Read the current ordered phase steps so injected steps can be inserted after the current step.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Phase.Steps.Name",
+          "description": "Compare each existing phase step name with the current plan name to find the insertion position.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AddPhaseSteps",
+      "description": "Add phase steps.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Forward the incoming configuration object into the constructed hydration plan.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Config.Break",
+          "description": "Evaluate the helper diagnostic break condition before cloning injected steps.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Config.Iteration",
+          "description": "Read the iteration number to decide whether repeated step cloning should be skipped; a null value is treated as zero by the direct expression.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Config.PreventReclone",
+          "description": "Control the repeated-cloning guard; when enabled, iterations greater than one return before step resolution.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Config.SkipRename",
+          "description": "Skip prefixing injected step names when true.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Prefix injected step names and evaluate the ManageLineage diagnostic condition.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Locate the steps to inject from ItemSignal.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        }
+      ]
+    }
+  ]
+}

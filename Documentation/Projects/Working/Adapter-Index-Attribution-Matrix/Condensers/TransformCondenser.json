@@ -1,0 +1,817 @@
+{
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "TransformCondenser",
+  "activities": [
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "TransformCondenser",
+      "name": "Project",
+      "description": "Project signal data.",
+      "coverage": [
+        {
+          "adapter": "TransformCondenser",
+          "status": "reads",
+          "notes": "Shared Config.DefaultPath is read before every supported branch. ItemSignal-rooted values, constructed hydration/token plans and writes-only members are excluded; original Config forwarded opaquely is recorded where reached.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "TransformCondenser",
+              "lines": [
+                70,
+                73,
+                79,
+                80
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Forward the incoming configuration into each constructed hydration plan.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    101,
+                    107,
+                    114,
+                    125
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Config is passed opaquely to the Hydration adapter for each selected node.",
+              "conditional": true,
+              "condition": "Project when content lookup has a result and a node is iterated."
+            }
+          ]
+        },
+        {
+          "path": "Config.DefaultPath",
+          "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    79,
+                    80,
+                    144,
+                    235,
+                    236
+                  ]
+                }
+              ],
+              "trace": "Shared resolver supplies literal -Default \"%.@\". The read occurs even when a particular branch does not use the resulting path.",
+              "conditional": true,
+              "condition": "After supported activity validation, before dispatch."
+            }
+          ],
+          "default": {
+            "TransformCondenser": "%.@"
+          }
+        },
+        {
+          "path": "Key",
+          "description": "Select the registered source transform nodes.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    87,
+                    90,
+                    92
+                  ]
+                }
+              ],
+              "trace": "Incoming Key resolver result is embedded in an ItemSignal path; the lookup target is not incoming Plan.",
+              "conditional": true,
+              "condition": "Project before selecting source nodes."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Supply the content lookup path forwarded to Token.Memory.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    94,
+                    96,
+                    100
+                  ]
+                }
+              ],
+              "trace": "Direct incoming Plan.Path is copied into constructed ContentPlan.Path, then passed to another named adapter.",
+              "conditional": true,
+              "condition": "Project when Key and source transform-node lookups have results."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "TransformCondenser",
+      "name": "Select",
+      "description": "Select signal data.",
+      "coverage": [
+        {
+          "adapter": "TransformCondenser",
+          "status": "reads",
+          "notes": "Shared Config.DefaultPath is read before every supported branch. ItemSignal-rooted values, constructed hydration/token plans and writes-only members are excluded; original Config forwarded opaquely is recorded where reached.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "TransformCondenser",
+              "lines": [
+                70,
+                73,
+                79,
+                80
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Forward configuration into the constructed hydration plan for the selected result.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    165,
+                    173,
+                    183
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Config is passed opaquely to the Hydration adapter.",
+              "conditional": true,
+              "condition": "Select after successful selection when Config.Hydrate is true."
+            }
+          ]
+        },
+        {
+          "path": "Config.DefaultPath",
+          "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    79,
+                    80,
+                    144,
+                    235,
+                    236
+                  ]
+                }
+              ],
+              "trace": "Shared resolver supplies literal -Default \"%.@\". The read occurs even when a particular branch does not use the resulting path.",
+              "conditional": true,
+              "condition": "After supported activity validation, before dispatch."
+            }
+          ],
+          "default": {
+            "TransformCondenser": "%.@"
+          }
+        },
+        {
+          "path": "Config.Hydrate",
+          "description": "Request hydration of the selected result.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    150,
+                    165
+                  ]
+                }
+              ],
+              "trace": "Resolver supplies literal -Default $false and its result gates post-selection hydration.",
+              "conditional": true,
+              "condition": "Select branch; hydration is reached only after successful selection."
+            }
+          ],
+          "default": {
+            "TransformCondenser": false
+          }
+        },
+        {
+          "path": "Format",
+          "description": "Identify the source content format used by selection.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    147,
+                    160
+                  ]
+                }
+              ],
+              "trace": "Resolver receives literal -Default \"\" and forwards the result as SourceFormat; the helper receives primitives, not incoming Plan.",
+              "conditional": true,
+              "condition": "Select branch."
+            }
+          ],
+          "default": {
+            "TransformCondenser": ""
+          }
+        },
+        {
+          "path": "HtmlDecode",
+          "description": "Control HTML decoding of selected source content.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    148,
+                    160
+                  ]
+                }
+              ],
+              "trace": "Resolver supplies literal -Default $true and forwards SourceHtmlDecode.",
+              "conditional": true,
+              "condition": "Select branch."
+            }
+          ],
+          "default": {
+            "TransformCondenser": true
+          }
+        },
+        {
+          "path": "Path",
+          "description": "Select the requested path within resolved source content.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    146,
+                    160
+                  ]
+                }
+              ],
+              "trace": "Incoming Path is forwarded as the primitive SourcePath argument to Invoke-TransformSelect.",
+              "conditional": true,
+              "condition": "Select branch after shared default-path setup."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "TransformCondenser",
+      "name": "Inject",
+      "description": "Inject signal data.",
+      "coverage": [
+        {
+          "adapter": "TransformCondenser",
+          "status": "reads",
+          "notes": "Shared Config.DefaultPath is read before every supported branch. ItemSignal-rooted values, constructed hydration/token plans and writes-only members are excluded; original Config forwarded opaquely is recorded where reached.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "TransformCondenser",
+              "lines": [
+                70,
+                73,
+                79,
+                80
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config.Content",
+          "description": "Provide content appended into ItemSignal.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    195,
+                    196
+                  ]
+                }
+              ],
+              "trace": "Resolver reads incoming Config.Content with no Default.",
+              "conditional": true,
+              "condition": "Inject branch."
+            }
+          ]
+        },
+        {
+          "path": "Config.DefaultPath",
+          "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    79,
+                    80,
+                    144,
+                    235,
+                    236
+                  ]
+                }
+              ],
+              "trace": "Shared resolver supplies literal -Default \"%.@\". The read occurs even when a particular branch does not use the resulting path.",
+              "conditional": true,
+              "condition": "After supported activity validation, before dispatch."
+            }
+          ],
+          "default": {
+            "TransformCondenser": "%.@"
+          }
+        },
+        {
+          "path": "Path",
+          "description": "Choose the ItemSignal destination for appended content.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    196
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Path is a read used as the write destination argument; writing ItemSignal does not make this a write-only Plan field.",
+              "conditional": true,
+              "condition": "Inject branch."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "TransformCondenser",
+      "name": "RegisterSignal",
+      "description": "Register a signal.",
+      "coverage": [
+        {
+          "adapter": "TransformCondenser",
+          "status": "reads",
+          "notes": "Shared Config.DefaultPath is read before every supported branch. ItemSignal-rooted values, constructed hydration/token plans and writes-only members are excluded; original Config forwarded opaquely is recorded where reached.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "TransformCondenser",
+              "lines": [
+                70,
+                73,
+                79,
+                80
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config.Content",
+          "description": "Provide the content signal registered in the ItemSignal graph.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    202,
+                    205
+                  ]
+                }
+              ],
+              "trace": "Incoming Config.Content is resolved without Default; the result signal is passed to RegisterSignal.",
+              "conditional": true,
+              "condition": "RegisterSignal branch."
+            }
+          ]
+        },
+        {
+          "path": "Config.DefaultPath",
+          "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    79,
+                    80,
+                    144,
+                    235,
+                    236
+                  ]
+                }
+              ],
+              "trace": "Shared resolver supplies literal -Default \"%.@\". The read occurs even when a particular branch does not use the resulting path.",
+              "conditional": true,
+              "condition": "After supported activity validation, before dispatch."
+            }
+          ],
+          "default": {
+            "TransformCondenser": "%.@"
+          }
+        },
+        {
+          "path": "Config.Key",
+          "description": "Name the graph registration key.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    203,
+                    205
+                  ]
+                }
+              ],
+              "trace": "Incoming Config.Key is resolved without Default.",
+              "conditional": true,
+              "condition": "RegisterSignal branch."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "TransformCondenser",
+      "name": "UnregisterSignalKeys",
+      "description": "Remove registered signal keys.",
+      "coverage": [
+        {
+          "adapter": "TransformCondenser",
+          "status": "reads",
+          "notes": "Shared Config.DefaultPath is read before every supported branch. ItemSignal-rooted values, constructed hydration/token plans and writes-only members are excluded; original Config forwarded opaquely is recorded where reached.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "TransformCondenser",
+              "lines": [
+                70,
+                73,
+                79,
+                80
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config.DefaultPath",
+          "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    79,
+                    80,
+                    144,
+                    235,
+                    236
+                  ]
+                }
+              ],
+              "trace": "Shared resolver supplies literal -Default \"%.@\". The read occurs even when a particular branch does not use the resulting path.",
+              "conditional": true,
+              "condition": "After supported activity validation, before dispatch."
+            }
+          ],
+          "default": {
+            "TransformCondenser": "%.@"
+          }
+        },
+        {
+          "path": "Config.Keys",
+          "description": "Choose graph keys to unregister.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    211,
+                    213,
+                    215
+                  ]
+                }
+              ],
+              "trace": "Incoming Config.Keys is resolved without Default and array-wrapped for iteration.",
+              "conditional": true,
+              "condition": "UnregisterSignalKeys branch."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "TransformCondenser",
+      "name": "Clone",
+      "description": "Clone signal data.",
+      "coverage": [
+        {
+          "adapter": "TransformCondenser",
+          "status": "reads",
+          "notes": "Shared Config.DefaultPath is read before every supported branch. ItemSignal-rooted values, constructed hydration/token plans and writes-only members are excluded; original Config forwarded opaquely is recorded where reached.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "TransformCondenser",
+              "lines": [
+                70,
+                73,
+                79,
+                80
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config.DefaultPath",
+          "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    79,
+                    80,
+                    144,
+                    235,
+                    236
+                  ]
+                }
+              ],
+              "trace": "Shared resolver supplies literal -Default \"%.@\". The read occurs even when a particular branch does not use the resulting path.",
+              "conditional": true,
+              "condition": "After supported activity validation, before dispatch."
+            }
+          ],
+          "default": {
+            "TransformCondenser": "%.@"
+          }
+        },
+        {
+          "path": "Path",
+          "description": "Select ItemSignal content to clone through JSON serialization.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    221,
+                    223,
+                    225,
+                    226
+                  ]
+                }
+              ],
+              "trace": "Incoming Path resolver result selects ItemSignal content; the cloned content is not incoming Plan.",
+              "conditional": true,
+              "condition": "Clone branch."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "TransformCondenser",
+      "name": "Merge",
+      "description": "Merge signal data.",
+      "coverage": [
+        {
+          "adapter": "TransformCondenser",
+          "status": "reads",
+          "notes": "Shared Config.DefaultPath is read before every supported branch. ItemSignal-rooted values, constructed hydration/token plans and writes-only members are excluded; original Config forwarded opaquely is recorded where reached. MergeArrayHandling, MergeNullValueHandling and Depth with their defaults are resolved from ItemSignal under DefaultPath, not Plan; only Config.DefaultPath is an incoming property for this branch.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "TransformCondenser",
+              "lines": [
+                70,
+                73,
+                79,
+                80
+              ]
+            },
+            {
+              "sourceId": "TransformCondenser",
+              "lines": [
+                235,
+                236,
+                237,
+                238,
+                239,
+                246
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config.DefaultPath",
+          "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "adapters": [
+            "TransformCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "TransformCondenser",
+              "references": [
+                {
+                  "sourceId": "TransformCondenser",
+                  "lines": [
+                    79,
+                    80,
+                    144,
+                    235,
+                    236
+                  ]
+                }
+              ],
+              "trace": "Shared resolver supplies literal -Default \"%.@\". The read occurs even when a particular branch does not use the resulting path.",
+              "conditional": true,
+              "condition": "After supported activity validation, before dispatch."
+            }
+          ],
+          "default": {
+            "TransformCondenser": "%.@"
+          }
+        }
+      ]
+    }
+  ]
+}

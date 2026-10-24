@@ -1,0 +1,34 @@
+{
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "GraphCondenser",
+  "activities": [],
+  "nonActivityEntryPoints": [
+    {
+      "signature": "Invoke([string]$Path, [object]$Plan)",
+      "status": "zero-read",
+      "notes": "ActivityScope None. The two-argument Invoke does not read or forward its Plan or Path; it reads Conductor FlatFormulaSource and calls Invoke-GraphCondenser with a constructed signal. Five-argument mapped dispatch does not match this signature. ConduitCondenser owns the mapped Graph activity.",
+      "properties": [],
+      "references": [
+        {
+          "sourceId": "GraphCondenser",
+          "lines": [
+            43,
+            44,
+            63,
+            66,
+            74,
+            77,
+            78,
+            81
+          ]
+        },
+        {
+          "sourceId": "condenser-mapped",
+          "lines": [
+            141
+          ]
+        }
+      ]
+    }
+  ]
+}

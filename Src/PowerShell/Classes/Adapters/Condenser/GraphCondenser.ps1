@@ -37,6 +37,12 @@
 #   - Declarative runtime orchestration of multi-phase graph systems
 
 
+<#
+Class: GraphCondenser
+Purpose: Launch declarative graph plans from a path.
+ActivityScope: None
+Activities: None; Invoke takes a path and plan without Activity.
+#>
 class GraphCondenser {
     [Conductor]$Conductor
     [MappedCondenserAdapter]$MappedCondenserAdapter

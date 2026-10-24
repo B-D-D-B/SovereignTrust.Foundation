@@ -1,0 +1,226 @@
+{
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "FormatCondenser",
+  "activities": [
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "FormatCondenser",
+      "name": "Json",
+      "description": "Format content as JSON.",
+      "coverage": [
+        {
+          "adapter": "FormatCondenser",
+          "status": "reads",
+          "notes": "Format source comes from ItemSignal at fixed %.@. Json/JsonArray forward original Plan to Invoke-FormatJson; Xml and Text do not read incoming Plan.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "FormatCondenser",
+              "lines": [
+                39,
+                42,
+                46,
+                51,
+                60,
+                71,
+                80,
+                91,
+                104,
+                116
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Format",
+          "description": "Select Json versus JsonArray parsing in the JSON formatting helper.",
+          "adapters": [
+            "FormatCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "FormatCondenser",
+              "references": [
+                {
+                  "sourceId": "format-json",
+                  "lines": [
+                    4,
+                    11,
+                    12,
+                    14,
+                    15,
+                    20
+                  ]
+                }
+              ],
+              "trace": "Both JSON-named activities pass original Plan unchanged; helper dispatch uses Plan.Format, with literal -Default \"Json\", rather than assuming the outer activity selects array behavior.",
+              "conditional": true,
+              "condition": "After ItemSignal content resolution succeeds for Json or JsonArray."
+            }
+          ],
+          "default": {
+            "FormatCondenser": "Json"
+          }
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "FormatCondenser",
+      "name": "JsonArray",
+      "description": "Format content as a JSON array.",
+      "coverage": [
+        {
+          "adapter": "FormatCondenser",
+          "status": "reads",
+          "notes": "Format source comes from ItemSignal at fixed %.@. Json/JsonArray forward original Plan to Invoke-FormatJson; Xml and Text do not read incoming Plan.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "FormatCondenser",
+              "lines": [
+                39,
+                42,
+                46,
+                51,
+                60,
+                71,
+                80,
+                91,
+                104,
+                116
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Format",
+          "description": "Select Json versus JsonArray parsing in the JSON formatting helper.",
+          "adapters": [
+            "FormatCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "FormatCondenser",
+              "references": [
+                {
+                  "sourceId": "format-json",
+                  "lines": [
+                    4,
+                    11,
+                    12,
+                    14,
+                    15,
+                    20
+                  ]
+                }
+              ],
+              "trace": "Both JSON-named activities pass original Plan unchanged; helper dispatch uses Plan.Format, with literal -Default \"Json\", rather than assuming the outer activity selects array behavior.",
+              "conditional": true,
+              "condition": "After ItemSignal content resolution succeeds for Json or JsonArray."
+            }
+          ],
+          "default": {
+            "FormatCondenser": "Json"
+          }
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "FormatCondenser",
+      "name": "Xml",
+      "description": "Format content as XML.",
+      "coverage": [
+        {
+          "adapter": "FormatCondenser",
+          "status": "zero-read",
+          "notes": "Format source comes from ItemSignal at fixed %.@. Json/JsonArray forward original Plan to Invoke-FormatJson; Xml and Text do not read incoming Plan.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "FormatCondenser",
+              "lines": [
+                39,
+                42,
+                46,
+                51,
+                60,
+                71,
+                80,
+                91,
+                104,
+                116
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": []
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "FormatCondenser",
+      "name": "Text",
+      "description": "Format content as text.",
+      "coverage": [
+        {
+          "adapter": "FormatCondenser",
+          "status": "zero-read",
+          "notes": "Format source comes from ItemSignal at fixed %.@. Json/JsonArray forward original Plan to Invoke-FormatJson; Xml and Text do not read incoming Plan.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "FormatCondenser",
+              "lines": [
+                39,
+                42,
+                46,
+                51,
+                60,
+                71,
+                80,
+                91,
+                104,
+                116
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": []
+    }
+  ]
+}

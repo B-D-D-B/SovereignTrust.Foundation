@@ -1,18 +1,10 @@
 <#
 Class: MappedCondenserAdapter
 Purpose: Route a named slot to a registered condenser.
-Activities: Provider-defined; this wrapper forwards Activity without a whitelist.
-- Conduit: Process (process a plan), Graph (build a phase graph).
-- Format: Json, JsonArray, Xml, Text (format content).
-- Map: Invoke, Map (invoke or map values).
-- Memory: Persist, Generate (persist or generate memory content).
-- Plan: IteratePhase, InvokePlan, InvokePhase, InvokePhaseAsync, AwaitPhase,
-  AwaitAllPhases, GetPhaseStatus, StopPhase, InsertPhaseSteps, AddPhaseSteps
-  (execute, control, or edit phases).
-- Transform: Project, Select, Inject, RegisterSignal,
-  UnregisterSignalKeys, Clone, Merge (transform or manage signal data).
+ActivityScope: None
+Activities: None; the mapped adapter forwards Activity to the resolved condenser.
+ActivityForwarding: Unchanged
 InvokeOld(Context, Plan) has no Activity parameter.
-These are provider-specific lists.
 #>
 
 class MappedCondenserAdapter {
@@ -75,7 +67,6 @@ class MappedCondenserAdapter {
 
     [Signal] Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
         $opSignal = [Signal]::Start("MappedCondenser.Invoke") | Select-Object -Last 1
-
 
     try {
         

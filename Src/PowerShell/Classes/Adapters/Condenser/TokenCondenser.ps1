@@ -8,6 +8,17 @@
 # flows, token graph processing, and context-sensitive publishing.
 # =============================================================================
 
+<#
+Class: TokenCondenser
+Purpose: Perform token condenser operations.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Parse: Resolve a token from its path.
+ActivityValidation: OnInvoke, BeforeDispatch
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+#>
 class TokenCondenser {
     [Conductor]$Conductor
     [MappedCondenserAdapter]$MappedCondenserAdapter
@@ -30,6 +41,11 @@ class TokenCondenser {
 
     [Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
         $opSignal = [Signal]::Start("TokenCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
+
+        if ($Activity -notin @('Parse','Read')) {
+            $opSignal.LogCritical("Unsupported TokenCondenser activity: '$Activity'.")
+            return $opSignal
+        }
 
 
         # Key is used in the plan to perform the token parsing, $ItemSignal contains the path as the result

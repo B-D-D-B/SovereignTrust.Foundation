@@ -34,6 +34,23 @@
 # • Temporal Recursion: ✅
 # =============================================================================
 
+<#
+Class: TransformCondenser
+Purpose: Perform transform condenser operations.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Project: Project signal data.
+- Select: Select signal data.
+- Inject: Inject signal data.
+- RegisterSignal: Register a signal.
+- UnregisterSignalKeys: Remove registered signal keys.
+- Clone: Clone signal data.
+- Merge: Merge signal data.
+ActivityValidation: OnInvoke, BeforeDispatch
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+#>
 class TransformCondenser {
     [Conductor]$Conductor
     [MappedCondenserAdapter]$MappedCondenserAdapter
@@ -52,6 +69,11 @@ class TransformCondenser {
 
     [Signal]Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
         $opSignal = [Signal]::Start("TransformCondenser.Invoke") | Select-Object -Last 1
+
+        if ($Activity -notin @('Project', 'Select', 'Inject', 'RegisterSignal', 'UnregisterSignalKeys', 'Clone', 'Merge')) {
+            $opSignal.LogCritical("Unsupported TransformCondenser activity: '$Activity'.")
+            return $opSignal
+        }
 
         # First Supported Activities -> Select, Merge, Project
         $DefaultPathSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.DefaultPath" -Default "%.@" -SignalLevel "Warning" | Select-Object -Last 1

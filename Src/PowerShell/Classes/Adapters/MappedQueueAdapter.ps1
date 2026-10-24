@@ -1,12 +1,18 @@
 <#
 Class: MappedQueueAdapter
 Purpose: Route a queue slot through Invoke-MappedAdapterCore.
-Activities: Provider-defined; the wrapper forwards Activity.
-- AzureStorageQueue: PeekBatch (ReadBatch alias with visibility-timeout
-  behavior, not a guaranteed non-consuming peek), HandleMessage (process a
-  message), ReadBatch (read messages), WriteItem (enqueue an item), AckItem
-  (acknowledge/delete an item).
-- DeferItem has a dispatch branch but is not implemented.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- PeekBatch: Read messages using provider visibility behavior.
+- HandleMessage: Process a message.
+- ReadBatch: Read a batch of messages.
+- WriteItem: Enqueue an item.
+- AckItem: Acknowledge an item.
+- DeferItem: Defer an item; the current provider branch is unfinished.
+ActivityValidation: OnInvoke, BeforeProviderResolution
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
 #>
 
 class MappedQueueAdapter {
@@ -71,6 +77,11 @@ class MappedQueueAdapter {
 
     [Signal] Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
         $opSignal = [Signal]::Start("MappedQueueAdapter.Invoke:$Slot") | Select-Object -Last 1
+
+        if ($Activity -notin @('PeekBatch', 'HandleMessage', 'ReadBatch', 'WriteItem', 'AckItem', 'DeferItem')) {
+            $opSignal.LogCritical("Unsupported MappedQueueAdapter activity: '$Activity'.")
+            return $opSignal
+        }
 
         $resultSignal = Invoke-MappedAdapterCore -MappedAdapterSignal $this.Signal -ConductionSignal $ConductionSignal -Slot $Slot -Activity $Activity -Plan $Plan -ItemSignal $ItemSignal | Select-Object -Last 1
 

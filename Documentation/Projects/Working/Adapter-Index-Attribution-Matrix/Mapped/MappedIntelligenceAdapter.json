@@ -1,0 +1,2026 @@
+{
+  "mappedAdapter": "MappedIntelligenceAdapter",
+  "condenser": null,
+  "activities": [
+    {
+      "mappedAdapter": "MappedIntelligenceAdapter",
+      "condenser": null,
+      "name": "SendMessage",
+      "description": "Send a request to an intelligence service.",
+      "coverage": [
+        {
+          "adapter": "Intelligence_CodexCLI",
+          "status": "reads",
+          "notes": "Mapped core/concrete forward original Plan to local helpers. SendMessage resolves original Config; runtime policy/model profiles are jacket-owned and excluded. HandleMessage reads Plan.Path/Format but message data is ItemSignal-rooted. Finite policy presence checks are not value reads. Other-adapter formatting internals are opaque.",
+          "references": [
+            {
+              "sourceId": "intelligence-mapped",
+              "lines": [
+                76,
+                80,
+                84,
+                85,
+                88
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "Intelligence_CodexCLI",
+              "lines": [
+                24,
+                27
+              ]
+            },
+            {
+              "sourceId": "Invoke-Intelligence_CodexCLI",
+              "lines": [
+                8,
+                9,
+                10,
+                11,
+                15,
+                18,
+                27,
+                28,
+                33,
+                45
+              ]
+            }
+          ]
+        },
+        {
+          "adapter": "Intelligence_AzureFoundry",
+          "status": "reads",
+          "notes": "All three mapped activities have concrete branches. SendMessage and SendMessageOriginal call the same Responses helper; HandleMessage resolves ItemSignal content using Plan.Path and optionally calls Format. Shared Config extraction happens before the switch. Helper clone context reads are included; recursive REST/Format inventories are excluded.",
+          "references": [
+            {
+              "sourceId": "intelligence-mapped",
+              "lines": [
+                76,
+                80,
+                84,
+                85,
+                88
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "Intelligence_AzureFoundry",
+              "lines": [
+                50,
+                61,
+                66,
+                72,
+                84,
+                87,
+                96,
+                103,
+                106,
+                113
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract the message request configuration after adapter validation.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    72,
+                    73,
+                    75
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "Concrete has a non-null ConductionSignal and nonempty activity."
+            },
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Invoke-Intelligence_CodexCLI",
+                  "lines": [
+                    15,
+                    17,
+                    18
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-CodexCLIExecution",
+                  "lines": [
+                    102
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded.",
+              "conditional": true,
+              "condition": "SendMessage policy-presence checks and runtime validation pass."
+            }
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Read the message Content input after preceding request validation.",
+          "adapters": [
+            "Intelligence_CodexCLI",
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Invoke-Intelligence_CodexCLI",
+                  "lines": [
+                    15,
+                    17,
+                    18
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-CodexCLIExecution",
+                  "lines": [
+                    102
+                  ]
+                },
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    31
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded.",
+              "conditional": true,
+              "condition": "SendMessage reaches this resolver after preceding validations; no resolver default."
+            },
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    87,
+                    96
+                  ]
+                },
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    63
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "SendMessage/SendMessageOriginal reaches this resolver after preceding model/input checks; no -Default supplied."
+            }
+          ]
+        },
+        {
+          "path": "Config.MediaPath",
+          "description": "Read Foundry MediaPath request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    87,
+                    96
+                  ]
+                },
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    80
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "SendMessage/SendMessageOriginal reaches this resolver after preceding model/input checks; no -Default supplied."
+            }
+          ]
+        },
+        {
+          "path": "Config.MediaUrl",
+          "description": "Read Foundry MediaUrl request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    87,
+                    96
+                  ]
+                },
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    81
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "SendMessage/SendMessageOriginal reaches this resolver after preceding model/input checks; no -Default supplied."
+            }
+          ]
+        },
+        {
+          "path": "Config.Model",
+          "description": "Read Foundry Model request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    87,
+                    96
+                  ]
+                },
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    56
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "SendMessage/SendMessageOriginal reaches this resolver after preceding model/input checks; no -Default supplied."
+            }
+          ]
+        },
+        {
+          "path": "Config.ModelKey",
+          "description": "Read the request ModelKey after preceding validation.",
+          "adapters": [
+            "Intelligence_CodexCLI",
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Invoke-Intelligence_CodexCLI",
+                  "lines": [
+                    15,
+                    17,
+                    18
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-CodexCLIExecution",
+                  "lines": [
+                    102
+                  ]
+                },
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    73
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded.",
+              "conditional": true,
+              "condition": "SendMessage reaches this resolver after preceding validations; no resolver default."
+            },
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    87,
+                    96
+                  ]
+                },
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    53
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "SendMessage/SendMessageOriginal reaches this resolver after preceding model/input checks; no -Default supplied."
+            }
+          ]
+        },
+        {
+          "path": "Config.OutputSchema",
+          "description": "Read CodexCLI OutputSchema input.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Invoke-Intelligence_CodexCLI",
+                  "lines": [
+                    15,
+                    17,
+                    18
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-CodexCLIExecution",
+                  "lines": [
+                    102
+                  ]
+                },
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    80
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded.",
+              "conditional": true,
+              "condition": "SendMessage reaches this resolver after preceding validations; no resolver default."
+            }
+          ]
+        },
+        {
+          "path": "Config.OutputSchema.$schema",
+          "description": "Validate output-schema $schema.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    80,
+                    83,
+                    87,
+                    119,
+                    125
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded.",
+              "conditional": true,
+              "condition": "Original OutputSchema is a supplied object; preceding closed-schema validation allows the corresponding read."
+            }
+          ]
+        },
+        {
+          "path": "Config.OutputSchema.additionalProperties",
+          "description": "Validate output-schema additionalProperties.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    80,
+                    83,
+                    87,
+                    119,
+                    131
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded.",
+              "conditional": true,
+              "condition": "Original OutputSchema is a supplied object; preceding closed-schema validation allows the corresponding read."
+            }
+          ]
+        },
+        {
+          "path": "Config.OutputSchema.properties",
+          "description": "Validate output-schema properties.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    80,
+                    83,
+                    87,
+                    119,
+                    140
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded.",
+              "conditional": true,
+              "condition": "Original OutputSchema is a supplied object; preceding closed-schema validation allows the corresponding read."
+            }
+          ]
+        },
+        {
+          "path": "Config.OutputSchema.properties[$name]",
+          "description": "Validate a caller-named output-schema property object.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    80,
+                    87,
+                    140,
+                    142,
+                    144,
+                    146,
+                    154,
+                    155,
+                    156,
+                    159,
+                    160
+                  ]
+                },
+                {
+                  "sourceId": "Resolve-CodexCLIRuntime",
+                  "lines": [
+                    19,
+                    21,
+                    22
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded. Enumerated property names are literal keys, not path expressions.",
+              "conditional": true,
+              "condition": "OutputSchema properties is an original dictionary/object, name satisfies required-list validation, and schema validation reaches this property."
+            }
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Get-CodexCLILiteralMember $properties $name | Select-Object -Last 1"
+        },
+        {
+          "path": "Config.OutputSchema.properties[$name].type",
+          "description": "Validate the scalar type of a caller-named output-schema property.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    140,
+                    154,
+                    156,
+                    159,
+                    160,
+                    163,
+                    165,
+                    167,
+                    168,
+                    169
+                  ]
+                },
+                {
+                  "sourceId": "Resolve-CodexCLIRuntime",
+                  "lines": [
+                    21,
+                    22
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded.",
+              "conditional": true,
+              "condition": "Original named schema property is an object; its type must be one of the supported scalar type names. Presence checks alone are not value reads."
+            }
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $property -Path 'type' -SignalLevel 'Information' | Select-Object -Last 1"
+        },
+        {
+          "path": "Config.OutputSchema.required",
+          "description": "Validate output-schema required.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    80,
+                    83,
+                    87,
+                    119,
+                    148
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded.",
+              "conditional": true,
+              "condition": "Original OutputSchema is a supplied object; preceding closed-schema validation allows the corresponding read."
+            }
+          ]
+        },
+        {
+          "path": "Config.OutputSchema.type",
+          "description": "Validate output-schema type.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    80,
+                    83,
+                    87,
+                    119,
+                    128
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded.",
+              "conditional": true,
+              "condition": "Original OutputSchema is a supplied object; preceding closed-schema validation allows the corresponding read."
+            }
+          ]
+        },
+        {
+          "path": "Config.Prompt",
+          "description": "Read CodexCLI Prompt input.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Invoke-Intelligence_CodexCLI",
+                  "lines": [
+                    15,
+                    17,
+                    18
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-CodexCLIExecution",
+                  "lines": [
+                    102
+                  ]
+                },
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    35
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded.",
+              "conditional": true,
+              "condition": "SendMessage reaches this resolver after preceding validations; no resolver default."
+            }
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media",
+          "description": "Read media inputs from the original structured prompt after validation.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    87,
+                    96
+                  ]
+                },
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    62
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "SendMessage/SendMessageOriginal reaches this resolver after preceding model/input checks; no -Default supplied."
+            },
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    35,
+                    36,
+                    43,
+                    45,
+                    64
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded.",
+              "conditional": true,
+              "condition": "Prompt is an original object rather than text; prior validation passes."
+            }
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media[*].Detail",
+          "description": "Read Detail from an original structured prompt media entry, after validation and only while original entries remain selected.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    62,
+                    79,
+                    84,
+                    86,
+                    88,
+                    93
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "Prompt.Media supplied original entries; legacy MediaPath/MediaUrl have not replaced them with generated objects."
+            },
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    64,
+                    66,
+                    69,
+                    70,
+                    94
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-CodexCLIExecution",
+                  "lines": [
+                    102,
+                    110
+                  ]
+                },
+                {
+                  "sourceId": "Resolve-CodexCLIMedia",
+                  "lines": [
+                    157,
+                    158,
+                    159,
+                    170
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded.",
+              "conditional": true,
+              "condition": "Original structured Prompt.Media entries are enumerated; entry/allowed-member validations pass."
+            }
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media[*].MediaPath",
+          "description": "Read MediaPath from an original structured prompt media entry, after validation and only while original entries remain selected.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    62,
+                    79,
+                    84,
+                    86,
+                    88,
+                    90
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "Prompt.Media supplied original entries; legacy MediaPath/MediaUrl have not replaced them with generated objects."
+            },
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    64,
+                    66,
+                    69,
+                    70,
+                    94
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-CodexCLIExecution",
+                  "lines": [
+                    102,
+                    110
+                  ]
+                },
+                {
+                  "sourceId": "Resolve-CodexCLIMedia",
+                  "lines": [
+                    157,
+                    158,
+                    159,
+                    161
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded.",
+              "conditional": true,
+              "condition": "Original structured Prompt.Media entries are enumerated; entry/allowed-member validations pass."
+            }
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media[*].MediaType",
+          "description": "Read MediaType from an original structured prompt media entry, after validation and only while original entries remain selected.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    62,
+                    79,
+                    84,
+                    86,
+                    88,
+                    92
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "Prompt.Media supplied original entries; legacy MediaPath/MediaUrl have not replaced them with generated objects."
+            },
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    64,
+                    66,
+                    69,
+                    70,
+                    94
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-CodexCLIExecution",
+                  "lines": [
+                    102,
+                    110
+                  ]
+                },
+                {
+                  "sourceId": "Resolve-CodexCLIMedia",
+                  "lines": [
+                    157,
+                    158,
+                    159,
+                    167
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded.",
+              "conditional": true,
+              "condition": "Original structured Prompt.Media entries are enumerated; entry/allowed-member validations pass."
+            }
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media[*].MediaUrl",
+          "description": "Read MediaUrl from an original structured prompt media entry, after validation and only while original entries remain selected.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    62,
+                    79,
+                    84,
+                    86,
+                    88,
+                    91
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "Prompt.Media supplied original entries; legacy MediaPath/MediaUrl have not replaced them with generated objects."
+            },
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    64,
+                    66,
+                    69,
+                    70,
+                    94
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-CodexCLIExecution",
+                  "lines": [
+                    102,
+                    110
+                  ]
+                },
+                {
+                  "sourceId": "Resolve-CodexCLIMedia",
+                  "lines": [
+                    157,
+                    158,
+                    159,
+                    164
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded.",
+              "conditional": true,
+              "condition": "Original structured Prompt.Media entries are enumerated; entry/allowed-member validations pass."
+            }
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media[*][$name]",
+          "description": "Validate the value of an unsupported literal request member.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Invoke-Intelligence_CodexCLI",
+                  "lines": [
+                    15,
+                    17,
+                    18
+                  ]
+                },
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    5,
+                    7,
+                    8,
+                    9,
+                    12,
+                    13,
+                    29,
+                    35,
+                    36,
+                    45
+                  ]
+                },
+                {
+                  "sourceId": "Resolve-CodexCLIRuntime",
+                  "lines": [
+                    16,
+                    19,
+                    21,
+                    22,
+                    35,
+                    40,
+                    41
+                  ]
+                },
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    64,
+                    70,
+                    94
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-CodexCLIExecution",
+                  "lines": [
+                    110
+                  ]
+                },
+                {
+                  "sourceId": "Resolve-CodexCLIMedia",
+                  "lines": [
+                    157,
+                    159
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded. Literal helper indexes exact keys even if names contain path syntax; this is a validation read, not a declaration that arbitrary members are supported.",
+              "conditional": true,
+              "condition": "Original Prompt.Media entry is an object and enumerated name is outside MediaPath/MediaUrl/MediaType/Detail."
+            }
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Get-CodexCLILiteralMember $Object $name | Select-Object -Last 1"
+        },
+        {
+          "path": "Config.Prompt.System",
+          "description": "Read the system input from the original structured prompt after validation.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    87,
+                    96
+                  ]
+                },
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    60
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "SendMessage/SendMessageOriginal reaches this resolver after preceding model/input checks; no -Default supplied."
+            },
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    35,
+                    36,
+                    43,
+                    45,
+                    48
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded.",
+              "conditional": true,
+              "condition": "Prompt is an original object rather than text; prior validation passes."
+            }
+          ]
+        },
+        {
+          "path": "Config.Prompt.Texts",
+          "description": "Read text inputs from the original structured prompt after validation.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    87,
+                    96
+                  ]
+                },
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    61
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "SendMessage/SendMessageOriginal reaches this resolver after preceding model/input checks; no -Default supplied."
+            },
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    35,
+                    36,
+                    43,
+                    45,
+                    53
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded.",
+              "conditional": true,
+              "condition": "Prompt is an original object rather than text; prior validation passes."
+            }
+          ]
+        },
+        {
+          "path": "Config.Prompt[$name]",
+          "description": "Validate the value of an unsupported literal request member.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Invoke-Intelligence_CodexCLI",
+                  "lines": [
+                    15,
+                    17,
+                    18
+                  ]
+                },
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    5,
+                    7,
+                    8,
+                    9,
+                    12,
+                    13,
+                    29,
+                    35,
+                    36,
+                    45
+                  ]
+                },
+                {
+                  "sourceId": "Resolve-CodexCLIRuntime",
+                  "lines": [
+                    16,
+                    19,
+                    21,
+                    22,
+                    35,
+                    40,
+                    41
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded. Literal helper indexes exact keys even if names contain path syntax; this is a validation read, not a declaration that arbitrary members are supported.",
+              "conditional": true,
+              "condition": "Prompt is an object and enumerated name is outside System/Texts/Media."
+            }
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Get-CodexCLILiteralMember $Object $name | Select-Object -Last 1"
+        },
+        {
+          "path": "Config[$name]",
+          "description": "Validate the value of an unsupported literal request member.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Invoke-Intelligence_CodexCLI",
+                  "lines": [
+                    15,
+                    17,
+                    18
+                  ]
+                },
+                {
+                  "sourceId": "Resolve-CodexCLIPrompt",
+                  "lines": [
+                    5,
+                    7,
+                    8,
+                    9,
+                    12,
+                    13,
+                    29,
+                    35,
+                    36,
+                    45
+                  ]
+                },
+                {
+                  "sourceId": "Resolve-CodexCLIRuntime",
+                  "lines": [
+                    16,
+                    19,
+                    21,
+                    22,
+                    35,
+                    40,
+                    41
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete forward original Plan; helper unwraps Config, execution passes it to Resolve-CodexCLIPrompt. Prompt, media and schema aliases retain original Config values. Runtime/jacket settings and generated request output are excluded. Literal helper indexes exact keys even if names contain path syntax; this is a validation read, not a declaration that arbitrary members are supported.",
+              "conditional": true,
+              "condition": "Enumerated Config name is outside Prompt/Content/ModelKey/OutputSchema/Break."
+            }
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Get-CodexCLILiteralMember $Object $name | Select-Object -Last 1"
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context when cloning the Foundry request.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    110
+                  ]
+                },
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    13
+                  ]
+                }
+              ],
+              "trace": "Resolve-ClonePlan reads original context references; generated REST Config fields and recursive adapter reads are excluded.",
+              "conditional": true,
+              "condition": "Responses helper builds a nonempty prompt and reaches cloning."
+            }
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context when cloning the Foundry request.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    110
+                  ]
+                },
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    13
+                  ]
+                }
+              ],
+              "trace": "Resolve-ClonePlan reads original context references; generated REST Config fields and recursive adapter reads are excluded.",
+              "conditional": true,
+              "condition": "Responses helper builds a nonempty prompt and reaches cloning."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedIntelligenceAdapter",
+      "condenser": null,
+      "name": "SendMessageOriginal",
+      "description": "Send the original message without prior transformation.",
+      "coverage": [
+        {
+          "adapter": "Intelligence_CodexCLI",
+          "status": "zero-read",
+          "notes": "The mapped activity is accepted globally, but the CodexCLI helper has only SendMessage and HandleMessage cases; SendMessageOriginal reaches default rejection without reading Plan properties.",
+          "references": [
+            {
+              "sourceId": "intelligence-mapped",
+              "lines": [
+                76,
+                80,
+                84,
+                85,
+                88
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "Intelligence_CodexCLI",
+              "lines": [
+                24,
+                27
+              ]
+            },
+            {
+              "sourceId": "Invoke-Intelligence_CodexCLI",
+              "lines": [
+                8,
+                9,
+                10,
+                11,
+                15,
+                18,
+                27,
+                28,
+                33,
+                45
+              ]
+            }
+          ]
+        },
+        {
+          "adapter": "Intelligence_AzureFoundry",
+          "status": "reads",
+          "notes": "All three mapped activities have concrete branches. SendMessage and SendMessageOriginal call the same Responses helper; HandleMessage resolves ItemSignal content using Plan.Path and optionally calls Format. Shared Config extraction happens before the switch. Helper clone context reads are included; recursive REST/Format inventories are excluded.",
+          "references": [
+            {
+              "sourceId": "intelligence-mapped",
+              "lines": [
+                76,
+                80,
+                84,
+                85,
+                88
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "Intelligence_AzureFoundry",
+              "lines": [
+                50,
+                61,
+                66,
+                72,
+                84,
+                87,
+                96,
+                103,
+                106,
+                113
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract intelligence service request configuration.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    72,
+                    73,
+                    75
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "Concrete has a non-null ConductionSignal and nonempty activity."
+            }
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Read Foundry Content request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    87,
+                    96
+                  ]
+                },
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    63
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "SendMessage/SendMessageOriginal reaches this resolver after preceding model/input checks; no -Default supplied."
+            }
+          ]
+        },
+        {
+          "path": "Config.MediaPath",
+          "description": "Read Foundry MediaPath request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    87,
+                    96
+                  ]
+                },
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    80
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "SendMessage/SendMessageOriginal reaches this resolver after preceding model/input checks; no -Default supplied."
+            }
+          ]
+        },
+        {
+          "path": "Config.MediaUrl",
+          "description": "Read Foundry MediaUrl request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    87,
+                    96
+                  ]
+                },
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    81
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "SendMessage/SendMessageOriginal reaches this resolver after preceding model/input checks; no -Default supplied."
+            }
+          ]
+        },
+        {
+          "path": "Config.Model",
+          "description": "Read Foundry Model request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    87,
+                    96
+                  ]
+                },
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    56
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "SendMessage/SendMessageOriginal reaches this resolver after preceding model/input checks; no -Default supplied."
+            }
+          ]
+        },
+        {
+          "path": "Config.ModelKey",
+          "description": "Read Foundry ModelKey request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    87,
+                    96
+                  ]
+                },
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    53
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "SendMessage/SendMessageOriginal reaches this resolver after preceding model/input checks; no -Default supplied."
+            }
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media",
+          "description": "Read Foundry Prompt.Media request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    87,
+                    96
+                  ]
+                },
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    62
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "SendMessage/SendMessageOriginal reaches this resolver after preceding model/input checks; no -Default supplied."
+            }
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media[*].Detail",
+          "description": "Read Foundry media Detail.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    62,
+                    79,
+                    84,
+                    86,
+                    88,
+                    93
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "Prompt.Media supplied original entries; legacy MediaPath/MediaUrl have not replaced them with generated objects."
+            }
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media[*].MediaPath",
+          "description": "Read Foundry media MediaPath.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    62,
+                    79,
+                    84,
+                    86,
+                    88,
+                    90
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "Prompt.Media supplied original entries; legacy MediaPath/MediaUrl have not replaced them with generated objects."
+            }
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media[*].MediaType",
+          "description": "Read Foundry media MediaType.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    62,
+                    79,
+                    84,
+                    86,
+                    88,
+                    92
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "Prompt.Media supplied original entries; legacy MediaPath/MediaUrl have not replaced them with generated objects."
+            }
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media[*].MediaUrl",
+          "description": "Read Foundry media MediaUrl.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    62,
+                    79,
+                    84,
+                    86,
+                    88,
+                    91
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "Prompt.Media supplied original entries; legacy MediaPath/MediaUrl have not replaced them with generated objects."
+            }
+          ]
+        },
+        {
+          "path": "Config.Prompt.System",
+          "description": "Read Foundry Prompt.System request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    87,
+                    96
+                  ]
+                },
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    60
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "SendMessage/SendMessageOriginal reaches this resolver after preceding model/input checks; no -Default supplied."
+            }
+          ]
+        },
+        {
+          "path": "Config.Prompt.Texts",
+          "description": "Read Foundry Prompt.Texts request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    87,
+                    96
+                  ]
+                },
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    61
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "SendMessage/SendMessageOriginal reaches this resolver after preceding model/input checks; no -Default supplied."
+            }
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context when cloning the Foundry request.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    110
+                  ]
+                },
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    13
+                  ]
+                }
+              ],
+              "trace": "Resolve-ClonePlan reads original context references; generated REST Config fields and recursive adapter reads are excluded.",
+              "conditional": true,
+              "condition": "Responses helper builds a nonempty prompt and reaches cloning."
+            }
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context when cloning the Foundry request.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "foundry-responses",
+                  "lines": [
+                    110
+                  ]
+                },
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    13
+                  ]
+                }
+              ],
+              "trace": "Resolve-ClonePlan reads original context references; generated REST Config fields and recursive adapter reads are excluded.",
+              "conditional": true,
+              "condition": "Responses helper builds a nonempty prompt and reaches cloning."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedIntelligenceAdapter",
+      "condenser": null,
+      "name": "HandleMessage",
+      "description": "Resolve and optionally format a message.",
+      "coverage": [
+        {
+          "adapter": "Intelligence_CodexCLI",
+          "status": "reads",
+          "notes": "Mapped core/concrete forward original Plan to local helpers. SendMessage resolves original Config; runtime policy/model profiles are jacket-owned and excluded. HandleMessage reads Plan.Path/Format but message data is ItemSignal-rooted. Finite policy presence checks are not value reads. Other-adapter formatting internals are opaque.",
+          "references": [
+            {
+              "sourceId": "intelligence-mapped",
+              "lines": [
+                76,
+                80,
+                84,
+                85,
+                88
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "Intelligence_CodexCLI",
+              "lines": [
+                24,
+                27
+              ]
+            },
+            {
+              "sourceId": "Invoke-Intelligence_CodexCLI",
+              "lines": [
+                8,
+                9,
+                10,
+                11,
+                15,
+                18,
+                27,
+                28,
+                33,
+                45
+              ]
+            }
+          ]
+        },
+        {
+          "adapter": "Intelligence_AzureFoundry",
+          "status": "reads",
+          "notes": "All three mapped activities have concrete branches. SendMessage and SendMessageOriginal call the same Responses helper; HandleMessage resolves ItemSignal content using Plan.Path and optionally calls Format. Shared Config extraction happens before the switch. Helper clone context reads are included; recursive REST/Format inventories are excluded.",
+          "references": [
+            {
+              "sourceId": "intelligence-mapped",
+              "lines": [
+                76,
+                80,
+                84,
+                85,
+                88
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "Intelligence_AzureFoundry",
+              "lines": [
+                50,
+                61,
+                66,
+                72,
+                84,
+                87,
+                96,
+                103,
+                106,
+                113
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract intelligence service request configuration.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    72,
+                    73,
+                    75
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "Concrete has a non-null ConductionSignal and nonempty activity."
+            }
+          ]
+        },
+        {
+          "path": "Format",
+          "description": "Resolve the message format after successful message lookup.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    106,
+                    113
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "HandleMessage branch; Format follows successful ItemSignal message resolution."
+            },
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Invoke-Intelligence_CodexCLI",
+                  "lines": [
+                    33,
+                    31,
+                    39
+                  ]
+                }
+              ],
+              "trace": "Original Plan field is resolved; Path selects ItemSignal data, while Format selects an opaque condenser call. No nested ItemSignal fields become Plan properties.",
+              "conditional": true,
+              "condition": "HandleMessage branch; Format requires successful message lookup."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the message lookup path for message handling.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ],
+          "evidence": [
+            {
+              "adapter": "Intelligence_AzureFoundry",
+              "references": [
+                {
+                  "sourceId": "Intelligence_AzureFoundry",
+                  "lines": [
+                    103,
+                    113
+                  ]
+                }
+              ],
+              "trace": "Mapped core/concrete preserve original Plan. Responses helper resolves Config fields; media entry aliases retain original Prompt.Media until a generated legacy-media object replaces them. Settings, response data and constructed REST fields are excluded.",
+              "conditional": true,
+              "condition": "HandleMessage branch; Format follows successful ItemSignal message resolution."
+            },
+            {
+              "adapter": "Intelligence_CodexCLI",
+              "references": [
+                {
+                  "sourceId": "Invoke-Intelligence_CodexCLI",
+                  "lines": [
+                    28,
+                    31,
+                    39
+                  ]
+                }
+              ],
+              "trace": "Original Plan field is resolved; Path selects ItemSignal data, while Format selects an opaque condenser call. No nested ItemSignal fields become Plan properties.",
+              "conditional": true,
+              "condition": "HandleMessage branch; Format requires successful message lookup."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

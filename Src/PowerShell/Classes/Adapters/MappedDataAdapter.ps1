@@ -1,12 +1,39 @@
 <#
 Class: MappedDataAdapter
 Purpose: Route a data slot through Invoke-MappedAdapterCore.
-Activities: Provider-defined; the wrapper forwards Activity.
-- AzureSql Write: run a configured write procedure.
-- AzureSql Query: run a configured read query.
-- AzureSql Delete: run a configured delete command.
-- AzureSql Admin: run a configured administration command.
-These are AzureSql operations, not a universal data API.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Write: Run a data write operation.
+- Query: Read data.
+- Delete: Remove data.
+- Admin: Run an administration command.
+- WriteItem: Write one data item.
+- WriteBatch: Write a batch of data items.
+- OpenCanonical: Open a canonical artifact record.
+- CaptureWriter: Capture a writer's artifact baseline.
+- ReadCaptured: Read a captured baseline.
+- PublishWriter: Publish a writer's candidate.
+- CreateEntry: Create an entry from a draft capture.
+- OpenArtifactProcess: Open an artifact process report.
+- InspectArtifactParts: Inspect artifact parts.
+- StartArtifactGeneration: Start generation of an artifact part.
+- PublishArtifactCandidate: Publish a generated artifact candidate.
+- FailArtifactGeneration: Mark artifact generation as failed.
+- CompleteArtifactGeneration: Complete published artifact generation.
+- RetryRejectedPart: Retry a rejected artifact part.
+- IngestArtifactPart: Ingest an artifact part.
+- ReconcileDelivery: Reconcile delivery state.
+- ResumeDelivery: Resume a pending delivery.
+- RetireDelivery: Retire a verified delivery.
+- RepairUnpublished: Repair an unpublished artifact.
+- SaveArtifactProcess: Save an artifact process snapshot.
+- SyncArtifactProcess: Synchronize an artifact process.
+- ReconcileArtifactProcess: Reconcile an artifact process.
+ActivityValidation: OnInvoke, BeforeProviderResolution
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+ActivityForwarding: Canonical
 #>
 
 class MappedDataAdapter {
@@ -70,6 +97,24 @@ class MappedDataAdapter {
 
     [Signal] Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
         $opSignal = [Signal]::Start("MappedDataAdapter.Invoke:$Slot") | Select-Object -Last 1
+
+        $allowedActivities = @(
+            'Write', 'Query', 'Delete', 'Admin', 'WriteItem', 'WriteBatch',
+            'OpenCanonical', 'CaptureWriter', 'ReadCaptured', 'PublishWriter',
+            'CreateEntry', 'OpenArtifactProcess', 'InspectArtifactParts',
+            'StartArtifactGeneration', 'PublishArtifactCandidate',
+            'FailArtifactGeneration', 'CompleteArtifactGeneration',
+            'RetryRejectedPart', 'IngestArtifactPart', 'ReconcileDelivery',
+            'ResumeDelivery', 'RetireDelivery', 'RepairUnpublished',
+            'SaveArtifactProcess', 'SyncArtifactProcess', 'ReconcileArtifactProcess'
+        )
+        if ($Activity -notin $allowedActivities) {
+            $opSignal.LogCritical("Unsupported MappedDataAdapter activity: '$Activity'.")
+            return $opSignal
+        }
+        foreach ($allowedActivity in $allowedActivities) {
+            if ($Activity -eq $allowedActivity) { $Activity = $allowedActivity; break }
+        }
 
         $resultSignal = Invoke-MappedAdapterCore -MappedAdapterSignal $this.Signal -ConductionSignal $ConductionSignal -Slot $Slot -Activity $Activity -Plan $Plan -ItemSignal $ItemSignal | Select-Object -Last 1
 

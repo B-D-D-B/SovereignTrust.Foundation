@@ -1,0 +1,2197 @@
+{
+  "name": "MappedDataAdapter",
+  "activities": [
+    {
+      "name": "Write",
+      "description": "Run a data write operation.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract the operation configuration after adapter and activity validation.",
+          "adapters": [
+            "Data_AzureDataExplorer",
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ColumnSchema",
+          "description": "Select SQL write ColumnSchema input.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.ColumnSchema[*].Name",
+          "description": "Read column descriptor Name.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.ColumnSchema[*].Type",
+          "description": "Read column descriptor Type.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.ColumnSchema[$name]",
+          "description": "Read a named column type from a dictionary schema.",
+          "adapters": [
+            "Data_AzureSql"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$Schema[$name]"
+        },
+        {
+          "path": "Config.CommandText",
+          "description": "Read and validate the Data Explorer command.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config.CommandTimeoutSeconds",
+          "description": "Choose a caller-specified SQL command timeout.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Select SQL write Content input.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content[*][$key]",
+          "description": "Read native incoming record fields before SQL payload serialization.",
+          "adapters": [
+            "Data_AzureSql"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$row[$key]"
+        },
+        {
+          "path": "Config.Content[$key]",
+          "description": "Read native incoming record fields before SQL payload serialization.",
+          "adapters": [
+            "Data_AzureSql"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$row[$key]"
+        },
+        {
+          "path": "Config.ContentPath",
+          "description": "Select SQL write ContentPath input.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Delimiter",
+          "description": "Select SQL write Delimiter input.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.InputFormat",
+          "description": "Select SQL write InputFormat input.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters",
+          "description": "Read SQL parameters for command binding.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Direction",
+          "description": "Read SQL parameter descriptor Direction.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Name",
+          "description": "Read SQL parameter descriptor Name.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Precision",
+          "description": "Read SQL parameter descriptor Precision.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Scale",
+          "description": "Read SQL parameter descriptor Scale.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Size",
+          "description": "Read SQL parameter descriptor Size.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.SqlDbType",
+          "description": "Read SQL parameter descriptor SqlDbType.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Value",
+          "description": "Read SQL parameter descriptor Value.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Direction",
+          "description": "Read SQL parameter descriptor Direction.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Name",
+          "description": "Read SQL parameter descriptor Name.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Precision",
+          "description": "Read SQL parameter descriptor Precision.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Scale",
+          "description": "Read SQL parameter descriptor Scale.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Size",
+          "description": "Read SQL parameter descriptor Size.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].SqlDbType",
+          "description": "Read SQL parameter descriptor SqlDbType.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Value",
+          "description": "Read SQL parameter descriptor Value.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[$key]",
+          "description": "Bind a scalar dictionary parameter by its literal key.",
+          "adapters": [
+            "Data_AzureSql"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$Parameters[$key]"
+        },
+        {
+          "path": "Config.PayloadMode",
+          "description": "Select SQL write PayloadMode input.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.PayloadParameter",
+          "description": "Select SQL write PayloadParameter.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Procedure",
+          "description": "Select SQL write Procedure.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.TransactionMode",
+          "description": "Choose and validate SQL transaction behavior.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Query",
+      "description": "Read data.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract the operation configuration after adapter and activity validation.",
+          "adapters": [
+            "Data_AzureDataExplorer",
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.CommandText",
+          "description": "Read and validate the operation command text.",
+          "adapters": [
+            "Data_AzureDataExplorer",
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.CommandTimeoutSeconds",
+          "description": "Choose a caller-specified SQL command timeout.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Parameters",
+          "description": "Read SQL parameters for command binding.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Direction",
+          "description": "Read SQL parameter descriptor Direction.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Name",
+          "description": "Read SQL parameter descriptor Name.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Precision",
+          "description": "Read SQL parameter descriptor Precision.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Scale",
+          "description": "Read SQL parameter descriptor Scale.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Size",
+          "description": "Read SQL parameter descriptor Size.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.SqlDbType",
+          "description": "Read SQL parameter descriptor SqlDbType.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Value",
+          "description": "Read SQL parameter descriptor Value.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Direction",
+          "description": "Read SQL parameter descriptor Direction.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Name",
+          "description": "Read SQL parameter descriptor Name.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Precision",
+          "description": "Read SQL parameter descriptor Precision.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Scale",
+          "description": "Read SQL parameter descriptor Scale.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Size",
+          "description": "Read SQL parameter descriptor Size.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].SqlDbType",
+          "description": "Read SQL parameter descriptor SqlDbType.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Value",
+          "description": "Read SQL parameter descriptor Value.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[$key]",
+          "description": "Bind a scalar dictionary parameter by its literal key.",
+          "adapters": [
+            "Data_AzureSql"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$Parameters[$key]"
+        },
+        {
+          "path": "Config.TransactionMode",
+          "description": "Choose and validate SQL transaction behavior.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Delete",
+      "description": "Remove data.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract the operation configuration after adapter and activity validation.",
+          "adapters": [
+            "Data_AzureDataExplorer",
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.CommandText",
+          "description": "Read and validate the operation command text.",
+          "adapters": [
+            "Data_AzureDataExplorer",
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.CommandTimeoutSeconds",
+          "description": "Choose a caller-specified SQL command timeout.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ExpectResultSets",
+          "description": "Choose whether SQL delete returns result sets.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters",
+          "description": "Read SQL parameters for command binding.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Direction",
+          "description": "Read SQL parameter descriptor Direction.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Name",
+          "description": "Read SQL parameter descriptor Name.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Precision",
+          "description": "Read SQL parameter descriptor Precision.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Scale",
+          "description": "Read SQL parameter descriptor Scale.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Size",
+          "description": "Read SQL parameter descriptor Size.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.SqlDbType",
+          "description": "Read SQL parameter descriptor SqlDbType.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Value",
+          "description": "Read SQL parameter descriptor Value.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Direction",
+          "description": "Read SQL parameter descriptor Direction.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Name",
+          "description": "Read SQL parameter descriptor Name.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Precision",
+          "description": "Read SQL parameter descriptor Precision.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Scale",
+          "description": "Read SQL parameter descriptor Scale.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Size",
+          "description": "Read SQL parameter descriptor Size.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].SqlDbType",
+          "description": "Read SQL parameter descriptor SqlDbType.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Value",
+          "description": "Read SQL parameter descriptor Value.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[$key]",
+          "description": "Bind a scalar dictionary parameter by its literal key.",
+          "adapters": [
+            "Data_AzureSql"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$Parameters[$key]"
+        },
+        {
+          "path": "Config.TransactionMode",
+          "description": "Choose and validate SQL transaction behavior.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "description": "Run an administration command.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract the operation configuration after adapter and activity validation.",
+          "adapters": [
+            "Data_AzureDataExplorer",
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.CommandText",
+          "description": "Read and validate the operation command text.",
+          "adapters": [
+            "Data_AzureDataExplorer",
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.CommandTimeoutSeconds",
+          "description": "Choose a caller-specified SQL command timeout.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Parameters",
+          "description": "Read SQL parameters for command binding.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Direction",
+          "description": "Read SQL parameter descriptor Direction.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Name",
+          "description": "Read SQL parameter descriptor Name.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Precision",
+          "description": "Read SQL parameter descriptor Precision.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Scale",
+          "description": "Read SQL parameter descriptor Scale.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Size",
+          "description": "Read SQL parameter descriptor Size.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.SqlDbType",
+          "description": "Read SQL parameter descriptor SqlDbType.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters.Value",
+          "description": "Read SQL parameter descriptor Value.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Direction",
+          "description": "Read SQL parameter descriptor Direction.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Name",
+          "description": "Read SQL parameter descriptor Name.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Precision",
+          "description": "Read SQL parameter descriptor Precision.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Scale",
+          "description": "Read SQL parameter descriptor Scale.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Size",
+          "description": "Read SQL parameter descriptor Size.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].SqlDbType",
+          "description": "Read SQL parameter descriptor SqlDbType.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[*].Value",
+          "description": "Read SQL parameter descriptor Value.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Parameters[$key]",
+          "description": "Bind a scalar dictionary parameter by its literal key.",
+          "adapters": [
+            "Data_AzureSql"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$Parameters[$key]"
+        },
+        {
+          "path": "Config.TransactionMode",
+          "description": "Choose and validate SQL transaction behavior.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "WriteItem",
+      "description": "Write one data item.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ContentKey",
+          "description": "Select Data Explorer ingestion ContentKey.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ],
+          "default": {
+            "Data_AzureDataExplorer": "Content"
+          }
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.MappingName",
+          "description": "Select Data Explorer ingestion MappingName.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config.TableName",
+          "description": "Select Data Explorer ingestion TableName.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context references while cloning the legacy Data Explorer request.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context references while cloning the legacy Data Explorer request.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "WriteBatch",
+      "description": "Write a batch of data items.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context references while cloning the legacy Data Explorer request.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context references while cloning the legacy Data Explorer request.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "OpenCanonical",
+      "description": "Open a canonical artifact record.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultText",
+          "description": "Supply artifact-process DefaultText for OpenCanonical.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Resource",
+          "description": "Supply artifact-process Resource for OpenCanonical.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CaptureWriter",
+      "description": "Capture a writer's artifact baseline.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultText",
+          "description": "Supply artifact-process DefaultText for CaptureWriter.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Group",
+          "description": "Supply artifact-process Group for CaptureWriter.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Resource",
+          "description": "Supply artifact-process Resource for CaptureWriter.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Writer",
+          "description": "Supply artifact-process Writer for CaptureWriter.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ReadCaptured",
+      "description": "Read a captured baseline.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.OperationId",
+          "description": "Supply artifact-process OperationId for ReadCaptured.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PublishWriter",
+      "description": "Publish a writer's candidate.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.CandidateText",
+          "description": "Supply artifact-process CandidateText for PublishWriter.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.GenerationToken",
+          "description": "Supply artifact-process GenerationToken for PublishWriter.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.OperationId",
+          "description": "Supply artifact-process OperationId for PublishWriter.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CreateEntry",
+      "description": "Create an entry from a draft capture.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.CandidateText",
+          "description": "Supply artifact-process CandidateText for CreateEntry.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DraftContainer",
+          "description": "Supply artifact-process DraftContainer for CreateEntry.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DraftName",
+          "description": "Supply artifact-process DraftName for CreateEntry.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DraftOperationId",
+          "description": "Supply artifact-process DraftOperationId for CreateEntry.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.OperationId",
+          "description": "Supply artifact-process OperationId for CreateEntry.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "OpenArtifactProcess",
+      "description": "Open an artifact process report.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "InspectArtifactParts",
+      "description": "Inspect artifact parts.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "StartArtifactGeneration",
+      "description": "Start generation of an artifact part.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.PartName",
+          "description": "Supply artifact-process PartName for StartArtifactGeneration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PublishArtifactCandidate",
+      "description": "Publish a generated artifact candidate.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.CandidateText",
+          "description": "Supply artifact-process CandidateText for PublishArtifactCandidate.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.OperationId",
+          "description": "Supply artifact-process OperationId for PublishArtifactCandidate.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.PartName",
+          "description": "Supply artifact-process PartName for PublishArtifactCandidate.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "FailArtifactGeneration",
+      "description": "Mark artifact generation as failed.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.OperationId",
+          "description": "Supply artifact-process OperationId for FailArtifactGeneration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.PartName",
+          "description": "Supply artifact-process PartName for FailArtifactGeneration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CompleteArtifactGeneration",
+      "description": "Complete published artifact generation.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.OperationId",
+          "description": "Supply artifact-process OperationId for CompleteArtifactGeneration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.PartName",
+          "description": "Supply artifact-process PartName for CompleteArtifactGeneration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "RetryRejectedPart",
+      "description": "Retry a rejected artifact part.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.EventReference",
+          "description": "Supply artifact-process EventReference for RetryRejectedPart.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.PartName",
+          "description": "Supply artifact-process PartName for RetryRejectedPart.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "IngestArtifactPart",
+      "description": "Ingest an artifact part.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.PartName",
+          "description": "Supply artifact-process PartName for IngestArtifactPart.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ReconcileDelivery",
+      "description": "Reconcile delivery state.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.PartName",
+          "description": "Supply artifact-process PartName for ReconcileDelivery.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ResumeDelivery",
+      "description": "Resume a pending delivery.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.EventReference",
+          "description": "Supply artifact-process EventReference for ResumeDelivery.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.PartName",
+          "description": "Supply artifact-process PartName for ResumeDelivery.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "RetireDelivery",
+      "description": "Retire a verified delivery.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.EventReference",
+          "description": "Supply artifact-process EventReference for RetireDelivery.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.PartName",
+          "description": "Supply artifact-process PartName for RetireDelivery.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "RepairUnpublished",
+      "description": "Repair an unpublished artifact.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.EventReference",
+          "description": "Supply artifact-process EventReference for RepairUnpublished.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SaveArtifactProcess",
+      "description": "Save an artifact process snapshot.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SyncArtifactProcess",
+      "description": "Synchronize an artifact process.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ReconcileArtifactProcess",
+      "description": "Reconcile an artifact process.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ]
+    }
+  ],
+  "concreteAdapters": [
+    {
+      "name": "Data_AzureSql",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureSql/PowerShell/Data_AzureSql.ps1"
+    },
+    {
+      "name": "Data_AzureDataExplorer",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureDataExplorer/PowerShell/Data_AzureDataExplorer.psm1"
+    },
+    {
+      "name": "Data_ArtifactProcess",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Data/ArtifactProcess/PowerShell/Data_ArtifactProcess.psm1"
+    }
+  ]
+}

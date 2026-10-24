@@ -1,0 +1,864 @@
+{
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "MemoryCondenser",
+  "activities": [
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "MemoryCondenser",
+      "name": "Persist",
+      "description": "Reserved memory persistence activity; its current branch has no implementation.",
+      "coverage": [
+        {
+          "adapter": "MemoryCondenser",
+          "status": "reserved-no-op",
+          "notes": "Reserved branch has only break, but the shared post-dispatch ReturnItemSignal read still executes. It is not a zero-read activity.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "MemoryCondenser",
+              "lines": [
+                37,
+                43,
+                53,
+                54,
+                266,
+                267,
+                268
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "ReturnItemSignal",
+          "description": "Return ItemSignal after the reserved Persist branch when requested.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    266,
+                    267,
+                    268
+                  ]
+                }
+              ],
+              "trace": "Shared trailing resolver reads original Plan.ReturnItemSignal with literal -Default $false.",
+              "conditional": true,
+              "condition": "Persist after its reserved branch."
+            }
+          ],
+          "default": {
+            "MemoryCondenser": false
+          }
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "MemoryCondenser",
+      "name": "Generate",
+      "description": "Generate memory content.",
+      "coverage": [
+        {
+          "adapter": "MemoryCondenser",
+          "status": "reads",
+          "notes": "GetNextStep receives original Plan as phase; Steps elements are selected then cloned before execution. Steps.* denotes fixed members of those incoming elements. Preserve original-element provenance only until hydration replaces a step or local writes replace a member; those generated values and downstream named-adapter reads are not additional incoming properties. Branch failure/early returns may skip trailing ReturnItemSignal.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "MemoryCondenser",
+              "lines": [
+                37,
+                43,
+                65,
+                67,
+                98,
+                122,
+                240,
+                266,
+                274,
+                282,
+                283,
+                346,
+                349,
+                355
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "ReturnItemSignal",
+          "description": "Return ItemSignal after generating all steps when requested.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    266,
+                    267,
+                    268
+                  ]
+                }
+              ],
+              "trace": "Shared trailing resolver reads original Plan.ReturnItemSignal with literal -Default $false.",
+              "conditional": true,
+              "condition": "Generate only when execution reaches the trailing resolver without returning early."
+            }
+          ],
+          "default": {
+            "MemoryCondenser": false
+          }
+        },
+        {
+          "path": "Steps",
+          "description": "Enumerate phase steps for execution and step-to-step navigation.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    65,
+                    274,
+                    276,
+                    282,
+                    283,
+                    294,
+                    307,
+                    333
+                  ]
+                }
+              ],
+              "trace": "GetNextStep parameter phase aliases original Plan. Its Steps collection supplies the step objects cloned for execution; fixed child-member reads are documented separately.",
+              "conditional": true,
+              "condition": "Generate whenever selecting the first or a subsequent step."
+            }
+          ]
+        },
+        {
+          "path": "Steps[*].Activity",
+          "description": "Identify step tracing and select the dispatched activity or Goto control flow.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    67,
+                    131,
+                    152,
+                    299
+                  ]
+                }
+              ],
+              "trace": "Original Plan aliases phase; phase.Steps supplies each selected step. The fixed member Activity is read directly or by resolver on that step. Config.SkipSteps uses ?? 0, not a supplied resolver Default. Config is forwarded only during deferred hydration.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ]
+        },
+        {
+          "path": "Steps[*].Adapter",
+          "description": "Identify step tracing and select the mapped adapter or goto branch.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    67,
+                    143,
+                    149,
+                    151,
+                    299
+                  ]
+                }
+              ],
+              "trace": "Original Plan aliases phase; phase.Steps supplies each selected step. The fixed member Adapter is read directly or by resolver on that step. Config.SkipSteps uses ?? 0, not a supplied resolver Default. Config is forwarded only during deferred hydration.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ]
+        },
+        {
+          "path": "Steps[*].Config",
+          "description": "Forward the step configuration into its constructed deferred hydration plan.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    93,
+                    97
+                  ]
+                }
+              ],
+              "trace": "Original Plan aliases phase; phase.Steps supplies each selected step. The fixed member Config is read directly or by resolver on that step. Config.SkipSteps uses ?? 0, not a supplied resolver Default. Config is forwarded only during deferred hydration.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ]
+        },
+        {
+          "path": "Steps[*].Config.Break",
+          "description": "Evaluate a diagnostic break condition for each step.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    71,
+                    65,
+                    283,
+                    355
+                  ]
+                }
+              ],
+              "trace": "GetNextStep selects and clones an incoming Steps element. The resolver explicitly supplies the recorded literal Default for Config.Break. After deferred hydration replaces step at line 98, only inherited/unmodified input fields retain this attribution.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ],
+          "default": {
+            "MemoryCondenser": false
+          }
+        },
+        {
+          "path": "Steps[*].Config.Iteration",
+          "description": "Read the previous iteration counter before incrementing the original selected step.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    346,
+                    348,
+                    349,
+                    350,
+                    351,
+                    355
+                  ]
+                }
+              ],
+              "trace": "The selected incoming step is read with literal -Default 0 before Config.Iteration is written and the step is cloned. Subsequent reads of the generated increment are not a new incoming value.",
+              "conditional": true,
+              "condition": "Generate GetNextStep when the selected step Config.PreventReclone is truthy."
+            }
+          ],
+          "default": {
+            "MemoryCondenser": 0
+          }
+        },
+        {
+          "path": "Steps[*].Config.PreventReclone",
+          "description": "Decide whether to track an execution iteration before cloning the selected step.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    346,
+                    348
+                  ]
+                }
+              ],
+              "trace": "Original Plan aliases phase; phase.Steps supplies each selected step. The fixed member Config.PreventReclone is read directly or by resolver on that step. Config.SkipSteps uses ?? 0, not a supplied resolver Default. Config is forwarded only during deferred hydration.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ]
+        },
+        {
+          "path": "Steps[*].Config.SkipSteps",
+          "description": "Offset the selected Goto target; a direct null-coalescing expression uses zero when null.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    299,
+                    303,
+                    306,
+                    307,
+                    316,
+                    317
+                  ]
+                }
+              ],
+              "trace": "Original Plan aliases phase; phase.Steps supplies each selected step. The fixed member Config.SkipSteps is read directly or by resolver on that step. Config.SkipSteps uses ?? 0, not a supplied resolver Default. Config is forwarded only during deferred hydration.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ]
+        },
+        {
+          "path": "Steps[*].Container",
+          "description": "Read the container used in missing-transform-result diagnostics.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    127,
+                    194
+                  ]
+                }
+              ],
+              "trace": "Original Plan aliases phase; phase.Steps supplies each selected step. The fixed member Container is read directly or by resolver on that step. Config.SkipSteps uses ?? 0, not a supplied resolver Default. Config is forwarded only during deferred hydration.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ]
+        },
+        {
+          "path": "Steps[*].ContentFormat",
+          "description": "Select optional formatting of final step content.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    129,
+                    141,
+                    219,
+                    225,
+                    228
+                  ]
+                }
+              ],
+              "trace": "Original Plan aliases phase; phase.Steps supplies each selected step. The fixed member ContentFormat is read directly or by resolver on that step. Config.SkipSteps uses ?? 0, not a supplied resolver Default. Config is forwarded only during deferred hydration.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ]
+        },
+        {
+          "path": "Steps[*].DeferredHydrationPlan",
+          "description": "Select deferred hydration applied before step execution.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    80,
+                    65,
+                    283,
+                    355
+                  ]
+                }
+              ],
+              "trace": "GetNextStep selects and clones an incoming Steps element. The resolver explicitly supplies the recorded literal Default for DeferredHydrationPlan. After deferred hydration replaces step at line 98, only inherited/unmodified input fields retain this attribution.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ],
+          "default": {
+            "MemoryCondenser": null
+          }
+        },
+        {
+          "path": "Steps[*].ExitAfterAdapter",
+          "description": "Skip post-adapter formatting/transform/hydration when true.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    135,
+                    65,
+                    283,
+                    355
+                  ]
+                }
+              ],
+              "trace": "GetNextStep selects and clones an incoming Steps element. The resolver explicitly supplies the recorded literal Default for ExitAfterAdapter. After deferred hydration replaces step at line 98, only inherited/unmodified input fields retain this attribution.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ],
+          "default": {
+            "MemoryCondenser": false
+          }
+        },
+        {
+          "path": "Steps[*].ExitAfterAdapterNoResult",
+          "description": "Return early when the adapter has no result and this flag is true.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    136,
+                    65,
+                    283,
+                    355
+                  ]
+                }
+              ],
+              "trace": "GetNextStep selects and clones an incoming Steps element. The resolver explicitly supplies the recorded literal Default for ExitAfterAdapterNoResult. After deferred hydration replaces step at line 98, only inherited/unmodified input fields retain this attribution.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ],
+          "default": {
+            "MemoryCondenser": false
+          }
+        },
+        {
+          "path": "Steps[*].Format",
+          "description": "Select optional formatting before transformation.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    128,
+                    140,
+                    175,
+                    180
+                  ]
+                }
+              ],
+              "trace": "Original Plan aliases phase; phase.Steps supplies each selected step. The fixed member Format is read directly or by resolver on that step. Config.SkipSteps uses ?? 0, not a supplied resolver Default. Config is forwarded only during deferred hydration.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ]
+        },
+        {
+          "path": "Steps[*].HydrationPlan",
+          "description": "Select optional post-adapter hydration.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    133,
+                    65,
+                    283,
+                    355
+                  ]
+                }
+              ],
+              "trace": "GetNextStep selects and clones an incoming Steps element. The resolver explicitly supplies the recorded literal Default for HydrationPlan. After deferred hydration replaces step at line 98, only inherited/unmodified input fields retain this attribution.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ],
+          "default": {
+            "MemoryCondenser": null
+          }
+        },
+        {
+          "path": "Steps[*].IsEnabled",
+          "description": "Check enablement before following a Goto target.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    299,
+                    300,
+                    302,
+                    303
+                  ]
+                }
+              ],
+              "trace": "The selected previous step is a clone of an incoming Steps element unless replaced. GetNextStep supplies literal -Default $true in the Goto-only resolver; this call context is separate from the main enablement test.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded. Goto navigation requires no Adapter and Activity equal to Goto."
+            }
+          ],
+          "default": {
+            "MemoryCondenser": true
+          }
+        },
+        {
+          "path": "Steps[*].IsEnabled",
+          "description": "Evaluate whether the step executes.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    106,
+                    65,
+                    283,
+                    355
+                  ]
+                }
+              ],
+              "trace": "GetNextStep selects and clones an incoming Steps element. The resolver explicitly supplies the recorded literal Default for IsEnabled. After deferred hydration replaces step at line 98, only inherited/unmodified input fields retain this attribution.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ],
+          "default": {
+            "MemoryCondenser": true
+          }
+        },
+        {
+          "path": "Steps[*].IsEnabledOperator",
+          "description": "Choose how step enablement values are combined.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    107,
+                    65,
+                    283,
+                    355
+                  ]
+                }
+              ],
+              "trace": "GetNextStep selects and clones an incoming Steps element. The resolver explicitly supplies the recorded literal Default for IsEnabledOperator. After deferred hydration replaces step at line 98, only inherited/unmodified input fields retain this attribution.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ],
+          "default": {
+            "MemoryCondenser": "And"
+          }
+        },
+        {
+          "path": "Steps[*].Key",
+          "description": "Choose the key used to register step results.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    134,
+                    65,
+                    283,
+                    355
+                  ]
+                }
+              ],
+              "trace": "GetNextStep selects and clones an incoming Steps element. The resolver explicitly supplies the recorded literal Default for Key. After deferred hydration replaces step at line 98, only inherited/unmodified input fields retain this attribution.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ],
+          "default": {
+            "MemoryCondenser": null
+          }
+        },
+        {
+          "path": "Steps[*].Mode",
+          "description": "Choose the transform activity when a step Path is present.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    130,
+                    65,
+                    283,
+                    355
+                  ]
+                }
+              ],
+              "trace": "GetNextStep selects and clones an incoming Steps element. The resolver explicitly supplies the recorded literal Default for Mode. After deferred hydration replaces step at line 98, only inherited/unmodified input fields retain this attribution.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ],
+          "default": {
+            "MemoryCondenser": "Select"
+          }
+        },
+        {
+          "path": "Steps[*].Name",
+          "description": "Identify step tracing and match names during next-step and goto selection.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    67,
+                    305,
+                    315,
+                    330
+                  ]
+                }
+              ],
+              "trace": "Original Plan aliases phase; phase.Steps supplies each selected step. The fixed member Name is read directly or by resolver on that step. Config.SkipSteps uses ?? 0, not a supplied resolver Default. Config is forwarded only during deferred hydration.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ]
+        },
+        {
+          "path": "Steps[*].Path",
+          "description": "Select transformation data and the target name for Goto navigation.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    125,
+                    139,
+                    186,
+                    192,
+                    303
+                  ]
+                }
+              ],
+              "trace": "Original Plan aliases phase; phase.Steps supplies each selected step. The fixed member Path is read directly or by resolver on that step. Config.SkipSteps uses ?? 0, not a supplied resolver Default. Config is forwarded only during deferred hydration.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ]
+        },
+        {
+          "path": "Steps[*].Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    13,
+                    20,
+                    21,
+                    22,
+                    25,
+                    33,
+                    34
+                  ]
+                }
+              ],
+              "trace": "Resolve-ClonePlan receives the original selected Steps element at Memory line 355 and reads its Plan/Phase references. Later clones after Phase has been assigned locally do not establish a new incoming Phase read.",
+              "conditional": true,
+              "condition": "Generate when GetNextStep clones a selected incoming step before local clone field replacement."
+            }
+          ]
+        },
+        {
+          "path": "Steps[*].Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    15,
+                    16,
+                    17,
+                    25,
+                    28,
+                    29
+                  ]
+                }
+              ],
+              "trace": "Resolve-ClonePlan receives the original selected Steps element at Memory line 355 and reads its Plan/Phase references. Later clones after Phase has been assigned locally do not establish a new incoming Phase read.",
+              "conditional": true,
+              "condition": "Generate when GetNextStep clones a selected incoming step before local clone field replacement."
+            }
+          ]
+        },
+        {
+          "path": "Steps[*].Resource",
+          "description": "Read the resource used in missing-transform-result diagnostics.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    126,
+                    194
+                  ]
+                }
+              ],
+              "trace": "Original Plan aliases phase; phase.Steps supplies each selected step. The fixed member Resource is read directly or by resolver on that step. Config.SkipSteps uses ?? 0, not a supplied resolver Default. Config is forwarded only during deferred hydration.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ]
+        },
+        {
+          "path": "Steps[*].Type",
+          "description": "Choose the transform condenser slot when a step Path is present.",
+          "adapters": [
+            "MemoryCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MemoryCondenser",
+              "references": [
+                {
+                  "sourceId": "MemoryCondenser",
+                  "lines": [
+                    132,
+                    65,
+                    283,
+                    355
+                  ]
+                }
+              ],
+              "trace": "GetNextStep selects and clones an incoming Steps element. The resolver explicitly supplies the recorded literal Default for Type. After deferred hydration replaces step at line 98, only inherited/unmodified input fields retain this attribution.",
+              "conditional": true,
+              "condition": "Generate for a step derived from incoming Steps, before that field is replaced by hydration or local writes; later replacement-owned values are excluded."
+            }
+          ],
+          "default": {
+            "MemoryCondenser": "Transform"
+          }
+        }
+      ]
+    }
+  ]
+}

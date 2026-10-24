@@ -1,7 +1,8 @@
 <#
 Class: MappedConduitAdapter
 Purpose: Try registered conduits until Invoke(Context, Plan) succeeds.
-Activities: No named Activity dispatch; invocation takes context and plan.
+ActivityScope: None
+Activities: None; Invoke takes context and plan without an Activity argument.
 #>
 
 class MappedConduitAdapter {

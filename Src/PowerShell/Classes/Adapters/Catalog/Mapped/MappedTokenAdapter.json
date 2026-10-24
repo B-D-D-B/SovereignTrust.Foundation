@@ -1,0 +1,261 @@
+{
+  "name": "MappedTokenAdapter",
+  "activities": [
+    {
+      "name": "Get",
+      "description": "Resolve a token value from a path.",
+      "properties": [
+        {
+          "path": "[$path]",
+          "description": "Resolve a dynamically selected descendant of the original forwarded configuration.",
+          "adapters": [
+            "Token_Memory"
+          ],
+          "default": {
+            "Token_Memory": {
+              "expression": "$default",
+              "representation": "powershell-expression"
+            }
+          },
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $dictionary -Path $path -Default $default -SignalLevel \"Warning\" | Select-Object -Last 1"
+        },
+        {
+          "path": "Config",
+          "description": "Forward the incoming configuration object into the constructed concrete token plan.",
+          "adapters": [
+            "Token_Conduction",
+            "Token_Dynamic",
+            "Token_Environment",
+            "Token_Formatter",
+            "Token_Generator",
+            "Token_Memory",
+            "Token_Navigator",
+            "Token_Storage",
+            "Token_System",
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Preserve configuration for a nested dynamic token reference.",
+          "adapters": [
+            "Token_Dynamic"
+          ]
+        },
+        {
+          "path": "Config.Content.Meta.Type",
+          "description": "Fall back to the content entity type while generating an ID code.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "Config.EmojiSets.MasterEmojiList",
+          "description": "Use the configured non-artifact master emoji sheet before loading it from storage.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "Config.EmojiSets.MasterEmojiList_Artifact",
+          "description": "Use the configured artifact master emoji sheet before loading it from storage.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "Config.EmojiSets[$emojiSheetName]",
+          "description": "Resolve the selected emoji sheet from preserved incoming configuration.",
+          "adapters": [
+            "Token_SDA"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Path \"Config.EmojiSets.$($emojiSheetName)\" -Dictionary $Plan -SignalLevel \"Information\" | Select-Object -Last 1"
+        },
+        {
+          "path": "Config.EmojiSetSources",
+          "description": "Read configured emoji-set sources during OCIID enrollment.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "Config.EntityType",
+          "description": "Select entity-specific enrollment, context, reference-tag, ID, lineage and emoji behavior.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "Config.Hours",
+          "description": "Provide the hourly weather observations used for closest-time selection.",
+          "adapters": [
+            "Token_SDA"
+          ],
+          "default": {
+            "Token_SDA": ""
+          }
+        },
+        {
+          "path": "Config.PrimaryAttributeName",
+          "description": "Build the ItemSignal lookup for the existing primary attribute.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "Config.SpecifiedTime",
+          "description": "Select the weather observation nearest the requested time.",
+          "adapters": [
+            "Token_SDA"
+          ],
+          "default": {
+            "Token_SDA": ""
+          }
+        },
+        {
+          "path": "Config.StateFile",
+          "description": "Name state resources and reverse-index files, or describe the OCIID write.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "Config.StatePath",
+          "description": "Name the state entry used when reading and incrementing the ID index.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "Config.Stations",
+          "description": "Attach station information to the selected weather result.",
+          "adapters": [
+            "Token_SDA"
+          ],
+          "default": {
+            "Token_SDA": ""
+          }
+        },
+        {
+          "path": "Config.UserEntry",
+          "description": "Read an explicit user entry or generation directive for ID, reference-tag or OCIID processing.",
+          "adapters": [
+            "Token_SDA"
+          ],
+          "default": {
+            "Token_SDA": ""
+          }
+        },
+        {
+          "path": "Config.VirtualPath",
+          "description": "Use an existing virtual storage path before deriving one from the token expression.",
+          "adapters": [
+            "Token_Storage"
+          ]
+        },
+        {
+          "path": "Container",
+          "description": "Override the token expression with a memory container/resource path when both values exist.",
+          "adapters": [
+            "Token_Conduction",
+            "Token_Dynamic",
+            "Token_Environment",
+            "Token_Formatter",
+            "Token_Generator",
+            "Token_Memory",
+            "Token_Navigator",
+            "Token_Storage",
+            "Token_System",
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Select the token provider and expression, and describe the resolution in diagnostics.",
+          "adapters": [
+            "Token_Conduction",
+            "Token_Dynamic",
+            "Token_Environment",
+            "Token_Formatter",
+            "Token_Generator",
+            "Token_Memory",
+            "Token_Navigator",
+            "Token_Storage",
+            "Token_System",
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "Resource",
+          "description": "Override the token expression with a memory container/resource path when both values exist.",
+          "adapters": [
+            "Token_Conduction",
+            "Token_Dynamic",
+            "Token_Environment",
+            "Token_Formatter",
+            "Token_Generator",
+            "Token_Memory",
+            "Token_Navigator",
+            "Token_Storage",
+            "Token_System",
+            "Token_SDA"
+          ]
+        }
+      ]
+    }
+  ],
+  "concreteAdapters": [
+    {
+      "name": "Token_Conduction",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Conduction.ps1"
+    },
+    {
+      "name": "Token_Dynamic",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Dynamic.ps1"
+    },
+    {
+      "name": "Token_Environment",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Environment.ps1"
+    },
+    {
+      "name": "Token_Formatter",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Formatter.ps1"
+    },
+    {
+      "name": "Token_Generator",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Generator.ps1"
+    },
+    {
+      "name": "Token_Memory",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Memory.ps1"
+    },
+    {
+      "name": "Token_Navigator",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Navigator.ps1"
+    },
+    {
+      "name": "Token_Storage",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Storage.ps1"
+    },
+    {
+      "name": "Token_System",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_System.ps1"
+    },
+    {
+      "name": "Token_SDA",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Token_SDA.psm1"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "HydrationCondenser",
+  "repository": "SovereignTrust.Foundation",
+  "path": "Src/PowerShell/Classes/Adapters/Condenser/HydrationCondenser.ps1",
+  "activities": [
+    {
+      "name": "Invoke",
+      "description": "Invoke a condenser operation.",
+      "properties": [
+        {
+          "path": "HydrationPlan",
+          "description": "Choose the sequence of hydration dispatch symbols; ^ repeats hydration until the compared result stabilizes.",
+          "adapters": [
+            "HydrationCondenser"
+          ],
+          "default": {
+            "HydrationCondenser": "^"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1400 @@
+{
+  "version": 1,
+  "scope": {
+    "mode": "pilot",
+    "mappedAdapters": [
+      "MappedSatelliteAdapter",
+      "MappedNetworkAdapter",
+      "MappedCondenserAdapter",
+      "MappedStorageAdapter",
+      "MappedTokenAdapter",
+      "MappedConductionAdapter",
+      "MappedConduitAdapter",
+      "MappedDataAdapter",
+      "MappedIntelligenceAdapter",
+      "MappedQuantumAdapter",
+      "MappedQueueAdapter",
+      "MappedSessionAdapter",
+      "MappedUtilityAdapter"
+    ],
+    "ownerStatus": [
+      {
+        "mappedAdapter": "MappedSatelliteAdapter",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedNetworkAdapter",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedCondenserAdapter",
+        "condenser": "PlanCondenser",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedCondenserAdapter",
+        "condenser": "ConductionCondenser",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedCondenserAdapter",
+        "condenser": "ConduitCondenser",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedCondenserAdapter",
+        "condenser": "FabCondenser",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedCondenserAdapter",
+        "condenser": "FormatCondenser",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedCondenserAdapter",
+        "condenser": "GraphCondenser",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedCondenserAdapter",
+        "condenser": "HydrationCondenser",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedCondenserAdapter",
+        "condenser": "MapCondenser",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedCondenserAdapter",
+        "condenser": "MemoryCondenser",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedCondenserAdapter",
+        "condenser": "MergeCondenser",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedCondenserAdapter",
+        "condenser": "RestCondenser",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedCondenserAdapter",
+        "condenser": "TokenCondenser",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedCondenserAdapter",
+        "condenser": "TransformCondenser",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedStorageAdapter",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedTokenAdapter",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedConductionAdapter",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedConduitAdapter",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedDataAdapter",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedIntelligenceAdapter",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedQuantumAdapter",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedQueueAdapter",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedSessionAdapter",
+        "status": "accepted"
+      },
+      {
+        "mappedAdapter": "MappedUtilityAdapter",
+        "status": "accepted"
+      }
+    ],
+    "condenserOwners": [
+      "PlanCondenser",
+      "ConductionCondenser",
+      "ConduitCondenser",
+      "FabCondenser",
+      "FormatCondenser",
+      "GraphCondenser",
+      "HydrationCondenser",
+      "MapCondenser",
+      "MemoryCondenser",
+      "MergeCondenser",
+      "RestCondenser",
+      "TokenCondenser",
+      "TransformCondenser"
+    ]
+  },
+  "indexBaselineSha256": "028352AC58352085D1BD01BBC1A5DA83A2FCE6CC4B998EC6E7525E2ECF0B9427",
+  "catalogFiles": [
+    {
+      "file": "../../../Src/PowerShell/Classes/Adapters/index.json",
+      "sha256": "461614B705383848B4F055A68CDCAB22EC05B51CCE174342F0CC714F5A98C434"
+    },
+    {
+      "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedSatelliteAdapter.json",
+      "sha256": "CCC9D6641E981B2C28FA7FD7539E8F3C051073BFF69F04C012B437C4501E2488"
+    },
+    {
+      "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedNetworkAdapter.json",
+      "sha256": "D3686C4D20CF450DC423B48A50CBC047FB558CB6F628883F3497B0750D68574A"
+    },
+    {
+      "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedCondenserAdapter.json",
+      "sha256": "4773B7D8B6680C14054F5E82A89D913E802A781BBDDC2AB0F0577BF256797A3B"
+    },
+    {
+      "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedStorageAdapter.json",
+      "sha256": "3B0914D3FDC73EABA019E4C243804A75BC0320E07A53B2A02C643F4007633BA8"
+    },
+    {
+      "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedTokenAdapter.json",
+      "sha256": "D5821691EC594C31A822DA5B206D3111BFAB60976D01207CE0884EF2E20181A7"
+    },
+    {
+      "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedConductionAdapter.json",
+      "sha256": "D1CAF78F3B264433B065F3DD7E0EEDA5279539500DA63300BE87DBEBC0BA6B58"
+    },
+    {
+      "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedConduitAdapter.json",
+      "sha256": "B766701AC8B0F4C11361513CC326C1DB68A0AB5B5C09ED38CE44269A10A2BF7A"
+    },
+    {
+      "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedDataAdapter.json",
+      "sha256": "0A723E19A802F8AB291B127FC2D8EDF996A7C31E65B5C56C4FD64E6ABE869EEF"
+    },
+    {
+      "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedIntelligenceAdapter.json",
+      "sha256": "28B1AE063AD773D6FBCAB9B1C23518476A98B2B8A8FE02A8D5430862F0D56933"
+    },
+    {
+      "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedQuantumAdapter.json",
+      "sha256": "D90C37E6D536F1A76AC27E4483B744A6B5636255DB34C62E9748AB3344484DF4"
+    },
+    {
+      "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedQueueAdapter.json",
+      "sha256": "FA133D1DBA46E22C769A3BA6BA7B109BEE25C6EFDE8DD11038FB45C02CC8E189"
+    },
+    {
+      "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedSessionAdapter.json",
+      "sha256": "29C35850EE6FF728A57BD50ACFCFC5BDD8D7852ACA268B041E34ADEC78B0B379"
+    },
+    {
+      "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedUtilityAdapter.json",
+      "sha256": "7DA464109A242C0EA9C9B6C7B874176E971922B68331A11E92478452D49F3119"
+    }
+  ],
+  "sources": [
+    {
+      "id": "satellite-mapped",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedSatelliteAdapter.ps1",
+      "sha256": "C8536BAAD7F8A2FA5DD5B9A571331A91F9042DC4721826CA7B23CC09CC29FBD3"
+    },
+    {
+      "id": "mapped-core",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Invoke-MappedAdapterCore.ps1",
+      "sha256": "0AB004DC55D82CDC9443E123C766262A4A75FADBDAB424E22A0EC4C971008792"
+    },
+    {
+      "id": "satellite-concrete",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Satellite/AzureApplicationInsights/PowerShell/Satellite_AzureApplicationInsights.psm1",
+      "sha256": "747BBB3E1ABC2FC34B05C1870CF418CFC6ADF38CC2EFCADC86902511D17E34FC"
+    },
+    {
+      "id": "network-mapped",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedNetworkAdapter.ps1",
+      "sha256": "BBA32609723509071469F6DD09D61B8868F957F840F29E83F67FF5A57CA3D842"
+    },
+    {
+      "id": "network-concrete",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Network/DiscordBot/PowerShell/Network_DiscordBot.psm1",
+      "sha256": "DBBE85CC453F129A47759BAE879A0F03CFBC53083F2B5452BFBB8B834DC673BF"
+    },
+    {
+      "id": "network-legacy-helper",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Network/Invoke-NetworkAdapter.ps1",
+      "sha256": "4BB20C48305311C0134C3882371E690826E103A17E1DCD0AA12911DCA2F83341"
+    },
+    {
+      "id": "condenser-mapped",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedCondenserAdapter.ps1",
+      "sha256": "C1D4BBECF14A58FE99CDE3DE16561D4CCE6843E6563B79E61D452CC9B56EA90F"
+    },
+    {
+      "id": "condenser-plan",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/PlanCondenser.ps1",
+      "sha256": "1293BDFBD22AD89C641E0FC5B4E8B95685CCC93F81CC7DC217D8CDE534B9C8F1"
+    },
+    {
+      "id": "condenser-conduction",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/ConductionCondenser.ps1",
+      "sha256": "5D1F1967553C0B6C5AC3F17C720AD62FC7B9E276AB00CC1DEDDE3767A4B2631C"
+    },
+    {
+      "id": "plan-iteration",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Plan/Invoke-PlanIteration.ps1",
+      "sha256": "3CF88F01B6BD75CC8D672F5B7DBA8B702C3794D83F17064AFE22AEF9BCAF716B"
+    },
+    {
+      "id": "plan-iteration-worker",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Plan/Invoke-PlanIterationWorker.ps1",
+      "sha256": "869A2E9CD9508EC05B390EAE09D04719C29F3C7D6D1442CDA9AFBA045DF709D6"
+    },
+    {
+      "id": "plan-clone",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Plan/Resolve-ClonePlan.ps1",
+      "sha256": "292547C09D6A10C4261F3E9DBBE91DB1291496B0F58E57EDBA0BAF3CFAF05787"
+    },
+    {
+      "id": "plan-phase",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Plan/Invoke-PlanPhase.ps1",
+      "sha256": "D45CF98C60656B8F531627264C48AA2A5EFAE462D4A51D84CF17D462FAFAF2DD"
+    },
+    {
+      "id": "mapped-invoke-wrapper",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Wrappers/Adapters/Invoke-MappedAdapter.ps1",
+      "sha256": "0B7C6FD6C46233F7421C97D2791A792CD65A90DDB3315AF0307C6B94E18670CC"
+    },
+    {
+      "id": "ConduitCondenser",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/ConduitCondenser.ps1",
+      "sha256": "2040B805A86E491078A0DA7B38F578D19353534341D033DFAAD50DC4EAA2EA5C"
+    },
+    {
+      "id": "FabCondenser",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/FabCondenser.ps1",
+      "sha256": "9C36DBBAD02949C0B72086D1ABD6F331F7E2D727BD72B8CC5D3A541B82654DB2"
+    },
+    {
+      "id": "FormatCondenser",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/FormatCondenser.ps1",
+      "sha256": "595E6ED81DECF943DCAAEEA5073185AF446A0475F113148542F0EC3A38DEDD89"
+    },
+    {
+      "id": "GraphCondenser",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/GraphCondenser.ps1",
+      "sha256": "3213132EB7528B89213C10C727138D7C032509AC129B953ACCA3E10D028373B3"
+    },
+    {
+      "id": "HydrationCondenser",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/HydrationCondenser.ps1",
+      "sha256": "567090D05741B85C35F436737A598B059B8905C1A39F840D9CBAD0B089B46D9A"
+    },
+    {
+      "id": "MapCondenser",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/MapCondenser.ps1",
+      "sha256": "572252AB3C43C2938BA1C0126B939B3EAC320A443B0DF6C6889F026049B3F661"
+    },
+    {
+      "id": "MemoryCondenser",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/MemoryCondenser.ps1",
+      "sha256": "6F887B010A58EED5F04CB6EAB056F6BD4A47184C35ABBA67496AF94A04428881"
+    },
+    {
+      "id": "MergeCondenser",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/MergeCondenser.ps1",
+      "sha256": "A44DCE5EC9EE65810B0FD4F96C260C9FC16B689622E324AAE9178258B5AA1613"
+    },
+    {
+      "id": "RestCondenser",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/RestCondenser.ps1",
+      "sha256": "DCD661B3D59816E69F213605CF6429EED96403273BE1A31A2AC92BD40CAE2E9C"
+    },
+    {
+      "id": "TokenCondenser",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/TokenCondenser.ps1",
+      "sha256": "C2595F44FE02FBD12445539BE61FE0191CF7940A9C4B26F1FA8EE318ECEEFAD3"
+    },
+    {
+      "id": "TransformCondenser",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/TransformCondenser.ps1",
+      "sha256": "2AE9F702A4D4E7BC1ACA5BCAB6F98E654637636FBED6B588A97CBDB44053409A"
+    },
+    {
+      "id": "conduit-process",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Conduit/Invoke-ProcessConduitCondenser.ps1",
+      "sha256": "3511F6519711D9C44D25FE4A017BFC8DED144FF893C02570AA1BE771CA1AE4DC"
+    },
+    {
+      "id": "conduit-pool",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Conduit/Invoke-ConduitPool.ps1",
+      "sha256": "7E9DE16EE738063F2F07895B05D97EFD6D0317C7EFE1078DDD9E5CB8843170B3"
+    },
+    {
+      "id": "format-json",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Format/Invoke-FormatJson.ps1",
+      "sha256": "C84115E824F0C0BD69A97C0F35D86157F6557BFF84E466581F3072C1FBA7D7FB"
+    },
+    {
+      "id": "hydration-apply",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Hydration/Invoke-ApplyHydrationCondenser.ps1",
+      "sha256": "8A0BEC021956DAF8DFEF236AB071DC5CB5F7ACBAE3DB7575361106EC00984A54"
+    },
+    {
+      "id": "map-invoke",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Map/Invoke-MapCondenser.ps1",
+      "sha256": "5636268D2C4A70BAF33C648F2801029FD61348B9C004B547378F330C0C7CEDFC"
+    },
+    {
+      "id": "map-direct",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Map/Invoke-DirectMapCondenser.ps1",
+      "sha256": "1702DDBE5B07E99DF78197C6C381FDD2D3E79F8FDC45B81BEF96E8C883AB5174"
+    },
+    {
+      "id": "map-template",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Map/Invoke-TemplateMapCondenser.ps1",
+      "sha256": "02087A99621D18CA8F8E19BE7A50A4F405FAA29CBA61993ADA603FC490F0B0A6"
+    },
+    {
+      "id": "json-token",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Token/Invoke-JsonTokenCondenser.ps1",
+      "sha256": "0F34A24DF3CBDA88698121EEF97951844E9B6AC49A34EF5164D23E2A1B938FE8"
+    },
+    {
+      "id": "token-property",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Global/Resolve-TokenForProperty.ps1",
+      "sha256": "DCA1C9826A93350D6C8A68B82D48076792959A7FC103E4D3C2C062A35FD0265A"
+    },
+    {
+      "id": "rest-core",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Rest/Invoke-RestCondenserCore.ps1",
+      "sha256": "E3C44F747CE954C5D966216DBA025767763E3FCEF2342B85ACC3C37EFD63EA6D"
+    },
+    {
+      "id": "graph-json-array",
+      "repository": "SignalGraph",
+      "path": "Src/PowerShell/SignalGraph/Utilities/Resolve-GraphForJsonArray.ps1",
+      "sha256": "C2A08C97545A701C774A2FEBACF3F03AAF58500DC98A5556F503F28948D9BE74"
+    },
+    {
+      "id": "Storage_EmbeddedFileSystem",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Storage/Storage_EmbeddedFileSystem.ps1",
+      "sha256": "C6EA612411E3317ED7E96EFE05E612BD6A2F3694FF9253D5C63B49058A760E6E"
+    },
+    {
+      "id": "Storage_LocalFileSystem",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/LocalFileSystem/PowerShell/Storage_LocalFileSystem.ps1",
+      "sha256": "62B6C761DB2B60819E734DCF65635C82B18D3315DFC46F0E561EF0C1D785AE16"
+    },
+    {
+      "id": "Storage_AzureStorageAccount",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureStorageAccount/PowerShell/Storage_AzureStorageAccount.psm1",
+      "sha256": "5EDA096F2ABDF8A0100FE81012BB2D11AA5539017451F92AC0633C8B94A63982"
+    },
+    {
+      "id": "Storage_AzureKeyVault",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureKeyVault/PowerShell/Storage_AzureKeyVault.psm1",
+      "sha256": "49E948D907626D0ADDCB170B6FA069F6002D04E6272A070D31B9F07E2A256299"
+    },
+    {
+      "id": "Token_Conduction",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Conduction.ps1",
+      "sha256": "C2A7EB89F55A9641224DCB3D0C8AC27F1FA2B5DCBBDB9F4A9A38F40924B1E391"
+    },
+    {
+      "id": "Token_Dynamic",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Dynamic.ps1",
+      "sha256": "992836A9C2E6ED8BF1378DAC27F160CD39CDD005BABCAF1A0BA96861D3F17CC1"
+    },
+    {
+      "id": "Token_Environment",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Environment.ps1",
+      "sha256": "BF7359E73D206A625380AAB157F44330EA263E78B86361F50DBBB927F322DF65"
+    },
+    {
+      "id": "Token_Formatter",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Formatter.ps1",
+      "sha256": "927B92C95919BFC832052C4AC118D5254477CB53634647863DA9CC1E9C1574E0"
+    },
+    {
+      "id": "Token_Generator",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Generator.ps1",
+      "sha256": "EC1B964E8395CEED775021B0DA076881AFC5CBC842B827797757222FC88B56B1"
+    },
+    {
+      "id": "Token_Memory",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Memory.ps1",
+      "sha256": "19364F0AF05E64FFA6A2190CAF33F72ECEF7F497FCD66329ECE6F1918C1E2C9C"
+    },
+    {
+      "id": "Token_Navigator",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Navigator.ps1",
+      "sha256": "0FD36253012306CBF8853B017C4AAC45F8268CBA09EF008CB32C34C5D6FAB63A"
+    },
+    {
+      "id": "Token_Storage",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Storage.ps1",
+      "sha256": "9122F07FF8BE2082845A0D21BDBC6533B6E2F9B0E3D7BECF74E0574A6CDE4173"
+    },
+    {
+      "id": "Token_System",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_System.ps1",
+      "sha256": "431B6A8E15E1AA59A86CED2F9DBFD453F3E5E42DBDC8F31F1099B8CCC2D81CCE"
+    },
+    {
+      "id": "Token_SDA",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Token_SDA.psm1",
+      "sha256": "50E786591DAA86D543ADC4E261F2562FA2F6368382750E0F310B9D386968890E"
+    },
+    {
+      "id": "storage-mapped",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedStorageAdapter.ps1",
+      "sha256": "0FADD780A315F3AF88005FFBBCB171DC8DE9D5C6BBB106E675F933CA11E67466"
+    },
+    {
+      "id": "token-mapped",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedTokenAdapter.ps1",
+      "sha256": "40132EE99F88D1BF3CD80D8B4E9C730958C7EC405E70DAD1B3C785110BA45ACA"
+    },
+    {
+      "id": "mapped-resolve",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Resolve-MappedAdapter.ps1",
+      "sha256": "5EAC4130E9BC50A67453B7AE525DD01AC01EA2E3AFFCD41B90ED8E90C187545E"
+    },
+    {
+      "id": "registered-resolve",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Resolve-RegisteredAdapter.ps1",
+      "sha256": "C364D43C52C293474117C72D6784E928090E6071D3F14F864CDA62E471A9BD76"
+    },
+    {
+      "id": "azure-Read",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureStorageAccount/PowerShell/Invoke-AzureStorageAccount_ReadObject.ps1",
+      "sha256": "DB7FBBD48F97372158A7DA848BC74B35FAA670335C0A9FF736389DD32146228F"
+    },
+    {
+      "id": "azure-Write",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureStorageAccount/PowerShell/Invoke-AzureStorageAccount_WriteObject.ps1",
+      "sha256": "61DF36CB0229B06BDC924F6C306307F9EBAE1864D8408D48FC170EA808BC2FBD"
+    },
+    {
+      "id": "azure-Delete",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureStorageAccount/PowerShell/Invoke-AzureStorageAccount_DeleteObject.ps1",
+      "sha256": "01191B6851E2DD791B13A5ED53460C5C3740AA1BFAB3E323F135EE09D2EF4116"
+    },
+    {
+      "id": "azure-Exists",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureStorageAccount/PowerShell/Invoke-AzureStorageAccount_ExistsObject.ps1",
+      "sha256": "133BBF41D0253DF25260524C456DEE4BB840097264F950C6D685D7F87428B28C"
+    },
+    {
+      "id": "token-dispatch",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-MappedTokenAdapter.ps1",
+      "sha256": "7A0BE7417CE07206063795DE314ACDCEE417C9DEFFBF508A49CC28B52BA4311F"
+    },
+    {
+      "id": "token-Conduction",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenConduction.ps1",
+      "sha256": "44457569A9F6CCD6279740E278E94D537F96E9E0A623B2F2C28AAD06980F90D2"
+    },
+    {
+      "id": "token-Dynamic",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenDynamic.ps1",
+      "sha256": "86120392BE30C151A001F3A53F2FE6BC52BC0ABB4420212B606FA6F706172F63"
+    },
+    {
+      "id": "token-Environment",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenEnvironment.ps1",
+      "sha256": "DE3C9D92E1838CC475CA6C92B86A8177118F6E903B6380D6F18B65B17BDA7F4D"
+    },
+    {
+      "id": "token-Formatter",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenFormatter.ps1",
+      "sha256": "CF1CCF4D7B7D3638DDD745900F445E2B7B3F8DA418618981354DF488BF86C62A"
+    },
+    {
+      "id": "token-Generator",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenGenerator.ps1",
+      "sha256": "F7959D17C5E7F420FE6EC9D359C950CBBD4F5D8110F58BDCD36A84692A4586CD"
+    },
+    {
+      "id": "token-Memory",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenMemory.ps1",
+      "sha256": "7972409BA55CEB2DB691792C05D00C5770174097426CD554BA66826CF6798A7C"
+    },
+    {
+      "id": "token-Navigator",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenNavigator.ps1",
+      "sha256": "EDBD1EAF98D092566276CEA767C27E5730373EE75E0EC0ACDA1B869277478C73"
+    },
+    {
+      "id": "token-Storage",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenStorage.ps1",
+      "sha256": "3FFCF608CF844920A05FCB4163FB854E0E3AD2B70CEFEDCBC4AAD3F640BC2657"
+    },
+    {
+      "id": "token-System",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenSystem.ps1",
+      "sha256": "44F4EBE6D3D79B930CC97113EA4CC6B89F1ACEA7B7872F1C792F49DE1914AADA"
+    },
+    {
+      "id": "token-FormatterFilePath",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenFormatterFilePath.ps1",
+      "sha256": "7A081F7EA4407CADEBEAE0DAAD84F5EB0B4B6FBD79E1A34DFCAB99DF94EE26FF"
+    },
+    {
+      "id": "token-FormatterJson",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenFormatterJson.ps1",
+      "sha256": "6C5E02575660106202781EB5FC57B66EB764AC7F4250EDED7540A6306B27E567"
+    },
+    {
+      "id": "token-FormatterString",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenFormatterString.ps1",
+      "sha256": "9D762A4075D8248C2FBECC2A583A3FD75A1C40A14B99947371C526E033D0B4AF"
+    },
+    {
+      "id": "token-FormatterVirtualFolder",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenFormatterVirtualFolder.ps1",
+      "sha256": "59295D209EA9B15752A4D8660F79D4E9D472AD7DF301DADFC59E5E1D43E4C052"
+    },
+    {
+      "id": "token-XmlNavigator",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenXmlNavigator.ps1",
+      "sha256": "EDBD1EAF98D092566276CEA767C27E5730373EE75E0EC0ACDA1B869277478C73"
+    },
+    {
+      "id": "dynamic-resolve",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Dynamic/Resolve-TokenDynamic.ps1",
+      "sha256": "5BBB2781CA0501CA02E51DABFC280B05D6CA069C89B14E12AF841AF5857703D3"
+    },
+    {
+      "id": "sda-dispatch",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Invoke-TokenSDA.ps1",
+      "sha256": "217AF8DA9A9FE8CE1C1F4CD5176AC0912319BF8237C2F92E5E00E6C27487CE64"
+    },
+    {
+      "id": "sda-config-append",
+      "repository": "SignalGraph",
+      "path": "Src/PowerShell/SignalGraph/Utilities/Add-PathToDictionary.ps1",
+      "sha256": "815D5DB23E62D26BAF45BB63BB10804845475F19C5F7CAE9E8E7280738D3A841"
+    },
+    {
+      "id": "sda-invoke-ID",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/SDAID/Invoke-SDAID.ps1",
+      "sha256": "ED1629724098D7858F7568D1381BEADE79522FB8675745C7AF055207CC260CCA"
+    },
+    {
+      "id": "sda-invoke-Lineage",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/Lineage/Invoke-SDALineage.ps1",
+      "sha256": "D967EE91BA4F431A5843B780B07322531283BD5C3EEA99912EC2B0D8B3BC21D7"
+    },
+    {
+      "id": "sda-invoke-Enrollment",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/Enrollment/Invoke-SDAEnrollment.ps1",
+      "sha256": "37DAAC36AE2A72D3BEC4BD4772DDC8CEEE4595661D3DB793E95A55441BA740FC"
+    },
+    {
+      "id": "sda-invoke-RefTag",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/SDARefTag/Invoke-SDARefTag.ps1",
+      "sha256": "EF4B0CE85718146411FFAD599C970C43AC8C9756E9E122CB431AC59323CB61A6"
+    },
+    {
+      "id": "sda-invoke-EntityLevel",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/Enrollment/Invoke-SDAEntityLevel.ps1",
+      "sha256": "10B5CF8543D16C8266797F03C46463A5E871B99FEB5BF0F6092CC74091C1DC53"
+    },
+    {
+      "id": "sda-invoke-ImageDimensions",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/SDAImageDimensions/Invoke-SDAImageDimensions.ps1",
+      "sha256": "2DBB7463DB9C721E1AC419F7D082F0EAD6A756BDB93B5B33D424A564BF7B0380"
+    },
+    {
+      "id": "sda-invoke-OCIID",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/SDAOCIID/Invoke-SDAOCIID.ps1",
+      "sha256": "823AB9BBC37789E4E442E6B7415460FF99516EE6E5A730003A2A0B53905C8250"
+    },
+    {
+      "id": "sda-invoke-WeatherVaults",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/WeatherVaults/Invoke-SDAWeatherVaults.ps1",
+      "sha256": "A9C4FF6E9E0CA3673EB26AEAE454EC62C26F3C3749B71ACD4B7E052B42E42711"
+    },
+    {
+      "id": "sda-invoke-AIContext",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/SDAAIContext/Invoke-SDAAIContext.ps1",
+      "sha256": "301121B30A4298423CD8B5D3606AD29BAEB1EAAD9F7000BF9A95402A9C34714F"
+    },
+    {
+      "id": "sda-add-AIContext",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/SDAAIContext/Add-SDAAIContext.ps1",
+      "sha256": "63DB3C45A13D1FE0F2AB105061D19B50E6A1DA8E0A71451C1EED525D8C5E10F6"
+    },
+    {
+      "id": "sda-add-RefTag",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/SDARefTag/Add-SDARefTag.ps1",
+      "sha256": "D99F32B9E77B9BF9E8F18F4035FA9FDBE3CA27B7F9FB8AA92A27094C8932F80A"
+    },
+    {
+      "id": "sda-add-ID",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/SDAID/Add-SDAID.ps1",
+      "sha256": "0DF0ED7DC8E2CEC404D38110FAE8E1991DB206C8F9E8B56DC67632EFD8F92881"
+    },
+    {
+      "id": "sda-add-OCIID",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/SDAOCIID/Add-SDAOCIID.ps1",
+      "sha256": "52AEA2B09286C5AC5661987E1C4401C447CB01DD16708B1AC51BF525FC4071F6"
+    },
+    {
+      "id": "sda-add-Lineage",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/Lineage/Add-SDALineage.ps1",
+      "sha256": "1A27EF5922C61D53F33C00A8CF6EDFC5207516643CEAFF60CF0A6EF81360CC2E"
+    },
+    {
+      "id": "sda-weather",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/WeatherVaults/Add-WeatherVaultsWeather.ps1",
+      "sha256": "38A8D96E576EF46F2316109BD5C293FA86FC767C0F0713F0D2B0901ACC626BBA"
+    },
+    {
+      "id": "sda-enroll",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/SDAOCIID/Invoke-EnrollItemIcondentity.ps1",
+      "sha256": "53500D6B437720A40E51B9313F0D19B476EDD8BF358A6622E4C047D89FC870A0"
+    },
+    {
+      "id": "conduction-mapped",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedConductionAdapter.ps1",
+      "sha256": "0EA34996E84E56C510E4719DA207174E08B6C5DC02A229683EBEC50F0DF6CB2B"
+    },
+    {
+      "id": "Conduction_ST",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Conduction/ST/PowerShell/Conduction_ST.psm1",
+      "sha256": "3FE632CD6F83F2139E034C0B8FAE3BECD911084DDE54587D55D44D0385C55A3E"
+    },
+    {
+      "id": "Conduction_SDA",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Conduction/SDA/PowerShell/Conduction_SDA.psm1",
+      "sha256": "F82363A1305DA7F95020D03C98231CF27466BC83297DDC273CC20A2B8DD5A125"
+    },
+    {
+      "id": "conduit-mapped",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedConduitAdapter.ps1",
+      "sha256": "8D18D23E1B3BF35A7820A015773C11F9679A843BE37EE022CBD16943E171EFD5"
+    },
+    {
+      "id": "data-mapped",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedDataAdapter.ps1",
+      "sha256": "45CBA6E7D2C2955BD1820C0A81B6BA5859451990C418E0A32C63E9C1D5CB7464"
+    },
+    {
+      "id": "Data_AzureSql",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureSql/PowerShell/Data_AzureSql.ps1",
+      "sha256": "DC54B58C395082C5A612701D006EA0CD625B9D4EF71794A7556B58B4CB096264"
+    },
+    {
+      "id": "Data_AzureDataExplorer",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureDataExplorer/PowerShell/Data_AzureDataExplorer.psm1",
+      "sha256": "6701AF2BBBAA15EA94703B47B3DC126ED49040D2F28AF559383BF1AFD9FADCBC"
+    },
+    {
+      "id": "Data_ArtifactProcess",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Data/ArtifactProcess/PowerShell/Data_ArtifactProcess.psm1",
+      "sha256": "10E250C25F0A72F4D9AE53B97EDA787B08E92883B7D0681FB9A29975FE39EF75"
+    },
+    {
+      "id": "intelligence-mapped",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedIntelligenceAdapter.ps1",
+      "sha256": "24AD791B06B17F991C7BBE3EEC3FF1AC0F34A624C999A4170E4A0A5DDC417B49"
+    },
+    {
+      "id": "Intelligence_CodexCLI",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/CodexCLI/PowerShell/Intelligence_CodexCLI.ps1",
+      "sha256": "CB5AD948572528F06BE4EA0488C7B3E353EF94E0E1679F63AE5A934691D306DD"
+    },
+    {
+      "id": "Intelligence_AzureFoundry",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/AzureFoundry/PowerShell/Intelligence_AzureFoundry.psm1",
+      "sha256": "1C0135E392349FA1B9D3ADC9F73F6A6F6C91021FCE1ECC8BA47B6DD430F5A278"
+    },
+    {
+      "id": "quantum-mapped",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedQuantumAdapter.ps1",
+      "sha256": "ED30172207A4E2FD3015FDE39E35959D768360D8FC76DE22B2D2034A6E79D2B3"
+    },
+    {
+      "id": "bearer-token",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Rest/Resolve-BearerToken.ps1",
+      "sha256": "CF072210B99E32F59F2318D964306276BDB8CC369A75E9C8F7E632051DFA97D8"
+    },
+    {
+      "id": "Invoke-Conduction_ST",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Conduction/ST/PowerShell/Invoke-Conduction_ST.ps1",
+      "sha256": "CA79AD924DB3E92ECA27EA234605AC347ADC830294252A129A466ECE7BBC401E"
+    },
+    {
+      "id": "Invoke-Conduction_ST_GetNextPhaseSet",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Conduction/ST/PowerShell/Invoke-Conduction_ST_GetNextPhaseSet.ps1",
+      "sha256": "7A7470EFE8F0E0200EC1CA296E6E128327240EF3171516D15A3F7D712C80AD19"
+    },
+    {
+      "id": "Invoke-ConductionPhase",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Conduction/ST/PowerShell/Invoke-ConductionPhase.ps1",
+      "sha256": "0957F1E337DEDF9E11880751368886410F7DC5C6F29D005A08ADF91AD82CAE7F"
+    },
+    {
+      "id": "Invoke-Data_AzureSql",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureSql/PowerShell/Invoke-Data_AzureSql.ps1",
+      "sha256": "11492F8BF69456283A39EBB07708BA587D2DC4AACED7D39EE78D9C7BA5ED6E59"
+    },
+    {
+      "id": "Invoke-AzureSqlWrite",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureSql/PowerShell/Invoke-AzureSqlWrite.ps1",
+      "sha256": "50E9340643EA0498C094C70E05F3A025BA6E148CF2F62765EE329308766F3AEB"
+    },
+    {
+      "id": "Invoke-AzureSqlQuery",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureSql/PowerShell/Invoke-AzureSqlQuery.ps1",
+      "sha256": "A9D4F42BE6D806133CDA54ED1FDDF75E19199111CC5D43D513BC30F539A24E85"
+    },
+    {
+      "id": "Invoke-AzureSqlDelete",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureSql/PowerShell/Invoke-AzureSqlDelete.ps1",
+      "sha256": "571557D2F5ACDA269552B37B08A795193C954A982590C427466576DF5CC06AB0"
+    },
+    {
+      "id": "Invoke-AzureSqlAdmin",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureSql/PowerShell/Invoke-AzureSqlAdmin.ps1",
+      "sha256": "72973B1AA0487464DF4ECC056900AAE7644DDD396E7543E003327CDF7A70881C"
+    },
+    {
+      "id": "New-AzureSqlCommand",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureSql/PowerShell/New-AzureSqlCommand.ps1",
+      "sha256": "5FB52BD130A766CDBD8ED1FA689EA56648915C2DA54960B2CD99C49980CA7B2C"
+    },
+    {
+      "id": "Add-AzureSqlParameters",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureSql/PowerShell/Add-AzureSqlParameters.ps1",
+      "sha256": "3F796CEADFB141FF812F6FA40BE435918A42B076F0C55882FB9B9472AEE2759D"
+    },
+    {
+      "id": "Resolve-AzureSqlWriteInput",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureSql/PowerShell/Resolve-AzureSqlWriteInput.ps1",
+      "sha256": "4377A324066219D6AC2EBC8D4EDB4E327D6A43426FD358F31C2D0403EA52E5FE"
+    },
+    {
+      "id": "Invoke-AzureDataExplorerAdmin",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureDataExplorer/PowerShell/Invoke-AzureDataExplorerAdmin.ps1",
+      "sha256": "815FBE34E5A66402A49EE57FBFC4079D2E461EA97E14CD99A2FE67CD67D27EFC"
+    },
+    {
+      "id": "Invoke-AzureDataExplorerData",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureDataExplorer/PowerShell/Invoke-AzureDataExplorerData.ps1",
+      "sha256": "3C2FAA8B0A5A8BBE2088977A9C970D08B0FEF9FB28F420B21C8A8A7E813F2FEE"
+    },
+    {
+      "id": "Invoke-Intelligence_CodexCLI",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/CodexCLI/PowerShell/Invoke-Intelligence_CodexCLI.ps1",
+      "sha256": "CA1A70F373E42645D81CB8771A4AD7B70FD4E5681D25C5334CDF8D5C2A67CE1F"
+    },
+    {
+      "id": "Invoke-CodexCLIExecution",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/CodexCLI/PowerShell/Invoke-CodexCLIExecution.ps1",
+      "sha256": "0EA2BF3F3483243BAE924CAFF4CB0962D708E4106FB0577E43DDA640256920CE"
+    },
+    {
+      "id": "Resolve-CodexCLIPrompt",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/CodexCLI/PowerShell/Resolve-CodexCLIPrompt.ps1",
+      "sha256": "F93BA127B8E865CDDFC6B63FDB7D0A91D032A3ACEA0A71A9B00F917DF9BAF02E"
+    },
+    {
+      "id": "Resolve-CodexCLIRuntime",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/CodexCLI/PowerShell/Resolve-CodexCLIRuntime.ps1",
+      "sha256": "6EB2D03889A03F5969EAEEA579A30A87F4720D62DC08563A5FEA9D03CEA9CD69"
+    },
+    {
+      "id": "Resolve-CodexCLIMedia",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/CodexCLI/PowerShell/Resolve-CodexCLIMedia.ps1",
+      "sha256": "3F24B67345AD852775DDE2108C1EAE92796F7100CD5D61695A82EE5C8AA632DA"
+    },
+    {
+      "id": "foundry-responses",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/AzureFoundry/PowerShell/Invoke-AzureFoundryOpenAIResponses.ps1",
+      "sha256": "8ACBDCDB2B355D8A5EFD4BAC37CA88CE76A2AC0ABCA1F88DAC782732D7500434"
+    },
+    {
+      "id": "artifact-host",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Data/ArtifactProcess/Runtime/Host.cs",
+      "sha256": "CAC8C37988FDAF53DBA0C94D7F75274558E05D528F6BFEA89AAD655332ED788D"
+    },
+    {
+      "id": "sql-object",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureSql/PowerShell/ConvertTo-AzureSqlJsonResult.ps1",
+      "sha256": "7267B588E88803253FAB59E01AF50F92A2FADFEA76A48C53293C5BC132954180"
+    },
+    {
+      "id": "queue-mapped",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedQueueAdapter.ps1",
+      "sha256": "CE32FEAF2D2E6345DFEA467AF7E98D3E3B71204117A24D89B79C1CA4829AA902"
+    },
+    {
+      "id": "Queue_AzureStorageQueue",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Queue/AzureStorageQueue/PowerShell/Queue_AzureStorageQueue.psm1",
+      "sha256": "B18E5E2B1F6BD31A967F60160AF3B4A405C4ACA5670320C3513BA26DDCBCE48B"
+    },
+    {
+      "id": "session-mapped",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedSessionAdapter.ps1",
+      "sha256": "E56F67A2FEB4B9E2D4B7B48047F68C88F86EE558520C69B5A33FF07167D82D29"
+    },
+    {
+      "id": "Session_ST",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Session/ST/PowerShell/Session_ST.psm1",
+      "sha256": "ABF100E2089BDE919C8C255BF6F5AC0D8F221FCA66A0F821EB9458E649806E1B"
+    },
+    {
+      "id": "utility-mapped",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedUtilityAdapter.ps1",
+      "sha256": "2F826E73F9911A5DBCC38FEA8123ED383B3EAC1694248CEF3B9D7E501E18E94A"
+    },
+    {
+      "id": "Utility_Media",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Utility/Media/PowerShell/Utility_Media.psm1",
+      "sha256": "18CB236F2F9B4BCCC6A6FFC8B8F0614C5C47D58B7350AF3765EDB6B8929506D8"
+    },
+    {
+      "id": "session-invoke",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Session/ST/PowerShell/Invoke-Session_ST.ps1",
+      "sha256": "6AF36D4EE053910EE6DF1F5C4DF54C0807323FCF08FE3B4B9DECD8B8785F4748"
+    },
+    {
+      "id": "media-resize",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Utility/Media/PowerShell/Magik/Invoke-ResizeImage.ps1",
+      "sha256": "382DA31B6A61A8F09F4E67F85B9B10BA1993E15B75B3D32FF2618F9CAA8E1615"
+    },
+    {
+      "id": "media-overlay",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Utility/Media/PowerShell/Magik/Invoke-OverlayImage.ps1",
+      "sha256": "BCA7FD1692D45D521B008C74206C8D6A2EF345D7B4EFFA0C6AA8833090F149F1"
+    }
+  ],
+  "emptyGroups": [
+    "MappedConduitAdapter",
+    "MappedQuantumAdapter"
+  ],
+  "shards": [
+    {
+      "mappedAdapter": "MappedSatelliteAdapter",
+      "condenser": null,
+      "file": "Adapter-Index-Attribution-Matrix/Mapped/MappedSatelliteAdapter.json",
+      "sha256": "D09EA27E5637BA9F80A760655D30FF69786883B939B3860FEDFB6828B624BCE8"
+    },
+    {
+      "mappedAdapter": "MappedNetworkAdapter",
+      "condenser": null,
+      "file": "Adapter-Index-Attribution-Matrix/Mapped/MappedNetworkAdapter.json",
+      "sha256": "1759FB21516B1D51348DA4483B1AA623A3621175EA089721A5734AC56B3184D1"
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "PlanCondenser",
+      "file": "Adapter-Index-Attribution-Matrix/Condensers/PlanCondenser.json",
+      "sha256": "039B5D93536530EB8506978F945C73B538881106B8D1BF9EA8D2F4661134E303"
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "ConductionCondenser",
+      "file": "Adapter-Index-Attribution-Matrix/Condensers/ConductionCondenser.json",
+      "sha256": "BFEECFC69F6D33D3DB1732A89A3C7BA76518B94EB11A0F68C8ABC1C6737B7F7E"
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "ConduitCondenser",
+      "file": "Adapter-Index-Attribution-Matrix/Condensers/ConduitCondenser.json",
+      "sha256": "5953630CA595B9B2D81060936980E962A5F05FF5CF0F7C76977BBDAF9C1C2934"
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "FabCondenser",
+      "file": "Adapter-Index-Attribution-Matrix/Condensers/FabCondenser.json",
+      "sha256": "6F4D1B39709B81DD9C6CF31396750C3A7852731BCC172CD8E62194BB5B2474CE"
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "FormatCondenser",
+      "file": "Adapter-Index-Attribution-Matrix/Condensers/FormatCondenser.json",
+      "sha256": "38EBA8F6A2BF898E3437A857B17441DFB4C7AE868CD1C34F4B14A9865F2D1C60"
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "GraphCondenser",
+      "file": "Adapter-Index-Attribution-Matrix/Condensers/GraphCondenser.json",
+      "sha256": "6898B68A5D26BD48CDF95ADA0899E61AD0B329F217C448BDA5F03A7098E1B7FE"
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "HydrationCondenser",
+      "file": "Adapter-Index-Attribution-Matrix/Condensers/HydrationCondenser.json",
+      "sha256": "563BFC9721D29332A6F161FD6D6802D4A76667BAC7B2E6C6475CB299BC38B98D"
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "MapCondenser",
+      "file": "Adapter-Index-Attribution-Matrix/Condensers/MapCondenser.json",
+      "sha256": "42887BDB4C7FB55D0E93BE0A51516C73C04648EE38EE25D6B0AD584012BC3E57"
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "MemoryCondenser",
+      "file": "Adapter-Index-Attribution-Matrix/Condensers/MemoryCondenser.json",
+      "sha256": "023C547C5F80F240147AE1AEB99B52AE00966E80D1929BBCE136C60787CF88F9"
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "MergeCondenser",
+      "file": "Adapter-Index-Attribution-Matrix/Condensers/MergeCondenser.json",
+      "sha256": "A2870DDF7D4893AF3CF9195282A1CC9E02B011C51C10CD4DEAF4D5E0FF3266A1"
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "RestCondenser",
+      "file": "Adapter-Index-Attribution-Matrix/Condensers/RestCondenser.json",
+      "sha256": "21716565DE36FDA16A3DC63D6B95694B5F546F962DA00CD39F2BF8E1731C2192"
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "TokenCondenser",
+      "file": "Adapter-Index-Attribution-Matrix/Condensers/TokenCondenser.json",
+      "sha256": "BDE8FBEAC0E267F601B15740FD9A4084BC5B0AD4C215E9C30A88BE246D843C57"
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "TransformCondenser",
+      "file": "Adapter-Index-Attribution-Matrix/Condensers/TransformCondenser.json",
+      "sha256": "D14D8146541ED5A654EE3D344A1C5B32A898DADD44E6D0AC15532A70B2D2CD29"
+    },
+    {
+      "mappedAdapter": "MappedStorageAdapter",
+      "condenser": null,
+      "file": "Adapter-Index-Attribution-Matrix/Mapped/MappedStorageAdapter.json",
+      "sha256": "DF97579FF4B44A203914197B32C2FB961DD0F7FD4028EB2BFB6CE9F0567680D1"
+    },
+    {
+      "mappedAdapter": "MappedTokenAdapter",
+      "condenser": null,
+      "file": "Adapter-Index-Attribution-Matrix/Mapped/MappedTokenAdapter.json",
+      "sha256": "F963C2954B7B05A6A884C2BDB68264A4C414EE00500C4A4F9A5AA60CC11C2BA8"
+    },
+    {
+      "mappedAdapter": "MappedConductionAdapter",
+      "condenser": null,
+      "file": "Adapter-Index-Attribution-Matrix/Mapped/MappedConductionAdapter.json",
+      "sha256": "348628D62E8B341B15EDC2CBE5DF38B11A93809F91FAC1795C0DBB779D4542DB"
+    },
+    {
+      "mappedAdapter": "MappedConduitAdapter",
+      "condenser": null,
+      "file": "Adapter-Index-Attribution-Matrix/Mapped/MappedConduitAdapter.json",
+      "sha256": "541B4A84962FA01312E62E4686AD20620453D10F976DA0EE3036AA0324E87D78"
+    },
+    {
+      "mappedAdapter": "MappedDataAdapter",
+      "condenser": null,
+      "file": "Adapter-Index-Attribution-Matrix/Mapped/MappedDataAdapter.json",
+      "sha256": "5F090091E01F50E4D85957A7E83D447280FDA0EFC20AF864285B7517989C1B20"
+    },
+    {
+      "mappedAdapter": "MappedIntelligenceAdapter",
+      "condenser": null,
+      "file": "Adapter-Index-Attribution-Matrix/Mapped/MappedIntelligenceAdapter.json",
+      "sha256": "48715B937ED6EE8BDE8E314286F8237E45D36214ECAFC3D7DBC660CB4CC78AA4"
+    },
+    {
+      "mappedAdapter": "MappedQuantumAdapter",
+      "condenser": null,
+      "file": "Adapter-Index-Attribution-Matrix/Mapped/MappedQuantumAdapter.json",
+      "sha256": "14A3BBB9D1F9CBD4715B7C19625CE09DE64F3E1B6B8234069EB617A2327A1363"
+    },
+    {
+      "mappedAdapter": "MappedQueueAdapter",
+      "condenser": null,
+      "file": "Adapter-Index-Attribution-Matrix/Mapped/MappedQueueAdapter.json",
+      "sha256": "B38B8ED14742E54B35C4098AD1A1EE715EF6BA97FFD441B5F59BE8B5AC249AEB"
+    },
+    {
+      "mappedAdapter": "MappedSessionAdapter",
+      "condenser": null,
+      "file": "Adapter-Index-Attribution-Matrix/Mapped/MappedSessionAdapter.json",
+      "sha256": "400FD2F49884A421DA051283A1BA795B008FE277F001313C70F0B9E486BC510A"
+    },
+    {
+      "mappedAdapter": "MappedUtilityAdapter",
+      "condenser": null,
+      "file": "Adapter-Index-Attribution-Matrix/Mapped/MappedUtilityAdapter.json",
+      "sha256": "BAB6CF47FDEEE852A1AAAA269DFA120EACAC217FB043B3A4BC4073C1C6135CB2"
+    }
+  ],
+  "ownerBaselines": [
+    {
+      "mappedAdapter": "MappedSatelliteAdapter",
+      "indexBaselineSha256": "028352AC58352085D1BD01BBC1A5DA83A2FCE6CC4B998EC6E7525E2ECF0B9427",
+      "catalogFiles": [
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/index.json",
+          "sha256": "461614B705383848B4F055A68CDCAB22EC05B51CCE174342F0CC714F5A98C434"
+        },
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedSatelliteAdapter.json",
+          "sha256": "CCC9D6641E981B2C28FA7FD7539E8F3C051073BFF69F04C012B437C4501E2488"
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedNetworkAdapter",
+      "indexBaselineSha256": "461614B705383848B4F055A68CDCAB22EC05B51CCE174342F0CC714F5A98C434",
+      "logicalBaselineSha256": "BF5C97F9D32EE903BF3D75E81DF5FF296FA9CD094D0FCA90DB4F448D1BDB6F13",
+      "catalogFiles": [
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/index.json",
+          "sha256": "66B58145A77A25699DB58EC6D8B2030B9222C7A35D2D6C09E387A73A548CC9F2"
+        },
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedNetworkAdapter.json",
+          "sha256": "D3686C4D20CF450DC423B48A50CBC047FB558CB6F628883F3497B0750D68574A"
+        },
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedSatelliteAdapter.json",
+          "sha256": "CE0CFC5C574CBC0C340EB04877C06DB5BDC4347A0F75DF4F59B025E3D59EF710"
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condensers": [
+        "PlanCondenser",
+        "ConductionCondenser"
+      ],
+      "indexBaselineSha256": "66B58145A77A25699DB58EC6D8B2030B9222C7A35D2D6C09E387A73A548CC9F2",
+      "logicalBaselineSha256": "11BFC520BEE35A8830DF6A836AD19EEE5DB439FA0D627BD1241C2BA99E21DAED",
+      "catalogFiles": [
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/index.json",
+          "sha256": "9826E464EA71AD2DFA7F5D31BD4200AA1B29C2E9B42697ED206654622F13FBCF"
+        },
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedCondenserAdapter.json",
+          "sha256": "4773B7D8B6680C14054F5E82A89D913E802A781BBDDC2AB0F0577BF256797A3B"
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condensers": [
+        "ConduitCondenser",
+        "FabCondenser",
+        "FormatCondenser",
+        "GraphCondenser",
+        "HydrationCondenser",
+        "MapCondenser",
+        "MemoryCondenser",
+        "MergeCondenser",
+        "RestCondenser",
+        "TokenCondenser",
+        "TransformCondenser"
+      ],
+      "indexBaselineSha256": "66B58145A77A25699DB58EC6D8B2030B9222C7A35D2D6C09E387A73A548CC9F2",
+      "logicalBaselineSha256": "11BFC520BEE35A8830DF6A836AD19EEE5DB439FA0D627BD1241C2BA99E21DAED",
+      "catalogFiles": [
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/index.json",
+          "sha256": "9826E464EA71AD2DFA7F5D31BD4200AA1B29C2E9B42697ED206654622F13FBCF"
+        },
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedCondenserAdapter.json",
+          "sha256": "4773B7D8B6680C14054F5E82A89D913E802A781BBDDC2AB0F0577BF256797A3B"
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedStorageAdapter",
+      "indexBaselineSha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50",
+      "catalogFiles": [
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/index.json",
+          "sha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50"
+        },
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedStorageAdapter.json",
+          "sha256": "3B0914D3FDC73EABA019E4C243804A75BC0320E07A53B2A02C643F4007633BA8"
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedTokenAdapter",
+      "indexBaselineSha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50",
+      "catalogFiles": [
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/index.json",
+          "sha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50"
+        },
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedTokenAdapter.json",
+          "sha256": "D5821691EC594C31A822DA5B206D3111BFAB60976D01207CE0884EF2E20181A7"
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedConductionAdapter",
+      "indexBaselineSha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50",
+      "catalogFiles": [
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/index.json",
+          "sha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50"
+        },
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedConductionAdapter.json",
+          "sha256": "D1CAF78F3B264433B065F3DD7E0EEDA5279539500DA63300BE87DBEBC0BA6B58"
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedConduitAdapter",
+      "indexBaselineSha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50",
+      "catalogFiles": [
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/index.json",
+          "sha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50"
+        },
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedConduitAdapter.json",
+          "sha256": "B766701AC8B0F4C11361513CC326C1DB68A0AB5B5C09ED38CE44269A10A2BF7A"
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedDataAdapter",
+      "indexBaselineSha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50",
+      "catalogFiles": [
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/index.json",
+          "sha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50"
+        },
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedDataAdapter.json",
+          "sha256": "0A723E19A802F8AB291B127FC2D8EDF996A7C31E65B5C56C4FD64E6ABE869EEF"
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedIntelligenceAdapter",
+      "indexBaselineSha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50",
+      "catalogFiles": [
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/index.json",
+          "sha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50"
+        },
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedIntelligenceAdapter.json",
+          "sha256": "28B1AE063AD773D6FBCAB9B1C23518476A98B2B8A8FE02A8D5430862F0D56933"
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedQuantumAdapter",
+      "indexBaselineSha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50",
+      "catalogFiles": [
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/index.json",
+          "sha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50"
+        },
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedQuantumAdapter.json",
+          "sha256": "D90C37E6D536F1A76AC27E4483B744A6B5636255DB34C62E9748AB3344484DF4"
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedQueueAdapter",
+      "indexBaselineSha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50",
+      "catalogFiles": [
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/index.json",
+          "sha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50"
+        },
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedQueueAdapter.json",
+          "sha256": "FA133D1DBA46E22C769A3BA6BA7B109BEE25C6EFDE8DD11038FB45C02CC8E189"
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedSessionAdapter",
+      "indexBaselineSha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50",
+      "catalogFiles": [
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/index.json",
+          "sha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50"
+        },
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedSessionAdapter.json",
+          "sha256": "29C35850EE6FF728A57BD50ACFCFC5BDD8D7852ACA268B041E34ADEC78B0B379"
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedUtilityAdapter",
+      "indexBaselineSha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50",
+      "catalogFiles": [
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/index.json",
+          "sha256": "BCB15130E7F285CECADA7E23229CA609F0FC81A6D05C2945BBD3C92F8C3BFC50"
+        },
+        {
+          "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedUtilityAdapter.json",
+          "sha256": "7DA464109A242C0EA9C9B6C7B874176E971922B68331A11E92478452D49F3119"
+        }
+      ]
+    }
+  ]
+}

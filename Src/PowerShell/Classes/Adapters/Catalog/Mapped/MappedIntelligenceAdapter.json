@@ -1,0 +1,372 @@
+{
+  "name": "MappedIntelligenceAdapter",
+  "activities": [
+    {
+      "name": "SendMessage",
+      "description": "Send a request to an intelligence service.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract the message request configuration after adapter validation.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Read the message Content input after preceding request validation.",
+          "adapters": [
+            "Intelligence_CodexCLI",
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Config.MediaPath",
+          "description": "Read Foundry MediaPath request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Config.MediaUrl",
+          "description": "Read Foundry MediaUrl request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Config.Model",
+          "description": "Read Foundry Model request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Config.ModelKey",
+          "description": "Read the request ModelKey after preceding validation.",
+          "adapters": [
+            "Intelligence_CodexCLI",
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Config.OutputSchema",
+          "description": "Read CodexCLI OutputSchema input.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "Config.OutputSchema.$schema",
+          "description": "Validate output-schema $schema.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "Config.OutputSchema.additionalProperties",
+          "description": "Validate output-schema additionalProperties.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "Config.OutputSchema.properties",
+          "description": "Validate output-schema properties.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "Config.OutputSchema.properties[$name]",
+          "description": "Validate a caller-named output-schema property object.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Get-CodexCLILiteralMember $properties $name | Select-Object -Last 1"
+        },
+        {
+          "path": "Config.OutputSchema.properties[$name].type",
+          "description": "Validate the scalar type of a caller-named output-schema property.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $property -Path 'type' -SignalLevel 'Information' | Select-Object -Last 1"
+        },
+        {
+          "path": "Config.OutputSchema.required",
+          "description": "Validate output-schema required.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "Config.OutputSchema.type",
+          "description": "Validate output-schema type.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "Config.Prompt",
+          "description": "Read CodexCLI Prompt input.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media",
+          "description": "Read media inputs from the original structured prompt after validation.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media[*].Detail",
+          "description": "Read Detail from an original structured prompt media entry, after validation and only while original entries remain selected.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media[*].MediaPath",
+          "description": "Read MediaPath from an original structured prompt media entry, after validation and only while original entries remain selected.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media[*].MediaType",
+          "description": "Read MediaType from an original structured prompt media entry, after validation and only while original entries remain selected.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media[*].MediaUrl",
+          "description": "Read MediaUrl from an original structured prompt media entry, after validation and only while original entries remain selected.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media[*][$name]",
+          "description": "Validate the value of an unsupported literal request member.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Get-CodexCLILiteralMember $Object $name | Select-Object -Last 1"
+        },
+        {
+          "path": "Config.Prompt.System",
+          "description": "Read the system input from the original structured prompt after validation.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "Config.Prompt.Texts",
+          "description": "Read text inputs from the original structured prompt after validation.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "Config.Prompt[$name]",
+          "description": "Validate the value of an unsupported literal request member.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Get-CodexCLILiteralMember $Object $name | Select-Object -Last 1"
+        },
+        {
+          "path": "Config[$name]",
+          "description": "Validate the value of an unsupported literal request member.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Get-CodexCLILiteralMember $Object $name | Select-Object -Last 1"
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context when cloning the Foundry request.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context when cloning the Foundry request.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SendMessageOriginal",
+      "description": "Send the original message without prior transformation.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract intelligence service request configuration.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Read Foundry Content request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Config.MediaPath",
+          "description": "Read Foundry MediaPath request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Config.MediaUrl",
+          "description": "Read Foundry MediaUrl request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Config.Model",
+          "description": "Read Foundry Model request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Config.ModelKey",
+          "description": "Read Foundry ModelKey request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media",
+          "description": "Read Foundry Prompt.Media request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media[*].Detail",
+          "description": "Read Foundry media Detail.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media[*].MediaPath",
+          "description": "Read Foundry media MediaPath.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media[*].MediaType",
+          "description": "Read Foundry media MediaType.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Config.Prompt.Media[*].MediaUrl",
+          "description": "Read Foundry media MediaUrl.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Config.Prompt.System",
+          "description": "Read Foundry Prompt.System request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Config.Prompt.Texts",
+          "description": "Read Foundry Prompt.Texts request input.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context when cloning the Foundry request.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context when cloning the Foundry request.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HandleMessage",
+      "description": "Resolve and optionally format a message.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract intelligence service request configuration.",
+          "adapters": [
+            "Intelligence_AzureFoundry"
+          ]
+        },
+        {
+          "path": "Format",
+          "description": "Resolve the message format after successful message lookup.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the message lookup path for message handling.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI"
+          ]
+        }
+      ]
+    }
+  ],
+  "concreteAdapters": [
+    {
+      "name": "Intelligence_CodexCLI",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/CodexCLI/PowerShell/Intelligence_CodexCLI.ps1"
+    },
+    {
+      "name": "Intelligence_AzureFoundry",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/AzureFoundry/PowerShell/Intelligence_AzureFoundry.psm1"
+    }
+  ]
+}

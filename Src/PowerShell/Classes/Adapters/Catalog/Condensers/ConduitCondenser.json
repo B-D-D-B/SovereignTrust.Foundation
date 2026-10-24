@@ -1,0 +1,105 @@
+{
+  "name": "ConduitCondenser",
+  "repository": "SovereignTrust.Foundation",
+  "path": "Src/PowerShell/Classes/Adapters/Condenser/ConduitCondenser.ps1",
+  "activities": [
+    {
+      "name": "Process",
+      "description": "Process a plan through a conduit.",
+      "properties": [
+        {
+          "path": "ForEachActivity",
+          "description": "Provide the activity copied into the per-item dispatch plan.",
+          "adapters": [
+            "ConduitCondenser"
+          ]
+        },
+        {
+          "path": "ForEachActivity",
+          "description": "Resolve the per-item activity after forwarding it into the cloned Activity field.",
+          "adapters": [
+            "ConduitCondenser"
+          ],
+          "default": {
+            "ConduitCondenser": "Read"
+          }
+        },
+        {
+          "path": "ForEachAdapter",
+          "description": "Choose the mapped adapter for each grid item.",
+          "adapters": [
+            "ConduitCondenser"
+          ]
+        },
+        {
+          "path": "ForEachPath",
+          "description": "Select the ItemSignal grid to process.",
+          "adapters": [
+            "ConduitCondenser"
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Name the process signal and iteration tracing.",
+          "adapters": [
+            "ConduitCondenser"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "adapters": [
+            "ConduitCondenser"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "adapters": [
+            "ConduitCondenser"
+          ]
+        },
+        {
+          "path": "SupportParallelism",
+          "description": "Choose the serial versus parallel conduit branch.",
+          "adapters": [
+            "ConduitCondenser"
+          ],
+          "default": {
+            "ConduitCondenser": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Graph",
+      "description": "Build a phase graph.",
+      "properties": [
+        {
+          "path": "Name",
+          "description": "Name the graph-plan signal and diagnostic messages.",
+          "adapters": [
+            "ConduitCondenser"
+          ]
+        },
+        {
+          "path": "NamePath",
+          "description": "Select the identifier field in each source-array item.",
+          "adapters": [
+            "ConduitCondenser"
+          ],
+          "default": {
+            "ConduitCondenser": "Name"
+          }
+        },
+        {
+          "path": "Path",
+          "description": "Select the ItemSignal array and derive the graph name from the final path segment.",
+          "adapters": [
+            "ConduitCondenser"
+          ]
+        }
+      ]
+    }
+  ]
+}

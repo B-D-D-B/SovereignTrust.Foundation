@@ -1,0 +1,763 @@
+{
+  "mappedAdapter": "MappedNetworkAdapter",
+  "condenser": null,
+  "activities": [
+    {
+      "mappedAdapter": "MappedNetworkAdapter",
+      "condenser": null,
+      "name": "SendFile",
+      "description": "Send a file through a network service.",
+      "coverage": [
+        {
+          "adapter": "Network_DiscordBot",
+          "status": "reads",
+          "notes": "The indexed activity overload forwards Plan unchanged through mapped-core. Resource and Addresses are read from this.Signal, channel IDs and message data from ItemSignal; locally constructed RestPlan fields are not incoming Plan reads. No supported activity is zero-read or reserved-no-op. The separate three-argument mapped overload has no Activity, does not forward its Plan, and passes NetworkSignal to a helper without that parameter. Its helper Action/Addresses/ConductionPlan/MaxMessages/PollIntervalSeconds reads are outside these indexed activity paths; no runtime success is claimed.",
+          "references": [
+            {
+              "sourceId": "network-mapped",
+              "lines": [
+                76,
+                79,
+                84
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "network-concrete",
+              "lines": [
+                91,
+                96,
+                103,
+                104,
+                106,
+                110,
+                113,
+                114,
+                122,
+                123,
+                124,
+                129,
+                134,
+                144,
+                147
+              ]
+            },
+            {
+              "sourceId": "network-mapped",
+              "lines": [
+                94,
+                98
+              ]
+            },
+            {
+              "sourceId": "network-legacy-helper",
+              "lines": [
+                3,
+                7,
+                9,
+                10,
+                19,
+                21,
+                24,
+                28,
+                29,
+                30,
+                31
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Read the configuration object and warn when it is absent or false-valued.",
+          "adapters": [
+            "Network_DiscordBot"
+          ],
+          "evidence": [
+            {
+              "adapter": "Network_DiscordBot",
+              "references": [
+                {
+                  "sourceId": "network-mapped",
+                  "lines": [
+                    76,
+                    79,
+                    84
+                  ]
+                },
+                {
+                  "sourceId": "mapped-core",
+                  "lines": [
+                    9,
+                    48
+                  ]
+                },
+                {
+                  "sourceId": "network-concrete",
+                  "lines": [
+                    91,
+                    96,
+                    103,
+                    104,
+                    106,
+                    110
+                  ]
+                }
+              ],
+              "trace": "The mapped activity overload and core forward incoming Plan unchanged. Config is resolved and unwrapped into config; its truthiness controls a diagnostic warning. Child property reads are documented separately.",
+              "conditional": true,
+              "condition": "After mapped validation and successful adapter resolution, when concrete Invoke has a non-null ConductionSignal and a nonempty Activity; shared by all supported activities."
+            }
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Provide text serialized into the multipart message payload when sending a file.",
+          "adapters": [
+            "Network_DiscordBot"
+          ],
+          "evidence": [
+            {
+              "adapter": "Network_DiscordBot",
+              "references": [
+                {
+                  "sourceId": "network-mapped",
+                  "lines": [
+                    76,
+                    79,
+                    84
+                  ]
+                },
+                {
+                  "sourceId": "mapped-core",
+                  "lines": [
+                    9,
+                    48
+                  ]
+                },
+                {
+                  "sourceId": "network-concrete",
+                  "lines": [
+                    122,
+                    123,
+                    129,
+                    130,
+                    131,
+                    145,
+                    146
+                  ]
+                }
+              ],
+              "trace": "Incoming Plan Config.Content is resolved, unwrapped and cast to string, then included in the local content payload and RestPlan.Config.Form.payload_json.",
+              "conditional": true,
+              "condition": "SendFile branch after shared entry reads."
+            }
+          ]
+        },
+        {
+          "path": "Config.FullPath",
+          "description": "Provide the attachment file path used in the multipart file upload.",
+          "adapters": [
+            "Network_DiscordBot"
+          ],
+          "evidence": [
+            {
+              "adapter": "Network_DiscordBot",
+              "references": [
+                {
+                  "sourceId": "network-mapped",
+                  "lines": [
+                    76,
+                    79,
+                    84
+                  ]
+                },
+                {
+                  "sourceId": "mapped-core",
+                  "lines": [
+                    9,
+                    48
+                  ]
+                },
+                {
+                  "sourceId": "network-concrete",
+                  "lines": [
+                    124,
+                    134,
+                    144,
+                    147,
+                    155,
+                    159
+                  ]
+                }
+              ],
+              "trace": "Incoming Config.FullPath is unwrapped into attachmentFilePath and forwarded in locally constructed RestPlan.Config.AttachmentPath and Form.files[0].",
+              "conditional": true,
+              "condition": "SendFile branch after shared entry reads."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedNetworkAdapter",
+      "condenser": null,
+      "name": "SendMessage",
+      "description": "Send a message.",
+      "coverage": [
+        {
+          "adapter": "Network_DiscordBot",
+          "status": "reads",
+          "notes": "The indexed activity overload forwards Plan unchanged through mapped-core. Resource and Addresses are read from this.Signal, channel IDs and message data from ItemSignal; locally constructed RestPlan fields are not incoming Plan reads. No supported activity is zero-read or reserved-no-op.",
+          "references": [
+            {
+              "sourceId": "network-mapped",
+              "lines": [
+                76,
+                79,
+                84
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "network-concrete",
+              "lines": [
+                91,
+                96,
+                103,
+                104,
+                106,
+                110,
+                113,
+                114,
+                173,
+                175,
+                180,
+                181,
+                193
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Read the configuration object and warn when it is absent or false-valued.",
+          "adapters": [
+            "Network_DiscordBot"
+          ],
+          "evidence": [
+            {
+              "adapter": "Network_DiscordBot",
+              "references": [
+                {
+                  "sourceId": "network-mapped",
+                  "lines": [
+                    76,
+                    79,
+                    84
+                  ]
+                },
+                {
+                  "sourceId": "mapped-core",
+                  "lines": [
+                    9,
+                    48
+                  ]
+                },
+                {
+                  "sourceId": "network-concrete",
+                  "lines": [
+                    91,
+                    96,
+                    103,
+                    104,
+                    106,
+                    110
+                  ]
+                }
+              ],
+              "trace": "The mapped activity overload and core forward incoming Plan unchanged. Config is resolved and unwrapped into config; its truthiness controls a diagnostic warning. Child property reads are documented separately.",
+              "conditional": true,
+              "condition": "After mapped validation and successful adapter resolution, when concrete Invoke has a non-null ConductionSignal and a nonempty Activity; shared by all supported activities."
+            }
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Provide message text split into chunks of at most 2000 characters and sent as message bodies.",
+          "adapters": [
+            "Network_DiscordBot"
+          ],
+          "evidence": [
+            {
+              "adapter": "Network_DiscordBot",
+              "references": [
+                {
+                  "sourceId": "network-mapped",
+                  "lines": [
+                    76,
+                    79,
+                    84
+                  ]
+                },
+                {
+                  "sourceId": "mapped-core",
+                  "lines": [
+                    9,
+                    48
+                  ]
+                },
+                {
+                  "sourceId": "network-concrete",
+                  "lines": [
+                    51,
+                    52,
+                    56,
+                    63,
+                    65,
+                    67,
+                    173,
+                    175,
+                    180,
+                    181,
+                    185,
+                    188,
+                    193,
+                    206
+                  ]
+                }
+              ],
+              "trace": "Config.Content is unwrapped and cast to string, then passed to SplitContent with literal length 2000. SplitContent operates only on these primitive arguments; each chunk enters a locally constructed REST body. The 2000 limit is not a resolver default.",
+              "conditional": true,
+              "condition": "SendMessage branch after shared entry reads."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedNetworkAdapter",
+      "condenser": null,
+      "name": "ReadBatch",
+      "description": "Read a batch of messages.",
+      "coverage": [
+        {
+          "adapter": "Network_DiscordBot",
+          "status": "reads",
+          "notes": "The indexed activity overload forwards Plan unchanged through mapped-core. Resource and Addresses are read from this.Signal, channel IDs and message data from ItemSignal; locally constructed RestPlan fields are not incoming Plan reads. No supported activity is zero-read or reserved-no-op.",
+          "references": [
+            {
+              "sourceId": "network-mapped",
+              "lines": [
+                76,
+                79,
+                84
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "network-concrete",
+              "lines": [
+                91,
+                96,
+                103,
+                104,
+                106,
+                110,
+                113,
+                114,
+                221,
+                222,
+                223,
+                224,
+                225,
+                246,
+                248,
+                249,
+                274,
+                275
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Read the configuration object and warn when it is absent or false-valued.",
+          "adapters": [
+            "Network_DiscordBot"
+          ],
+          "evidence": [
+            {
+              "adapter": "Network_DiscordBot",
+              "references": [
+                {
+                  "sourceId": "network-mapped",
+                  "lines": [
+                    76,
+                    79,
+                    84
+                  ]
+                },
+                {
+                  "sourceId": "mapped-core",
+                  "lines": [
+                    9,
+                    48
+                  ]
+                },
+                {
+                  "sourceId": "network-concrete",
+                  "lines": [
+                    91,
+                    96,
+                    103,
+                    104,
+                    106,
+                    110
+                  ]
+                }
+              ],
+              "trace": "The mapped activity overload and core forward incoming Plan unchanged. Config is resolved and unwrapped into config; its truthiness controls a diagnostic warning. Child property reads are documented separately.",
+              "conditional": true,
+              "condition": "After mapped validation and successful adapter resolution, when concrete Invoke has a non-null ConductionSignal and a nonempty Activity; shared by all supported activities."
+            }
+          ]
+        },
+        {
+          "path": "Config.MessageLimit",
+          "description": "Set the message limit query parameter for the batch request.",
+          "adapters": [
+            "Network_DiscordBot"
+          ],
+          "evidence": [
+            {
+              "adapter": "Network_DiscordBot",
+              "references": [
+                {
+                  "sourceId": "network-mapped",
+                  "lines": [
+                    76,
+                    79,
+                    84
+                  ]
+                },
+                {
+                  "sourceId": "mapped-core",
+                  "lines": [
+                    9,
+                    48
+                  ]
+                },
+                {
+                  "sourceId": "network-concrete",
+                  "lines": [
+                    221,
+                    224,
+                    229
+                  ]
+                }
+              ],
+              "trace": "Resolve-PathFromDictionary reads incoming Config.MessageLimit with literal -Default 10; GetResult supplies the limit query parameter.",
+              "conditional": true,
+              "condition": "ReadBatch branch after shared entry reads."
+            }
+          ],
+          "default": {
+            "Network_DiscordBot": 10
+          }
+        },
+        {
+          "path": "Config.PollingDelayMS",
+          "description": "Set the delay in milliseconds between polling iterations when polling continues.",
+          "adapters": [
+            "Network_DiscordBot"
+          ],
+          "evidence": [
+            {
+              "adapter": "Network_DiscordBot",
+              "references": [
+                {
+                  "sourceId": "network-mapped",
+                  "lines": [
+                    76,
+                    79,
+                    84
+                  ]
+                },
+                {
+                  "sourceId": "mapped-core",
+                  "lines": [
+                    9,
+                    48
+                  ]
+                },
+                {
+                  "sourceId": "network-concrete",
+                  "lines": [
+                    223,
+                    274,
+                    275
+                  ]
+                }
+              ],
+              "trace": "Resolve-PathFromDictionary reads incoming Config.PollingDelayMS with literal -Default 5000; GetResult supplies Start-Sleep only when continue is true.",
+              "conditional": true,
+              "condition": "Read during ReadBatch setup; used for sleeping only when the loop continues after response processing."
+            }
+          ],
+          "default": {
+            "Network_DiscordBot": 5000
+          }
+        },
+        {
+          "path": "Config.PollUntilResponse",
+          "description": "Control whether batch polling continues after a response unless a matching reply ends the operation.",
+          "adapters": [
+            "Network_DiscordBot"
+          ],
+          "evidence": [
+            {
+              "adapter": "Network_DiscordBot",
+              "references": [
+                {
+                  "sourceId": "network-mapped",
+                  "lines": [
+                    76,
+                    79,
+                    84
+                  ]
+                },
+                {
+                  "sourceId": "mapped-core",
+                  "lines": [
+                    9,
+                    48
+                  ]
+                },
+                {
+                  "sourceId": "network-concrete",
+                  "lines": [
+                    222,
+                    227,
+                    246,
+                    265,
+                    267,
+                    274
+                  ]
+                }
+              ],
+              "trace": "Resolve-PathFromDictionary reads incoming Config.PollUntilResponse with literal -Default $false; its unwrapped result is assigned to continue after a successful REST response. A matched reply returns early.",
+              "conditional": true,
+              "condition": "ReadBatch branch; loop continuation is evaluated after a successful response."
+            }
+          ],
+          "default": {
+            "Network_DiscordBot": false
+          }
+        },
+        {
+          "path": "Path",
+          "description": "Optionally locate prior messages in ItemSignal to match replies in the fetched batch.",
+          "adapters": [
+            "Network_DiscordBot"
+          ],
+          "evidence": [
+            {
+              "adapter": "Network_DiscordBot",
+              "references": [
+                {
+                  "sourceId": "network-mapped",
+                  "lines": [
+                    76,
+                    79,
+                    84
+                  ]
+                },
+                {
+                  "sourceId": "mapped-core",
+                  "lines": [
+                    9,
+                    48
+                  ]
+                },
+                {
+                  "sourceId": "network-concrete",
+                  "lines": [
+                    225,
+                    248,
+                    249,
+                    251,
+                    255,
+                    260,
+                    262,
+                    267
+                  ]
+                }
+              ],
+              "trace": "Incoming Plan.Path is resolved without a supplied default. When that result exists it is used as a dynamic path against ItemSignal, whose IDs are compared to response message references; those dynamic lookups are not additional incoming Plan paths.",
+              "conditional": true,
+              "condition": "Read during ReadBatch setup; prior-message lookup and reply filtering occur only when the Path lookup has a result."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedNetworkAdapter",
+      "condenser": null,
+      "name": "HandleMessage",
+      "description": "Process message content.",
+      "coverage": [
+        {
+          "adapter": "Network_DiscordBot",
+          "status": "reads",
+          "notes": "The indexed activity overload forwards Plan unchanged through mapped-core. Resource and Addresses are read from this.Signal, channel IDs and message data from ItemSignal; locally constructed RestPlan fields are not incoming Plan reads. No supported activity is zero-read or reserved-no-op.",
+          "references": [
+            {
+              "sourceId": "network-mapped",
+              "lines": [
+                76,
+                79,
+                84
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "network-concrete",
+              "lines": [
+                91,
+                96,
+                103,
+                104,
+                106,
+                110,
+                113,
+                114,
+                284,
+                287,
+                289,
+                290
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Read the configuration object and warn when it is absent or false-valued.",
+          "adapters": [
+            "Network_DiscordBot"
+          ],
+          "evidence": [
+            {
+              "adapter": "Network_DiscordBot",
+              "references": [
+                {
+                  "sourceId": "network-mapped",
+                  "lines": [
+                    76,
+                    79,
+                    84
+                  ]
+                },
+                {
+                  "sourceId": "mapped-core",
+                  "lines": [
+                    9,
+                    48
+                  ]
+                },
+                {
+                  "sourceId": "network-concrete",
+                  "lines": [
+                    91,
+                    96,
+                    103,
+                    104,
+                    106,
+                    110
+                  ]
+                }
+              ],
+              "trace": "The mapped activity overload and core forward incoming Plan unchanged. Config is resolved and unwrapped into config; its truthiness controls a diagnostic warning. Child property reads are documented separately.",
+              "conditional": true,
+              "condition": "After mapped validation and successful adapter resolution, when concrete Invoke has a non-null ConductionSignal and a nonempty Activity; shared by all supported activities."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Select message content from ItemSignal for the activity result.",
+          "adapters": [
+            "Network_DiscordBot"
+          ],
+          "evidence": [
+            {
+              "adapter": "Network_DiscordBot",
+              "references": [
+                {
+                  "sourceId": "network-mapped",
+                  "lines": [
+                    76,
+                    79,
+                    84
+                  ]
+                },
+                {
+                  "sourceId": "mapped-core",
+                  "lines": [
+                    9,
+                    48
+                  ]
+                },
+                {
+                  "sourceId": "network-concrete",
+                  "lines": [
+                    284,
+                    287,
+                    289,
+                    290
+                  ]
+                }
+              ],
+              "trace": "Direct incoming Plan.Path member access supplies the path argument to Resolve-PathFromDictionary rooted in ItemSignal. This is a Plan property read even though the lookup target is ItemSignal. The commented Config.Message lookup is excluded.",
+              "conditional": true,
+              "condition": "HandleMessage branch after shared entry reads; sets the result only if the ItemSignal lookup has a result."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

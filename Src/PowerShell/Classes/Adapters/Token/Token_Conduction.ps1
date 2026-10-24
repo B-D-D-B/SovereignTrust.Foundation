@@ -1,3 +1,14 @@
+<#
+Class: Token_Conduction
+Purpose: Resolve conduction token values.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Get: Resolve a token value from the requested path.
+ActivityValidation: OnInvoke, BeforeDispatch
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+#>
 class Token_Conduction {
     [Signal]$Signal
     [Conductor]$Conductor
@@ -34,7 +45,12 @@ class Token_Conduction {
     }
 
 [Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
-    $opSignal = [Signal]::Start("Token_Conduction.Invoke") | Select-Object -Last 1
+        $opSignal = [Signal]::Start("Token_Conduction.Invoke") | Select-Object -Last 1
+
+        if ($Activity -notin @('Get')) {
+            $opSignal.LogCritical("Unsupported Token_Conduction activity: '$Activity'.")
+            return $opSignal
+        }
 
     try {
             $Path = $Plan.Path

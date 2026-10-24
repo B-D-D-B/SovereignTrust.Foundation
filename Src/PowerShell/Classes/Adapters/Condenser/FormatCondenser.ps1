@@ -5,6 +5,20 @@
 #  Authors: Shadow PhanTom 🤖/☠️🧁👾️ • Neural Alchemist ⚗️☣️🐲 • Version: 2025.5.4.8
 # =============================================================================
 
+<#
+Class: FormatCondenser
+Purpose: Perform format condenser operations.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Json: Format content as JSON.
+- JsonArray: Format content as a JSON array.
+- Xml: Format content as XML.
+- Text: Format content as text.
+ActivityValidation: OnInvoke, BeforeDispatch
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+#>
 class FormatCondenser {
     [Signal]$Signal
 
@@ -24,6 +38,11 @@ class FormatCondenser {
 
     [Signal]Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
         $opSignal = [Signal]::Start("FormatCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
+
+        if ($Activity -notin @('Json', 'JsonArray', 'Xml', 'Text')) {
+#            $opSignal.LogCritical("Unsupported FormatCondenser activity: '$Activity'.")
+#            return $opSignal
+        }
 
         $DefaultPath = "%.@"
         if ($Activity) {

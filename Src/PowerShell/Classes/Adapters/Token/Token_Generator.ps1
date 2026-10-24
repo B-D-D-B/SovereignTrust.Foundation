@@ -1,3 +1,14 @@
+<#
+Class: Token_Generator
+Purpose: Resolve generator token values.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Get: Resolve a token value from the requested path.
+ActivityValidation: OnInvoke, BeforeDispatch
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+#>
 class Token_Generator {
     [Signal]$Signal
     [Conductor]$Conductor
@@ -35,6 +46,11 @@ class Token_Generator {
 
     [Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
         $opSignal = [Signal]::Start("Token_Generator.Invoke") | Select-Object -Last 1
+
+        if ($Activity -notin @('Get')) {
+            $opSignal.LogCritical("Unsupported Token_Generator activity: '$Activity'.")
+            return $opSignal
+        }
 
         try {
             $Path = $Plan.Path

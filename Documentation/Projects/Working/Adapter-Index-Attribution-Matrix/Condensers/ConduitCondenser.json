@@ -1,0 +1,379 @@
+{
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "ConduitCondenser",
+  "activities": [
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "ConduitCondenser",
+      "name": "Process",
+      "description": "Process a plan through a conduit.",
+      "coverage": [
+        {
+          "adapter": "ConduitCondenser",
+          "status": "reads",
+          "notes": "Processes the selected ItemSignal grid using a clone of incoming Plan. Clone Adapter/Activity are overwritten from ForEachAdapter/ForEachActivity; helper routing reads are attributed back to those sources. No arbitrary downstream adapter inventory. Serial helper Plan can later be rebound to item data, so only proven pre-rebinding incoming fields are attributed.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "ConduitCondenser",
+              "lines": [
+                69,
+                73,
+                83,
+                97,
+                99,
+                100,
+                103
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "ForEachActivity",
+          "description": "Provide the activity copied into the per-item dispatch plan.",
+          "adapters": [
+            "ConduitCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "ConduitCondenser",
+              "references": [
+                {
+                  "sourceId": "ConduitCondenser",
+                  "lines": [
+                    97,
+                    100,
+                    103
+                  ]
+                }
+              ],
+              "trace": "Direct inherited clone.ForEachActivity is assigned to clone.Activity; this assignment read has no resolver Default.",
+              "conditional": true,
+              "condition": "Process after grid selection and cloning succeed."
+            }
+          ]
+        },
+        {
+          "path": "ForEachActivity",
+          "description": "Resolve the per-item activity after forwarding it into the cloned Activity field.",
+          "adapters": [
+            "ConduitCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "ConduitCondenser",
+              "references": [
+                {
+                  "sourceId": "conduit-process",
+                  "lines": [
+                    43,
+                    46,
+                    75
+                  ]
+                }
+              ],
+              "trace": "Conduit lines 97-100 clone the incoming plan and set Activity from ForEachActivity. The helper resolves that Activity with literal -Default \"Read\"; this fallback applies to the forwarded value, not to original Plan.Activity.",
+              "conditional": true,
+              "condition": "Process helper entry after the Activity field has been populated from ForEachActivity."
+            }
+          ],
+          "default": {
+            "ConduitCondenser": "Read"
+          }
+        },
+        {
+          "path": "ForEachAdapter",
+          "description": "Choose the mapped adapter for each grid item.",
+          "adapters": [
+            "ConduitCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "ConduitCondenser",
+              "references": [
+                {
+                  "sourceId": "ConduitCondenser",
+                  "lines": [
+                    97,
+                    99,
+                    103
+                  ]
+                }
+              ],
+              "trace": "The cloned ForEachAdapter is copied into clone.Adapter; the process helper reads Adapter for routing. Original Plan.Adapter is overwritten and not inventoried.",
+              "conditional": true,
+              "condition": "Process after grid selection and cloning succeed."
+            }
+          ]
+        },
+        {
+          "path": "ForEachPath",
+          "description": "Select the ItemSignal grid to process.",
+          "adapters": [
+            "ConduitCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "ConduitCondenser",
+              "references": [
+                {
+                  "sourceId": "ConduitCondenser",
+                  "lines": [
+                    83,
+                    89
+                  ]
+                }
+              ],
+              "trace": "Incoming ForEachPath supplies the ItemSignal resolver path.",
+              "conditional": true,
+              "condition": "Process before selecting the source grid."
+            }
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Name the process signal and iteration tracing.",
+          "adapters": [
+            "ConduitCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "ConduitCondenser",
+              "references": [
+                {
+                  "sourceId": "conduit-process",
+                  "lines": [
+                    36,
+                    66,
+                    71
+                  ]
+                }
+              ],
+              "trace": "Name is inherited by the clone. Entry Name and pre-rebinding trace Name originate in incoming Plan; after local plan is replaced with an item result, subsequent names are item-owned and excluded.",
+              "conditional": true,
+              "condition": "Process helper entry and tracing before any local plan rebinding."
+            }
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "adapters": [
+            "ConduitCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "ConduitCondenser",
+              "references": [
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    13,
+                    20,
+                    21,
+                    22,
+                    25,
+                    33,
+                    34
+                  ]
+                }
+              ],
+              "trace": "Conduit calls Resolve-ClonePlan on original Plan at line 97; helper reads Plan and Phase before temporarily removing/restoring them.",
+              "conditional": true,
+              "condition": "Process before constructing the dispatch clone."
+            }
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "adapters": [
+            "ConduitCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "ConduitCondenser",
+              "references": [
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    15,
+                    16,
+                    17,
+                    25,
+                    28,
+                    29
+                  ]
+                }
+              ],
+              "trace": "Conduit calls Resolve-ClonePlan on original Plan at line 97; helper reads Plan and Phase before temporarily removing/restoring them.",
+              "conditional": true,
+              "condition": "Process before constructing the dispatch clone."
+            }
+          ]
+        },
+        {
+          "path": "SupportParallelism",
+          "description": "Choose the serial versus parallel conduit branch.",
+          "adapters": [
+            "ConduitCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "ConduitCondenser",
+              "references": [
+                {
+                  "sourceId": "conduit-process",
+                  "lines": [
+                    39,
+                    40,
+                    52,
+                    58,
+                    116
+                  ]
+                }
+              ],
+              "trace": "The helper receives the clone and resolves inherited SupportParallelism with literal -Default $false. Pool receives Plan but has no active property reads.",
+              "conditional": true,
+              "condition": "Process helper after source-grid selection."
+            }
+          ],
+          "default": {
+            "ConduitCondenser": false
+          }
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "ConduitCondenser",
+      "name": "Graph",
+      "description": "Build a phase graph.",
+      "coverage": [
+        {
+          "adapter": "ConduitCondenser",
+          "status": "reads",
+          "notes": "Source-supported Graph activity belongs to ConduitCondenser. It passes original Plan into the specific SignalGraph helper; this does not make GraphCondenser an activity owner.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "ConduitCondenser",
+              "lines": [
+                73,
+                114,
+                117,
+                123,
+                133
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Name",
+          "description": "Name the graph-plan signal and diagnostic messages.",
+          "adapters": [
+            "ConduitCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "ConduitCondenser",
+              "references": [
+                {
+                  "sourceId": "ConduitCondenser",
+                  "lines": [
+                    117,
+                    119,
+                    120,
+                    130,
+                    135,
+                    141
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Name is used for graph-plan identity and diagnostic branching.",
+              "conditional": true,
+              "condition": "Graph branch."
+            }
+          ]
+        },
+        {
+          "path": "NamePath",
+          "description": "Select the identifier field in each source-array item.",
+          "adapters": [
+            "ConduitCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "ConduitCondenser",
+              "references": [
+                {
+                  "sourceId": "graph-json-array",
+                  "lines": [
+                    32,
+                    47,
+                    59,
+                    60,
+                    64
+                  ]
+                }
+              ],
+              "trace": "Conduit line 133 forwards original Plan. The helper resolves NamePath with literal -Default \"Name\" and uses it against each ItemSignal-derived item.",
+              "conditional": true,
+              "condition": "Graph helper after source array resolution succeeds."
+            }
+          ],
+          "default": {
+            "ConduitCondenser": "Name"
+          }
+        },
+        {
+          "path": "Path",
+          "description": "Select the ItemSignal array and derive the graph name from the final path segment.",
+          "adapters": [
+            "ConduitCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "ConduitCondenser",
+              "references": [
+                {
+                  "sourceId": "ConduitCondenser",
+                  "lines": [
+                    123,
+                    125,
+                    126,
+                    127,
+                    128,
+                    133
+                  ]
+                }
+              ],
+              "trace": "Original Path is resolved, split for naming, and used against ItemSignal; the selected objects are not Plan children.",
+              "conditional": true,
+              "condition": "Graph branch before the graph helper."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

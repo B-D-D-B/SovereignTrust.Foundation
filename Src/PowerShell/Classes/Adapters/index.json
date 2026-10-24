@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "layoutVersion": 1,
+  "mappedAdapters": [
+    {
+      "name": "MappedAdapterTemplate",
+      "activities": [],
+      "concreteAdapters": []
+    },
+    {
+      "name": "MappedCondenserAdapter",
+      "file": "Catalog/Mapped/MappedCondenserAdapter.json"
+    },
+    {
+      "name": "MappedConductionAdapter",
+      "file": "Catalog/Mapped/MappedConductionAdapter.json"
+    },
+    {
+      "name": "MappedConduitAdapter",
+      "file": "Catalog/Mapped/MappedConduitAdapter.json"
+    },
+    {
+      "name": "MappedDataAdapter",
+      "file": "Catalog/Mapped/MappedDataAdapter.json"
+    },
+    {
+      "name": "MappedIntelligenceAdapter",
+      "file": "Catalog/Mapped/MappedIntelligenceAdapter.json"
+    },
+    {
+      "name": "MappedNetworkAdapter",
+      "file": "Catalog/Mapped/MappedNetworkAdapter.json"
+    },
+    {
+      "name": "MappedQuantumAdapter",
+      "file": "Catalog/Mapped/MappedQuantumAdapter.json"
+    },
+    {
+      "name": "MappedQueueAdapter",
+      "file": "Catalog/Mapped/MappedQueueAdapter.json"
+    },
+    {
+      "name": "MappedSatelliteAdapter",
+      "file": "Catalog/Mapped/MappedSatelliteAdapter.json"
+    },
+    {
+      "name": "MappedSessionAdapter",
+      "file": "Catalog/Mapped/MappedSessionAdapter.json"
+    },
+    {
+      "name": "MappedStorageAdapter",
+      "file": "Catalog/Mapped/MappedStorageAdapter.json"
+    },
+    {
+      "name": "MappedTokenAdapter",
+      "file": "Catalog/Mapped/MappedTokenAdapter.json"
+    },
+    {
+      "name": "MappedUtilityAdapter",
+      "file": "Catalog/Mapped/MappedUtilityAdapter.json"
+    }
+  ]
+}

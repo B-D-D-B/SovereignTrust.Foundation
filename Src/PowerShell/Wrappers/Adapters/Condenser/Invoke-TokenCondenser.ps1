@@ -27,7 +27,7 @@ function Invoke-TokenCondenser {
         }
 
         # ░▒▓█ Run the Conduction Condenser using the Config bits  █▓▒░
-        $consdenserIvokeSignal = $consdenser.Invoke($null, $null, $Signal, $Plan , $ItemSignal) | Select-Object -Last 1
+        $consdenserIvokeSignal = $consdenser.Invoke($null, 'Parse', $Signal, $Plan , $ItemSignal) | Select-Object -Last 1
         if ($opSignal.MergeSignalAndVerifyFailure($consdenserIvokeSignal)) {
             $opSignal.LogCritical("Fab consdenser failed.")
             return $opSignal

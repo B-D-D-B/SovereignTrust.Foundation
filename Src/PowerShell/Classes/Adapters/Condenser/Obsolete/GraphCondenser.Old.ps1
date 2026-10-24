@@ -10,6 +10,12 @@
 # Memory-safe, signal-tracked, and designed for ceremonial use in Condenser layers.
 # =============================================================================
 
+<#
+Class: GridCondenser
+Purpose: Legacy graph condenser definition.
+ActivityScope: None
+Activities: None; this legacy definition has no Activity dispatch.
+#>
 class GridCondenser {
     [Conductor]$Conductor
     [MappedCondenserAdapter]$MappedCondenserAdapter

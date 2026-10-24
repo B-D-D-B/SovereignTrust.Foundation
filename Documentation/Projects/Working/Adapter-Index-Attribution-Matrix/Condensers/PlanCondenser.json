@@ -1,0 +1,3272 @@
+{
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "PlanCondenser",
+  "activities": [
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "PlanCondenser",
+      "name": "IteratePhase",
+      "description": "Iterate a plan phase.",
+      "coverage": [
+        {
+          "adapter": "PlanCondenser",
+          "status": "reads",
+          "notes": "Mapped dispatch passes the original Plan unchanged. Shared Name tracing and Path resolution run before branch dispatch. Reads against ItemSignal, ConductionSignal and environment objects are excluded. Constructed plans and another named adapter are not recursively inventoried.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "condenser-plan",
+              "lines": [
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                135,
+                138,
+                144,
+                147
+              ]
+            },
+            {
+              "sourceId": "condenser-plan",
+              "lines": [
+                153,
+                154,
+                155,
+                181,
+                198,
+                199,
+                212,
+                228,
+                249,
+                252,
+                275,
+                285,
+                298
+              ]
+            },
+            {
+              "sourceId": "plan-iteration",
+              "lines": [
+                28,
+                30,
+                35,
+                41,
+                59,
+                67
+              ]
+            },
+            {
+              "sourceId": "plan-clone",
+              "lines": [
+                12,
+                13
+              ]
+            },
+            {
+              "sourceId": "plan-iteration-worker",
+              "lines": [
+                54,
+                57
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Adapter",
+          "description": "Identify the iteration trace adapter and select the condenser slot for the cloned iteration plan.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "plan-iteration",
+                  "lines": [
+                    30,
+                    59,
+                    60,
+                    61,
+                    65
+                  ]
+                }
+              ],
+              "trace": "The helper receives original Plan on the serial path and its cloned counterpart in a worker. It reads Adapter, splits it on a dot, validates the slot, and forwards that slot to Invoke-CondenserAdapter.",
+              "conditional": true,
+              "condition": "When an iteration executes through Invoke-PlanIteration (serial or a worker carrying a clone); no child-adapter implementation is recursively inventoried."
+            }
+          ]
+        },
+        {
+          "path": "Config.Activity",
+          "description": "Name the iteration trace activity and select the activity executed for the cloned iteration plan.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "plan-iteration",
+                  "lines": [
+                    30,
+                    41,
+                    67
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Config.Activity is used for tracing, assigned into the clone Activity, and passed to Invoke-CondenserAdapter. The assignment target is locally cloned state, but the source is incoming Config.Activity.",
+              "conditional": true,
+              "condition": "When an iteration executes through Invoke-PlanIteration (serial or a worker carrying a clone); no child-adapter implementation is recursively inventoried."
+            }
+          ]
+        },
+        {
+          "path": "Config.IterationArray",
+          "description": "Supply the iteration values and cardinality used to select serial and parallel work.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    153,
+                    161,
+                    164,
+                    165,
+                    226,
+                    238,
+                    247
+                  ]
+                }
+              ],
+              "trace": "The resolver result is wrapped as an array; its count controls empty-array exit, warmup size and remaining work.",
+              "conditional": true,
+              "condition": "IteratePhase branch before iteration-array validation."
+            }
+          ]
+        },
+        {
+          "path": "Config.IterationName",
+          "description": "Name the registered iteration signal.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    154,
+                    162,
+                    255,
+                    291
+                  ]
+                }
+              ],
+              "trace": "The resolver receives literal -Default \"Iteration\"; its string result is forwarded as IterationName to serial and worker contexts.",
+              "conditional": true,
+              "condition": "IteratePhase branch before iteration-array validation."
+            }
+          ],
+          "default": {
+            "PlanCondenser": "Iteration"
+          }
+        },
+        {
+          "path": "Config.Threading.DebugInline",
+          "description": "Select inline debug execution when deciding and invoking parallel work.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    199,
+                    205,
+                    222,
+                    240,
+                    301
+                  ]
+                }
+              ],
+              "trace": "The resolver receives literal -Default $false, validates a boolean, and passes it to the runspace-pool debug switch.",
+              "conditional": true,
+              "condition": "IteratePhase with a nonempty iteration array and Config.Threading.Enabled true, after earlier validation succeeds."
+            }
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Config.Threading.DebugWorkItemIndex",
+          "description": "Select the work-item index for inline debugging.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    181,
+                    226,
+                    228,
+                    231,
+                    302
+                  ]
+                }
+              ],
+              "trace": "The supplied Default is $warmupCount, computed as Math.Min(warmup, iterationArray.Count). Preserve this runtime expression instead of inventing a literal.",
+              "conditional": true,
+              "condition": "IteratePhase with a nonempty iteration array and Config.Threading.Enabled true, after earlier validation succeeds."
+            }
+          ],
+          "default": {
+            "PlanCondenser": {
+              "expression": "$warmupCount",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Threading.Enabled",
+          "description": "Enable consideration of threaded iteration and validate that the option is boolean.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    155,
+                    169,
+                    173,
+                    180
+                  ]
+                }
+              ],
+              "trace": "The resolver receives literal -Default $false. The boolean type is checked after the nonempty iteration-array check.",
+              "conditional": true,
+              "condition": "IteratePhase branch before iteration-array validation."
+            }
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Config.Threading.MaxThreads",
+          "description": "Set the iteration worker throttle, clamped to at least one.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    197,
+                    212,
+                    215,
+                    216,
+                    241,
+                    299
+                  ]
+                }
+              ],
+              "trace": "The actual resolver Default expression is $maxParallelismSignal.GetResult(). That signal reads environment Config.MaxParallelism from ConductionSignal with its own fallback 1; the incoming property fallback remains a runtime expression, not the literal 1.",
+              "conditional": true,
+              "condition": "IteratePhase with a nonempty iteration array and Config.Threading.Enabled true, after earlier validation succeeds."
+            }
+          ],
+          "default": {
+            "PlanCondenser": {
+              "expression": "$maxParallelismSignal.GetResult()",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Threading.ReuseItemSignalGrid",
+          "description": "Request reuse of the source ItemSignal grid in iteration workers.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    198,
+                    205,
+                    221,
+                    293
+                  ]
+                }
+              ],
+              "trace": "The resolver receives literal -Default $false; the boolean is validated and forwarded through workerContext.ReuseItemSignalGrid. The worker consumes that local context, not a new incoming Plan path.",
+              "conditional": true,
+              "condition": "IteratePhase with a nonempty iteration array and Config.Threading.Enabled true, after earlier validation succeeds."
+            }
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Config.Threading.Warmup",
+          "description": "Set the nonnegative number of warmup iterations before parallel work, capped by the iteration count.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    181,
+                    184,
+                    190,
+                    226
+                  ]
+                }
+              ],
+              "trace": "The resolver receives literal -Default 0; its value is cast to int, rejected if negative and capped with Math.Min.",
+              "conditional": true,
+              "condition": "IteratePhase with a nonempty iteration array and Config.Threading.Enabled true, after earlier validation succeeds."
+            }
+          ],
+          "default": {
+            "PlanCondenser": 0
+          }
+        },
+        {
+          "path": "Name",
+          "description": "Identify the iteration template and input hash in execution tracing.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "plan-iteration",
+                  "lines": [
+                    26,
+                    27,
+                    28
+                  ]
+                }
+              ],
+              "trace": "Plan.Name is read when STExecutionTraceState is non-null; the helper receives the original or a clone of it.",
+              "conditional": true,
+              "condition": "When an iteration executes through Invoke-PlanIteration (serial or a worker carrying a clone); no child-adapter implementation is recursively inventoried. This extra Name read requires execution tracing state."
+            }
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    138,
+                    144
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Name is converted to string and passed to Enter-STExecutionTrace before branch dispatch.",
+              "conditional": true,
+              "condition": "After activity validation; before the branch-specific work."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    147,
+                    148
+                  ]
+                }
+              ],
+              "trace": "Resolve-PathFromDictionary reads incoming Plan.Path without a supplied Default; GetResult is retained as DefaultPath. Even branches that do not use DefaultPath perform this read.",
+              "conditional": true,
+              "condition": "After activity validation and entry tracing; before branch-specific work."
+            }
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Temporarily preserve the parent-phase reference while cloning the iteration plan.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    13,
+                    20,
+                    21,
+                    22,
+                    25,
+                    32,
+                    33,
+                    34
+                  ]
+                }
+              ],
+              "trace": "Resolve-ClonePlan reads incoming Phase before removal/serialization and restores its reference on original and clone. The helper called on injected ItemSignal steps in other activities is not an incoming Plan read.",
+              "conditional": true,
+              "condition": "When an iteration executes through Invoke-PlanIteration (serial or a worker carrying a clone); no child-adapter implementation is recursively inventoried."
+            }
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Temporarily preserve the parent-plan reference while cloning the iteration plan.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    15,
+                    16,
+                    17,
+                    25,
+                    27,
+                    28,
+                    29
+                  ]
+                }
+              ],
+              "trace": "Resolve-ClonePlan receives incoming Plan from the serial helper or directly from the parallel work-item loop. It reads the Plan member before removal/serialization and restores the same reference on original and clone.",
+              "conditional": true,
+              "condition": "When an iteration executes through Invoke-PlanIteration (serial or a worker carrying a clone); no child-adapter implementation is recursively inventoried."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "PlanCondenser",
+      "name": "InvokePlan",
+      "description": "Reserved plan invocation activity; its current branch has no implementation.",
+      "coverage": [
+        {
+          "adapter": "PlanCondenser",
+          "status": "reserved-no-op",
+          "notes": "Mapped dispatch passes the original Plan unchanged. Shared Name tracing and Path resolution run before branch dispatch. Reads against ItemSignal, ConductionSignal and environment objects are excluded. Constructed plans and another named adapter are not recursively inventoried. InvokePlan is explicitly reserved: its branch contains only a TODO and break. Shared Name/Path reads still occur; reserved does not mean zero incoming reads.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "condenser-plan",
+              "lines": [
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                135,
+                138,
+                144,
+                147
+              ]
+            },
+            {
+              "sourceId": "condenser-plan",
+              "lines": [
+                342,
+                343,
+                344
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    138,
+                    144
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Name is converted to string and passed to Enter-STExecutionTrace before branch dispatch.",
+              "conditional": true,
+              "condition": "After activity validation; before the branch-specific work."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    147,
+                    148
+                  ]
+                }
+              ],
+              "trace": "Resolve-PathFromDictionary reads incoming Plan.Path without a supplied Default; GetResult is retained as DefaultPath. Even branches that do not use DefaultPath perform this read.",
+              "conditional": true,
+              "condition": "After activity validation and entry tracing; before branch-specific work."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "PlanCondenser",
+      "name": "InvokePhase",
+      "description": "Invoke a phase.",
+      "coverage": [
+        {
+          "adapter": "PlanCondenser",
+          "status": "reads",
+          "notes": "Mapped dispatch passes the original Plan unchanged. Shared Name tracing and Path resolution run before branch dispatch. Reads against ItemSignal, ConductionSignal and environment objects are excluded. Constructed plans and another named adapter are not recursively inventoried.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "condenser-plan",
+              "lines": [
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                135,
+                138,
+                144,
+                147
+              ]
+            },
+            {
+              "sourceId": "condenser-plan",
+              "lines": [
+                48,
+                56,
+                57,
+                67,
+                76,
+                78,
+                95,
+                105,
+                109,
+                114,
+                348
+              ]
+            },
+            {
+              "sourceId": "plan-phase",
+              "lines": [
+                5,
+                9,
+                13,
+                17
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Forward the incoming configuration object into the constructed hydration plan.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    91,
+                    95,
+                    109,
+                    348
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Config is assigned unchanged to hydrationPlan.Config; hydrationPlan is dispatched to the Hydration adapter. Config is recorded as an opaque forwarded object, not recursively expanded into another condenser inventory.",
+              "conditional": true,
+              "condition": "When InvokePhase reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger."
+            }
+          ]
+        },
+        {
+          "path": "Config.Break",
+          "description": "Evaluate the helper diagnostic break condition before cloning injected steps.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    78,
+                    79,
+                    81,
+                    82,
+                    348
+                  ]
+                }
+              ],
+              "trace": "Original Plan Config.Break is resolved with literal -Default $false and tested; the branch only assigns a local diagnostic variable.",
+              "conditional": true,
+              "condition": "When InvokePhase reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger."
+            }
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Config.Iteration",
+          "description": "Read the iteration number to decide whether repeated step cloning should be skipped; a null value is treated as zero by the direct expression.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    56,
+                    57,
+                    59,
+                    348
+                  ]
+                }
+              ],
+              "trace": "ResolveInsertPhaseSteps receives original Plan; direct Plan.Config.Iteration uses ?? 0. This is not a resolver-supplied Default, so no default map is attached.",
+              "conditional": true,
+              "condition": "On entry to ResolveInsertPhaseSteps from InvokePhase."
+            }
+          ]
+        },
+        {
+          "path": "Config.PreventReclone",
+          "description": "Control the repeated-cloning guard; when enabled, iterations greater than one return before step resolution.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    57,
+                    59,
+                    61,
+                    62,
+                    348
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Config.PreventReclone gates the helper early return using the resolved iteration.",
+              "conditional": true,
+              "condition": "On entry to ResolveInsertPhaseSteps from InvokePhase."
+            }
+          ]
+        },
+        {
+          "path": "Config.SkipRename",
+          "description": "Skip prefixing injected step names when true.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    114,
+                    115,
+                    117,
+                    348
+                  ]
+                }
+              ],
+              "trace": "Resolve-PathFromDictionary reads original Config.SkipRename with literal -Default $false after hydration succeeds.",
+              "conditional": true,
+              "condition": "When InvokePhase reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger. This lookup occurs after successful hydration."
+            }
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Name",
+          "description": "Name the locally constructed phase passed to Invoke-PlanPhase.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    347,
+                    348,
+                    353,
+                    354,
+                    358,
+                    361
+                  ]
+                }
+              ],
+              "trace": "After ResolveInsertPhaseSteps succeeds, direct Plan.Name is copied into phase.Name. Invoke-PlanPhase receives that constructed phase, not original Plan.",
+              "conditional": true,
+              "condition": "InvokePhase after successful step resolution."
+            }
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    138,
+                    144
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Name is converted to string and passed to Enter-STExecutionTrace before branch dispatch.",
+              "conditional": true,
+              "condition": "After activity validation; before the branch-specific work."
+            }
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Prefix injected step names and evaluate the ManageLineage diagnostic condition.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    76,
+                    105,
+                    114,
+                    117,
+                    348
+                  ]
+                }
+              ],
+              "trace": "The helper stores Plan.Name as currentPlanName, evaluates its ManageLineage pattern, and uses the stored name when renaming steps unless SkipRename is true.",
+              "conditional": true,
+              "condition": "When InvokePhase reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Locate the steps to inject from ItemSignal.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    67,
+                    348
+                  ]
+                }
+              ],
+              "trace": "The helper reads original Plan.Path directly as the resolver path argument, while the lookup dictionary is ItemSignal. The lookup result and its cloned steps are not the incoming Plan.",
+              "conditional": true,
+              "condition": "When InvokePhase reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    147,
+                    148
+                  ]
+                }
+              ],
+              "trace": "Resolve-PathFromDictionary reads incoming Plan.Path without a supplied Default; GetResult is retained as DefaultPath. Even branches that do not use DefaultPath perform this read.",
+              "conditional": true,
+              "condition": "After activity validation and entry tracing; before branch-specific work."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "PlanCondenser",
+      "name": "InvokePhaseAsync",
+      "description": "Start a phase asynchronously.",
+      "coverage": [
+        {
+          "adapter": "PlanCondenser",
+          "status": "reads",
+          "notes": "Mapped dispatch passes the original Plan unchanged. Shared Name tracing and Path resolution run before branch dispatch. Reads against ItemSignal, ConductionSignal and environment objects are excluded. Constructed plans and another named adapter are not recursively inventoried.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "condenser-plan",
+              "lines": [
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                135,
+                138,
+                144,
+                147
+              ]
+            },
+            {
+              "sourceId": "condenser-plan",
+              "lines": [
+                48,
+                56,
+                57,
+                67,
+                76,
+                78,
+                95,
+                105,
+                109,
+                114,
+                369
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Forward the incoming configuration object into the constructed hydration plan.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    91,
+                    95,
+                    109,
+                    369
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Config is assigned unchanged to hydrationPlan.Config; hydrationPlan is dispatched to the Hydration adapter. Config is recorded as an opaque forwarded object, not recursively expanded into another condenser inventory.",
+              "conditional": true,
+              "condition": "When InvokePhaseAsync reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger."
+            }
+          ]
+        },
+        {
+          "path": "Config.Break",
+          "description": "Evaluate the helper diagnostic break condition before cloning injected steps.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    78,
+                    79,
+                    81,
+                    82,
+                    369
+                  ]
+                }
+              ],
+              "trace": "Original Plan Config.Break is resolved with literal -Default $false and tested; the branch only assigns a local diagnostic variable.",
+              "conditional": true,
+              "condition": "When InvokePhaseAsync reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger."
+            }
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Config.DebugInline",
+          "description": "Select inline execution for the background phase task.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    397,
+                    403,
+                    434
+                  ]
+                }
+              ],
+              "trace": "The resolver receives literal -Default $false; a boolean is required before supplying the DebugInline switch.",
+              "conditional": true,
+              "condition": "InvokePhaseAsync after step resolution, environment existence/support validation and successful ItemSignal snapshot export."
+            }
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Config.Iteration",
+          "description": "Read the iteration number to decide whether repeated step cloning should be skipped; a null value is treated as zero by the direct expression.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    56,
+                    57,
+                    59,
+                    369
+                  ]
+                }
+              ],
+              "trace": "ResolveInsertPhaseSteps receives original Plan; direct Plan.Config.Iteration uses ?? 0. This is not a resolver-supplied Default, so no default map is attached.",
+              "conditional": true,
+              "condition": "On entry to ResolveInsertPhaseSteps from InvokePhaseAsync."
+            }
+          ]
+        },
+        {
+          "path": "Config.MaxBackgroundPhases",
+          "description": "Limit concurrent background phase tasks to a positive integer.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    398,
+                    399,
+                    408,
+                    412,
+                    433
+                  ]
+                }
+              ],
+              "trace": "The actual Default expression is $environmentMaxSignal.GetResult(), whose source reads environment Config.MaxBackgroundPhases with fallback 4. Do not replace the incoming property fallback with 4.",
+              "conditional": true,
+              "condition": "InvokePhaseAsync after step resolution, environment existence/support validation and successful ItemSignal snapshot export."
+            }
+          ],
+          "default": {
+            "PlanCondenser": {
+              "expression": "$environmentMaxSignal.GetResult()",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.PreventReclone",
+          "description": "Control the repeated-cloning guard; when enabled, iterations greater than one return before step resolution.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    57,
+                    59,
+                    61,
+                    62,
+                    369
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Config.PreventReclone gates the helper early return using the resolved iteration.",
+              "conditional": true,
+              "condition": "On entry to ResolveInsertPhaseSteps from InvokePhaseAsync."
+            }
+          ]
+        },
+        {
+          "path": "Config.ReturnKeys",
+          "description": "Select result keys to export from the background phase.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    396,
+                    422
+                  ]
+                }
+              ],
+              "trace": "The resolver receives literal empty-array -Default @(); its result is array-wrapped into workerContext.ReturnKeys.",
+              "conditional": true,
+              "condition": "InvokePhaseAsync after step resolution, environment existence/support validation and successful ItemSignal snapshot export."
+            }
+          ],
+          "default": {
+            "PlanCondenser": []
+          }
+        },
+        {
+          "path": "Config.SkipRename",
+          "description": "Skip prefixing injected step names when true.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    114,
+                    115,
+                    117,
+                    369
+                  ]
+                }
+              ],
+              "trace": "Resolve-PathFromDictionary reads original Config.SkipRename with literal -Default $false after hydration succeeds.",
+              "conditional": true,
+              "condition": "When InvokePhaseAsync reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger. This lookup occurs after successful hydration."
+            }
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Config.TaskName",
+          "description": "Name the background phase task.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    395,
+                    431
+                  ]
+                }
+              ],
+              "trace": "The supplied resolver fallback is the direct expression $Plan.Name, preserving its runtime value rather than assuming a literal.",
+              "conditional": true,
+              "condition": "InvokePhaseAsync after step resolution, environment existence/support validation and successful ItemSignal snapshot export."
+            }
+          ],
+          "default": {
+            "PlanCondenser": {
+              "expression": "$Plan.Name",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    138,
+                    144
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Name is converted to string and passed to Enter-STExecutionTrace before branch dispatch.",
+              "conditional": true,
+              "condition": "After activity validation; before the branch-specific work."
+            }
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Prefix injected step names and evaluate the ManageLineage diagnostic condition.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    76,
+                    105,
+                    114,
+                    117,
+                    369
+                  ]
+                }
+              ],
+              "trace": "The helper stores Plan.Name as currentPlanName, evaluates its ManageLineage pattern, and uses the stored name when renaming steps unless SkipRename is true.",
+              "conditional": true,
+              "condition": "When InvokePhaseAsync reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger."
+            }
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Supply the fallback expression evaluated for the background task name.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    395
+                  ]
+                }
+              ],
+              "trace": "The -Default argument directly reads incoming Plan.Name when constructing the Config.TaskName resolver call, even if Config.TaskName exists.",
+              "conditional": true,
+              "condition": "InvokePhaseAsync after step resolution, environment existence/support validation and successful ItemSignal snapshot export."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Locate the steps to inject from ItemSignal.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    67,
+                    369
+                  ]
+                }
+              ],
+              "trace": "The helper reads original Plan.Path directly as the resolver path argument, while the lookup dictionary is ItemSignal. The lookup result and its cloned steps are not the incoming Plan.",
+              "conditional": true,
+              "condition": "When InvokePhaseAsync reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    147,
+                    148
+                  ]
+                }
+              ],
+              "trace": "Resolve-PathFromDictionary reads incoming Plan.Path without a supplied Default; GetResult is retained as DefaultPath. Even branches that do not use DefaultPath perform this read.",
+              "conditional": true,
+              "condition": "After activity validation and entry tracing; before branch-specific work."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "PlanCondenser",
+      "name": "AwaitPhase",
+      "description": "Wait for a phase.",
+      "coverage": [
+        {
+          "adapter": "PlanCondenser",
+          "status": "reads",
+          "notes": "Mapped dispatch passes the original Plan unchanged. Shared Name tracing and Path resolution run before branch dispatch. Reads against ItemSignal, ConductionSignal and environment objects are excluded. Constructed plans and another named adapter are not recursively inventoried.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "condenser-plan",
+              "lines": [
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                135,
+                138,
+                144,
+                147
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config.ResultCollisionAction",
+          "description": "Choose Error, PreserveParent or OverwriteParent when merging completed phase results.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    443,
+                    444,
+                    449,
+                    451,
+                    459
+                  ]
+                }
+              ],
+              "trace": "The resolver supplies literal -Default 'Error' after a nonempty task ID has been obtained; the string is validated before completing the task.",
+              "conditional": true,
+              "condition": "AwaitPhase with a nonempty task ID."
+            }
+          ],
+          "default": {
+            "PlanCondenser": "Error"
+          }
+        },
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    138,
+                    144
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Name is converted to string and passed to Enter-STExecutionTrace before branch dispatch.",
+              "conditional": true,
+              "condition": "After activity validation; before the branch-specific work."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    147,
+                    148
+                  ]
+                }
+              ],
+              "trace": "Resolve-PathFromDictionary reads incoming Plan.Path without a supplied Default; GetResult is retained as DefaultPath. Even branches that do not use DefaultPath perform this read.",
+              "conditional": true,
+              "condition": "After activity validation and entry tracing; before branch-specific work."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Use a string Path directly as the background task identifier.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    147,
+                    148,
+                    443
+                  ]
+                }
+              ],
+              "trace": "DefaultPath aliases incoming Path; the string branch uses it directly, while the object branch is represented separately as Path.TaskId.",
+              "conditional": true,
+              "condition": "AwaitPhase branch when the resolved Path is a string."
+            }
+          ]
+        },
+        {
+          "path": "Path.TaskId",
+          "description": "Read the task identifier when Path is an object rather than a string.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    147,
+                    148,
+                    443
+                  ]
+                }
+              ],
+              "trace": "DefaultPath aliases the incoming Path resolver result. The conditional expression uses DefaultPath itself when it is a string, otherwise reads its TaskId member.",
+              "conditional": true,
+              "condition": "AwaitPhase branch only when the resolved Path is not a string."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "PlanCondenser",
+      "name": "AwaitAllPhases",
+      "description": "Wait for all phases.",
+      "coverage": [
+        {
+          "adapter": "PlanCondenser",
+          "status": "reads",
+          "notes": "Mapped dispatch passes the original Plan unchanged. Shared Name tracing and Path resolution run before branch dispatch. Reads against ItemSignal, ConductionSignal and environment objects are excluded. Constructed plans and another named adapter are not recursively inventoried.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "condenser-plan",
+              "lines": [
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                135,
+                138,
+                144,
+                147
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config.ResultCollisionAction",
+          "description": "Choose Error, PreserveParent or OverwriteParent when merging all completed phase results.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    470,
+                    472,
+                    484
+                  ]
+                }
+              ],
+              "trace": "The resolver supplies literal -Default 'Error'; its value is validated and forwarded to Complete-PlanPhaseTask for each received task.",
+              "conditional": true,
+              "condition": "AwaitAllPhases branch before waiting for tasks."
+            }
+          ],
+          "default": {
+            "PlanCondenser": "Error"
+          }
+        },
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    138,
+                    144
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Name is converted to string and passed to Enter-STExecutionTrace before branch dispatch.",
+              "conditional": true,
+              "condition": "After activity validation; before the branch-specific work."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    147,
+                    148
+                  ]
+                }
+              ],
+              "trace": "Resolve-PathFromDictionary reads incoming Plan.Path without a supplied Default; GetResult is retained as DefaultPath. Even branches that do not use DefaultPath perform this read.",
+              "conditional": true,
+              "condition": "After activity validation and entry tracing; before branch-specific work."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "PlanCondenser",
+      "name": "GetPhaseStatus",
+      "description": "Read a phase status.",
+      "coverage": [
+        {
+          "adapter": "PlanCondenser",
+          "status": "reads",
+          "notes": "Mapped dispatch passes the original Plan unchanged. Shared Name tracing and Path resolution run before branch dispatch. Reads against ItemSignal, ConductionSignal and environment objects are excluded. Constructed plans and another named adapter are not recursively inventoried.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "condenser-plan",
+              "lines": [
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                135,
+                138,
+                144,
+                147
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    138,
+                    144
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Name is converted to string and passed to Enter-STExecutionTrace before branch dispatch.",
+              "conditional": true,
+              "condition": "After activity validation; before the branch-specific work."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    147,
+                    148
+                  ]
+                }
+              ],
+              "trace": "Resolve-PathFromDictionary reads incoming Plan.Path without a supplied Default; GetResult is retained as DefaultPath. Even branches that do not use DefaultPath perform this read.",
+              "conditional": true,
+              "condition": "After activity validation and entry tracing; before branch-specific work."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Use a string Path directly as the background task identifier.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    147,
+                    148,
+                    495
+                  ]
+                }
+              ],
+              "trace": "DefaultPath aliases incoming Path; the string branch uses it directly, while the object branch is represented separately as Path.TaskId.",
+              "conditional": true,
+              "condition": "GetPhaseStatus branch when the resolved Path is a string."
+            }
+          ]
+        },
+        {
+          "path": "Path.TaskId",
+          "description": "Read the task identifier when Path is an object rather than a string.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    147,
+                    148,
+                    495
+                  ]
+                }
+              ],
+              "trace": "DefaultPath aliases the incoming Path resolver result. The conditional expression uses DefaultPath itself when it is a string, otherwise reads its TaskId member.",
+              "conditional": true,
+              "condition": "GetPhaseStatus branch only when the resolved Path is not a string."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "PlanCondenser",
+      "name": "StopPhase",
+      "description": "Stop a phase.",
+      "coverage": [
+        {
+          "adapter": "PlanCondenser",
+          "status": "reads",
+          "notes": "Mapped dispatch passes the original Plan unchanged. Shared Name tracing and Path resolution run before branch dispatch. Reads against ItemSignal, ConductionSignal and environment objects are excluded. Constructed plans and another named adapter are not recursively inventoried.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "condenser-plan",
+              "lines": [
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                135,
+                138,
+                144,
+                147
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    138,
+                    144
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Name is converted to string and passed to Enter-STExecutionTrace before branch dispatch.",
+              "conditional": true,
+              "condition": "After activity validation; before the branch-specific work."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    147,
+                    148
+                  ]
+                }
+              ],
+              "trace": "Resolve-PathFromDictionary reads incoming Plan.Path without a supplied Default; GetResult is retained as DefaultPath. Even branches that do not use DefaultPath perform this read.",
+              "conditional": true,
+              "condition": "After activity validation and entry tracing; before branch-specific work."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Use a string Path directly as the background task identifier.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    147,
+                    148,
+                    504
+                  ]
+                }
+              ],
+              "trace": "DefaultPath aliases incoming Path; the string branch uses it directly, while the object branch is represented separately as Path.TaskId.",
+              "conditional": true,
+              "condition": "StopPhase branch when the resolved Path is a string."
+            }
+          ]
+        },
+        {
+          "path": "Path.TaskId",
+          "description": "Read the task identifier when Path is an object rather than a string.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    147,
+                    148,
+                    504
+                  ]
+                }
+              ],
+              "trace": "DefaultPath aliases the incoming Path resolver result. The conditional expression uses DefaultPath itself when it is a string, otherwise reads its TaskId member.",
+              "conditional": true,
+              "condition": "StopPhase branch only when the resolved Path is not a string."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "PlanCondenser",
+      "name": "InsertPhaseSteps",
+      "description": "Insert phase steps.",
+      "coverage": [
+        {
+          "adapter": "PlanCondenser",
+          "status": "reads",
+          "notes": "Mapped dispatch passes the original Plan unchanged. Shared Name tracing and Path resolution run before branch dispatch. Reads against ItemSignal, ConductionSignal and environment objects are excluded. Constructed plans and another named adapter are not recursively inventoried.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "condenser-plan",
+              "lines": [
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                135,
+                138,
+                144,
+                147
+              ]
+            },
+            {
+              "sourceId": "condenser-plan",
+              "lines": [
+                48,
+                56,
+                57,
+                67,
+                76,
+                78,
+                95,
+                105,
+                109,
+                114,
+                513
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Forward the incoming configuration object into the constructed hydration plan.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    91,
+                    95,
+                    109,
+                    513
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Config is assigned unchanged to hydrationPlan.Config; hydrationPlan is dispatched to the Hydration adapter. Config is recorded as an opaque forwarded object, not recursively expanded into another condenser inventory.",
+              "conditional": true,
+              "condition": "When InsertPhaseSteps reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger."
+            }
+          ]
+        },
+        {
+          "path": "Config.Break",
+          "description": "Evaluate the helper diagnostic break condition before cloning injected steps.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    78,
+                    79,
+                    81,
+                    82,
+                    513
+                  ]
+                }
+              ],
+              "trace": "Original Plan Config.Break is resolved with literal -Default $false and tested; the branch only assigns a local diagnostic variable.",
+              "conditional": true,
+              "condition": "When InsertPhaseSteps reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger."
+            }
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Config.Iteration",
+          "description": "Read the iteration number to decide whether repeated step cloning should be skipped; a null value is treated as zero by the direct expression.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    56,
+                    57,
+                    59,
+                    513
+                  ]
+                }
+              ],
+              "trace": "ResolveInsertPhaseSteps receives original Plan; direct Plan.Config.Iteration uses ?? 0. This is not a resolver-supplied Default, so no default map is attached.",
+              "conditional": true,
+              "condition": "On entry to ResolveInsertPhaseSteps from InsertPhaseSteps."
+            }
+          ]
+        },
+        {
+          "path": "Config.PreventReclone",
+          "description": "Control the repeated-cloning guard; when enabled, iterations greater than one return before step resolution.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    57,
+                    59,
+                    61,
+                    62,
+                    513
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Config.PreventReclone gates the helper early return using the resolved iteration.",
+              "conditional": true,
+              "condition": "On entry to ResolveInsertPhaseSteps from InsertPhaseSteps."
+            }
+          ]
+        },
+        {
+          "path": "Config.SkipRename",
+          "description": "Skip prefixing injected step names when true.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    114,
+                    115,
+                    117,
+                    513
+                  ]
+                }
+              ],
+              "trace": "Resolve-PathFromDictionary reads original Config.SkipRename with literal -Default $false after hydration succeeds.",
+              "conditional": true,
+              "condition": "When InsertPhaseSteps reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger. This lookup occurs after successful hydration."
+            }
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Name",
+          "description": "Find the current step in the existing phase steps.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    527
+                  ]
+                }
+              ],
+              "trace": "Direct incoming Plan.Name is compared with each phaseSteps element Name.",
+              "conditional": true,
+              "condition": "InsertPhaseSteps after successful injected-step resolution, while searching existing steps."
+            }
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    138,
+                    144
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Name is converted to string and passed to Enter-STExecutionTrace before branch dispatch.",
+              "conditional": true,
+              "condition": "After activity validation; before the branch-specific work."
+            }
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Prefix injected step names and evaluate the ManageLineage diagnostic condition.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    76,
+                    105,
+                    114,
+                    117,
+                    513
+                  ]
+                }
+              ],
+              "trace": "The helper stores Plan.Name as currentPlanName, evaluates its ManageLineage pattern, and uses the stored name when renaming steps unless SkipRename is true.",
+              "conditional": true,
+              "condition": "When InsertPhaseSteps reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Locate the steps to inject from ItemSignal.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    67,
+                    513
+                  ]
+                }
+              ],
+              "trace": "The helper reads original Plan.Path directly as the resolver path argument, while the lookup dictionary is ItemSignal. The lookup result and its cloned steps are not the incoming Plan.",
+              "conditional": true,
+              "condition": "When InsertPhaseSteps reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    147,
+                    148
+                  ]
+                }
+              ],
+              "trace": "Resolve-PathFromDictionary reads incoming Plan.Path without a supplied Default; GetResult is retained as DefaultPath. Even branches that do not use DefaultPath perform this read.",
+              "conditional": true,
+              "condition": "After activity validation and entry tracing; before branch-specific work."
+            }
+          ]
+        },
+        {
+          "path": "Phase.Steps",
+          "description": "Read the current ordered phase steps so injected steps can be inserted after the current step.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    521,
+                    522,
+                    526,
+                    535,
+                    539
+                  ]
+                }
+              ],
+              "trace": "The resolver reads incoming Phase.Steps and wraps the result as an array. Later writes to Phase.Steps are not additional reads.",
+              "conditional": true,
+              "condition": "InsertPhaseSteps after successful injected-step resolution."
+            }
+          ]
+        },
+        {
+          "path": "Phase.Steps.Name",
+          "description": "Compare each existing phase step name with the current plan name to find the insertion position.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    521,
+                    522,
+                    526,
+                    527
+                  ]
+                }
+              ],
+              "trace": "phaseSteps aliases the incoming Phase.Steps array. The loop reads each indexed element Name; Phase.Steps.Name denotes that fixed member across the array, not a dynamically invented property.",
+              "conditional": true,
+              "condition": "InsertPhaseSteps after successful injected-step resolution, while searching existing steps."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "PlanCondenser",
+      "name": "AddPhaseSteps",
+      "description": "Add phase steps.",
+      "coverage": [
+        {
+          "adapter": "PlanCondenser",
+          "status": "reads",
+          "notes": "Mapped dispatch passes the original Plan unchanged. Shared Name tracing and Path resolution run before branch dispatch. Reads against ItemSignal, ConductionSignal and environment objects are excluded. Constructed plans and another named adapter are not recursively inventoried.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "condenser-plan",
+              "lines": [
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                135,
+                138,
+                144,
+                147
+              ]
+            },
+            {
+              "sourceId": "condenser-plan",
+              "lines": [
+                48,
+                56,
+                57,
+                67,
+                76,
+                78,
+                95,
+                105,
+                109,
+                114,
+                556
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Forward the incoming configuration object into the constructed hydration plan.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    91,
+                    95,
+                    109,
+                    556
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Config is assigned unchanged to hydrationPlan.Config; hydrationPlan is dispatched to the Hydration adapter. Config is recorded as an opaque forwarded object, not recursively expanded into another condenser inventory.",
+              "conditional": true,
+              "condition": "When AddPhaseSteps reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger."
+            }
+          ]
+        },
+        {
+          "path": "Config.Break",
+          "description": "Evaluate the helper diagnostic break condition before cloning injected steps.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    78,
+                    79,
+                    81,
+                    82,
+                    556
+                  ]
+                }
+              ],
+              "trace": "Original Plan Config.Break is resolved with literal -Default $false and tested; the branch only assigns a local diagnostic variable.",
+              "conditional": true,
+              "condition": "When AddPhaseSteps reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger."
+            }
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Config.Iteration",
+          "description": "Read the iteration number to decide whether repeated step cloning should be skipped; a null value is treated as zero by the direct expression.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    56,
+                    57,
+                    59,
+                    556
+                  ]
+                }
+              ],
+              "trace": "ResolveInsertPhaseSteps receives original Plan; direct Plan.Config.Iteration uses ?? 0. This is not a resolver-supplied Default, so no default map is attached.",
+              "conditional": true,
+              "condition": "On entry to ResolveInsertPhaseSteps from AddPhaseSteps."
+            }
+          ]
+        },
+        {
+          "path": "Config.PreventReclone",
+          "description": "Control the repeated-cloning guard; when enabled, iterations greater than one return before step resolution.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    57,
+                    59,
+                    61,
+                    62,
+                    556
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Config.PreventReclone gates the helper early return using the resolved iteration.",
+              "conditional": true,
+              "condition": "On entry to ResolveInsertPhaseSteps from AddPhaseSteps."
+            }
+          ]
+        },
+        {
+          "path": "Config.SkipRename",
+          "description": "Skip prefixing injected step names when true.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    114,
+                    115,
+                    117,
+                    556
+                  ]
+                }
+              ],
+              "trace": "Resolve-PathFromDictionary reads original Config.SkipRename with literal -Default $false after hydration succeeds.",
+              "conditional": true,
+              "condition": "When AddPhaseSteps reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger. This lookup occurs after successful hydration."
+            }
+          ],
+          "default": {
+            "PlanCondenser": false
+          }
+        },
+        {
+          "path": "Name",
+          "description": "Name the plan execution trace.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    138,
+                    144
+                  ]
+                }
+              ],
+              "trace": "Direct Plan.Name is converted to string and passed to Enter-STExecutionTrace before branch dispatch.",
+              "conditional": true,
+              "condition": "After activity validation; before the branch-specific work."
+            }
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Prefix injected step names and evaluate the ManageLineage diagnostic condition.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    76,
+                    105,
+                    114,
+                    117,
+                    556
+                  ]
+                }
+              ],
+              "trace": "The helper stores Plan.Name as currentPlanName, evaluates its ManageLineage pattern, and uses the stored name when renaming steps unless SkipRename is true.",
+              "conditional": true,
+              "condition": "When AddPhaseSteps reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Locate the steps to inject from ItemSignal.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    67,
+                    556
+                  ]
+                }
+              ],
+              "trace": "The helper reads original Plan.Path directly as the resolver path argument, while the lookup dictionary is ItemSignal. The lookup result and its cloned steps are not the incoming Plan.",
+              "conditional": true,
+              "condition": "When AddPhaseSteps reaches ResolveInsertPhaseSteps; later reads require preceding helper operations to succeed and the PreventReclone early return not to trigger."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Resolve the activity path before dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    147,
+                    148
+                  ]
+                }
+              ],
+              "trace": "Resolve-PathFromDictionary reads incoming Plan.Path without a supplied Default; GetResult is retained as DefaultPath. Even branches that do not use DefaultPath perform this read.",
+              "conditional": true,
+              "condition": "After activity validation and entry tracing; before branch-specific work."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

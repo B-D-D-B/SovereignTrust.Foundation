@@ -8,6 +8,17 @@
 # flows during SDA Fusion execution and Conduction plan generation.
 # =============================================================================
 
+<#
+Class: HydrationCondenser
+Purpose: Perform hydration condenser operations.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Invoke: Apply plan hydration to a signal.
+ActivityValidation: OnInvoke, BeforeDispatch
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+#>
 class HydrationCondenser {
     [Conductor]$Conductor
     [MappedCondenserAdapter]$MappedCondenserAdapter
@@ -27,6 +38,11 @@ class HydrationCondenser {
 
     [Signal]Invoke($Slot, $Activity, $Signal, $Plan, $ItemSignal) {
         $opSignal = [Signal]::Start("HydrationCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
+
+        if ($Activity -notin @('Invoke')) {
+            $opSignal.LogCritical("Unsupported HydrationCondenser activity: '$Activity'.")
+            return $opSignal
+        }
 
         # TODO: Review, do we want to clone $ItemSignal since hydration modifies in place?
         $resultSignal = Invoke-ApplyHydrationCondenser -Signal $Signal -Plan $Plan -ItemSignal $ItemSignal 

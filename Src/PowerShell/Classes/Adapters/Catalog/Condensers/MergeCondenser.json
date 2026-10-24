@@ -1,0 +1,43 @@
+{
+  "name": "MergeCondenser",
+  "repository": "SovereignTrust.Foundation",
+  "path": "Src/PowerShell/Classes/Adapters/Condenser/MergeCondenser.ps1",
+  "activities": [
+    {
+      "name": "Merge",
+      "description": "Merge signal data.",
+      "properties": [
+        {
+          "path": "Depth",
+          "description": "Set the JSON merge depth.",
+          "adapters": [
+            "MergeCondenser"
+          ],
+          "default": {
+            "MergeCondenser": 20
+          }
+        },
+        {
+          "path": "MergeArrayHandling",
+          "description": "Choose array merging behavior.",
+          "adapters": [
+            "MergeCondenser"
+          ],
+          "default": {
+            "MergeCondenser": "Merge"
+          }
+        },
+        {
+          "path": "MergeNullValueHandling",
+          "description": "Choose how null overlay values are handled.",
+          "adapters": [
+            "MergeCondenser"
+          ],
+          "default": {
+            "MergeCondenser": "Ignore"
+          }
+        }
+      ]
+    }
+  ]
+}

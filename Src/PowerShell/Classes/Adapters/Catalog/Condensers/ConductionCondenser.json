@@ -1,0 +1,25 @@
+{
+  "name": "ConductionCondenser",
+  "repository": "SovereignTrust.Foundation",
+  "path": "Src/PowerShell/Classes/Adapters/Condenser/ConductionCondenser.ps1",
+  "activities": [
+    {
+      "name": "ST",
+      "description": "Invoke a SovereignTrust conduction plan.",
+      "properties": []
+    },
+    {
+      "name": "Sleep",
+      "description": "Pause for Config.Duration seconds and return ActualDuration (measured seconds) and Matched (absolute difference <= 0.1 seconds, inclusive). Scheduling delay can yield Matched=false without an adapter failure.",
+      "properties": [
+        {
+          "path": "Config.Duration",
+          "description": "Required finite, nonnegative number of seconds; zero is permitted.",
+          "adapters": [
+            "ConductionCondenser"
+          ]
+        }
+      ]
+    }
+  ]
+}

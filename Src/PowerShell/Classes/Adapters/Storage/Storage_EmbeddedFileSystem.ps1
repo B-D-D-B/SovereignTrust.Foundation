@@ -1,4 +1,18 @@
 
+<#
+Class: Storage_EmbeddedFileSystem
+Purpose: Read and modify embedded filesystem resources.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Read: Retrieve content from a resource.
+- Write: Store content in a resource.
+- Delete: Remove a resource.
+- Exists: Check whether a resource is present.
+ActivityValidation: OnInvoke, BeforeDispatch
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+#>
 class Storage_EmbeddedFileSystem {
     [MappedStorageAdapter]$MappedAdapter
     [Signal]$Signal
@@ -96,6 +110,12 @@ class Storage_EmbeddedFileSystem {
     }
 
     [Signal]Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
+        if ($Activity -notin @('Read', 'Write', 'Delete', 'Exists')) {
+            $invalidActivitySignal = [Signal]::Start("EmbeddedFileSystem.$Slot.$Activity") | Select-Object -Last 1
+            $invalidActivitySignal.LogCritical("Unsupported Storage_EmbeddedFileSystem activity: '$Activity'.")
+            return $invalidActivitySignal
+        }
+
         $virtualPathSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "VirtualPath" | Select-Object -Last 1
         $virtualPath = $virtualPathSignal.GetResult()
         $opSignal = [Signal]::Start("EmbeddedFileSystem.$slot.$activity.$virtualPath") | Select-Object -Last 1

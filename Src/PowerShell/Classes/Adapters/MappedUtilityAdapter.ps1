@@ -1,9 +1,15 @@
 <#
 Class: MappedUtilityAdapter
 Purpose: Route a utility slot to its provider and derive a virtual path.
-Activities: Provider-defined; the five-argument Invoke forwards Activity.
-InvokeWithPlan and InvokeAdapterMethod are separate entry points, not
-Activity values.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Resize: Resize an image.
+- Overlay: Overlay one image on another.
+ActivityValidation: OnInvoke, BeforeProviderResolution
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+InvokeWithPlan and InvokeAdapterMethod have no Activity parameter.
 #>
 
 class MappedUtilityAdapter {
@@ -76,6 +82,11 @@ class MappedUtilityAdapter {
     [Signal]Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
 
         $opSignal = [Signal]::Start("MappedUtilityAdapter.Invoke:$Slot") | Select-Object -Last 1
+
+        if ($Activity -notin @('Resize', 'Overlay')) {
+            $opSignal.LogCritical("Unsupported MappedUtilityAdapter activity: '$Activity'.")
+            return $opSignal
+        }
 
         # TODO: Add Rule System for managing when multiple slots should be tried and if results should be aggregated or return on exists.
 

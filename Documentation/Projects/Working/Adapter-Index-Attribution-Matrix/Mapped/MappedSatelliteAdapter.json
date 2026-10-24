@@ -1,0 +1,451 @@
+{
+  "mappedAdapter": "MappedSatelliteAdapter",
+  "condenser": null,
+  "activities": [
+    {
+      "mappedAdapter": "MappedSatelliteAdapter",
+      "condenser": null,
+      "name": "EmitEntries",
+      "description": "Emit telemetry entries through a configured plan.",
+      "coverage": [
+        {
+          "adapter": "Satellite_AzureApplicationInsights",
+          "status": "reads",
+          "notes": "Config is read before dispatch for a missing-config warning. The emission branch resolves PlanTokens from this.Signal, builds TokenPlan locally, and executes a cloned cached plan; those objects are not the incoming Plan.",
+          "references": [
+            {
+              "sourceId": "satellite-mapped",
+              "lines": [
+                76,
+                79,
+                84
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                25,
+                38,
+                46,
+                48
+              ]
+            },
+            {
+              "sourceId": "satellite-concrete",
+              "lines": [
+                64,
+                69,
+                76,
+                77,
+                79,
+                83,
+                111,
+                115,
+                117,
+                118,
+                123,
+                126,
+                127
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Read the configuration object to warn when it is absent or false-valued; no configuration child fields are consumed.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ],
+          "evidence": [
+            {
+              "adapter": "Satellite_AzureApplicationInsights",
+              "references": [
+                {
+                  "sourceId": "satellite-mapped",
+                  "lines": [
+                    76,
+                    79,
+                    84
+                  ]
+                },
+                {
+                  "sourceId": "mapped-core",
+                  "lines": [
+                    9,
+                    25,
+                    38,
+                    46,
+                    48
+                  ]
+                },
+                {
+                  "sourceId": "satellite-concrete",
+                  "lines": [
+                    64,
+                    69,
+                    76,
+                    77,
+                    79,
+                    83
+                  ]
+                }
+              ],
+              "trace": "Mapped Invoke passes the incoming Plan to Invoke-MappedAdapterCore; the core forwards it unchanged to concrete Invoke. Resolve-PathFromDictionary reads Config, GetResult unwraps it into config, and the truthiness check controls a warning.",
+              "conditional": true,
+              "condition": "Reached after mapped activity validation and successful adapter resolution, when concrete Invoke has a non-null ConductionSignal and nonempty Activity; shared by all four supported activities."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedSatelliteAdapter",
+      "condenser": null,
+      "name": "EmitSignal",
+      "description": "Emit a signal through a configured plan.",
+      "coverage": [
+        {
+          "adapter": "Satellite_AzureApplicationInsights",
+          "status": "reads",
+          "notes": "Config is read before dispatch for a missing-config warning. The emission branch resolves PlanTokens from this.Signal, builds TokenPlan locally, and executes a cloned cached plan; those objects are not the incoming Plan.",
+          "references": [
+            {
+              "sourceId": "satellite-mapped",
+              "lines": [
+                76,
+                79,
+                84
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                25,
+                38,
+                46,
+                48
+              ]
+            },
+            {
+              "sourceId": "satellite-concrete",
+              "lines": [
+                64,
+                69,
+                76,
+                77,
+                79,
+                83,
+                111,
+                115,
+                117,
+                118,
+                123,
+                126,
+                127
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Read the configuration object to warn when it is absent or false-valued; no configuration child fields are consumed.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ],
+          "evidence": [
+            {
+              "adapter": "Satellite_AzureApplicationInsights",
+              "references": [
+                {
+                  "sourceId": "satellite-mapped",
+                  "lines": [
+                    76,
+                    79,
+                    84
+                  ]
+                },
+                {
+                  "sourceId": "mapped-core",
+                  "lines": [
+                    9,
+                    25,
+                    38,
+                    46,
+                    48
+                  ]
+                },
+                {
+                  "sourceId": "satellite-concrete",
+                  "lines": [
+                    64,
+                    69,
+                    76,
+                    77,
+                    79,
+                    83
+                  ]
+                }
+              ],
+              "trace": "Mapped Invoke passes the incoming Plan to Invoke-MappedAdapterCore; the core forwards it unchanged to concrete Invoke. Resolve-PathFromDictionary reads Config, GetResult unwraps it into config, and the truthiness check controls a warning.",
+              "conditional": true,
+              "condition": "Reached after mapped activity validation and successful adapter resolution, when concrete Invoke has a non-null ConductionSignal and nonempty Activity; shared by all four supported activities."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedSatelliteAdapter",
+      "condenser": null,
+      "name": "SendMessage",
+      "description": "Post a telemetry message.",
+      "coverage": [
+        {
+          "adapter": "Satellite_AzureApplicationInsights",
+          "status": "reads",
+          "notes": "Reads Config for diagnostics and incoming Path for the locally constructed ContentPlan sent to Token.Memory/Get. Addresses comes from this.Signal; RestPlan.Config (Body, Method, SkipBearerToken, Uri) is constructed locally and is not incoming Config.",
+          "references": [
+            {
+              "sourceId": "satellite-mapped",
+              "lines": [
+                76,
+                79,
+                84
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                25,
+                38,
+                46,
+                48
+              ]
+            },
+            {
+              "sourceId": "satellite-concrete",
+              "lines": [
+                64,
+                69,
+                76,
+                77,
+                79,
+                83,
+                132,
+                134,
+                136,
+                137,
+                141,
+                143,
+                146,
+                148,
+                149,
+                150,
+                151,
+                152,
+                156
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Read the configuration object to warn when it is absent or false-valued; no configuration child fields are consumed.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ],
+          "evidence": [
+            {
+              "adapter": "Satellite_AzureApplicationInsights",
+              "references": [
+                {
+                  "sourceId": "satellite-mapped",
+                  "lines": [
+                    76,
+                    79,
+                    84
+                  ]
+                },
+                {
+                  "sourceId": "mapped-core",
+                  "lines": [
+                    9,
+                    25,
+                    38,
+                    46,
+                    48
+                  ]
+                },
+                {
+                  "sourceId": "satellite-concrete",
+                  "lines": [
+                    64,
+                    69,
+                    76,
+                    77,
+                    79,
+                    83
+                  ]
+                }
+              ],
+              "trace": "Mapped Invoke passes the incoming Plan to Invoke-MappedAdapterCore; the core forwards it unchanged to concrete Invoke. Resolve-PathFromDictionary reads Config, GetResult unwraps it into config, and the truthiness check controls a warning.",
+              "conditional": true,
+              "condition": "Reached after mapped activity validation and successful adapter resolution, when concrete Invoke has a non-null ConductionSignal and nonempty Activity; shared by all four supported activities."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Provide the content lookup path forwarded to Token.Memory/Get to obtain the message body.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ],
+          "evidence": [
+            {
+              "adapter": "Satellite_AzureApplicationInsights",
+              "references": [
+                {
+                  "sourceId": "satellite-mapped",
+                  "lines": [
+                    76,
+                    79,
+                    84
+                  ]
+                },
+                {
+                  "sourceId": "mapped-core",
+                  "lines": [
+                    9,
+                    25,
+                    38,
+                    46,
+                    48
+                  ]
+                },
+                {
+                  "sourceId": "satellite-concrete",
+                  "lines": [
+                    132,
+                    134,
+                    136,
+                    137,
+                    141,
+                    149
+                  ]
+                }
+              ],
+              "trace": "Resolve-PathFromDictionary reads Path from the incoming Plan. bodyPathSignal.GetResult() becomes the locally created ContentPlan.Path passed to Token.Memory/Get; its result becomes the locally created RestPlan.Config.Body.",
+              "conditional": true,
+              "condition": "Only the SendMessage branch, after concrete entry guards and the shared Config read."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedSatelliteAdapter",
+      "condenser": null,
+      "name": "EmitSignalFull",
+      "description": "Mark entries to skip; the current branch does not emit them.",
+      "coverage": [
+        {
+          "adapter": "Satellite_AzureApplicationInsights",
+          "status": "reads",
+          "notes": "Reads Config for diagnostics, then tags ItemSignal.Entries with Skip. Emission calls are commented out. This branch has a real incoming read and tag effects, so it is neither zero-read nor reserved-no-op. ItemSignal entries are not incoming Plan properties.",
+          "references": [
+            {
+              "sourceId": "satellite-mapped",
+              "lines": [
+                76,
+                79,
+                84
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                25,
+                38,
+                46,
+                48
+              ]
+            },
+            {
+              "sourceId": "satellite-concrete",
+              "lines": [
+                64,
+                69,
+                76,
+                77,
+                79,
+                83,
+                90,
+                96,
+                98,
+                109
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Read the configuration object to warn when it is absent or false-valued; no configuration child fields are consumed.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ],
+          "evidence": [
+            {
+              "adapter": "Satellite_AzureApplicationInsights",
+              "references": [
+                {
+                  "sourceId": "satellite-mapped",
+                  "lines": [
+                    76,
+                    79,
+                    84
+                  ]
+                },
+                {
+                  "sourceId": "mapped-core",
+                  "lines": [
+                    9,
+                    25,
+                    38,
+                    46,
+                    48
+                  ]
+                },
+                {
+                  "sourceId": "satellite-concrete",
+                  "lines": [
+                    64,
+                    69,
+                    76,
+                    77,
+                    79,
+                    83
+                  ]
+                }
+              ],
+              "trace": "Mapped Invoke passes the incoming Plan to Invoke-MappedAdapterCore; the core forwards it unchanged to concrete Invoke. Resolve-PathFromDictionary reads Config, GetResult unwraps it into config, and the truthiness check controls a warning.",
+              "conditional": true,
+              "condition": "Reached after mapped activity validation and successful adapter resolution, when concrete Invoke has a non-null ConductionSignal and nonempty Activity; shared by all four supported activities."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

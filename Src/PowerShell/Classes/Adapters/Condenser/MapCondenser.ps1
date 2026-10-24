@@ -9,6 +9,18 @@
 # reactive publishing from flattened Plan schemas.
 # =============================================================================
 
+<#
+Class: MapCondenser
+Purpose: Perform map condenser operations.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Invoke: Invoke a mapped operation.
+- Map: Map values into a target.
+ActivityValidation: OnInvoke, BeforeDispatch
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+#>
 class MapCondenser {
     [Conductor]$Conductor
     [MappedCondenserAdapter]$MappedCondenserAdapter
@@ -30,6 +42,11 @@ class MapCondenser {
         # For the Content Condenser, the plan contains the steps to perform, similar to the steps in the FormulaGraphCondenser but 2 dimensional mappings
 
         $opSignal = [Signal]::Start("MapCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
+
+        if ($Activity -notin @('Invoke', 'Map')) {
+#            $opSignal.LogCritical("Unsupported MapCondenser activity: '$Activity'.")
+#            return $opSignal
+        }
         
         # First Supported Activities -> Select, Merge, Project
         $DefaultPath = "%.@"

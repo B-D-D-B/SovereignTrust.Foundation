@@ -1,0 +1,112 @@
+{
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "FabCondenser",
+  "activities": [
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "FabCondenser",
+      "name": "Invoke",
+      "description": "Invoke a condenser operation.",
+      "coverage": [
+        {
+          "adapter": "FabCondenser",
+          "status": "reads",
+          "notes": "Only the validated Invoke branch is inventoried. Proposal/Context reads in InvokeOld are excluded.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "FabCondenser",
+              "lines": [
+                40,
+                43,
+                50,
+                51,
+                52,
+                53,
+                59,
+                72,
+                74,
+                85
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config.AdapterLoading.Mode",
+          "description": "Choose lazy registration unless the loading mode is Eager.",
+          "adapters": [
+            "FabCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "FabCondenser",
+              "references": [
+                {
+                  "sourceId": "FabCondenser",
+                  "lines": [
+                    50,
+                    52,
+                    53,
+                    54,
+                    55,
+                    56,
+                    69,
+                    73
+                  ]
+                }
+              ],
+              "trace": "The resolver receives -Default $loadingMode; that alias is assigned literal 'Lazy' immediately before the call and has not yet been changed.",
+              "conditional": true,
+              "condition": "Invoke when incoming Plan is non-null."
+            }
+          ],
+          "default": {
+            "FabCondenser": "Lazy"
+          }
+        },
+        {
+          "path": "Config.AdapterLoading.RetryFailedResolution",
+          "description": "Allow a failed lazy adapter resolution to be retried.",
+          "adapters": [
+            "FabCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "FabCondenser",
+              "references": [
+                {
+                  "sourceId": "FabCondenser",
+                  "lines": [
+                    51,
+                    52,
+                    59,
+                    60,
+                    61,
+                    62,
+                    70,
+                    81
+                  ]
+                }
+              ],
+              "trace": "The resolver receives -Default $retryFailedResolution, assigned literal $false before the call; the result is forwarded to lazy registration.",
+              "conditional": true,
+              "condition": "Invoke when incoming Plan is non-null; used by lazy registration."
+            }
+          ],
+          "default": {
+            "FabCondenser": false
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "name": "FormatCondenser",
+  "repository": "SovereignTrust.Foundation",
+  "path": "Src/PowerShell/Classes/Adapters/Condenser/FormatCondenser.ps1",
+  "activities": [
+    {
+      "name": "Json",
+      "description": "Format content as JSON.",
+      "properties": [
+        {
+          "path": "Format",
+          "description": "Select Json versus JsonArray parsing in the JSON formatting helper.",
+          "adapters": [
+            "FormatCondenser"
+          ],
+          "default": {
+            "FormatCondenser": "Json"
+          }
+        }
+      ]
+    },
+    {
+      "name": "JsonArray",
+      "description": "Format content as a JSON array.",
+      "properties": [
+        {
+          "path": "Format",
+          "description": "Select Json versus JsonArray parsing in the JSON formatting helper.",
+          "adapters": [
+            "FormatCondenser"
+          ],
+          "default": {
+            "FormatCondenser": "Json"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Xml",
+      "description": "Format content as XML.",
+      "properties": []
+    },
+    {
+      "name": "Text",
+      "description": "Format content as text.",
+      "properties": []
+    }
+  ]
+}

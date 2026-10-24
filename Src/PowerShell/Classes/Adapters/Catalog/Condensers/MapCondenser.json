@@ -1,0 +1,119 @@
+{
+  "name": "MapCondenser",
+  "repository": "SovereignTrust.Foundation",
+  "path": "Src/PowerShell/Classes/Adapters/Condenser/MapCondenser.ps1",
+  "activities": [
+    {
+      "name": "Invoke",
+      "description": "Invoke a condenser operation.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Forward the configuration object into a constructed token lookup plan.",
+          "adapters": [
+            "MapCondenser"
+          ]
+        },
+        {
+          "path": "HydrationStyle",
+          "description": "Select deferred token delimiters when the style is Deferred.",
+          "adapters": [
+            "MapCondenser"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Locate source content in ItemSignal for token substitution and writeback.",
+          "adapters": [
+            "MapCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Map",
+      "description": "Map values.",
+      "properties": [
+        {
+          "path": "@.CondenserMode",
+          "description": "Select Direct or Template mapping from the incoming proposal signal payload.",
+          "adapters": [
+            "MapCondenser"
+          ]
+        },
+        {
+          "path": "@.Content",
+          "description": "Read the incoming proposal signal payload content for direct substitution.",
+          "adapters": [
+            "MapCondenser"
+          ]
+        },
+        {
+          "path": "@.ReplacementType",
+          "description": "Select the direct-substitution tag format from the proposal signal payload.",
+          "adapters": [
+            "MapCondenser"
+          ]
+        },
+        {
+          "path": "Content",
+          "description": "Validate template content, derive tags and return substituted content.",
+          "adapters": [
+            "MapCondenser"
+          ]
+        },
+        {
+          "path": "MappingType",
+          "description": "Select the mapping behavior passed to replacement.",
+          "adapters": [
+            "MapCondenser"
+          ]
+        },
+        {
+          "path": "RelayData",
+          "description": "Select relay entries associated with each requested source.",
+          "adapters": [
+            "MapCondenser"
+          ]
+        },
+        {
+          "path": "RelayData.Key.RelayFilename",
+          "description": "Match each relay entry filename against the current source.",
+          "adapters": [
+            "MapCondenser"
+          ]
+        },
+        {
+          "path": "RelayData.Value",
+          "description": "Test and read each selected relay value object before resolving a tag.",
+          "adapters": [
+            "MapCondenser"
+          ]
+        },
+        {
+          "path": "RelayData[*].Value[$tag]",
+          "description": "Resolve each runtime template tag against selected incoming relay data values.",
+          "adapters": [
+            "MapCondenser"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $relayData.Value -Path $tag"
+        },
+        {
+          "path": "ReplacementType",
+          "description": "Choose template tag parsing and replacement syntax.",
+          "adapters": [
+            "MapCondenser"
+          ]
+        },
+        {
+          "path": "SourceRelayList",
+          "description": "Enumerate the relay sources for each template tag.",
+          "adapters": [
+            "MapCondenser"
+          ]
+        }
+      ]
+    }
+  ]
+}

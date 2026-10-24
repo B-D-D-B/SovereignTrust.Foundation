@@ -1,0 +1,125 @@
+{
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "MergeCondenser",
+  "activities": [
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "MergeCondenser",
+      "name": "Merge",
+      "description": "Merge signal data.",
+      "coverage": [
+        {
+          "adapter": "MergeCondenser",
+          "status": "reads",
+          "notes": "Reads three settings from incoming Plan; Base and Overlay are ItemSignal-rooted. Parameter-only overloads and their separate defaults are excluded.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "MergeCondenser",
+              "lines": [
+                51,
+                61,
+                67,
+                71,
+                75,
+                80,
+                88,
+                97
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Depth",
+          "description": "Set the JSON merge depth.",
+          "adapters": [
+            "MergeCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MergeCondenser",
+              "references": [
+                {
+                  "sourceId": "MergeCondenser",
+                  "lines": [
+                    75,
+                    97
+                  ]
+                }
+              ],
+              "trace": "The validated Merge branch resolves this incoming property with the recorded literal Default and forwards its result to Invoke-MergeJson.",
+              "conditional": true,
+              "condition": "Merge before source objects are merged."
+            }
+          ],
+          "default": {
+            "MergeCondenser": 20
+          }
+        },
+        {
+          "path": "MergeArrayHandling",
+          "description": "Choose array merging behavior.",
+          "adapters": [
+            "MergeCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MergeCondenser",
+              "references": [
+                {
+                  "sourceId": "MergeCondenser",
+                  "lines": [
+                    71,
+                    97
+                  ]
+                }
+              ],
+              "trace": "The validated Merge branch resolves this incoming property with the recorded literal Default and forwards its result to Invoke-MergeJson.",
+              "conditional": true,
+              "condition": "Merge before source objects are merged."
+            }
+          ],
+          "default": {
+            "MergeCondenser": "Merge"
+          }
+        },
+        {
+          "path": "MergeNullValueHandling",
+          "description": "Choose how null overlay values are handled.",
+          "adapters": [
+            "MergeCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "MergeCondenser",
+              "references": [
+                {
+                  "sourceId": "MergeCondenser",
+                  "lines": [
+                    67,
+                    97
+                  ]
+                }
+              ],
+              "trace": "The validated Merge branch resolves this incoming property with the recorded literal Default and forwards its result to Invoke-MergeJson.",
+              "conditional": true,
+              "condition": "Merge before source objects are merged."
+            }
+          ],
+          "default": {
+            "MergeCondenser": "Ignore"
+          }
+        }
+      ]
+    }
+  ]
+}

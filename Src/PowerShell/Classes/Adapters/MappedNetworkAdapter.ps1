@@ -1,10 +1,17 @@
 <#
 Class: MappedNetworkAdapter
 Purpose: Route a network slot through Invoke-MappedAdapterCore.
-Activities: Provider-defined; the five-argument Invoke forwards Activity.
-- DiscordBot: SendFile (send a file), SendMessage (send a message),
-  ReadBatch (read messages), HandleMessage (handle message content).
-Invoke(Slot, Context, Plan) has no Activity parameter.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- SendFile: Send a file through a network service.
+- SendMessage: Send a message.
+- ReadBatch: Read a batch of messages.
+- HandleMessage: Process message content.
+ActivityValidation: OnInvoke, BeforeProviderResolution
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+The three-argument Invoke overload has no Activity parameter.
 #>
 
 class MappedNetworkAdapter {
@@ -68,6 +75,11 @@ class MappedNetworkAdapter {
 
     [Signal] Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
         $opSignal = [Signal]::Start("MappedDataAdapter.Invoke:$Slot") | Select-Object -Last 1
+
+        if ($Activity -notin @('SendFile', 'SendMessage', 'ReadBatch', 'HandleMessage')) {
+            $opSignal.LogCritical("Unsupported MappedNetworkAdapter activity: '$Activity'.")
+            return $opSignal
+        }
 
         $resultSignal = Invoke-MappedAdapterCore -MappedAdapterSignal $this.Signal -ConductionSignal $ConductionSignal -Slot $Slot -Activity $Activity -Plan $Plan -ItemSignal $ItemSignal | Select-Object -Last 1
 

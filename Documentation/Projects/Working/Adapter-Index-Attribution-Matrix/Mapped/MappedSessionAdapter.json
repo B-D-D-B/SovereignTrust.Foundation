@@ -1,0 +1,111 @@
+{
+  "mappedAdapter": "MappedSessionAdapter",
+  "condenser": null,
+  "activities": [
+    {
+      "mappedAdapter": "MappedSessionAdapter",
+      "condenser": null,
+      "name": "RequestOrRegister",
+      "description": "Return an existing session or register a new one.",
+      "coverage": [
+        {
+          "adapter": "Session_ST",
+          "status": "reads",
+          "notes": "Mapped core forwards original Plan. The concrete activity overload forwards it into Invoke-Session_ST. Only Name and Path are read; session content comes from ItemSignal.Jacket and storage is rooted in MappedAdapterSignal. Other overloads and unused session-phase helpers are outside this dispatch.",
+          "references": [
+            {
+              "sourceId": "session-mapped",
+              "lines": [
+                72,
+                75,
+                80
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "Session_ST",
+              "lines": [
+                49,
+                64
+              ]
+            },
+            {
+              "sourceId": "session-invoke",
+              "lines": [
+                1,
+                7,
+                11,
+                13,
+                16,
+                21,
+                23
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Name",
+          "description": "Name the session operation for diagnostics.",
+          "adapters": [
+            "Session_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Session_ST",
+              "references": [
+                {
+                  "sourceId": "Session_ST",
+                  "lines": [
+                    64
+                  ]
+                },
+                {
+                  "sourceId": "session-invoke",
+                  "lines": [
+                    11
+                  ]
+                }
+              ],
+              "trace": "Concrete/helper retain original Plan; direct Name interpolation has no default.",
+              "conditional": true,
+              "condition": "RequestOrRegister reaches the helper."
+            }
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Locate an existing session or register the item jacket at that location.",
+          "adapters": [
+            "Session_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Session_ST",
+              "references": [
+                {
+                  "sourceId": "session-invoke",
+                  "lines": [
+                    13,
+                    16,
+                    21
+                  ]
+                }
+              ],
+              "trace": "Original Plan.Path selects a path in MappedAdapterSignal; lookup/registration data is not a Plan descendant.",
+              "conditional": true,
+              "condition": "Helper reached; registration uses Path again only when no existing result is found."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

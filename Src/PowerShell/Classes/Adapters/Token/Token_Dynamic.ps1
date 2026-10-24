@@ -1,3 +1,14 @@
+<#
+Class: Token_Dynamic
+Purpose: Resolve dynamic token values.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Get: Resolve a token value from the requested path.
+ActivityValidation: OnInvoke, BeforeDispatch
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+#>
 class Token_Dynamic {
     [Signal]$Signal
     [Conductor]$Conductor
@@ -34,7 +45,12 @@ class Token_Dynamic {
     }
 
     [Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
-    $opSignal = [Signal]::Start("Token_Dynamic.Invoke") | Select-Object -Last 1
+        $opSignal = [Signal]::Start("Token_Dynamic.Invoke") | Select-Object -Last 1
+
+        if ($Activity -notin @('Get')) {
+            $opSignal.LogCritical("Unsupported Token_Dynamic activity: '$Activity'.")
+            return $opSignal
+        }
 
     try {
             $Path = $Plan.Path

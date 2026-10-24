@@ -1,0 +1,5557 @@
+{
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "RestCondenser",
+  "activities": [
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "RestCondenser",
+      "name": "Get",
+      "description": "Identify a REST retrieval operation.",
+      "coverage": [
+        {
+          "adapter": "RestCondenser",
+          "status": "reads",
+          "notes": "All accepted activity names follow the same Plan.Config.Method-driven implementation. Original Plan is cloned; derived headers and resolved bearer tokens may overwrite clone fields. Read attribution below distinguishes inherited inputs from generated replacements, direct validation reads and resolver defaults. No HTTP operation was executed.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "RestCondenser",
+              "lines": [
+                46,
+                55,
+                60,
+                62,
+                71,
+                74,
+                77,
+                81,
+                86,
+                93
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37
+                  ]
+                }
+              ],
+              "trace": "The clone retains incoming Config except generated Headers/BearerToken fields. Core tests the object and inspects its TargetPath member metadata; no arbitrary metadata names become properties.",
+              "conditional": true,
+              "condition": "Core entry after cloning."
+            }
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    63,
+                    77,
+                    102,
+                    103
+                  ]
+                }
+              ],
+              "trace": "The core supplies explicit -Default $null. Original Config.BearerToken survives in the clone only when RestCondenser did not overwrite it with a resolved token; refresh writes are generated values and excluded.",
+              "conditional": true,
+              "condition": "Core resolver setup with SkipBearerToken true and no prior generated overwrite of clone.Config.BearerToken."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    70,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Body is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    66,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    71,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Form is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    61,
+                    79,
+                    99,
+                    103,
+                    132,
+                    135,
+                    136,
+                    205
+                  ]
+                }
+              ],
+              "trace": "The resolver again receives -Default $headers, but preceding attempts may have reassigned or mutated headers. Preserve the runtime expression rather than reusing the initial empty object; synthesized/replaced headers are not new incoming data.",
+              "conditional": true,
+              "condition": "Later core attempts after a retry, while any referenced caller header object still derives from input."
+            }
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    24,
+                    61,
+                    79,
+                    93,
+                    99,
+                    103
+                  ]
+                }
+              ],
+              "trace": "The resolver receives -Default $headers. Before the first attempt headers is a literal empty hashtable {}; record literal object data. If storage-header synthesis replaced clone.Headers, that value is generated rather than incoming.",
+              "conditional": true,
+              "condition": "First core attempt; inherited Config.Headers attribution applies only while clone.Headers has not been replaced with generated storage headers."
+            }
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    71,
+                    117,
+                    118,
+                    119,
+                    120,
+                    77
+                  ]
+                }
+              ],
+              "trace": "GetStorageVersionHeaders resolves original Config.Headers without Default; when present its result is copied to clone.Config.Headers. This absence-sensitive lookup is distinct from the core fallback reads.",
+              "conditional": true,
+              "condition": "After initial bearer-token handling succeeds and Plan is non-null."
+            }
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    181,
+                    192,
+                    198,
+                    201,
+                    239,
+                    253
+                  ]
+                }
+              ],
+              "trace": "ResolveBearerToken receives original Plan initially and its clone on retry, and resolves inherited Config.Host without Default. Actual access-token data lives in ConductionSignal.",
+              "conditional": true,
+              "condition": "When SkipBearerToken is false and token resolution reaches the non-null Plan guard, initially or during refresh."
+            }
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    64,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Method is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    60,
+                    78,
+                    107,
+                    108,
+                    109
+                  ]
+                }
+              ],
+              "trace": "Inherited Config.Querystring is resolved with literal -Default \"\".",
+              "conditional": true,
+              "condition": "Each request attempt reaching core resolver setup."
+            }
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    91,
+                    93,
+                    94,
+                    95,
+                    99
+                  ]
+                }
+              ],
+              "trace": "After the core returns a result, a separate resolver reads original Plan.Config.ReturnHttpStatus with literal -Default $false.",
+              "conditional": true,
+              "condition": "Only when the core result signal HasResult()."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    65,
+                    84,
+                    173,
+                    174
+                  ]
+                }
+              ],
+              "trace": "Core resolves inherited Config.ReturnHttpStatus with literal -Default $false.",
+              "conditional": true,
+              "condition": "Each core request attempt reaching resolver setup; status output is used in the bodyless/non-target-path request branch."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.ReturnHttpStatus is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    222,
+                    223,
+                    240,
+                    241
+                  ]
+                }
+              ],
+              "trace": "Core operates on a clone retaining SkipBearerToken; each retry branch supplies literal -Default $false. Retry context remains separate from initial resolution.",
+              "conditional": true,
+              "condition": "On the corresponding authentication/host exception branch after a REST attempt."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    60,
+                    62,
+                    63
+                  ]
+                }
+              ],
+              "trace": "Original Config.SkipBearerToken is resolved with literal -Default $false before token handling.",
+              "conditional": true,
+              "condition": "After supported activity validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    67,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.SourcePath is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    42,
+                    43,
+                    47,
+                    164,
+                    165,
+                    169
+                  ]
+                }
+              ],
+              "trace": "Core checks member presence and reads inherited TargetPath directly without resolver Default; temporary paths are locally generated and excluded.",
+              "conditional": true,
+              "condition": "Core entry checks member presence; value validation and file handling occur only when TargetPath is supplied."
+            }
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    125,
+                    128,
+                    136,
+                    140,
+                    153
+                  ]
+                }
+              ],
+              "trace": "Original Config.Uri is read without Default only after the caller-headers lookup has no result; host parsing may cause generated headers to replace absent input headers.",
+              "conditional": true,
+              "condition": "GetStorageVersionHeaders when Config.Headers is absent and preceding checks succeed."
+            }
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    62,
+                    73,
+                    75,
+                    106,
+                    109
+                  ]
+                }
+              ],
+              "trace": "The inherited URI is resolved without Default; the first result element is used.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup."
+            }
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    13,
+                    20,
+                    21,
+                    22,
+                    25,
+                    33,
+                    34
+                  ]
+                }
+              ],
+              "trace": "RestCondenser line 74 calls Resolve-ClonePlan with original Plan; Plan and Phase members are saved/restored by the helper.",
+              "conditional": true,
+              "condition": "After initial token and header processing, before core dispatch."
+            }
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    15,
+                    16,
+                    17,
+                    25,
+                    28,
+                    29
+                  ]
+                }
+              ],
+              "trace": "RestCondenser line 74 calls Resolve-ClonePlan with original Plan; Plan and Phase members are saved/restored by the helper.",
+              "conditional": true,
+              "condition": "After initial token and header processing, before core dispatch."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "RestCondenser",
+      "name": "Head",
+      "description": "Identify a REST metadata request.",
+      "coverage": [
+        {
+          "adapter": "RestCondenser",
+          "status": "reads",
+          "notes": "All accepted activity names follow the same Plan.Config.Method-driven implementation. Original Plan is cloned; derived headers and resolved bearer tokens may overwrite clone fields. Read attribution below distinguishes inherited inputs from generated replacements, direct validation reads and resolver defaults. No HTTP operation was executed.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "RestCondenser",
+              "lines": [
+                46,
+                55,
+                60,
+                62,
+                71,
+                74,
+                77,
+                81,
+                86,
+                93
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37
+                  ]
+                }
+              ],
+              "trace": "The clone retains incoming Config except generated Headers/BearerToken fields. Core tests the object and inspects its TargetPath member metadata; no arbitrary metadata names become properties.",
+              "conditional": true,
+              "condition": "Core entry after cloning."
+            }
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    63,
+                    77,
+                    102,
+                    103
+                  ]
+                }
+              ],
+              "trace": "The core supplies explicit -Default $null. Original Config.BearerToken survives in the clone only when RestCondenser did not overwrite it with a resolved token; refresh writes are generated values and excluded.",
+              "conditional": true,
+              "condition": "Core resolver setup with SkipBearerToken true and no prior generated overwrite of clone.Config.BearerToken."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    70,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Body is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    66,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    71,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Form is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    61,
+                    79,
+                    99,
+                    103,
+                    132,
+                    135,
+                    136,
+                    205
+                  ]
+                }
+              ],
+              "trace": "The resolver again receives -Default $headers, but preceding attempts may have reassigned or mutated headers. Preserve the runtime expression rather than reusing the initial empty object; synthesized/replaced headers are not new incoming data.",
+              "conditional": true,
+              "condition": "Later core attempts after a retry, while any referenced caller header object still derives from input."
+            }
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    24,
+                    61,
+                    79,
+                    93,
+                    99,
+                    103
+                  ]
+                }
+              ],
+              "trace": "The resolver receives -Default $headers. Before the first attempt headers is a literal empty hashtable {}; record literal object data. If storage-header synthesis replaced clone.Headers, that value is generated rather than incoming.",
+              "conditional": true,
+              "condition": "First core attempt; inherited Config.Headers attribution applies only while clone.Headers has not been replaced with generated storage headers."
+            }
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    71,
+                    117,
+                    118,
+                    119,
+                    120,
+                    77
+                  ]
+                }
+              ],
+              "trace": "GetStorageVersionHeaders resolves original Config.Headers without Default; when present its result is copied to clone.Config.Headers. This absence-sensitive lookup is distinct from the core fallback reads.",
+              "conditional": true,
+              "condition": "After initial bearer-token handling succeeds and Plan is non-null."
+            }
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    181,
+                    192,
+                    198,
+                    201,
+                    239,
+                    253
+                  ]
+                }
+              ],
+              "trace": "ResolveBearerToken receives original Plan initially and its clone on retry, and resolves inherited Config.Host without Default. Actual access-token data lives in ConductionSignal.",
+              "conditional": true,
+              "condition": "When SkipBearerToken is false and token resolution reaches the non-null Plan guard, initially or during refresh."
+            }
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    64,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Method is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    60,
+                    78,
+                    107,
+                    108,
+                    109
+                  ]
+                }
+              ],
+              "trace": "Inherited Config.Querystring is resolved with literal -Default \"\".",
+              "conditional": true,
+              "condition": "Each request attempt reaching core resolver setup."
+            }
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    91,
+                    93,
+                    94,
+                    95,
+                    99
+                  ]
+                }
+              ],
+              "trace": "After the core returns a result, a separate resolver reads original Plan.Config.ReturnHttpStatus with literal -Default $false.",
+              "conditional": true,
+              "condition": "Only when the core result signal HasResult()."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    65,
+                    84,
+                    173,
+                    174
+                  ]
+                }
+              ],
+              "trace": "Core resolves inherited Config.ReturnHttpStatus with literal -Default $false.",
+              "conditional": true,
+              "condition": "Each core request attempt reaching resolver setup; status output is used in the bodyless/non-target-path request branch."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.ReturnHttpStatus is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    222,
+                    223,
+                    240,
+                    241
+                  ]
+                }
+              ],
+              "trace": "Core operates on a clone retaining SkipBearerToken; each retry branch supplies literal -Default $false. Retry context remains separate from initial resolution.",
+              "conditional": true,
+              "condition": "On the corresponding authentication/host exception branch after a REST attempt."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    60,
+                    62,
+                    63
+                  ]
+                }
+              ],
+              "trace": "Original Config.SkipBearerToken is resolved with literal -Default $false before token handling.",
+              "conditional": true,
+              "condition": "After supported activity validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    67,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.SourcePath is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    42,
+                    43,
+                    47,
+                    164,
+                    165,
+                    169
+                  ]
+                }
+              ],
+              "trace": "Core checks member presence and reads inherited TargetPath directly without resolver Default; temporary paths are locally generated and excluded.",
+              "conditional": true,
+              "condition": "Core entry checks member presence; value validation and file handling occur only when TargetPath is supplied."
+            }
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    125,
+                    128,
+                    136,
+                    140,
+                    153
+                  ]
+                }
+              ],
+              "trace": "Original Config.Uri is read without Default only after the caller-headers lookup has no result; host parsing may cause generated headers to replace absent input headers.",
+              "conditional": true,
+              "condition": "GetStorageVersionHeaders when Config.Headers is absent and preceding checks succeed."
+            }
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    62,
+                    73,
+                    75,
+                    106,
+                    109
+                  ]
+                }
+              ],
+              "trace": "The inherited URI is resolved without Default; the first result element is used.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup."
+            }
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    13,
+                    20,
+                    21,
+                    22,
+                    25,
+                    33,
+                    34
+                  ]
+                }
+              ],
+              "trace": "RestCondenser line 74 calls Resolve-ClonePlan with original Plan; Plan and Phase members are saved/restored by the helper.",
+              "conditional": true,
+              "condition": "After initial token and header processing, before core dispatch."
+            }
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    15,
+                    16,
+                    17,
+                    25,
+                    28,
+                    29
+                  ]
+                }
+              ],
+              "trace": "RestCondenser line 74 calls Resolve-ClonePlan with original Plan; Plan and Phase members are saved/restored by the helper.",
+              "conditional": true,
+              "condition": "After initial token and header processing, before core dispatch."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "RestCondenser",
+      "name": "Post",
+      "description": "Identify a REST creation or submission operation.",
+      "coverage": [
+        {
+          "adapter": "RestCondenser",
+          "status": "reads",
+          "notes": "All accepted activity names follow the same Plan.Config.Method-driven implementation. Original Plan is cloned; derived headers and resolved bearer tokens may overwrite clone fields. Read attribution below distinguishes inherited inputs from generated replacements, direct validation reads and resolver defaults. No HTTP operation was executed.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "RestCondenser",
+              "lines": [
+                46,
+                55,
+                60,
+                62,
+                71,
+                74,
+                77,
+                81,
+                86,
+                93
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37
+                  ]
+                }
+              ],
+              "trace": "The clone retains incoming Config except generated Headers/BearerToken fields. Core tests the object and inspects its TargetPath member metadata; no arbitrary metadata names become properties.",
+              "conditional": true,
+              "condition": "Core entry after cloning."
+            }
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    63,
+                    77,
+                    102,
+                    103
+                  ]
+                }
+              ],
+              "trace": "The core supplies explicit -Default $null. Original Config.BearerToken survives in the clone only when RestCondenser did not overwrite it with a resolved token; refresh writes are generated values and excluded.",
+              "conditional": true,
+              "condition": "Core resolver setup with SkipBearerToken true and no prior generated overwrite of clone.Config.BearerToken."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    70,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Body is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    66,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    71,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Form is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    61,
+                    79,
+                    99,
+                    103,
+                    132,
+                    135,
+                    136,
+                    205
+                  ]
+                }
+              ],
+              "trace": "The resolver again receives -Default $headers, but preceding attempts may have reassigned or mutated headers. Preserve the runtime expression rather than reusing the initial empty object; synthesized/replaced headers are not new incoming data.",
+              "conditional": true,
+              "condition": "Later core attempts after a retry, while any referenced caller header object still derives from input."
+            }
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    24,
+                    61,
+                    79,
+                    93,
+                    99,
+                    103
+                  ]
+                }
+              ],
+              "trace": "The resolver receives -Default $headers. Before the first attempt headers is a literal empty hashtable {}; record literal object data. If storage-header synthesis replaced clone.Headers, that value is generated rather than incoming.",
+              "conditional": true,
+              "condition": "First core attempt; inherited Config.Headers attribution applies only while clone.Headers has not been replaced with generated storage headers."
+            }
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    71,
+                    117,
+                    118,
+                    119,
+                    120,
+                    77
+                  ]
+                }
+              ],
+              "trace": "GetStorageVersionHeaders resolves original Config.Headers without Default; when present its result is copied to clone.Config.Headers. This absence-sensitive lookup is distinct from the core fallback reads.",
+              "conditional": true,
+              "condition": "After initial bearer-token handling succeeds and Plan is non-null."
+            }
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    181,
+                    192,
+                    198,
+                    201,
+                    239,
+                    253
+                  ]
+                }
+              ],
+              "trace": "ResolveBearerToken receives original Plan initially and its clone on retry, and resolves inherited Config.Host without Default. Actual access-token data lives in ConductionSignal.",
+              "conditional": true,
+              "condition": "When SkipBearerToken is false and token resolution reaches the non-null Plan guard, initially or during refresh."
+            }
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    64,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Method is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    60,
+                    78,
+                    107,
+                    108,
+                    109
+                  ]
+                }
+              ],
+              "trace": "Inherited Config.Querystring is resolved with literal -Default \"\".",
+              "conditional": true,
+              "condition": "Each request attempt reaching core resolver setup."
+            }
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    91,
+                    93,
+                    94,
+                    95,
+                    99
+                  ]
+                }
+              ],
+              "trace": "After the core returns a result, a separate resolver reads original Plan.Config.ReturnHttpStatus with literal -Default $false.",
+              "conditional": true,
+              "condition": "Only when the core result signal HasResult()."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    65,
+                    84,
+                    173,
+                    174
+                  ]
+                }
+              ],
+              "trace": "Core resolves inherited Config.ReturnHttpStatus with literal -Default $false.",
+              "conditional": true,
+              "condition": "Each core request attempt reaching resolver setup; status output is used in the bodyless/non-target-path request branch."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.ReturnHttpStatus is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    222,
+                    223,
+                    240,
+                    241
+                  ]
+                }
+              ],
+              "trace": "Core operates on a clone retaining SkipBearerToken; each retry branch supplies literal -Default $false. Retry context remains separate from initial resolution.",
+              "conditional": true,
+              "condition": "On the corresponding authentication/host exception branch after a REST attempt."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    60,
+                    62,
+                    63
+                  ]
+                }
+              ],
+              "trace": "Original Config.SkipBearerToken is resolved with literal -Default $false before token handling.",
+              "conditional": true,
+              "condition": "After supported activity validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    67,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.SourcePath is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    42,
+                    43,
+                    47,
+                    164,
+                    165,
+                    169
+                  ]
+                }
+              ],
+              "trace": "Core checks member presence and reads inherited TargetPath directly without resolver Default; temporary paths are locally generated and excluded.",
+              "conditional": true,
+              "condition": "Core entry checks member presence; value validation and file handling occur only when TargetPath is supplied."
+            }
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    125,
+                    128,
+                    136,
+                    140,
+                    153
+                  ]
+                }
+              ],
+              "trace": "Original Config.Uri is read without Default only after the caller-headers lookup has no result; host parsing may cause generated headers to replace absent input headers.",
+              "conditional": true,
+              "condition": "GetStorageVersionHeaders when Config.Headers is absent and preceding checks succeed."
+            }
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    62,
+                    73,
+                    75,
+                    106,
+                    109
+                  ]
+                }
+              ],
+              "trace": "The inherited URI is resolved without Default; the first result element is used.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup."
+            }
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    13,
+                    20,
+                    21,
+                    22,
+                    25,
+                    33,
+                    34
+                  ]
+                }
+              ],
+              "trace": "RestCondenser line 74 calls Resolve-ClonePlan with original Plan; Plan and Phase members are saved/restored by the helper.",
+              "conditional": true,
+              "condition": "After initial token and header processing, before core dispatch."
+            }
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    15,
+                    16,
+                    17,
+                    25,
+                    28,
+                    29
+                  ]
+                }
+              ],
+              "trace": "RestCondenser line 74 calls Resolve-ClonePlan with original Plan; Plan and Phase members are saved/restored by the helper.",
+              "conditional": true,
+              "condition": "After initial token and header processing, before core dispatch."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "RestCondenser",
+      "name": "Put",
+      "description": "Identify a REST replacement operation.",
+      "coverage": [
+        {
+          "adapter": "RestCondenser",
+          "status": "reads",
+          "notes": "All accepted activity names follow the same Plan.Config.Method-driven implementation. Original Plan is cloned; derived headers and resolved bearer tokens may overwrite clone fields. Read attribution below distinguishes inherited inputs from generated replacements, direct validation reads and resolver defaults. No HTTP operation was executed.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "RestCondenser",
+              "lines": [
+                46,
+                55,
+                60,
+                62,
+                71,
+                74,
+                77,
+                81,
+                86,
+                93
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37
+                  ]
+                }
+              ],
+              "trace": "The clone retains incoming Config except generated Headers/BearerToken fields. Core tests the object and inspects its TargetPath member metadata; no arbitrary metadata names become properties.",
+              "conditional": true,
+              "condition": "Core entry after cloning."
+            }
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    63,
+                    77,
+                    102,
+                    103
+                  ]
+                }
+              ],
+              "trace": "The core supplies explicit -Default $null. Original Config.BearerToken survives in the clone only when RestCondenser did not overwrite it with a resolved token; refresh writes are generated values and excluded.",
+              "conditional": true,
+              "condition": "Core resolver setup with SkipBearerToken true and no prior generated overwrite of clone.Config.BearerToken."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    70,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Body is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    66,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    71,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Form is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    61,
+                    79,
+                    99,
+                    103,
+                    132,
+                    135,
+                    136,
+                    205
+                  ]
+                }
+              ],
+              "trace": "The resolver again receives -Default $headers, but preceding attempts may have reassigned or mutated headers. Preserve the runtime expression rather than reusing the initial empty object; synthesized/replaced headers are not new incoming data.",
+              "conditional": true,
+              "condition": "Later core attempts after a retry, while any referenced caller header object still derives from input."
+            }
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    24,
+                    61,
+                    79,
+                    93,
+                    99,
+                    103
+                  ]
+                }
+              ],
+              "trace": "The resolver receives -Default $headers. Before the first attempt headers is a literal empty hashtable {}; record literal object data. If storage-header synthesis replaced clone.Headers, that value is generated rather than incoming.",
+              "conditional": true,
+              "condition": "First core attempt; inherited Config.Headers attribution applies only while clone.Headers has not been replaced with generated storage headers."
+            }
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    71,
+                    117,
+                    118,
+                    119,
+                    120,
+                    77
+                  ]
+                }
+              ],
+              "trace": "GetStorageVersionHeaders resolves original Config.Headers without Default; when present its result is copied to clone.Config.Headers. This absence-sensitive lookup is distinct from the core fallback reads.",
+              "conditional": true,
+              "condition": "After initial bearer-token handling succeeds and Plan is non-null."
+            }
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    181,
+                    192,
+                    198,
+                    201,
+                    239,
+                    253
+                  ]
+                }
+              ],
+              "trace": "ResolveBearerToken receives original Plan initially and its clone on retry, and resolves inherited Config.Host without Default. Actual access-token data lives in ConductionSignal.",
+              "conditional": true,
+              "condition": "When SkipBearerToken is false and token resolution reaches the non-null Plan guard, initially or during refresh."
+            }
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    64,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Method is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    60,
+                    78,
+                    107,
+                    108,
+                    109
+                  ]
+                }
+              ],
+              "trace": "Inherited Config.Querystring is resolved with literal -Default \"\".",
+              "conditional": true,
+              "condition": "Each request attempt reaching core resolver setup."
+            }
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    91,
+                    93,
+                    94,
+                    95,
+                    99
+                  ]
+                }
+              ],
+              "trace": "After the core returns a result, a separate resolver reads original Plan.Config.ReturnHttpStatus with literal -Default $false.",
+              "conditional": true,
+              "condition": "Only when the core result signal HasResult()."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    65,
+                    84,
+                    173,
+                    174
+                  ]
+                }
+              ],
+              "trace": "Core resolves inherited Config.ReturnHttpStatus with literal -Default $false.",
+              "conditional": true,
+              "condition": "Each core request attempt reaching resolver setup; status output is used in the bodyless/non-target-path request branch."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.ReturnHttpStatus is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    222,
+                    223,
+                    240,
+                    241
+                  ]
+                }
+              ],
+              "trace": "Core operates on a clone retaining SkipBearerToken; each retry branch supplies literal -Default $false. Retry context remains separate from initial resolution.",
+              "conditional": true,
+              "condition": "On the corresponding authentication/host exception branch after a REST attempt."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    60,
+                    62,
+                    63
+                  ]
+                }
+              ],
+              "trace": "Original Config.SkipBearerToken is resolved with literal -Default $false before token handling.",
+              "conditional": true,
+              "condition": "After supported activity validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    67,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.SourcePath is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    42,
+                    43,
+                    47,
+                    164,
+                    165,
+                    169
+                  ]
+                }
+              ],
+              "trace": "Core checks member presence and reads inherited TargetPath directly without resolver Default; temporary paths are locally generated and excluded.",
+              "conditional": true,
+              "condition": "Core entry checks member presence; value validation and file handling occur only when TargetPath is supplied."
+            }
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    125,
+                    128,
+                    136,
+                    140,
+                    153
+                  ]
+                }
+              ],
+              "trace": "Original Config.Uri is read without Default only after the caller-headers lookup has no result; host parsing may cause generated headers to replace absent input headers.",
+              "conditional": true,
+              "condition": "GetStorageVersionHeaders when Config.Headers is absent and preceding checks succeed."
+            }
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    62,
+                    73,
+                    75,
+                    106,
+                    109
+                  ]
+                }
+              ],
+              "trace": "The inherited URI is resolved without Default; the first result element is used.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup."
+            }
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    13,
+                    20,
+                    21,
+                    22,
+                    25,
+                    33,
+                    34
+                  ]
+                }
+              ],
+              "trace": "RestCondenser line 74 calls Resolve-ClonePlan with original Plan; Plan and Phase members are saved/restored by the helper.",
+              "conditional": true,
+              "condition": "After initial token and header processing, before core dispatch."
+            }
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    15,
+                    16,
+                    17,
+                    25,
+                    28,
+                    29
+                  ]
+                }
+              ],
+              "trace": "RestCondenser line 74 calls Resolve-ClonePlan with original Plan; Plan and Phase members are saved/restored by the helper.",
+              "conditional": true,
+              "condition": "After initial token and header processing, before core dispatch."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "RestCondenser",
+      "name": "Patch",
+      "description": "Identify a REST partial update operation.",
+      "coverage": [
+        {
+          "adapter": "RestCondenser",
+          "status": "reads",
+          "notes": "All accepted activity names follow the same Plan.Config.Method-driven implementation. Original Plan is cloned; derived headers and resolved bearer tokens may overwrite clone fields. Read attribution below distinguishes inherited inputs from generated replacements, direct validation reads and resolver defaults. No HTTP operation was executed.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "RestCondenser",
+              "lines": [
+                46,
+                55,
+                60,
+                62,
+                71,
+                74,
+                77,
+                81,
+                86,
+                93
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37
+                  ]
+                }
+              ],
+              "trace": "The clone retains incoming Config except generated Headers/BearerToken fields. Core tests the object and inspects its TargetPath member metadata; no arbitrary metadata names become properties.",
+              "conditional": true,
+              "condition": "Core entry after cloning."
+            }
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    63,
+                    77,
+                    102,
+                    103
+                  ]
+                }
+              ],
+              "trace": "The core supplies explicit -Default $null. Original Config.BearerToken survives in the clone only when RestCondenser did not overwrite it with a resolved token; refresh writes are generated values and excluded.",
+              "conditional": true,
+              "condition": "Core resolver setup with SkipBearerToken true and no prior generated overwrite of clone.Config.BearerToken."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    70,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Body is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    66,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    71,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Form is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    61,
+                    79,
+                    99,
+                    103,
+                    132,
+                    135,
+                    136,
+                    205
+                  ]
+                }
+              ],
+              "trace": "The resolver again receives -Default $headers, but preceding attempts may have reassigned or mutated headers. Preserve the runtime expression rather than reusing the initial empty object; synthesized/replaced headers are not new incoming data.",
+              "conditional": true,
+              "condition": "Later core attempts after a retry, while any referenced caller header object still derives from input."
+            }
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    24,
+                    61,
+                    79,
+                    93,
+                    99,
+                    103
+                  ]
+                }
+              ],
+              "trace": "The resolver receives -Default $headers. Before the first attempt headers is a literal empty hashtable {}; record literal object data. If storage-header synthesis replaced clone.Headers, that value is generated rather than incoming.",
+              "conditional": true,
+              "condition": "First core attempt; inherited Config.Headers attribution applies only while clone.Headers has not been replaced with generated storage headers."
+            }
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    71,
+                    117,
+                    118,
+                    119,
+                    120,
+                    77
+                  ]
+                }
+              ],
+              "trace": "GetStorageVersionHeaders resolves original Config.Headers without Default; when present its result is copied to clone.Config.Headers. This absence-sensitive lookup is distinct from the core fallback reads.",
+              "conditional": true,
+              "condition": "After initial bearer-token handling succeeds and Plan is non-null."
+            }
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    181,
+                    192,
+                    198,
+                    201,
+                    239,
+                    253
+                  ]
+                }
+              ],
+              "trace": "ResolveBearerToken receives original Plan initially and its clone on retry, and resolves inherited Config.Host without Default. Actual access-token data lives in ConductionSignal.",
+              "conditional": true,
+              "condition": "When SkipBearerToken is false and token resolution reaches the non-null Plan guard, initially or during refresh."
+            }
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    64,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Method is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    60,
+                    78,
+                    107,
+                    108,
+                    109
+                  ]
+                }
+              ],
+              "trace": "Inherited Config.Querystring is resolved with literal -Default \"\".",
+              "conditional": true,
+              "condition": "Each request attempt reaching core resolver setup."
+            }
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    91,
+                    93,
+                    94,
+                    95,
+                    99
+                  ]
+                }
+              ],
+              "trace": "After the core returns a result, a separate resolver reads original Plan.Config.ReturnHttpStatus with literal -Default $false.",
+              "conditional": true,
+              "condition": "Only when the core result signal HasResult()."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    65,
+                    84,
+                    173,
+                    174
+                  ]
+                }
+              ],
+              "trace": "Core resolves inherited Config.ReturnHttpStatus with literal -Default $false.",
+              "conditional": true,
+              "condition": "Each core request attempt reaching resolver setup; status output is used in the bodyless/non-target-path request branch."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.ReturnHttpStatus is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    222,
+                    223,
+                    240,
+                    241
+                  ]
+                }
+              ],
+              "trace": "Core operates on a clone retaining SkipBearerToken; each retry branch supplies literal -Default $false. Retry context remains separate from initial resolution.",
+              "conditional": true,
+              "condition": "On the corresponding authentication/host exception branch after a REST attempt."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    60,
+                    62,
+                    63
+                  ]
+                }
+              ],
+              "trace": "Original Config.SkipBearerToken is resolved with literal -Default $false before token handling.",
+              "conditional": true,
+              "condition": "After supported activity validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    67,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.SourcePath is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    42,
+                    43,
+                    47,
+                    164,
+                    165,
+                    169
+                  ]
+                }
+              ],
+              "trace": "Core checks member presence and reads inherited TargetPath directly without resolver Default; temporary paths are locally generated and excluded.",
+              "conditional": true,
+              "condition": "Core entry checks member presence; value validation and file handling occur only when TargetPath is supplied."
+            }
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    125,
+                    128,
+                    136,
+                    140,
+                    153
+                  ]
+                }
+              ],
+              "trace": "Original Config.Uri is read without Default only after the caller-headers lookup has no result; host parsing may cause generated headers to replace absent input headers.",
+              "conditional": true,
+              "condition": "GetStorageVersionHeaders when Config.Headers is absent and preceding checks succeed."
+            }
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    62,
+                    73,
+                    75,
+                    106,
+                    109
+                  ]
+                }
+              ],
+              "trace": "The inherited URI is resolved without Default; the first result element is used.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup."
+            }
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    13,
+                    20,
+                    21,
+                    22,
+                    25,
+                    33,
+                    34
+                  ]
+                }
+              ],
+              "trace": "RestCondenser line 74 calls Resolve-ClonePlan with original Plan; Plan and Phase members are saved/restored by the helper.",
+              "conditional": true,
+              "condition": "After initial token and header processing, before core dispatch."
+            }
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    15,
+                    16,
+                    17,
+                    25,
+                    28,
+                    29
+                  ]
+                }
+              ],
+              "trace": "RestCondenser line 74 calls Resolve-ClonePlan with original Plan; Plan and Phase members are saved/restored by the helper.",
+              "conditional": true,
+              "condition": "After initial token and header processing, before core dispatch."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "RestCondenser",
+      "name": "Delete",
+      "description": "Identify a REST deletion operation.",
+      "coverage": [
+        {
+          "adapter": "RestCondenser",
+          "status": "reads",
+          "notes": "All accepted activity names follow the same Plan.Config.Method-driven implementation. Original Plan is cloned; derived headers and resolved bearer tokens may overwrite clone fields. Read attribution below distinguishes inherited inputs from generated replacements, direct validation reads and resolver defaults. No HTTP operation was executed.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "RestCondenser",
+              "lines": [
+                46,
+                55,
+                60,
+                62,
+                71,
+                74,
+                77,
+                81,
+                86,
+                93
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37
+                  ]
+                }
+              ],
+              "trace": "The clone retains incoming Config except generated Headers/BearerToken fields. Core tests the object and inspects its TargetPath member metadata; no arbitrary metadata names become properties.",
+              "conditional": true,
+              "condition": "Core entry after cloning."
+            }
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    63,
+                    77,
+                    102,
+                    103
+                  ]
+                }
+              ],
+              "trace": "The core supplies explicit -Default $null. Original Config.BearerToken survives in the clone only when RestCondenser did not overwrite it with a resolved token; refresh writes are generated values and excluded.",
+              "conditional": true,
+              "condition": "Core resolver setup with SkipBearerToken true and no prior generated overwrite of clone.Config.BearerToken."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    70,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Body is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    66,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    71,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Form is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    61,
+                    79,
+                    99,
+                    103,
+                    132,
+                    135,
+                    136,
+                    205
+                  ]
+                }
+              ],
+              "trace": "The resolver again receives -Default $headers, but preceding attempts may have reassigned or mutated headers. Preserve the runtime expression rather than reusing the initial empty object; synthesized/replaced headers are not new incoming data.",
+              "conditional": true,
+              "condition": "Later core attempts after a retry, while any referenced caller header object still derives from input."
+            }
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    24,
+                    61,
+                    79,
+                    93,
+                    99,
+                    103
+                  ]
+                }
+              ],
+              "trace": "The resolver receives -Default $headers. Before the first attempt headers is a literal empty hashtable {}; record literal object data. If storage-header synthesis replaced clone.Headers, that value is generated rather than incoming.",
+              "conditional": true,
+              "condition": "First core attempt; inherited Config.Headers attribution applies only while clone.Headers has not been replaced with generated storage headers."
+            }
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    71,
+                    117,
+                    118,
+                    119,
+                    120,
+                    77
+                  ]
+                }
+              ],
+              "trace": "GetStorageVersionHeaders resolves original Config.Headers without Default; when present its result is copied to clone.Config.Headers. This absence-sensitive lookup is distinct from the core fallback reads.",
+              "conditional": true,
+              "condition": "After initial bearer-token handling succeeds and Plan is non-null."
+            }
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    181,
+                    192,
+                    198,
+                    201,
+                    239,
+                    253
+                  ]
+                }
+              ],
+              "trace": "ResolveBearerToken receives original Plan initially and its clone on retry, and resolves inherited Config.Host without Default. Actual access-token data lives in ConductionSignal.",
+              "conditional": true,
+              "condition": "When SkipBearerToken is false and token resolution reaches the non-null Plan guard, initially or during refresh."
+            }
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    64,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Method is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    60,
+                    78,
+                    107,
+                    108,
+                    109
+                  ]
+                }
+              ],
+              "trace": "Inherited Config.Querystring is resolved with literal -Default \"\".",
+              "conditional": true,
+              "condition": "Each request attempt reaching core resolver setup."
+            }
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    91,
+                    93,
+                    94,
+                    95,
+                    99
+                  ]
+                }
+              ],
+              "trace": "After the core returns a result, a separate resolver reads original Plan.Config.ReturnHttpStatus with literal -Default $false.",
+              "conditional": true,
+              "condition": "Only when the core result signal HasResult()."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    65,
+                    84,
+                    173,
+                    174
+                  ]
+                }
+              ],
+              "trace": "Core resolves inherited Config.ReturnHttpStatus with literal -Default $false.",
+              "conditional": true,
+              "condition": "Each core request attempt reaching resolver setup; status output is used in the bodyless/non-target-path request branch."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.ReturnHttpStatus is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    222,
+                    223,
+                    240,
+                    241
+                  ]
+                }
+              ],
+              "trace": "Core operates on a clone retaining SkipBearerToken; each retry branch supplies literal -Default $false. Retry context remains separate from initial resolution.",
+              "conditional": true,
+              "condition": "On the corresponding authentication/host exception branch after a REST attempt."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    60,
+                    62,
+                    63
+                  ]
+                }
+              ],
+              "trace": "Original Config.SkipBearerToken is resolved with literal -Default $false before token handling.",
+              "conditional": true,
+              "condition": "After supported activity validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    67,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.SourcePath is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    42,
+                    43,
+                    47,
+                    164,
+                    165,
+                    169
+                  ]
+                }
+              ],
+              "trace": "Core checks member presence and reads inherited TargetPath directly without resolver Default; temporary paths are locally generated and excluded.",
+              "conditional": true,
+              "condition": "Core entry checks member presence; value validation and file handling occur only when TargetPath is supplied."
+            }
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    125,
+                    128,
+                    136,
+                    140,
+                    153
+                  ]
+                }
+              ],
+              "trace": "Original Config.Uri is read without Default only after the caller-headers lookup has no result; host parsing may cause generated headers to replace absent input headers.",
+              "conditional": true,
+              "condition": "GetStorageVersionHeaders when Config.Headers is absent and preceding checks succeed."
+            }
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    62,
+                    73,
+                    75,
+                    106,
+                    109
+                  ]
+                }
+              ],
+              "trace": "The inherited URI is resolved without Default; the first result element is used.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup."
+            }
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    13,
+                    20,
+                    21,
+                    22,
+                    25,
+                    33,
+                    34
+                  ]
+                }
+              ],
+              "trace": "RestCondenser line 74 calls Resolve-ClonePlan with original Plan; Plan and Phase members are saved/restored by the helper.",
+              "conditional": true,
+              "condition": "After initial token and header processing, before core dispatch."
+            }
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    15,
+                    16,
+                    17,
+                    25,
+                    28,
+                    29
+                  ]
+                }
+              ],
+              "trace": "RestCondenser line 74 calls Resolve-ClonePlan with original Plan; Plan and Phase members are saved/restored by the helper.",
+              "conditional": true,
+              "condition": "After initial token and header processing, before core dispatch."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedCondenserAdapter",
+      "condenser": "RestCondenser",
+      "name": "Options",
+      "description": "Identify a REST capability request.",
+      "coverage": [
+        {
+          "adapter": "RestCondenser",
+          "status": "reads",
+          "notes": "All accepted activity names follow the same Plan.Config.Method-driven implementation. Original Plan is cloned; derived headers and resolved bearer tokens may overwrite clone fields. Read attribution below distinguishes inherited inputs from generated replacements, direct validation reads and resolver defaults. No HTTP operation was executed.",
+          "references": [
+            {
+              "sourceId": "condenser-mapped",
+              "lines": [
+                108,
+                111,
+                141
+              ]
+            },
+            {
+              "sourceId": "RestCondenser",
+              "lines": [
+                46,
+                55,
+                60,
+                62,
+                71,
+                74,
+                77,
+                81,
+                86,
+                93
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37
+                  ]
+                }
+              ],
+              "trace": "The clone retains incoming Config except generated Headers/BearerToken fields. Core tests the object and inspects its TargetPath member metadata; no arbitrary metadata names become properties.",
+              "conditional": true,
+              "condition": "Core entry after cloning."
+            }
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    63,
+                    77,
+                    102,
+                    103
+                  ]
+                }
+              ],
+              "trace": "The core supplies explicit -Default $null. Original Config.BearerToken survives in the clone only when RestCondenser did not overwrite it with a resolved token; refresh writes are generated values and excluded.",
+              "conditional": true,
+              "condition": "Core resolver setup with SkipBearerToken true and no prior generated overwrite of clone.Config.BearerToken."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    70,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Body is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    66,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    71,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Form is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    61,
+                    79,
+                    99,
+                    103,
+                    132,
+                    135,
+                    136,
+                    205
+                  ]
+                }
+              ],
+              "trace": "The resolver again receives -Default $headers, but preceding attempts may have reassigned or mutated headers. Preserve the runtime expression rather than reusing the initial empty object; synthesized/replaced headers are not new incoming data.",
+              "conditional": true,
+              "condition": "Later core attempts after a retry, while any referenced caller header object still derives from input."
+            }
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    24,
+                    61,
+                    79,
+                    93,
+                    99,
+                    103
+                  ]
+                }
+              ],
+              "trace": "The resolver receives -Default $headers. Before the first attempt headers is a literal empty hashtable {}; record literal object data. If storage-header synthesis replaced clone.Headers, that value is generated rather than incoming.",
+              "conditional": true,
+              "condition": "First core attempt; inherited Config.Headers attribution applies only while clone.Headers has not been replaced with generated storage headers."
+            }
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    71,
+                    117,
+                    118,
+                    119,
+                    120,
+                    77
+                  ]
+                }
+              ],
+              "trace": "GetStorageVersionHeaders resolves original Config.Headers without Default; when present its result is copied to clone.Config.Headers. This absence-sensitive lookup is distinct from the core fallback reads.",
+              "conditional": true,
+              "condition": "After initial bearer-token handling succeeds and Plan is non-null."
+            }
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    181,
+                    192,
+                    198,
+                    201,
+                    239,
+                    253
+                  ]
+                }
+              ],
+              "trace": "ResolveBearerToken receives original Plan initially and its clone on retry, and resolves inherited Config.Host without Default. Actual access-token data lives in ConductionSignal.",
+              "conditional": true,
+              "condition": "When SkipBearerToken is false and token resolution reaches the non-null Plan guard, initially or during refresh."
+            }
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    64,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.Method is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    60,
+                    78,
+                    107,
+                    108,
+                    109
+                  ]
+                }
+              ],
+              "trace": "Inherited Config.Querystring is resolved with literal -Default \"\".",
+              "conditional": true,
+              "condition": "Each request attempt reaching core resolver setup."
+            }
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    91,
+                    93,
+                    94,
+                    95,
+                    99
+                  ]
+                }
+              ],
+              "trace": "After the core returns a result, a separate resolver reads original Plan.Config.ReturnHttpStatus with literal -Default $false.",
+              "conditional": true,
+              "condition": "Only when the core result signal HasResult()."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    65,
+                    84,
+                    173,
+                    174
+                  ]
+                }
+              ],
+              "trace": "Core resolves inherited Config.ReturnHttpStatus with literal -Default $false.",
+              "conditional": true,
+              "condition": "Each core request attempt reaching resolver setup; status output is used in the bodyless/non-target-path request branch."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.ReturnHttpStatus is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    222,
+                    223,
+                    240,
+                    241
+                  ]
+                }
+              ],
+              "trace": "Core operates on a clone retaining SkipBearerToken; each retry branch supplies literal -Default $false. Retry context remains separate from initial resolution.",
+              "conditional": true,
+              "condition": "On the corresponding authentication/host exception branch after a REST attempt."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    60,
+                    62,
+                    63
+                  ]
+                }
+              ],
+              "trace": "Original Config.SkipBearerToken is resolved with literal -Default $false before token handling.",
+              "conditional": true,
+              "condition": "After supported activity validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    67,
+                    81,
+                    82,
+                    83,
+                    86,
+                    87
+                  ]
+                }
+              ],
+              "trace": "The core receives a clone retaining this incoming field and resolves it with explicit -Default $null. Later assigned local defaults do not change the resolver fallback.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup after target-path validation."
+            }
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    52,
+                    53,
+                    54
+                  ]
+                }
+              ],
+              "trace": "Direct clone.Config member reads are inherited from input and supply no resolver Default. The compound OR expression short-circuits, so later fields are read only when earlier rejection predicates are false.",
+              "conditional": true,
+              "condition": "Only when Config.TargetPath is supplied and earlier path validation succeeds; field Config.SourcePath is reached under compound-condition short-circuiting."
+            }
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    37,
+                    41,
+                    42,
+                    43,
+                    47,
+                    164,
+                    165,
+                    169
+                  ]
+                }
+              ],
+              "trace": "Core checks member presence and reads inherited TargetPath directly without resolver Default; temporary paths are locally generated and excluded.",
+              "conditional": true,
+              "condition": "Core entry checks member presence; value validation and file handling occur only when TargetPath is supplied."
+            }
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "RestCondenser",
+                  "lines": [
+                    125,
+                    128,
+                    136,
+                    140,
+                    153
+                  ]
+                }
+              ],
+              "trace": "Original Config.Uri is read without Default only after the caller-headers lookup has no result; host parsing may cause generated headers to replace absent input headers.",
+              "conditional": true,
+              "condition": "GetStorageVersionHeaders when Config.Headers is absent and preceding checks succeed."
+            }
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "rest-core",
+                  "lines": [
+                    62,
+                    73,
+                    75,
+                    106,
+                    109
+                  ]
+                }
+              ],
+              "trace": "The inherited URI is resolved without Default; the first result element is used.",
+              "conditional": true,
+              "condition": "Each request attempt reaching resolver setup."
+            }
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    13,
+                    20,
+                    21,
+                    22,
+                    25,
+                    33,
+                    34
+                  ]
+                }
+              ],
+              "trace": "RestCondenser line 74 calls Resolve-ClonePlan with original Plan; Plan and Phase members are saved/restored by the helper.",
+              "conditional": true,
+              "condition": "After initial token and header processing, before core dispatch."
+            }
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "RestCondenser",
+              "references": [
+                {
+                  "sourceId": "plan-clone",
+                  "lines": [
+                    12,
+                    15,
+                    16,
+                    17,
+                    25,
+                    28,
+                    29
+                  ]
+                }
+              ],
+              "trace": "RestCondenser line 74 calls Resolve-ClonePlan with original Plan; Plan and Phase members are saved/restored by the helper.",
+              "conditional": true,
+              "condition": "After initial token and header processing, before core dispatch."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

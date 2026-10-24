@@ -1,0 +1,1617 @@
+{
+  "name": "RestCondenser",
+  "repository": "SovereignTrust.Foundation",
+  "path": "Src/PowerShell/Classes/Adapters/Condenser/RestCondenser.ps1",
+  "activities": [
+    {
+      "name": "Get",
+      "description": "Identify a REST retrieval operation.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Head",
+      "description": "Identify a REST metadata request.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Post",
+      "description": "Identify a REST creation or submission operation.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Put",
+      "description": "Identify a REST replacement operation.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Patch",
+      "description": "Identify a REST partial update operation.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Delete",
+      "description": "Identify a REST deletion operation.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Options",
+      "description": "Identify a REST capability request.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ]
+    }
+  ]
+}

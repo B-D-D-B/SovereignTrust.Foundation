@@ -1,0 +1,12 @@
+{
+  "name": "TokenCondenser",
+  "repository": "SovereignTrust.Foundation",
+  "path": "Src/PowerShell/Classes/Adapters/Condenser/TokenCondenser.ps1",
+  "activities": [
+    {
+      "name": "Parse",
+      "description": "Resolve a token through the token condenser.",
+      "properties": []
+    }
+  ]
+}

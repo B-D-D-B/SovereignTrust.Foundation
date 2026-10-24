@@ -1,7 +1,8 @@
 <#
 Class: MappedQuantumAdapter
 Purpose: Submit a circuit to a provider implementing SubmitCircuit.
-Activities: No named Activity dispatch.
+ActivityScope: None
+Activities: None; SubmitQuantumJob takes a circuit and job parameters.
 - SubmitQuantumJob(CircuitName, QuantumJobParameters): submit a
   provider-specific circuit or job.
 #>

@@ -23,6 +23,7 @@ function Invoke-TokenStorage {
 
         $segments = $Path -split '\.'
         $PartialPath = ($segments[2..($segments.Count - 1)] -join '.')
+        $activity = $segments[2]
 
         $key = ''
         $scope = ''
@@ -48,7 +49,9 @@ function Invoke-TokenStorage {
 
         $mappedAdapter = $mappedAdapterSignal.GetResult()
 
-        $resultSignal = $mappedAdapter.Invoke($slot, $PartialPath, $Signal, $Plan, $ItemSignal) | Select-Object -Last 1
+        #This was sending PartialPath as the activity, but it needs to just be the first part and we need to route the rest as virtual path in the plan.
+
+        $resultSignal = $mappedAdapter.Invoke($slot, $activity, $Signal, $Plan, $ItemSignal) | Select-Object -Last 1
         if ($opSignal.MergeSignalAndVerifyFailure($resultSignal)) {
             $opSignal.LogCritical("MappedAdapter failed to resolve key '$key' with scope '$scope'.")
             return $opSignal

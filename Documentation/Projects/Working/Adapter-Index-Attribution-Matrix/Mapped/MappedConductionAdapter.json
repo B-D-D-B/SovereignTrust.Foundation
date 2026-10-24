@@ -1,0 +1,2616 @@
+{
+  "mappedAdapter": "MappedConductionAdapter",
+  "condenser": null,
+  "activities": [
+    {
+      "mappedAdapter": "MappedConductionAdapter",
+      "condenser": null,
+      "name": "Invoke",
+      "description": "Execute a conduction plan.",
+      "coverage": [
+        {
+          "adapter": "Conduction_SDA",
+          "status": "zero-read",
+          "notes": "Mapped core forwards Plan unchanged, but the concrete activity overload ignores it and calls Invoke-Conduction_SDA with conductor/ConductionSignal only. All three mapped verbs follow the same branch; no incoming Plan property reads and no claimed distinct concrete activity behavior.",
+          "references": [
+            {
+              "sourceId": "conduction-mapped",
+              "lines": [
+                74,
+                77,
+                82
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "Conduction_SDA",
+              "lines": [
+                38,
+                40,
+                43
+              ]
+            }
+          ]
+        },
+        {
+          "adapter": "Conduction_ST",
+          "status": "reads",
+          "notes": "All three mapped verbs forward Plan unchanged to the same ST helper; no local activity switch. Direct Plan and original Phases aliases are inventoried. Graph wrapping retains direct phase objects; arbitrary Signal data, other-adapter internal reads and status writes are excluded. Wrapper reads are conditional on graph creation succeeding; no runtime behavior acceptance is claimed.",
+          "references": [
+            {
+              "sourceId": "conduction-mapped",
+              "lines": [
+                74,
+                77,
+                82
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "Conduction_ST",
+              "lines": [
+                49,
+                55
+              ]
+            },
+            {
+              "sourceId": "Invoke-Conduction_ST",
+              "lines": [
+                10,
+                14,
+                26,
+                52,
+                57,
+                60,
+                74,
+                88,
+                107
+              ]
+            },
+            {
+              "sourceId": "graph-json-array",
+              "lines": [
+                53,
+                62,
+                71,
+                72,
+                76,
+                77
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Description",
+          "description": "Describe the full plan when a phase is invoked.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    103,
+                    105,
+                    107,
+                    109
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete wrapper pass original Plan unchanged to Invoke-Conduction_ST; directly relevant phase helpers retain full Plan or alias its original Phases values.",
+              "conditional": true,
+              "condition": "A phase-set reaches Invoke-ConductionPhase."
+            }
+          ]
+        },
+        {
+          "path": "ExcludeFromTelemetry",
+          "description": "Control conduction and phase telemetry emission.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    14,
+                    18
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    20,
+                    37
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete wrapper pass original Plan unchanged to Invoke-Conduction_ST; directly relevant phase helpers retain full Plan or alias its original Phases values.",
+              "conditional": true,
+              "condition": "ST helper and phase-set helper reached."
+            }
+          ],
+          "default": {
+            "Conduction_ST": false
+          }
+        },
+        {
+          "path": "Id",
+          "description": "Attach the original plan identifier to telemetry.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    14,
+                    18,
+                    26
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete wrapper pass original Plan unchanged to Invoke-Conduction_ST; directly relevant phase helpers retain full Plan or alias its original Phases values.",
+              "conditional": true,
+              "condition": "ExcludeFromTelemetry resolves false."
+            }
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Name the conduction operation and its telemetry.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    10,
+                    16,
+                    27
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    17,
+                    34,
+                    105
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete wrapper pass original Plan unchanged to Invoke-Conduction_ST; directly relevant phase helpers retain full Plan or alias its original Phases values.",
+              "conditional": true,
+              "condition": "ST helper reached; telemetry-specific reads require telemetry enabled."
+            }
+          ]
+        },
+        {
+          "path": "Phases",
+          "description": "Select and order phases for conduction.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    52,
+                    57,
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete wrapper pass original Plan unchanged to Invoke-Conduction_ST; directly relevant phase helpers retain full Plan or alias its original Phases values.",
+              "conditional": true,
+              "condition": "Graph creation succeeds and Phases resolver is reached."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].DependsOn",
+          "description": "Read direct phase DependsOn for dependency ordering.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    37,
+                    38,
+                    63
+                  ]
+                }
+              ],
+              "trace": "Incoming Phases result is enumerated; direct non-single-key objects remain the phase alias. Local Order fallback 999999 is not a resolver default.",
+              "conditional": true,
+              "condition": "Direct phase object reaches the corresponding resolver; prior Name validation may skip later fields."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Id",
+          "description": "Attach the phase identifier to telemetry.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "graph-json-array",
+                  "lines": [
+                    62,
+                    71,
+                    72,
+                    76,
+                    77
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    33,
+                    37,
+                    46
+                  ]
+                }
+              ],
+              "trace": "Phase jacket result retains original direct phase; no default.",
+              "conditional": true,
+              "condition": "Direct original phase selected and telemetry enabled."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings",
+          "description": "Read phase Mappings for subsequent processing.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    224,
+                    229,
+                    250,
+                    269
+                  ]
+                }
+              ],
+              "trace": "phaseDict is original direct phase retained in its signal jacket. The preceding Memory adapter call is opaque; attribution applies only while the incoming field survives unchanged.",
+              "conditional": true,
+              "condition": "Phase survives Memory.Generate and original direct phase field remains present."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].%.@.VirtualPath",
+          "description": "Attempt the mapping-relative jacket/result virtual-path lookup.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    116,
+                    161,
+                    269,
+                    280
+                  ]
+                }
+              ],
+              "trace": "Exact wire path %.@.VirtualPath is preserved; do not rename it to a plain VirtualPath field or assert resolution succeeds. Incoming mapping is the helper Plan.",
+              "conditional": true,
+              "condition": "Original mapping survives and InvokeStep is reached."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Action",
+          "description": "Read mapping Action to order or dispatch the step.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    116,
+                    132,
+                    158,
+                    269,
+                    273,
+                    274,
+                    275,
+                    278,
+                    280
+                  ]
+                }
+              ],
+              "trace": "Mappings elements come from surviving incoming direct phase. Sort helpers and InvokeStep receive each mapping as their Plan/Dict; calls into other adapters/functions are opaque.",
+              "conditional": true,
+              "condition": "Original direct phase Mappings survive Memory.Generate; mapping is enumerated."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Activity",
+          "description": "Read mapping Activity to order or dispatch the step.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    116,
+                    132,
+                    159,
+                    269,
+                    273,
+                    274,
+                    275,
+                    278,
+                    280
+                  ]
+                }
+              ],
+              "trace": "Mappings elements come from surviving incoming direct phase. Sort helpers and InvokeStep receive each mapping as their Plan/Dict; calls into other adapters/functions are opaque.",
+              "conditional": true,
+              "condition": "Original direct phase Mappings survive Memory.Generate; mapping is enumerated."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Adapter",
+          "description": "Read mapping Adapter to order or dispatch the step.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    116,
+                    132,
+                    160,
+                    269,
+                    273,
+                    274,
+                    275,
+                    278,
+                    280
+                  ]
+                }
+              ],
+              "trace": "Mappings elements come from surviving incoming direct phase. Sort helpers and InvokeStep receive each mapping as their Plan/Dict; calls into other adapters/functions are opaque.",
+              "conditional": true,
+              "condition": "Original direct phase Mappings survive Memory.Generate; mapping is enumerated."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Name",
+          "description": "Read mapping Name to order or dispatch the step.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    116,
+                    132,
+                    157,
+                    269,
+                    273,
+                    274,
+                    275,
+                    278,
+                    280
+                  ]
+                }
+              ],
+              "trace": "Mappings elements come from surviving incoming direct phase. Sort helpers and InvokeStep receive each mapping as their Plan/Dict; calls into other adapters/functions are opaque.",
+              "conditional": true,
+              "condition": "Original direct phase Mappings survive Memory.Generate; mapping is enumerated."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Order",
+          "description": "Read mapping Order to order or dispatch the step.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    116,
+                    132,
+                    132,
+                    269,
+                    273,
+                    274,
+                    275,
+                    278,
+                    280
+                  ]
+                }
+              ],
+              "trace": "Mappings elements come from surviving incoming direct phase. Sort helpers and InvokeStep receive each mapping as their Plan/Dict; calls into other adapters/functions are opaque.",
+              "conditional": true,
+              "condition": "Original direct phase Mappings survive Memory.Generate; mapping is enumerated."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Name",
+          "description": "Read direct phase Name for dependency ordering.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    37,
+                    38,
+                    44
+                  ]
+                }
+              ],
+              "trace": "Incoming Phases result is enumerated; direct non-single-key objects remain the phase alias. Local Order fallback 999999 is not a resolver default.",
+              "conditional": true,
+              "condition": "Direct phase object reaches the corresponding resolver; prior Name validation may skip later fields."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Order",
+          "description": "Read direct phase Order for dependency ordering.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    37,
+                    38,
+                    51
+                  ]
+                }
+              ],
+              "trace": "Incoming Phases result is enumerated; direct non-single-key objects remain the phase alias. Local Order fallback 999999 is not a resolver default.",
+              "conditional": true,
+              "condition": "Direct phase object reaches the corresponding resolver; prior Name validation may skip later fields."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].PostMappings",
+          "description": "Read phase PostMappings for subsequent processing.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    224,
+                    229,
+                    250,
+                    293
+                  ]
+                }
+              ],
+              "trace": "phaseDict is original direct phase retained in its signal jacket. The preceding Memory adapter call is opaque; attribution applies only while the incoming field survives unchanged.",
+              "conditional": true,
+              "condition": "Phase survives Memory.Generate and original direct phase field remains present."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].RepeatCount",
+          "description": "Control phase repetition using RepeatCount.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    52,
+                    57,
+                    60,
+                    74,
+                    88
+                  ]
+                },
+                {
+                  "sourceId": "graph-json-array",
+                  "lines": [
+                    53,
+                    62,
+                    71,
+                    72,
+                    76,
+                    77
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    18,
+                    22,
+                    24,
+                    33
+                  ]
+                }
+              ],
+              "trace": "Graph nodes jacket the original direct phase object, and selected phase signals resolve its field. Generated node metadata is excluded.",
+              "conditional": true,
+              "condition": "Selected graph node retains an original direct phase object and phase-set invocation is reached."
+            }
+          ],
+          "default": {
+            "Conduction_ST": 0
+          }
+        },
+        {
+          "path": "Phases[*].RepeatDelayMS",
+          "description": "Control phase repetition using RepeatDelayMS.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    52,
+                    57,
+                    60,
+                    74,
+                    88
+                  ]
+                },
+                {
+                  "sourceId": "graph-json-array",
+                  "lines": [
+                    53,
+                    62,
+                    71,
+                    72,
+                    76,
+                    77
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    18,
+                    22,
+                    25,
+                    33
+                  ]
+                }
+              ],
+              "trace": "Graph nodes jacket the original direct phase object, and selected phase signals resolve its field. Generated node metadata is excluded.",
+              "conditional": true,
+              "condition": "Selected graph node retains an original direct phase object and phase-set invocation is reached."
+            }
+          ],
+          "default": {
+            "Conduction_ST": 0
+          }
+        },
+        {
+          "path": "Phases[*][$onlyKey]",
+          "description": "Unwrap a single-key phase dictionary.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    38,
+                    39,
+                    40
+                  ]
+                }
+              ],
+              "trace": "Literal selected key reads the original phase wrapper value, not a generated phase.",
+              "conditional": true,
+              "condition": "Original phase item is a dictionary with exactly one key."
+            }
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$phaseItem[$onlyKey]"
+        },
+        {
+          "path": "Phases[*][$onlyKey].DependsOn",
+          "description": "Read wrapped phase DependsOn for dependency ordering.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    38,
+                    39,
+                    40,
+                    63
+                  ]
+                }
+              ],
+              "trace": "Single-key dictionary item in original Phases is unwrapped by its literal key. Only original wrapped value is attributable; no default supplied.",
+              "conditional": true,
+              "condition": "Single-key dictionary phase wrapper and prior validations allow this read."
+            }
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $phase -Path \"DependsOn\" -SignalLevel \"Warning\" | Select-Object -Last 1"
+        },
+        {
+          "path": "Phases[*][$onlyKey].Name",
+          "description": "Read wrapped phase Name for dependency ordering.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    38,
+                    39,
+                    40,
+                    44
+                  ]
+                }
+              ],
+              "trace": "Single-key dictionary item in original Phases is unwrapped by its literal key. Only original wrapped value is attributable; no default supplied.",
+              "conditional": true,
+              "condition": "Single-key dictionary phase wrapper and prior validations allow this read."
+            }
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $phase -Path \"Name\" -SignalLevel \"Warning\" | Select-Object -Last 1"
+        },
+        {
+          "path": "Phases[*][$onlyKey].Order",
+          "description": "Read wrapped phase Order for dependency ordering.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    38,
+                    39,
+                    40,
+                    51
+                  ]
+                }
+              ],
+              "trace": "Single-key dictionary item in original Phases is unwrapped by its literal key. Only original wrapped value is attributable; no default supplied.",
+              "conditional": true,
+              "condition": "Single-key dictionary phase wrapper and prior validations allow this read."
+            }
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $phase -Path \"Order\" -SignalLevel \"Warning\" | Select-Object -Last 1"
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedConductionAdapter",
+      "condenser": null,
+      "name": "Run",
+      "description": "Run a conduction plan.",
+      "coverage": [
+        {
+          "adapter": "Conduction_SDA",
+          "status": "zero-read",
+          "notes": "Mapped core forwards Plan unchanged, but the concrete activity overload ignores it and calls Invoke-Conduction_SDA with conductor/ConductionSignal only. All three mapped verbs follow the same branch; no incoming Plan property reads and no claimed distinct concrete activity behavior.",
+          "references": [
+            {
+              "sourceId": "conduction-mapped",
+              "lines": [
+                74,
+                77,
+                82
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "Conduction_SDA",
+              "lines": [
+                38,
+                40,
+                43
+              ]
+            }
+          ]
+        },
+        {
+          "adapter": "Conduction_ST",
+          "status": "reads",
+          "notes": "All three mapped verbs forward Plan unchanged to the same ST helper; no local activity switch. Direct Plan and original Phases aliases are inventoried. Graph wrapping retains direct phase objects; arbitrary Signal data, other-adapter internal reads and status writes are excluded. Wrapper reads are conditional on graph creation succeeding; no runtime behavior acceptance is claimed.",
+          "references": [
+            {
+              "sourceId": "conduction-mapped",
+              "lines": [
+                74,
+                77,
+                82
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "Conduction_ST",
+              "lines": [
+                49,
+                55
+              ]
+            },
+            {
+              "sourceId": "Invoke-Conduction_ST",
+              "lines": [
+                10,
+                14,
+                26,
+                52,
+                57,
+                60,
+                74,
+                88,
+                107
+              ]
+            },
+            {
+              "sourceId": "graph-json-array",
+              "lines": [
+                53,
+                62,
+                71,
+                72,
+                76,
+                77
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Description",
+          "description": "Describe the full plan when a phase is invoked.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    103,
+                    105,
+                    107,
+                    109
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete wrapper pass original Plan unchanged to Invoke-Conduction_ST; directly relevant phase helpers retain full Plan or alias its original Phases values.",
+              "conditional": true,
+              "condition": "A phase-set reaches Invoke-ConductionPhase."
+            }
+          ]
+        },
+        {
+          "path": "ExcludeFromTelemetry",
+          "description": "Control conduction and phase telemetry emission.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    14,
+                    18
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    20,
+                    37
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete wrapper pass original Plan unchanged to Invoke-Conduction_ST; directly relevant phase helpers retain full Plan or alias its original Phases values.",
+              "conditional": true,
+              "condition": "ST helper and phase-set helper reached."
+            }
+          ],
+          "default": {
+            "Conduction_ST": false
+          }
+        },
+        {
+          "path": "Id",
+          "description": "Attach the original plan identifier to telemetry.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    14,
+                    18,
+                    26
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete wrapper pass original Plan unchanged to Invoke-Conduction_ST; directly relevant phase helpers retain full Plan or alias its original Phases values.",
+              "conditional": true,
+              "condition": "ExcludeFromTelemetry resolves false."
+            }
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Name the conduction operation and its telemetry.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    10,
+                    16,
+                    27
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    17,
+                    34,
+                    105
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete wrapper pass original Plan unchanged to Invoke-Conduction_ST; directly relevant phase helpers retain full Plan or alias its original Phases values.",
+              "conditional": true,
+              "condition": "ST helper reached; telemetry-specific reads require telemetry enabled."
+            }
+          ]
+        },
+        {
+          "path": "Phases",
+          "description": "Select and order phases for conduction.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    52,
+                    57,
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete wrapper pass original Plan unchanged to Invoke-Conduction_ST; directly relevant phase helpers retain full Plan or alias its original Phases values.",
+              "conditional": true,
+              "condition": "Graph creation succeeds and Phases resolver is reached."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].DependsOn",
+          "description": "Read direct phase DependsOn for dependency ordering.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    37,
+                    38,
+                    63
+                  ]
+                }
+              ],
+              "trace": "Incoming Phases result is enumerated; direct non-single-key objects remain the phase alias. Local Order fallback 999999 is not a resolver default.",
+              "conditional": true,
+              "condition": "Direct phase object reaches the corresponding resolver; prior Name validation may skip later fields."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Id",
+          "description": "Attach the phase identifier to telemetry.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "graph-json-array",
+                  "lines": [
+                    62,
+                    71,
+                    72,
+                    76,
+                    77
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    33,
+                    37,
+                    46
+                  ]
+                }
+              ],
+              "trace": "Phase jacket result retains original direct phase; no default.",
+              "conditional": true,
+              "condition": "Direct original phase selected and telemetry enabled."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings",
+          "description": "Read phase Mappings for subsequent processing.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    224,
+                    229,
+                    250,
+                    269
+                  ]
+                }
+              ],
+              "trace": "phaseDict is original direct phase retained in its signal jacket. The preceding Memory adapter call is opaque; attribution applies only while the incoming field survives unchanged.",
+              "conditional": true,
+              "condition": "Phase survives Memory.Generate and original direct phase field remains present."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].%.@.VirtualPath",
+          "description": "Attempt the mapping-relative jacket/result virtual-path lookup.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    116,
+                    161,
+                    269,
+                    280
+                  ]
+                }
+              ],
+              "trace": "Exact wire path %.@.VirtualPath is preserved; do not rename it to a plain VirtualPath field or assert resolution succeeds. Incoming mapping is the helper Plan.",
+              "conditional": true,
+              "condition": "Original mapping survives and InvokeStep is reached."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Action",
+          "description": "Read mapping Action to order or dispatch the step.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    116,
+                    132,
+                    158,
+                    269,
+                    273,
+                    274,
+                    275,
+                    278,
+                    280
+                  ]
+                }
+              ],
+              "trace": "Mappings elements come from surviving incoming direct phase. Sort helpers and InvokeStep receive each mapping as their Plan/Dict; calls into other adapters/functions are opaque.",
+              "conditional": true,
+              "condition": "Original direct phase Mappings survive Memory.Generate; mapping is enumerated."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Activity",
+          "description": "Read mapping Activity to order or dispatch the step.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    116,
+                    132,
+                    159,
+                    269,
+                    273,
+                    274,
+                    275,
+                    278,
+                    280
+                  ]
+                }
+              ],
+              "trace": "Mappings elements come from surviving incoming direct phase. Sort helpers and InvokeStep receive each mapping as their Plan/Dict; calls into other adapters/functions are opaque.",
+              "conditional": true,
+              "condition": "Original direct phase Mappings survive Memory.Generate; mapping is enumerated."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Adapter",
+          "description": "Read mapping Adapter to order or dispatch the step.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    116,
+                    132,
+                    160,
+                    269,
+                    273,
+                    274,
+                    275,
+                    278,
+                    280
+                  ]
+                }
+              ],
+              "trace": "Mappings elements come from surviving incoming direct phase. Sort helpers and InvokeStep receive each mapping as their Plan/Dict; calls into other adapters/functions are opaque.",
+              "conditional": true,
+              "condition": "Original direct phase Mappings survive Memory.Generate; mapping is enumerated."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Name",
+          "description": "Read mapping Name to order or dispatch the step.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    116,
+                    132,
+                    157,
+                    269,
+                    273,
+                    274,
+                    275,
+                    278,
+                    280
+                  ]
+                }
+              ],
+              "trace": "Mappings elements come from surviving incoming direct phase. Sort helpers and InvokeStep receive each mapping as their Plan/Dict; calls into other adapters/functions are opaque.",
+              "conditional": true,
+              "condition": "Original direct phase Mappings survive Memory.Generate; mapping is enumerated."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Order",
+          "description": "Read mapping Order to order or dispatch the step.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    116,
+                    132,
+                    132,
+                    269,
+                    273,
+                    274,
+                    275,
+                    278,
+                    280
+                  ]
+                }
+              ],
+              "trace": "Mappings elements come from surviving incoming direct phase. Sort helpers and InvokeStep receive each mapping as their Plan/Dict; calls into other adapters/functions are opaque.",
+              "conditional": true,
+              "condition": "Original direct phase Mappings survive Memory.Generate; mapping is enumerated."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Name",
+          "description": "Read direct phase Name for dependency ordering.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    37,
+                    38,
+                    44
+                  ]
+                }
+              ],
+              "trace": "Incoming Phases result is enumerated; direct non-single-key objects remain the phase alias. Local Order fallback 999999 is not a resolver default.",
+              "conditional": true,
+              "condition": "Direct phase object reaches the corresponding resolver; prior Name validation may skip later fields."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Order",
+          "description": "Read direct phase Order for dependency ordering.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    37,
+                    38,
+                    51
+                  ]
+                }
+              ],
+              "trace": "Incoming Phases result is enumerated; direct non-single-key objects remain the phase alias. Local Order fallback 999999 is not a resolver default.",
+              "conditional": true,
+              "condition": "Direct phase object reaches the corresponding resolver; prior Name validation may skip later fields."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].PostMappings",
+          "description": "Read phase PostMappings for subsequent processing.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    224,
+                    229,
+                    250,
+                    293
+                  ]
+                }
+              ],
+              "trace": "phaseDict is original direct phase retained in its signal jacket. The preceding Memory adapter call is opaque; attribution applies only while the incoming field survives unchanged.",
+              "conditional": true,
+              "condition": "Phase survives Memory.Generate and original direct phase field remains present."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].RepeatCount",
+          "description": "Control phase repetition using RepeatCount.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    52,
+                    57,
+                    60,
+                    74,
+                    88
+                  ]
+                },
+                {
+                  "sourceId": "graph-json-array",
+                  "lines": [
+                    53,
+                    62,
+                    71,
+                    72,
+                    76,
+                    77
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    18,
+                    22,
+                    24,
+                    33
+                  ]
+                }
+              ],
+              "trace": "Graph nodes jacket the original direct phase object, and selected phase signals resolve its field. Generated node metadata is excluded.",
+              "conditional": true,
+              "condition": "Selected graph node retains an original direct phase object and phase-set invocation is reached."
+            }
+          ],
+          "default": {
+            "Conduction_ST": 0
+          }
+        },
+        {
+          "path": "Phases[*].RepeatDelayMS",
+          "description": "Control phase repetition using RepeatDelayMS.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    52,
+                    57,
+                    60,
+                    74,
+                    88
+                  ]
+                },
+                {
+                  "sourceId": "graph-json-array",
+                  "lines": [
+                    53,
+                    62,
+                    71,
+                    72,
+                    76,
+                    77
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    18,
+                    22,
+                    25,
+                    33
+                  ]
+                }
+              ],
+              "trace": "Graph nodes jacket the original direct phase object, and selected phase signals resolve its field. Generated node metadata is excluded.",
+              "conditional": true,
+              "condition": "Selected graph node retains an original direct phase object and phase-set invocation is reached."
+            }
+          ],
+          "default": {
+            "Conduction_ST": 0
+          }
+        },
+        {
+          "path": "Phases[*][$onlyKey]",
+          "description": "Unwrap a single-key phase dictionary.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    38,
+                    39,
+                    40
+                  ]
+                }
+              ],
+              "trace": "Literal selected key reads the original phase wrapper value, not a generated phase.",
+              "conditional": true,
+              "condition": "Original phase item is a dictionary with exactly one key."
+            }
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$phaseItem[$onlyKey]"
+        },
+        {
+          "path": "Phases[*][$onlyKey].DependsOn",
+          "description": "Read wrapped phase DependsOn for dependency ordering.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    38,
+                    39,
+                    40,
+                    63
+                  ]
+                }
+              ],
+              "trace": "Single-key dictionary item in original Phases is unwrapped by its literal key. Only original wrapped value is attributable; no default supplied.",
+              "conditional": true,
+              "condition": "Single-key dictionary phase wrapper and prior validations allow this read."
+            }
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $phase -Path \"DependsOn\" -SignalLevel \"Warning\" | Select-Object -Last 1"
+        },
+        {
+          "path": "Phases[*][$onlyKey].Name",
+          "description": "Read wrapped phase Name for dependency ordering.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    38,
+                    39,
+                    40,
+                    44
+                  ]
+                }
+              ],
+              "trace": "Single-key dictionary item in original Phases is unwrapped by its literal key. Only original wrapped value is attributable; no default supplied.",
+              "conditional": true,
+              "condition": "Single-key dictionary phase wrapper and prior validations allow this read."
+            }
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $phase -Path \"Name\" -SignalLevel \"Warning\" | Select-Object -Last 1"
+        },
+        {
+          "path": "Phases[*][$onlyKey].Order",
+          "description": "Read wrapped phase Order for dependency ordering.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    38,
+                    39,
+                    40,
+                    51
+                  ]
+                }
+              ],
+              "trace": "Single-key dictionary item in original Phases is unwrapped by its literal key. Only original wrapped value is attributable; no default supplied.",
+              "conditional": true,
+              "condition": "Single-key dictionary phase wrapper and prior validations allow this read."
+            }
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $phase -Path \"Order\" -SignalLevel \"Warning\" | Select-Object -Last 1"
+        }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedConductionAdapter",
+      "condenser": null,
+      "name": "ST",
+      "description": "Execute a SovereignTrust conduction plan.",
+      "coverage": [
+        {
+          "adapter": "Conduction_SDA",
+          "status": "zero-read",
+          "notes": "Mapped core forwards Plan unchanged, but the concrete activity overload ignores it and calls Invoke-Conduction_SDA with conductor/ConductionSignal only. All three mapped verbs follow the same branch; no incoming Plan property reads and no claimed distinct concrete activity behavior.",
+          "references": [
+            {
+              "sourceId": "conduction-mapped",
+              "lines": [
+                74,
+                77,
+                82
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "Conduction_SDA",
+              "lines": [
+                38,
+                40,
+                43
+              ]
+            }
+          ]
+        },
+        {
+          "adapter": "Conduction_ST",
+          "status": "reads",
+          "notes": "All three mapped verbs forward Plan unchanged to the same ST helper; no local activity switch. Direct Plan and original Phases aliases are inventoried. Graph wrapping retains direct phase objects; arbitrary Signal data, other-adapter internal reads and status writes are excluded. Wrapper reads are conditional on graph creation succeeding; no runtime behavior acceptance is claimed.",
+          "references": [
+            {
+              "sourceId": "conduction-mapped",
+              "lines": [
+                74,
+                77,
+                82
+              ]
+            },
+            {
+              "sourceId": "mapped-core",
+              "lines": [
+                9,
+                48
+              ]
+            },
+            {
+              "sourceId": "Conduction_ST",
+              "lines": [
+                49,
+                55
+              ]
+            },
+            {
+              "sourceId": "Invoke-Conduction_ST",
+              "lines": [
+                10,
+                14,
+                26,
+                52,
+                57,
+                60,
+                74,
+                88,
+                107
+              ]
+            },
+            {
+              "sourceId": "graph-json-array",
+              "lines": [
+                53,
+                62,
+                71,
+                72,
+                76,
+                77
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "path": "Description",
+          "description": "Describe the full plan when a phase is invoked.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    103,
+                    105,
+                    107,
+                    109
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete wrapper pass original Plan unchanged to Invoke-Conduction_ST; directly relevant phase helpers retain full Plan or alias its original Phases values.",
+              "conditional": true,
+              "condition": "A phase-set reaches Invoke-ConductionPhase."
+            }
+          ]
+        },
+        {
+          "path": "ExcludeFromTelemetry",
+          "description": "Control conduction and phase telemetry emission.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    14,
+                    18
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    20,
+                    37
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete wrapper pass original Plan unchanged to Invoke-Conduction_ST; directly relevant phase helpers retain full Plan or alias its original Phases values.",
+              "conditional": true,
+              "condition": "ST helper and phase-set helper reached."
+            }
+          ],
+          "default": {
+            "Conduction_ST": false
+          }
+        },
+        {
+          "path": "Id",
+          "description": "Attach the original plan identifier to telemetry.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    14,
+                    18,
+                    26
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete wrapper pass original Plan unchanged to Invoke-Conduction_ST; directly relevant phase helpers retain full Plan or alias its original Phases values.",
+              "conditional": true,
+              "condition": "ExcludeFromTelemetry resolves false."
+            }
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Name the conduction operation and its telemetry.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    10,
+                    16,
+                    27
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    17,
+                    34,
+                    105
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete wrapper pass original Plan unchanged to Invoke-Conduction_ST; directly relevant phase helpers retain full Plan or alias its original Phases values.",
+              "conditional": true,
+              "condition": "ST helper reached; telemetry-specific reads require telemetry enabled."
+            }
+          ]
+        },
+        {
+          "path": "Phases",
+          "description": "Select and order phases for conduction.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    52,
+                    57,
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32
+                  ]
+                }
+              ],
+              "trace": "Mapped core and concrete wrapper pass original Plan unchanged to Invoke-Conduction_ST; directly relevant phase helpers retain full Plan or alias its original Phases values.",
+              "conditional": true,
+              "condition": "Graph creation succeeds and Phases resolver is reached."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].DependsOn",
+          "description": "Read direct phase DependsOn for dependency ordering.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    37,
+                    38,
+                    63
+                  ]
+                }
+              ],
+              "trace": "Incoming Phases result is enumerated; direct non-single-key objects remain the phase alias. Local Order fallback 999999 is not a resolver default.",
+              "conditional": true,
+              "condition": "Direct phase object reaches the corresponding resolver; prior Name validation may skip later fields."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Id",
+          "description": "Attach the phase identifier to telemetry.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "graph-json-array",
+                  "lines": [
+                    62,
+                    71,
+                    72,
+                    76,
+                    77
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    33,
+                    37,
+                    46
+                  ]
+                }
+              ],
+              "trace": "Phase jacket result retains original direct phase; no default.",
+              "conditional": true,
+              "condition": "Direct original phase selected and telemetry enabled."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings",
+          "description": "Read phase Mappings for subsequent processing.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    224,
+                    229,
+                    250,
+                    269
+                  ]
+                }
+              ],
+              "trace": "phaseDict is original direct phase retained in its signal jacket. The preceding Memory adapter call is opaque; attribution applies only while the incoming field survives unchanged.",
+              "conditional": true,
+              "condition": "Phase survives Memory.Generate and original direct phase field remains present."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].%.@.VirtualPath",
+          "description": "Attempt the mapping-relative jacket/result virtual-path lookup.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    116,
+                    161,
+                    269,
+                    280
+                  ]
+                }
+              ],
+              "trace": "Exact wire path %.@.VirtualPath is preserved; do not rename it to a plain VirtualPath field or assert resolution succeeds. Incoming mapping is the helper Plan.",
+              "conditional": true,
+              "condition": "Original mapping survives and InvokeStep is reached."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Action",
+          "description": "Read mapping Action to order or dispatch the step.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    116,
+                    132,
+                    158,
+                    269,
+                    273,
+                    274,
+                    275,
+                    278,
+                    280
+                  ]
+                }
+              ],
+              "trace": "Mappings elements come from surviving incoming direct phase. Sort helpers and InvokeStep receive each mapping as their Plan/Dict; calls into other adapters/functions are opaque.",
+              "conditional": true,
+              "condition": "Original direct phase Mappings survive Memory.Generate; mapping is enumerated."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Activity",
+          "description": "Read mapping Activity to order or dispatch the step.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    116,
+                    132,
+                    159,
+                    269,
+                    273,
+                    274,
+                    275,
+                    278,
+                    280
+                  ]
+                }
+              ],
+              "trace": "Mappings elements come from surviving incoming direct phase. Sort helpers and InvokeStep receive each mapping as their Plan/Dict; calls into other adapters/functions are opaque.",
+              "conditional": true,
+              "condition": "Original direct phase Mappings survive Memory.Generate; mapping is enumerated."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Adapter",
+          "description": "Read mapping Adapter to order or dispatch the step.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    116,
+                    132,
+                    160,
+                    269,
+                    273,
+                    274,
+                    275,
+                    278,
+                    280
+                  ]
+                }
+              ],
+              "trace": "Mappings elements come from surviving incoming direct phase. Sort helpers and InvokeStep receive each mapping as their Plan/Dict; calls into other adapters/functions are opaque.",
+              "conditional": true,
+              "condition": "Original direct phase Mappings survive Memory.Generate; mapping is enumerated."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Name",
+          "description": "Read mapping Name to order or dispatch the step.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    116,
+                    132,
+                    157,
+                    269,
+                    273,
+                    274,
+                    275,
+                    278,
+                    280
+                  ]
+                }
+              ],
+              "trace": "Mappings elements come from surviving incoming direct phase. Sort helpers and InvokeStep receive each mapping as their Plan/Dict; calls into other adapters/functions are opaque.",
+              "conditional": true,
+              "condition": "Original direct phase Mappings survive Memory.Generate; mapping is enumerated."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Order",
+          "description": "Read mapping Order to order or dispatch the step.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    116,
+                    132,
+                    132,
+                    269,
+                    273,
+                    274,
+                    275,
+                    278,
+                    280
+                  ]
+                }
+              ],
+              "trace": "Mappings elements come from surviving incoming direct phase. Sort helpers and InvokeStep receive each mapping as their Plan/Dict; calls into other adapters/functions are opaque.",
+              "conditional": true,
+              "condition": "Original direct phase Mappings survive Memory.Generate; mapping is enumerated."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Name",
+          "description": "Read direct phase Name for dependency ordering.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    37,
+                    38,
+                    44
+                  ]
+                }
+              ],
+              "trace": "Incoming Phases result is enumerated; direct non-single-key objects remain the phase alias. Local Order fallback 999999 is not a resolver default.",
+              "conditional": true,
+              "condition": "Direct phase object reaches the corresponding resolver; prior Name validation may skip later fields."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].Order",
+          "description": "Read direct phase Order for dependency ordering.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    37,
+                    38,
+                    51
+                  ]
+                }
+              ],
+              "trace": "Incoming Phases result is enumerated; direct non-single-key objects remain the phase alias. Local Order fallback 999999 is not a resolver default.",
+              "conditional": true,
+              "condition": "Direct phase object reaches the corresponding resolver; prior Name validation may skip later fields."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].PostMappings",
+          "description": "Read phase PostMappings for subsequent processing.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    224,
+                    229,
+                    250,
+                    293
+                  ]
+                }
+              ],
+              "trace": "phaseDict is original direct phase retained in its signal jacket. The preceding Memory adapter call is opaque; attribution applies only while the incoming field survives unchanged.",
+              "conditional": true,
+              "condition": "Phase survives Memory.Generate and original direct phase field remains present."
+            }
+          ]
+        },
+        {
+          "path": "Phases[*].RepeatCount",
+          "description": "Control phase repetition using RepeatCount.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    52,
+                    57,
+                    60,
+                    74,
+                    88
+                  ]
+                },
+                {
+                  "sourceId": "graph-json-array",
+                  "lines": [
+                    53,
+                    62,
+                    71,
+                    72,
+                    76,
+                    77
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    18,
+                    22,
+                    24,
+                    33
+                  ]
+                }
+              ],
+              "trace": "Graph nodes jacket the original direct phase object, and selected phase signals resolve its field. Generated node metadata is excluded.",
+              "conditional": true,
+              "condition": "Selected graph node retains an original direct phase object and phase-set invocation is reached."
+            }
+          ],
+          "default": {
+            "Conduction_ST": 0
+          }
+        },
+        {
+          "path": "Phases[*].RepeatDelayMS",
+          "description": "Control phase repetition using RepeatDelayMS.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    52,
+                    57,
+                    60,
+                    74,
+                    88
+                  ]
+                },
+                {
+                  "sourceId": "graph-json-array",
+                  "lines": [
+                    53,
+                    62,
+                    71,
+                    72,
+                    76,
+                    77
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-ConductionPhase",
+                  "lines": [
+                    18,
+                    22,
+                    25,
+                    33
+                  ]
+                }
+              ],
+              "trace": "Graph nodes jacket the original direct phase object, and selected phase signals resolve its field. Generated node metadata is excluded.",
+              "conditional": true,
+              "condition": "Selected graph node retains an original direct phase object and phase-set invocation is reached."
+            }
+          ],
+          "default": {
+            "Conduction_ST": 0
+          }
+        },
+        {
+          "path": "Phases[*][$onlyKey]",
+          "description": "Unwrap a single-key phase dictionary.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    38,
+                    39,
+                    40
+                  ]
+                }
+              ],
+              "trace": "Literal selected key reads the original phase wrapper value, not a generated phase.",
+              "conditional": true,
+              "condition": "Original phase item is a dictionary with exactly one key."
+            }
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$phaseItem[$onlyKey]"
+        },
+        {
+          "path": "Phases[*][$onlyKey].DependsOn",
+          "description": "Read wrapped phase DependsOn for dependency ordering.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    38,
+                    39,
+                    40,
+                    63
+                  ]
+                }
+              ],
+              "trace": "Single-key dictionary item in original Phases is unwrapped by its literal key. Only original wrapped value is attributable; no default supplied.",
+              "conditional": true,
+              "condition": "Single-key dictionary phase wrapper and prior validations allow this read."
+            }
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $phase -Path \"DependsOn\" -SignalLevel \"Warning\" | Select-Object -Last 1"
+        },
+        {
+          "path": "Phases[*][$onlyKey].Name",
+          "description": "Read wrapped phase Name for dependency ordering.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    38,
+                    39,
+                    40,
+                    44
+                  ]
+                }
+              ],
+              "trace": "Single-key dictionary item in original Phases is unwrapped by its literal key. Only original wrapped value is attributable; no default supplied.",
+              "conditional": true,
+              "condition": "Single-key dictionary phase wrapper and prior validations allow this read."
+            }
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $phase -Path \"Name\" -SignalLevel \"Warning\" | Select-Object -Last 1"
+        },
+        {
+          "path": "Phases[*][$onlyKey].Order",
+          "description": "Read wrapped phase Order for dependency ordering.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "evidence": [
+            {
+              "adapter": "Conduction_ST",
+              "references": [
+                {
+                  "sourceId": "Invoke-Conduction_ST",
+                  "lines": [
+                    60,
+                    74
+                  ]
+                },
+                {
+                  "sourceId": "Invoke-Conduction_ST_GetNextPhaseSet",
+                  "lines": [
+                    17,
+                    25,
+                    32,
+                    38,
+                    39,
+                    40,
+                    51
+                  ]
+                }
+              ],
+              "trace": "Single-key dictionary item in original Phases is unwrapped by its literal key. Only original wrapped value is attributable; no default supplied.",
+              "conditional": true,
+              "condition": "Single-key dictionary phase wrapper and prior validations allow this read."
+            }
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $phase -Path \"Order\" -SignalLevel \"Warning\" | Select-Object -Last 1"
+        }
+      ]
+    }
+  ]
+}

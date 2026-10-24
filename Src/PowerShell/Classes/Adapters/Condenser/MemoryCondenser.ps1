@@ -5,6 +5,18 @@
 #  Authors: Shadow PhanTom 🤖/☠️🧁👾️ • Neural Alchemist ⚗️☣️🐲 • Version: 2025.5.4.8
 # =============================================================================
 
+<#
+Class: MemoryCondenser
+Purpose: Perform memory condenser operations.
+ContractStatus: Enforced
+ActivityScope: AdapterAgnostic
+Activities:
+- Persist: Reserved memory persistence activity; its current branch has no implementation.
+- Generate: Generate memory content.
+ActivityValidation: OnInvoke, BeforeDispatch
+UnsupportedActivity: FailedSignal
+ActivityComparison: CaseInsensitive
+#>
 class MemoryCondenser {
     [Signal]$Signal
 
@@ -24,9 +36,14 @@ class MemoryCondenser {
 
     [Signal]Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
 
-        # For the Content Condenser, the plan contains the steps to perform, similar to the steps in the FormulaGraphCondenser but 2 dimensional mappings
+        # Here $Plan is a full phase containing Steps; other adapters ordinarily receive one phase step as $Plan unless their contract specifies otherwise.
 
         $opSignal = [Signal]::Start("MemoryCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
+
+        if ($Activity -notin @('Persist', 'Generate')) {
+            $opSignal.LogCritical("Unsupported MemoryCondenser activity: '$Activity'.")
+            return $opSignal
+        }
         
         # First Supported Activities -> Select, Merge, Project
         if ($Activity) {
@@ -51,7 +68,7 @@ class MemoryCondenser {
                         $stThrew=$false
                         $stStatus=$null
                         try {
-                        $breakSignal = Resolve-PathFromDictionary -Dictionary $step -Path "Config.Break" -Default $false | Select-Object -Last 1
+                        $breakSignal = Resolve-PathFromDictionary -Dictionary $step -Path "Config.Break" -SignalLevel "Information" -Default $false | Select-Object -Last 1
                         if ($breakSignal.GetResult()) {
                             $Check = ""
                         }

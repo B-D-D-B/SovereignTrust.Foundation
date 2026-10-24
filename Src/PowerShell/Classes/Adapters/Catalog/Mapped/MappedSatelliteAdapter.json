@@ -1,0 +1,105 @@
+{
+  "name": "MappedSatelliteAdapter",
+  "activities": [
+    {
+      "name": "EmitEntries",
+      "description": "Emit telemetry through a configured plan and forward the stored { ItemsReceived, ItemsAccepted, Result } outcome, including on failure.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Read the configuration object to warn when it is absent or false-valued; no configuration child fields are consumed.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "EmitSignal",
+      "description": "Emit telemetry through a configured plan and forward the stored { ItemsReceived, ItemsAccepted, Result } outcome, including on failure.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Read the configuration object to warn when it is absent or false-valued; no configuration child fields are consumed.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SendMessage",
+      "description": "Count outbound JSON envelopes on the item graph, post the unchanged body, and return the raw REST receipt.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Read Config.CountKey to store the submitted envelope count on the current item graph before POST.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ]
+        },
+        {
+          "path": "Path",
+          "description": "Provide the content lookup path forwarded to Token.Memory/Get to obtain the message body.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ]
+        },
+        {
+          "path": "Config.CountKey",
+          "description": "Item graph key for the count parsed from the exact outbound JSON body before POST.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HandleResponse",
+      "description": "Provider-free normalization of Config.RawResponse and Config.ItemsSent into { ItemsReceived, ItemsAccepted, Result }; Result is exactly ItemsAccepted == ItemsSent regardless of errors. Store at Config.HandledResultKey before LogCritical per error; a count match with errors retains Result true in a failed Signal.",
+      "properties": [
+        {
+          "path": "Config.RawResponse",
+          "description": "Raw REST response property bag or JSON object from the matching SendMessage Key.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ]
+        },
+        {
+          "path": "Config.ItemsSent",
+          "description": "Positive whole item count from the matching SendMessage CountKey; never inferred from service counts.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ]
+        },
+        {
+          "path": "Config.HandledResultKey",
+          "description": "Distinct item graph key for the normalized result, including on reported service errors.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "EmitSignalFull",
+      "description": "Mark entries to skip; the current branch does not emit them.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Read the configuration object to warn when it is absent or false-valued; no configuration child fields are consumed.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ]
+        }
+      ]
+    }
+  ],
+  "concreteAdapters": [
+    {
+      "name": "Satellite_AzureApplicationInsights",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Satellite/AzureApplicationInsights/PowerShell/Satellite_AzureApplicationInsights.psm1"
+    }
+  ]
+}
