@@ -9,55 +9,55 @@
     },
     {
       "name": "MappedCondenserAdapter",
-      "file": "Catalog/Mapped/MappedCondenserAdapter.json"
+      "file": "Mapped/MappedCondenserAdapter.json"
     },
     {
       "name": "MappedConductionAdapter",
-      "file": "Catalog/Mapped/MappedConductionAdapter.json"
+      "file": "Mapped/MappedConductionAdapter.json"
     },
     {
       "name": "MappedConduitAdapter",
-      "file": "Catalog/Mapped/MappedConduitAdapter.json"
+      "file": "Mapped/MappedConduitAdapter.json"
     },
     {
       "name": "MappedDataAdapter",
-      "file": "Catalog/Mapped/MappedDataAdapter.json"
+      "file": "Mapped/MappedDataAdapter.json"
     },
     {
       "name": "MappedIntelligenceAdapter",
-      "file": "Catalog/Mapped/MappedIntelligenceAdapter.json"
+      "file": "Mapped/MappedIntelligenceAdapter.json"
     },
     {
       "name": "MappedNetworkAdapter",
-      "file": "Catalog/Mapped/MappedNetworkAdapter.json"
+      "file": "Mapped/MappedNetworkAdapter.json"
     },
     {
       "name": "MappedQuantumAdapter",
-      "file": "Catalog/Mapped/MappedQuantumAdapter.json"
+      "file": "Mapped/MappedQuantumAdapter.json"
     },
     {
       "name": "MappedQueueAdapter",
-      "file": "Catalog/Mapped/MappedQueueAdapter.json"
+      "file": "Mapped/MappedQueueAdapter.json"
     },
     {
       "name": "MappedSatelliteAdapter",
-      "file": "Catalog/Mapped/MappedSatelliteAdapter.json"
+      "file": "Mapped/MappedSatelliteAdapter.json"
     },
     {
       "name": "MappedSessionAdapter",
-      "file": "Catalog/Mapped/MappedSessionAdapter.json"
+      "file": "Mapped/MappedSessionAdapter.json"
     },
     {
       "name": "MappedStorageAdapter",
-      "file": "Catalog/Mapped/MappedStorageAdapter.json"
+      "file": "Mapped/MappedStorageAdapter.json"
     },
     {
       "name": "MappedTokenAdapter",
-      "file": "Catalog/Mapped/MappedTokenAdapter.json"
+      "file": "Mapped/MappedTokenAdapter.json"
     },
     {
       "name": "MappedUtilityAdapter",
-      "file": "Catalog/Mapped/MappedUtilityAdapter.json"
+      "file": "Mapped/MappedUtilityAdapter.json"
     }
   ]
 }
