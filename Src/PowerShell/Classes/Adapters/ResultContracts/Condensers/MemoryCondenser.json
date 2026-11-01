@@ -1,0 +1,122 @@
+{
+  "name": "MemoryCondenser",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/MemoryCondenser.ps1",
+      "sha256": "D569029204439A9765E1137A9CEAADC7ED0CB5B9C31A6A25942B1E8FA44382BC"
+    },
+    {
+      "id": "s2",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedCondenserAdapter.ps1",
+      "sha256": "CDB170DE2EB8292E350DD924703F26EF17E4839B85120D183A138221826C939E"
+    }
+  ],
+  "activities": [
+    {
+      "name": "Persist",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "MemoryCondenser",
+            "support": "reserved",
+            "when": "declared branch has no persistence implementation",
+            "outcomes": [
+              {
+                "condition": "branch returns without persistence receipt",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Persist'",
+                "line": 43,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "Generate",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "MemoryCondenser",
+            "support": "implemented",
+            "when": "ordered enabled steps, optional Key/Format/Path/Hydration/ContentFormat pipeline",
+            "outcomes": [
+              {
+                "condition": "steps finish and ReturnItemSignal is false",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "ReturnItemSignal is true",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Signal",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "Signal",
+                    "presence": "required",
+                    "meaning": "current ItemSignal",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "hydration, adapter, postprocessor or background cleanup fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "runs selected steps and registers keyed Signals in item graph"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Generate'",
+                "line": 43,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "A successful keyed Signal may have no Result; a later stage can overwrite its graph entry or fail."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    }
+  ]
+}

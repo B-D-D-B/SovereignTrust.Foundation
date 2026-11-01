@@ -1,0 +1,957 @@
+{
+  "name": "RestCondenser",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/RestCondenser.ps1",
+      "sha256": "DCD661B3D59816E69F213605CF6429EED96403273BE1A31A2AC92BD40CAE2E9C"
+    },
+    {
+      "id": "s2",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Rest/Invoke-RestCondenserCore.ps1",
+      "sha256": "E3C44F747CE954C5D966216DBA025767763E3FCEF2342B85ACC3C37EFD63EA6D"
+    },
+    {
+      "id": "s3",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedCondenserAdapter.ps1",
+      "sha256": "CDB170DE2EB8292E350DD924703F26EF17E4839B85120D183A138221826C939E"
+    }
+  ],
+  "activities": [
+    {
+      "name": "Get",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "RestCondenser",
+            "support": "implemented",
+            "when": "Config.Method selects actual HTTP method; activity name is validated but is not method selection",
+            "outcomes": [
+              {
+                "condition": "HTTP call returns and ReturnHttpStatus=false",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "response body native value"
+              },
+              {
+                "condition": "Config.TargetPath download completes",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "local target path",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "HTTP call returns and ReturnHttpStatus=true",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Hashtable",
+                "shape": [
+                  {
+                    "path": "Response",
+                    "type": "provider response",
+                    "presence": "conditional",
+                    "meaning": "response body",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Url",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "final URL",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Method",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "actual Config.Method",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "ResourceName",
+                    "type": "String",
+                    "presence": "conditional",
+                    "meaning": "resolved resource",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Success",
+                    "type": "Boolean",
+                    "presence": "required",
+                    "meaning": "constant true after HTTP invocation",
+                    "origin": "constant"
+                  },
+                  {
+                    "path": "StatusCode",
+                    "type": "Int32",
+                    "presence": "required",
+                    "meaning": "HTTP status including non-2xx",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Headers",
+                    "type": "object",
+                    "presence": "conditional",
+                    "meaning": "response headers",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ElapsedMilliseconds",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "request stopwatch",
+                    "origin": "measured"
+                  }
+                ]
+              },
+              {
+                "condition": "bearer resolution, network/HTTP exception or retry exhaustion",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "sends configured HTTP request; TargetPath writes local file"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Get'",
+                "line": 55,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "'Get'",
+                "line": 52,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Non-2xx can still return success Signal in status mode; check StatusCode explicitly. No live endpoint was called."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "Head",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "RestCondenser",
+            "support": "implemented",
+            "when": "Config.Method selects actual HTTP method; activity name is validated but is not method selection",
+            "outcomes": [
+              {
+                "condition": "HTTP call returns and ReturnHttpStatus=false",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "response body native value"
+              },
+              {
+                "condition": "Config.TargetPath download completes",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "local target path",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "HTTP call returns and ReturnHttpStatus=true",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Hashtable",
+                "shape": [
+                  {
+                    "path": "Response",
+                    "type": "provider response",
+                    "presence": "conditional",
+                    "meaning": "response body",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Url",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "final URL",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Method",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "actual Config.Method",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "ResourceName",
+                    "type": "String",
+                    "presence": "conditional",
+                    "meaning": "resolved resource",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Success",
+                    "type": "Boolean",
+                    "presence": "required",
+                    "meaning": "constant true after HTTP invocation",
+                    "origin": "constant"
+                  },
+                  {
+                    "path": "StatusCode",
+                    "type": "Int32",
+                    "presence": "required",
+                    "meaning": "HTTP status including non-2xx",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Headers",
+                    "type": "object",
+                    "presence": "conditional",
+                    "meaning": "response headers",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ElapsedMilliseconds",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "request stopwatch",
+                    "origin": "measured"
+                  }
+                ]
+              },
+              {
+                "condition": "bearer resolution, network/HTTP exception or retry exhaustion",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "sends configured HTTP request; TargetPath writes local file"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Head'",
+                "line": 55,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Non-2xx can still return success Signal in status mode; check StatusCode explicitly. No live endpoint was called."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "Post",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "RestCondenser",
+            "support": "implemented",
+            "when": "Config.Method selects actual HTTP method; activity name is validated but is not method selection",
+            "outcomes": [
+              {
+                "condition": "HTTP call returns and ReturnHttpStatus=false",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "response body native value"
+              },
+              {
+                "condition": "Config.TargetPath download completes",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "local target path",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "HTTP call returns and ReturnHttpStatus=true",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Hashtable",
+                "shape": [
+                  {
+                    "path": "Response",
+                    "type": "provider response",
+                    "presence": "conditional",
+                    "meaning": "response body",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Url",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "final URL",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Method",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "actual Config.Method",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "ResourceName",
+                    "type": "String",
+                    "presence": "conditional",
+                    "meaning": "resolved resource",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Success",
+                    "type": "Boolean",
+                    "presence": "required",
+                    "meaning": "constant true after HTTP invocation",
+                    "origin": "constant"
+                  },
+                  {
+                    "path": "StatusCode",
+                    "type": "Int32",
+                    "presence": "required",
+                    "meaning": "HTTP status including non-2xx",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Headers",
+                    "type": "object",
+                    "presence": "conditional",
+                    "meaning": "response headers",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ElapsedMilliseconds",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "request stopwatch",
+                    "origin": "measured"
+                  }
+                ]
+              },
+              {
+                "condition": "bearer resolution, network/HTTP exception or retry exhaustion",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "sends configured HTTP request; TargetPath writes local file"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Post'",
+                "line": 55,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "\"Post\"",
+                "line": 126,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Non-2xx can still return success Signal in status mode; check StatusCode explicitly. No live endpoint was called."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "Put",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "RestCondenser",
+            "support": "implemented",
+            "when": "Config.Method selects actual HTTP method; activity name is validated but is not method selection",
+            "outcomes": [
+              {
+                "condition": "HTTP call returns and ReturnHttpStatus=false",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "response body native value"
+              },
+              {
+                "condition": "Config.TargetPath download completes",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "local target path",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "HTTP call returns and ReturnHttpStatus=true",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Hashtable",
+                "shape": [
+                  {
+                    "path": "Response",
+                    "type": "provider response",
+                    "presence": "conditional",
+                    "meaning": "response body",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Url",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "final URL",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Method",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "actual Config.Method",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "ResourceName",
+                    "type": "String",
+                    "presence": "conditional",
+                    "meaning": "resolved resource",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Success",
+                    "type": "Boolean",
+                    "presence": "required",
+                    "meaning": "constant true after HTTP invocation",
+                    "origin": "constant"
+                  },
+                  {
+                    "path": "StatusCode",
+                    "type": "Int32",
+                    "presence": "required",
+                    "meaning": "HTTP status including non-2xx",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Headers",
+                    "type": "object",
+                    "presence": "conditional",
+                    "meaning": "response headers",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ElapsedMilliseconds",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "request stopwatch",
+                    "origin": "measured"
+                  }
+                ]
+              },
+              {
+                "condition": "bearer resolution, network/HTTP exception or retry exhaustion",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "sends configured HTTP request; TargetPath writes local file"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Put'",
+                "line": 55,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "\"Put\"",
+                "line": 114,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Non-2xx can still return success Signal in status mode; check StatusCode explicitly. No live endpoint was called."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "Patch",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "RestCondenser",
+            "support": "implemented",
+            "when": "Config.Method selects actual HTTP method; activity name is validated but is not method selection",
+            "outcomes": [
+              {
+                "condition": "HTTP call returns and ReturnHttpStatus=false",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "response body native value"
+              },
+              {
+                "condition": "Config.TargetPath download completes",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "local target path",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "HTTP call returns and ReturnHttpStatus=true",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Hashtable",
+                "shape": [
+                  {
+                    "path": "Response",
+                    "type": "provider response",
+                    "presence": "conditional",
+                    "meaning": "response body",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Url",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "final URL",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Method",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "actual Config.Method",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "ResourceName",
+                    "type": "String",
+                    "presence": "conditional",
+                    "meaning": "resolved resource",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Success",
+                    "type": "Boolean",
+                    "presence": "required",
+                    "meaning": "constant true after HTTP invocation",
+                    "origin": "constant"
+                  },
+                  {
+                    "path": "StatusCode",
+                    "type": "Int32",
+                    "presence": "required",
+                    "meaning": "HTTP status including non-2xx",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Headers",
+                    "type": "object",
+                    "presence": "conditional",
+                    "meaning": "response headers",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ElapsedMilliseconds",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "request stopwatch",
+                    "origin": "measured"
+                  }
+                ]
+              },
+              {
+                "condition": "bearer resolution, network/HTTP exception or retry exhaustion",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "sends configured HTTP request; TargetPath writes local file"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Patch'",
+                "line": 55,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Non-2xx can still return success Signal in status mode; check StatusCode explicitly. No live endpoint was called."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "Delete",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "RestCondenser",
+            "support": "implemented",
+            "when": "Config.Method selects actual HTTP method; activity name is validated but is not method selection",
+            "outcomes": [
+              {
+                "condition": "HTTP call returns and ReturnHttpStatus=false",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "response body native value"
+              },
+              {
+                "condition": "Config.TargetPath download completes",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "local target path",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "HTTP call returns and ReturnHttpStatus=true",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Hashtable",
+                "shape": [
+                  {
+                    "path": "Response",
+                    "type": "provider response",
+                    "presence": "conditional",
+                    "meaning": "response body",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Url",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "final URL",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Method",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "actual Config.Method",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "ResourceName",
+                    "type": "String",
+                    "presence": "conditional",
+                    "meaning": "resolved resource",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Success",
+                    "type": "Boolean",
+                    "presence": "required",
+                    "meaning": "constant true after HTTP invocation",
+                    "origin": "constant"
+                  },
+                  {
+                    "path": "StatusCode",
+                    "type": "Int32",
+                    "presence": "required",
+                    "meaning": "HTTP status including non-2xx",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Headers",
+                    "type": "object",
+                    "presence": "conditional",
+                    "meaning": "response headers",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ElapsedMilliseconds",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "request stopwatch",
+                    "origin": "measured"
+                  }
+                ]
+              },
+              {
+                "condition": "bearer resolution, network/HTTP exception or retry exhaustion",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "sends configured HTTP request; TargetPath writes local file"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Delete'",
+                "line": 55,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Non-2xx can still return success Signal in status mode; check StatusCode explicitly. No live endpoint was called."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "Options",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "RestCondenser",
+            "support": "implemented",
+            "when": "Config.Method selects actual HTTP method; activity name is validated but is not method selection",
+            "outcomes": [
+              {
+                "condition": "HTTP call returns and ReturnHttpStatus=false",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "response body native value"
+              },
+              {
+                "condition": "Config.TargetPath download completes",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "local target path",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "HTTP call returns and ReturnHttpStatus=true",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Hashtable",
+                "shape": [
+                  {
+                    "path": "Response",
+                    "type": "provider response",
+                    "presence": "conditional",
+                    "meaning": "response body",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Url",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "final URL",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Method",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "actual Config.Method",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "ResourceName",
+                    "type": "String",
+                    "presence": "conditional",
+                    "meaning": "resolved resource",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Success",
+                    "type": "Boolean",
+                    "presence": "required",
+                    "meaning": "constant true after HTTP invocation",
+                    "origin": "constant"
+                  },
+                  {
+                    "path": "StatusCode",
+                    "type": "Int32",
+                    "presence": "required",
+                    "meaning": "HTTP status including non-2xx",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Headers",
+                    "type": "object",
+                    "presence": "conditional",
+                    "meaning": "response headers",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ElapsedMilliseconds",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "request stopwatch",
+                    "origin": "measured"
+                  }
+                ]
+              },
+              {
+                "condition": "bearer resolution, network/HTTP exception or retry exhaustion",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "sends configured HTTP request; TargetPath writes local file"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Options'",
+                "line": 55,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Non-2xx can still return success Signal in status mode; check StatusCode explicitly. No live endpoint was called."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    }
+  ]
+}

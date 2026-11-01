@@ -1,0 +1,80 @@
+{
+  "name": "HydrationCondenser",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/HydrationCondenser.ps1",
+      "sha256": "567090D05741B85C35F436737A598B059B8905C1A39F840D9CBAD0B089B46D9A"
+    },
+    {
+      "id": "s2",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Hydration/Invoke-ApplyHydrationCondenser.ps1",
+      "sha256": "8A0BEC021956DAF8DFEF236AB071DC5CB5F7ACBAE3DB7575361106EC00984A54"
+    },
+    {
+      "id": "s3",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedCondenserAdapter.ps1",
+      "sha256": "CDB170DE2EB8292E350DD924703F26EF17E4839B85120D183A138221826C939E"
+    }
+  ],
+  "activities": [
+    {
+      "name": "Invoke",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "HydrationCondenser",
+            "support": "implemented",
+            "when": "delegates supplied hydration plan",
+            "outcomes": [
+              {
+                "condition": "hydration helper succeeds",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "hydrated native value"
+              },
+              {
+                "condition": "hydration helper fails",
+                "signalState": "conditional",
+                "hasResult": "conditional",
+                "resultType": "helper result or absent",
+                "limitations": "leaf does not merge helper failure before SetResult(GetResult)"
+              }
+            ],
+            "sideEffects": [
+              "may hydrate selected object content"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Invoke'",
+                "line": 42,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 14,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"Invoke\"",
+                "line": 118,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    }
+  ]
+}

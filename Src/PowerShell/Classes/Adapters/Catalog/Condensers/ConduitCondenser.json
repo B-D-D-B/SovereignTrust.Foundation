@@ -5,11 +5,19 @@
   "activities": [
     {
       "name": "Process",
+      "whenToUse": "Use to dispatch ForEachAdapter and ForEachActivity over the grid selected by ForEachPath. Omit or disable SupportParallelism for serial processing; Config.ResultDetail=true returns serial dispatch counts and keys after every child returns a nonfailed Signal.",
       "description": "Process a plan through a conduit.",
       "properties": [
         {
+          "path": "Config.ResultDetail",
+          "description": "Optional native Boolean. True returns serial child-dispatch counts and grid keys; absent/false preserves ItemSignal. True with SupportParallelism or invalid type fails before child effects.",
+          "whenToUse": "Set native Boolean true when serial dispatch counts and completed grid keys are needed. Omit or use false to return the source ItemSignal; true requires SupportParallelism absent or native Boolean false and rejects parallel execution before child effects.",
+          "adapters": ["ConduitCondenser"]
+        },
+        {
           "path": "ForEachActivity",
           "description": "Provide the activity copied into the per-item dispatch plan.",
+          "whenToUse": "Supply the activity to use for grid-item dispatch. It is copied directly into the cloned Activity field before the process helper runs.",
           "adapters": [
             "ConduitCondenser"
           ]
@@ -17,6 +25,7 @@
         {
           "path": "ForEachActivity",
           "description": "Resolve the per-item activity after forwarding it into the cloned Activity field.",
+          "whenToUse": "Set the per-item activity explicitly when a specific operation is required. The helper resolves the forwarded Activity with a Read fallback; the original Plan.Activity is overwritten during cloning.",
           "adapters": [
             "ConduitCondenser"
           ],
@@ -27,6 +36,7 @@
         {
           "path": "ForEachAdapter",
           "description": "Choose the mapped adapter for each grid item.",
+          "whenToUse": "Supply the mapped adapter route used for the grid items. It replaces Adapter in the dispatch clone before the helper selects its route.",
           "adapters": [
             "ConduitCondenser"
           ]
@@ -34,6 +44,7 @@
         {
           "path": "ForEachPath",
           "description": "Select the ItemSignal grid to process.",
+          "whenToUse": "Supply the path in ItemSignal that resolves the source graph whose Grid entries should be processed.",
           "adapters": [
             "ConduitCondenser"
           ]
@@ -41,6 +52,7 @@
         {
           "path": "Name",
           "description": "Name the process signal and iteration tracing.",
+          "whenToUse": "Provide an identifying name for the process-entry signal and iteration tracing before a grid item result becomes the local plan.",
           "adapters": [
             "ConduitCondenser"
           ]
@@ -48,6 +60,7 @@
         {
           "path": "Phase",
           "description": "Preserve the parent-phase reference while cloning.",
+          "whenToUse": "Retain the framework parent-phase reference when present. The clone helper temporarily detaches it, then restores the same reference on the original and cloned plans; omit it when no parent phase is attached.",
           "adapters": [
             "ConduitCondenser"
           ]
@@ -55,6 +68,7 @@
         {
           "path": "Plan",
           "description": "Preserve the parent-plan reference while cloning.",
+          "whenToUse": "Retain the framework parent-plan reference when present. The clone helper temporarily detaches it, then restores the same reference on the original and cloned plans; omit it when no parent plan is attached.",
           "adapters": [
             "ConduitCondenser"
           ]
@@ -62,6 +76,7 @@
         {
           "path": "SupportParallelism",
           "description": "Choose the serial versus parallel conduit branch.",
+          "whenToUse": "Omit or use false for serial processing; a one-item grid also uses the serial path. True selects the separate parallel path for other grid sizes and cannot be combined with Config.ResultDetail=true.",
           "adapters": [
             "ConduitCondenser"
           ],
@@ -69,15 +84,60 @@
             "ConduitCondenser": false
           }
         }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "Signal",
+          "description": "Source grid ItemSignal [computed] after all serial children succeed when Config.ResultDetail is absent/false.",
+          "adapters": [
+            "ConduitCondenser"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "PSCustomObject",
+          "description": "Config.ResultDetail=true only after every serial child returns a nonfailed Signal; no success detail on failure.",
+          "adapters": ["ConduitCondenser"]
+        },
+        {
+          "path": "$.AttemptedCount",
+          "type": "Int32",
+          "description": "Number of child invocations started in serial; a failing attempt produces no public detail.",
+          "adapters": ["ConduitCondenser"]
+        },
+        {
+          "path": "$.CompletedCount",
+          "type": "Int32",
+          "description": "Number of nonfailed child Signals returned; independent marker verifies domain effect.",
+          "adapters": ["ConduitCondenser"]
+        },
+        {
+          "path": "$.Items[*].Key",
+          "type": "String",
+          "description": "Copied source Grid key for each completed child in serial order.",
+          "adapters": ["ConduitCondenser"]
+        },
+        {
+          "path": "$.Items[*].Completed",
+          "type": "Boolean",
+          "description": "True for each returned nonfailed child, not proof of its intended effect.",
+          "adapters": ["ConduitCondenser"]
+        }
+      ],
+      "resultNotes": [
+        "ConduitCondenser: Serial child failure now fails Process and suppresses a success Result; normal mapped failure carries no Result. A nonfailed child and detail count do not prove its intended node effect."
       ]
     },
     {
       "name": "Graph",
+      "whenToUse": "Use to turn the array selected by Path in ItemSignal into a graph keyed by NamePath, which defaults to Name. The final Path segment supplies the graph name.",
       "description": "Build a phase graph.",
       "properties": [
         {
           "path": "Name",
           "description": "Name the graph-plan signal and diagnostic messages.",
+          "whenToUse": "Supply a name for GraphPlan signal identity and diagnostics. The resulting graph name comes from the final segment of Path.",
           "adapters": [
             "ConduitCondenser"
           ]
@@ -85,6 +145,7 @@
         {
           "path": "NamePath",
           "description": "Select the identifier field in each source-array item.",
+          "whenToUse": "Set the field path used to resolve each selected item identifier when it differs from Name; omit this property to use the Name default.",
           "adapters": [
             "ConduitCondenser"
           ],
@@ -95,11 +156,24 @@
         {
           "path": "Path",
           "description": "Select the ItemSignal array and derive the graph name from the final path segment.",
+          "whenToUse": "Supply the ItemSignal path selecting the source array. Its final dot-delimited segment is also used to name the graph.",
           "adapters": [
             "ConduitCondenser"
           ]
         }
-      ]
+      ],
+      "result": [
+        {
+          "path": "Result",
+          "type": "Graph",
+          "description": "resolved graph inside nested Signal [computed]. When graph creation from formula source; graph helper returns nested graph Signal.",
+          "adapters": [
+            "ConduitCondenser"
+          ]
+        }
+      ],
+      "resultNotes": []
     }
-  ]
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Condensers/ConduitCondenser.json","version":1}
 }

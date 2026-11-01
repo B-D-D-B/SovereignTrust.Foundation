@@ -5,21 +5,52 @@
   "activities": [
     {
       "name": "ST",
+      "whenToUse": "Use to forward the plan to the registered Conduction.ST adapter; downstream plan requirements still apply even though this activity declares no local input properties. A failed delegate can be invoked a second time.",
       "description": "Invoke a SovereignTrust conduction plan.",
-      "properties": []
+      "properties": [],
+      "result": [],
+      "resultNotes": [
+        "Successful mapped ST invocation has no public Result: MappedConductionAdapter drops the delegated result.",
+        "A failed delegate yields a failed Signal with no Result; ConductionCondenser.ST can invoke that delegate twice."
+      ]
     },
     {
       "name": "Sleep",
+      "whenToUse": "Use for a synchronous delay of Config.Duration seconds. The result reports measured duration and a tolerance match; Matched can be false even when the Signal succeeds.",
       "description": "Pause for Config.Duration seconds and return ActualDuration (measured seconds) and Matched (absolute difference <= 0.1 seconds, inclusive). Scheduling delay can yield Matched=false without an adapter failure.",
       "properties": [
         {
           "path": "Config.Duration",
           "description": "Required finite, nonnegative number of seconds; zero is permitted.",
+          "whenToUse": "Supply a finite, nonnegative numeric value in seconds when using Sleep; zero is allowed. Numeric strings and Booleans are rejected.",
           "adapters": [
             "ConductionCondenser"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "ActualDuration",
+          "type": "Double",
+          "description": "Stopwatch-measured elapsed seconds.",
+          "adapters": [
+            "ConductionCondenser"
+          ]
+        },
+        {
+          "path": "Matched",
+          "type": "Boolean",
+          "description": "True when the absolute difference between ActualDuration and requested Duration is at most 0.1 seconds.",
+          "adapters": [
+            "ConductionCondenser"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Matched=false can accompany a successful Signal; it is a timing-domain mismatch.",
+        "Missing or invalid Duration, or a Start-Sleep exception, fails the Signal without Result."
       ]
     }
-  ]
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Condensers/ConductionCondenser.json","version":1}
 }

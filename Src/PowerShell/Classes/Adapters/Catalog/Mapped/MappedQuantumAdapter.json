@@ -1,5 +1,7 @@
 {
   "name": "MappedQuantumAdapter",
   "activities": [],
-  "concreteAdapters": []
+  "concreteAdapters": [],
+  "resultContractRef": {"file":"../../ResultContracts/Mapped/MappedQuantumAdapter.json","version":1},
+  "resultInventorySummary": {"status":"no-declared-activities","detail":"This catalog declares no activity Result fields."}
 }

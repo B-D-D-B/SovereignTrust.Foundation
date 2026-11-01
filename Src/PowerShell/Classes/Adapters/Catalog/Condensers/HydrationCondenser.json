@@ -5,11 +5,13 @@
   "activities": [
     {
       "name": "Invoke",
+      "whenToUse": "Use to run the supplied HydrationPlan against the current Signal and ItemSignal. The helper interprets each character as a dispatch step; unknown symbols are warned and skipped. The default ^ recursively calls the same plan, so it does not establish safe fixed-point completion.",
       "description": "Invoke a condenser operation.",
       "properties": [
         {
           "path": "HydrationPlan",
-          "description": "Choose the sequence of hydration dispatch symbols; ^ repeats hydration until the compared result stabilizes.",
+          "whenToUse": "Supply an explicit sequence of current dispatch symbols (*, @, +, -, ~, #, $) for the desired mapped slots. Omission defaults to ^, whose branch recurses with the unchanged Plan and can fail to terminate; do not assume it converges.",
+          "description": "Choose the hydration dispatch symbols; ^ recursively reuses the same Plan and may not terminate.",
           "adapters": [
             "HydrationCondenser"
           ],
@@ -17,7 +19,19 @@
             "HydrationCondenser": "^"
           }
         }
-      ]
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "hydrated native value",
+          "description": "When delegates supplied hydration plan; hydration helper succeeds (Result presence conditional).",
+          "adapters": [
+            "HydrationCondenser"
+          ]
+        }
+      ],
+      "resultNotes": []
     }
-  ]
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Condensers/HydrationCondenser.json","version":1}
 }

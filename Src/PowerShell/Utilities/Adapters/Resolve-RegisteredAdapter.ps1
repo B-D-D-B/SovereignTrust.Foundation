@@ -1,7 +1,6 @@
 function Resolve-RegisteredAdapter {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory)]
         [object]$Registration,
 
         [Parameter(Mandatory)]

@@ -1,0 +1,993 @@
+{
+  "name": "MappedTokenAdapter",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedTokenAdapter.ps1",
+      "sha256": "D347BC6E53C756C063FE098A63DFC94B1AEB6B9C4182E32ACE86EA6C8AAB7C2F"
+    },
+    {
+      "id": "s2",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Dynamic.ps1",
+      "sha256": "992836A9C2E6ED8BF1378DAC27F160CD39CDD005BABCAF1A0BA96861D3F17CC1"
+    },
+    {
+      "id": "s3",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Dynamic/Resolve-TokenDynamic.ps1",
+      "sha256": "5BBB2781CA0501CA02E51DABFC280B05D6CA069C89B14E12AF841AF5857703D3"
+    },
+    {
+      "id": "s4",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Environment.ps1",
+      "sha256": "BF7359E73D206A625380AAB157F44330EA263E78B86361F50DBBB927F322DF65"
+    },
+    {
+      "id": "s5",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenEnvironment.ps1",
+      "sha256": "DE3C9D92E1838CC475CA6C92B86A8177118F6E903B6380D6F18B65B17BDA7F4D"
+    },
+    {
+      "id": "s6",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_System.ps1",
+      "sha256": "431B6A8E15E1AA59A86CED2F9DBFD453F3E5E42DBDC8F31F1099B8CCC2D81CCE"
+    },
+    {
+      "id": "s7",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenSystem.ps1",
+      "sha256": "44F4EBE6D3D79B930CC97113EA4CC6B89F1ACEA7B7872F1C792F49DE1914AADA"
+    },
+    {
+      "id": "s8",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Formatter.ps1",
+      "sha256": "927B92C95919BFC832052C4AC118D5254477CB53634647863DA9CC1E9C1574E0"
+    },
+    {
+      "id": "s9",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenFormatter.ps1",
+      "sha256": "CF1CCF4D7B7D3638DDD745900F445E2B7B3F8DA418618981354DF488BF86C62A"
+    },
+    {
+      "id": "s10",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenFormatterJson.ps1",
+      "sha256": "6C5E02575660106202781EB5FC57B66EB764AC7F4250EDED7540A6306B27E567"
+    },
+    {
+      "id": "s11",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenFormatterString.ps1",
+      "sha256": "9D762A4075D8248C2FBECC2A583A3FD75A1C40A14B99947371C526E033D0B4AF"
+    },
+    {
+      "id": "s12",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenFormatterFilePath.ps1",
+      "sha256": "7A081F7EA4407CADEBEAE0DAAD84F5EB0B4B6FBD79E1A34DFCAB99DF94EE26FF"
+    },
+    {
+      "id": "s13",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenFormatterVirtualFolder.ps1",
+      "sha256": "59295D209EA9B15752A4D8660F79D4E9D472AD7DF301DADFC59E5E1D43E4C052"
+    },
+    {
+      "id": "s14",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Memory.ps1",
+      "sha256": "19364F0AF05E64FFA6A2190CAF33F72ECEF7F497FCD66329ECE6F1918C1E2C9C"
+    },
+    {
+      "id": "s15",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenMemory.ps1",
+      "sha256": "7972409BA55CEB2DB691792C05D00C5770174097426CD554BA66826CF6798A7C"
+    },
+    {
+      "id": "s16",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Storage.ps1",
+      "sha256": "9122F07FF8BE2082845A0D21BDBC6533B6E2F9B0E3D7BECF74E0574A6CDE4173"
+    },
+    {
+      "id": "s17",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenStorage.ps1",
+      "sha256": "669F7C0355B655B79C28D2F7C8C78D18967A0877709E426231ABE24E249AE761"
+    },
+    {
+      "id": "s18",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Generator.ps1",
+      "sha256": "EC1B964E8395CEED775021B0DA076881AFC5CBC842B827797757222FC88B56B1"
+    },
+    {
+      "id": "s19",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenGenerator.ps1",
+      "sha256": "F7959D17C5E7F420FE6EC9D359C950CBBD4F5D8110F58BDCD36A84692A4586CD"
+    },
+    {
+      "id": "s20",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Navigator.ps1",
+      "sha256": "0FD36253012306CBF8853B017C4AAC45F8268CBA09EF008CB32C34C5D6FAB63A"
+    },
+    {
+      "id": "s21",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenNavigator.ps1",
+      "sha256": "EDBD1EAF98D092566276CEA767C27E5730373EE75E0EC0ACDA1B869277478C73"
+    },
+    {
+      "id": "s22",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Conduction.ps1",
+      "sha256": "C2A7EB89F55A9641224DCB3D0C8AC27F1FA2B5DCBBDB9F4A9A38F40924B1E391"
+    },
+    {
+      "id": "s23",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenConduction.ps1",
+      "sha256": "44457569A9F6CCD6279740E278E94D537F96E9E0A623B2F2C28AAD06980F90D2"
+    },
+    {
+      "id": "s24",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Token_SDA.psm1",
+      "sha256": "50E786591DAA86D543ADC4E261F2562FA2F6368382750E0F310B9D386968890E"
+    },
+    {
+      "id": "s25",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Invoke-TokenSDA.ps1",
+      "sha256": "217AF8DA9A9FE8CE1C1F4CD5176AC0912319BF8237C2F92E5E00E6C27487CE64"
+    },
+    {
+      "id": "s26",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/SDAImageDimensions/Invoke-SDAImageDimensions.ps1",
+      "sha256": "2DBB7463DB9C721E1AC419F7D082F0EAD6A756BDB93B5B33D424A564BF7B0380"
+    },
+    {
+      "id": "s27",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/Enrollment/Invoke-SDAEntityLevel.ps1",
+      "sha256": "10B5CF8543D16C8266797F03C46463A5E871B99FEB5BF0F6092CC74091C1DC53"
+    },
+    {
+      "id": "s28",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/Enrollment/Invoke-SDAEnrollment.ps1",
+      "sha256": "37DAAC36AE2A72D3BEC4BD4772DDC8CEEE4595661D3DB793E95A55441BA740FC"
+    },
+    {
+      "id": "s29",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/WeatherVaults/Invoke-SDAWeatherVaults.ps1",
+      "sha256": "A9C4FF6E9E0CA3673EB26AEAE454EC62C26F3C3749B71ACD4B7E052B42E42711"
+    },
+    {
+      "id": "s30",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/WeatherVaults/Add-WeatherVaultsWeather.ps1",
+      "sha256": "38A8D96E576EF46F2316109BD5C293FA86FC767C0F0713F0D2B0901ACC626BBA"
+    },
+    {
+      "id": "s31",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/Lineage/Add-SDALineage.ps1",
+      "sha256": "1A27EF5922C61D53F33C00A8CF6EDFC5207516643CEAFF60CF0A6EF81360CC2E"
+    },
+    {
+      "id": "s32",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/SDAAIContext/Add-SDAAIContext.ps1",
+      "sha256": "63DB3C45A13D1FE0F2AB105061D19B50E6A1DA8E0A71451C1EED525D8C5E10F6"
+    },
+    {
+      "id": "s33",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/SDAID/Add-SDAID.ps1",
+      "sha256": "0DF0ED7DC8E2CEC404D38110FAE8E1991DB206C8F9E8B56DC67632EFD8F92881"
+    },
+    {
+      "id": "s34",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/SDAOCIID/Add-SDAOCIID.ps1",
+      "sha256": "52AEA2B09286C5AC5661987E1C4401C447CB01DD16708B1AC51BF525FC4071F6"
+    },
+    {
+      "id": "s35",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/SDAOCIID/Invoke-EnrollItemIcondentity.ps1",
+      "sha256": "53500D6B437720A40E51B9313F0D19B476EDD8BF358A6622E4C047D89FC870A0"
+    },
+    {
+      "id": "s36",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/SDAOCIID/Get-SeedFromOrdinals.ps1",
+      "sha256": "76634547B867B6789062D63C527F1ADA6CECC7A6130AAD1608D0B06D48E3D332"
+    },
+    {
+      "id": "s37",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Process/SDARefTag/Add-SDARefTag.ps1",
+      "sha256": "D99F32B9E77B9BF9E8F18F4035FA9FDBE3CA27B7F9FB8AA92A27094C8932F80A"
+    }
+  ],
+  "activities": [
+    {
+      "name": "Get",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "common": {
+          "selection": "Path first segment chooses concrete token adapter; Slot does not select implementation. Successful HasResult only is copied to mapped Signal."
+        },
+        "variants": [
+          {
+            "adapter": "Token_Dynamic",
+            "support": "implemented",
+            "when": "Dynamic expression function name in Path/Key selects branch; Config.Operator does not dispatch",
+            "outcomes": [
+              {
+                "condition": "Equals/NotEquals",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Boolean or matching collection elements",
+                "limitations": "PowerShell -eq/-ne are case-insensitive for strings and collection LHS can emit elements"
+              },
+              {
+                "condition": "In/NotIn, IsNull/IsNotNull, Gt/Lt, normalized Not/And/Or",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Boolean"
+              },
+              {
+                "condition": "Add/Subtract/ToInt converts operands to Int32",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Int32"
+              },
+              {
+                "condition": "If branch",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "selected native typed-reference value or text; false literal null becomes absent"
+              },
+              {
+                "condition": "ToArray returns enumerable copy or literal-delimiter split",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Object[]"
+              },
+              {
+                "condition": "JoinArrays joins inner arrays without inner delimiter, then outer values with supplied delimiter",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String"
+              },
+              {
+                "condition": "FromJson/Guid/NewGuid/LocalToUtc and text branches",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "native parsed value/String/DateTime"
+              },
+              {
+                "condition": "Null branch",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "unsupported operator, invalid conversion or missing path",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Get'",
+                "line": 81,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "'Get'",
+                "line": 50,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "'Get'",
+                "line": 303,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "In/NotIn are overlap tests; not exact-set identity, deduplication or cardinality."
+          },
+          {
+            "adapter": "Token_Environment",
+            "support": "implemented",
+            "when": "explicit process/user/machine scope or default process→user→machine fallback",
+            "outcomes": [
+              {
+                "condition": "value found, including explicit-scope empty String",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "environment value",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "all scopes return null",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "invalid path or resolver failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Get'",
+                "line": 81,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "'Get'",
+                "line": 50,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Only default fallback treats empty string as false and tries the next scope; explicit scope retains empty string."
+          },
+          {
+            "adapter": "Token_System",
+            "support": "implemented",
+            "when": "System path uses shared environment helper",
+            "outcomes": [
+              {
+                "condition": "helper resolves value",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "String"
+              },
+              {
+                "condition": "invalid path",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Get'",
+                "line": 81,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "'Get'",
+                "line": 50,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s7",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Helper strips Environment prefix rather than System; System-prefixed paths can miss."
+          },
+          {
+            "adapter": "Token_Formatter",
+            "support": "implemented",
+            "when": "Path formatter branch chooses JSON serialize/parse or path formatting",
+            "outcomes": [
+              {
+                "condition": "JSON encode branch",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String"
+              },
+              {
+                "condition": "JSON decode branch",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "native JSON value; JSON null is absent"
+              },
+              {
+                "condition": "FilePath/VirtualFolder/String branch",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String"
+              },
+              {
+                "condition": "bad format/path input",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Get'",
+                "line": 81,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s8",
+                "symbol": "'Get'",
+                "line": 50,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s9",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s10",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s11",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s12",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s13",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ]
+          },
+          {
+            "adapter": "Token_Memory",
+            "support": "implemented",
+            "when": "item graph path resolution; optional textual default",
+            "outcomes": [
+              {
+                "condition": "path resolves",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "native value including false, zero or empty string"
+              },
+              {
+                "condition": "default supplied",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "textual default value"
+              },
+              {
+                "condition": "path unresolved with no default; warning only",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "empty inner path typo or resolver failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Get'",
+                "line": 81,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s14",
+                "symbol": "'Get'",
+                "line": 50,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s15",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Empty inner path invokes misspelled $opSlignal.SetResult and catches technical failure."
+          },
+          {
+            "adapter": "Token_Storage",
+            "support": "implemented",
+            "when": "Path selects delegated mapped storage verb",
+            "outcomes": [
+              {
+                "condition": "delegated storage succeeds",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "selected storage result"
+              },
+              {
+                "condition": "delegated storage fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "may perform storage writes/deletes depending on selected path"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Get'",
+                "line": 81,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s16",
+                "symbol": "'Get'",
+                "line": 50,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s17",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Token Get is not intrinsically read-only."
+          },
+          {
+            "adapter": "Token_Generator",
+            "support": "unknown",
+            "when": "helper references System.Generator API not defined in checked-in source trees",
+            "outcomes": [
+              {
+                "condition": "helper call",
+                "signalState": "unknown",
+                "hasResult": "unknown",
+                "resultType": "unknown",
+                "unresolved": "referenced System API implementation is absent from checked-in source; bind packaged command or correct source before claiming output"
+              },
+              {
+                "condition": "unresolved command or delegate failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Get'",
+                "line": 81,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s18",
+                "symbol": "'Get'",
+                "line": 50,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s19",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "No generated/navigation/conduction result is asserted from the class wrapper alone."
+          },
+          {
+            "adapter": "Token_Navigator",
+            "support": "unknown",
+            "when": "helper references System.Navigator API not defined in checked-in source trees",
+            "outcomes": [
+              {
+                "condition": "helper call",
+                "signalState": "unknown",
+                "hasResult": "unknown",
+                "resultType": "unknown",
+                "unresolved": "referenced System API implementation is absent from checked-in source; bind packaged command or correct source before claiming output"
+              },
+              {
+                "condition": "unresolved command or delegate failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Get'",
+                "line": 81,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s20",
+                "symbol": "'Get'",
+                "line": 50,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s21",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "No generated/navigation/conduction result is asserted from the class wrapper alone."
+          },
+          {
+            "adapter": "Token_Conduction",
+            "support": "unknown",
+            "when": "helper references System.Conduction API not defined in checked-in source trees",
+            "outcomes": [
+              {
+                "condition": "helper call",
+                "signalState": "unknown",
+                "hasResult": "unknown",
+                "resultType": "unknown",
+                "unresolved": "referenced System API implementation is absent from checked-in source; bind packaged command or correct source before claiming output"
+              },
+              {
+                "condition": "unresolved command or delegate failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Get'",
+                "line": 81,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s22",
+                "symbol": "'Get'",
+                "line": 50,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s23",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "No generated/navigation/conduction result is asserted from the class wrapper alone."
+          },
+          {
+            "adapter": "Token_SDA",
+            "support": "implemented",
+            "when": "Path second segment selects SDA handler and third segment selects operation",
+            "outcomes": [
+              {
+                "condition": "Enrollment branch",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "serialized descendant/suffix object; zero suffix values are constants, not counts",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "EntityLevel branch maps Platform=-1 through Artifact=7",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Int32"
+              },
+              {
+                "condition": "WeatherVaults branch",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "selected weather native object",
+                "limitations": "selects closest Config.Hours datetime and injects Config.Stations into selected object; not a provider measurement"
+              },
+              {
+                "condition": "ImageDimensions branch",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "PSCustomObject",
+                "shape": [
+                  {
+                    "path": "Width",
+                    "type": "Int32",
+                    "presence": "required",
+                    "meaning": "decoded image width",
+                    "origin": "measured"
+                  },
+                  {
+                    "path": "Height",
+                    "type": "Int32",
+                    "presence": "required",
+                    "meaning": "decoded image height",
+                    "origin": "measured"
+                  },
+                  {
+                    "path": "AspectRatio",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "formatted ratio",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "AspectRatioDecimal",
+                    "type": "Number",
+                    "presence": "required",
+                    "meaning": "ratio",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "Lineage/ELineage branch",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "PSCustomObject or nested Object[]",
+                "shape": [
+                  {
+                    "path": "<ancestor>.Level",
+                    "type": "String",
+                    "presence": "conditional",
+                    "meaning": "ancestor entity label",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "<ancestor>.Code",
+                    "type": "native copied value",
+                    "presence": "conditional",
+                    "meaning": "ancestor code",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "<ancestor>.ID",
+                    "type": "native copied value (String or Number)",
+                    "presence": "conditional",
+                    "meaning": "ancestor ID without string conversion",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "<ancestor>.FullName",
+                    "type": "native copied value",
+                    "presence": "conditional",
+                    "meaning": "ancestor full name",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "<ancestor>.RefTag",
+                    "type": "native copied value",
+                    "presence": "conditional",
+                    "meaning": "ancestor reference tag",
+                    "origin": "echoed-input"
+                  }
+                ]
+              },
+              {
+                "condition": "AIContext.HasPattern branch",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Boolean"
+              },
+              {
+                "condition": "AIContext content branch",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String; may be empty"
+              },
+              {
+                "condition": "ID branch",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "Int32 index or String code"
+              },
+              {
+                "condition": "OCIID.EID branch",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Int64",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "seed from ordinal conversion",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "OCIID.ECodeSet branch",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Object[] of emoji/code values"
+              },
+              {
+                "condition": "OCIID Config.UserEntry=%S returns without result",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "RefTag branch",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "native existing entry or String tag"
+              },
+              {
+                "condition": "EntityLevel unknown entity label sets null without Critical",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "unsupported path or handler failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "ID/OCIID/RefTag handlers can mutate persisted dictionaries"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Get'",
+                "line": 81,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s24",
+                "symbol": "Invoke",
+                "line": 2,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s25",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s26",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s27",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s28",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s29",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s30",
+                "symbol": "Add-WeatherVaultsWeather",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s31",
+                "symbol": "Add-SDALineage",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s32",
+                "symbol": "Invoke",
+                "line": 37,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s33",
+                "symbol": "Invoke",
+                "line": 59,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s34",
+                "symbol": "Invoke",
+                "line": 23,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s35",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s36",
+                "symbol": "Get-SeedFromOrdinals",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s37",
+                "symbol": "Invoke",
+                "line": 43,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Dispatcher requires at least three path segments. Unknown nonnull Enrollment EntityType has no default and can fail to terminate."
+          }
+        ]
+      }
+    }
+  ]
+}

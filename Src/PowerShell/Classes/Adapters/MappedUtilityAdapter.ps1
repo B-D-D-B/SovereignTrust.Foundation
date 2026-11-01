@@ -6,6 +6,7 @@ ActivityScope: AdapterAgnostic
 Activities:
 - Resize: Resize an image.
 - Overlay: Overlay one image on another.
+- Inspect: Read file bytes and optional bounded image pixels.
 ActivityValidation: OnInvoke, BeforeProviderResolution
 UnsupportedActivity: FailedSignal
 ActivityComparison: CaseInsensitive
@@ -83,7 +84,7 @@ class MappedUtilityAdapter {
 
         $opSignal = [Signal]::Start("MappedUtilityAdapter.Invoke:$Slot") | Select-Object -Last 1
 
-        if ($Activity -notin @('Resize', 'Overlay')) {
+        if ($Activity -notin @('Resize', 'Overlay', 'Inspect')) {
             $opSignal.LogCritical("Unsupported MappedUtilityAdapter activity: '$Activity'.")
             return $opSignal
         }

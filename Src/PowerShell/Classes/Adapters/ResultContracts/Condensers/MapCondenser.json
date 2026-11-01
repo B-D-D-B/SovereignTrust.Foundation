@@ -1,0 +1,164 @@
+{
+  "name": "MapCondenser",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/MapCondenser.ps1",
+      "sha256": "598B60A692FEF19878F0E1F4B326A06E64B670E3CBEA66768279287073FC4A05"
+    },
+    {
+      "id": "s2",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Map/Invoke-MapCondenser.ps1",
+      "sha256": "45EB83180FCE39F35BAF13F2403777807A604D1A2E524E671FD1405CE10E99FD"
+    },
+    {
+      "id": "s3",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedCondenserAdapter.ps1",
+      "sha256": "CDB170DE2EB8292E350DD924703F26EF17E4839B85120D183A138221826C939E"
+    },
+    {
+      "id": "s4",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Map/Invoke-DirectMapCondenser.ps1",
+      "sha256": "BB25B96B86A543643A8A42923BA024AFADA535953CFA2EA0437BA648E7A99468"
+    },
+    {
+      "id": "s5",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Map/MapCondenser.Shared.psm1",
+      "sha256": "C8814EA0D4660527F821CBA03EC206D24008C82140326675A42D77FBA8C94161"
+    }
+  ],
+  "activities": [
+    {
+      "name": "Invoke",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "MapCondenser",
+            "support": "implemented",
+            "when": "Plan mapping branch using ItemSignal",
+            "outcomes": [
+              {
+                "condition": "mapping succeeds",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "mapped value or Signal",
+                "limitations": "source may set original ItemSignal as Result; inspect at Signal boundary"
+              },
+              {
+                "condition": "source/message mapping fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "can mutate original ItemSignal"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Invoke'",
+                "line": 46,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"Invoke\"",
+                "line": 118,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Condenser helper failure is not consistently merged before result extraction."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "Map",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "MapCondenser",
+            "support": "implemented",
+            "when": "ordinary Plan supplies Config.ProposalPath to a Graph Signal or an existing caller supplies a Proposal Signal directly; optional Config.DataPath selects data proxy",
+            "outcomes": [
+              {
+                "condition": "valid Proposal Signal with Direct mode/Content and all selected substitutions resolve",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String",
+                "shape": [
+                  { "path": "$", "type": "String", "presence": "required", "meaning": "literal tag-substituted text, including false/zero/empty and dollar-containing values", "origin": "computed" }
+                ]
+              },
+              {
+                "condition": "Template mode selected",
+                "signalState": "conditional",
+                "hasResult": "conditional",
+                "resultType": "unknown",
+                "limitations": "existing Template helper may mutate Proposal.Content; not validated by Direct transport/literal repair"
+              },
+              {
+                "condition": "missing/incorrect ProposalPath, plain wrong object, missing Content/data, unsupported mode or helper failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "Direct mode uses an operation-local data proxy; original ItemSignal data and Proposal Signal are not mutated by Direct replacement",
+              "Template mode retains legacy Proposal.Content mutation behavior"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Map'",
+                "line": 98,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "literalReplacement",
+                "line": 54,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Get-MapCondenserVariableTags",
+                "line": 6,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Direct missing tag remains unresolved text and requires caller rejection when full substitution is expected. Template behavior is not established or made immutable by this fix."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    }
+  ]
+}

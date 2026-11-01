@@ -95,7 +95,7 @@ class MemoryCondenser {
 
                             # Perform Hydration
                             $StepHydrateResultSignal = Invoke-CondenserAdapter -Slot "Hydration" -Plan $HydrationPlan -Signal $ConductionSignal -ItemSignal $HydrationSignal | Select-Object -Last 1
-                            if ($opSignal.MergeSignalAndVerifyFailure($StepHydrateResultSignal)) { return $opSignal }
+                            if (    $opSignal.MergeSignalAndVerifyFailure($StepHydrateResultSignal)) { return $opSignal }
                             $step = $StepHydrateResultSignal.GetResult()
 
                             if ($breakSignal.GetResult()) {

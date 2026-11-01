@@ -1,0 +1,826 @@
+{
+  "name": "PlanCondenser",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/PlanCondenser.ps1",
+      "sha256": "33377A60FEA9CAFA089E0C62BD8E0EC380A4EF0C4A8925B1740FE3715854EE35"
+    },
+    {
+      "id": "s2",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedCondenserAdapter.ps1",
+      "sha256": "CDB170DE2EB8292E350DD924703F26EF17E4839B85120D183A138221826C939E"
+    },
+    {
+      "id": "s3",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Threading/STBackgroundTasks.ps1",
+      "sha256": "84729A5EB02270EE0EBBA8689D9237BBE11678AE60EFAAEF0D143D953089D617"
+    },
+    {
+      "id": "s4",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Plan/Complete-PlanPhaseTask.ps1",
+      "sha256": "9CA368FB3521387D731AB657A8DB33156140AEBA219098FEADF2F2D0990E049A"
+    }
+  ],
+  "activities": [
+    {
+      "name": "IteratePhase",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "PlanCondenser",
+            "support": "implemented",
+            "when": "serial or configured threaded phase execution",
+            "outcomes": [
+              {
+                "condition": "empty or completed iteration; no aggregate Result",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "invalid threading config, child phase or worker fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "runs child phase steps; may create background workers"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'IteratePhase'",
+                "line": 138,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "No aggregate child result at this public boundary."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "InvokePlan",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "PlanCondenser",
+            "support": "reserved",
+            "when": "declared placeholder branch",
+            "outcomes": [
+              {
+                "condition": "no plan invocation result is emitted",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'InvokePlan'",
+                "line": 138,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "InvokePhase",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "PlanCondenser",
+            "support": "implemented",
+            "when": "serial or configured threaded phase execution",
+            "outcomes": [
+              {
+                "condition": "phase completes; helper receipt is merged but not copied",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "invalid threading config, child phase or worker fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "runs child phase steps; may create background workers"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'InvokePhase'",
+                "line": 138,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "No aggregate child result at this public boundary."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "InvokePhaseAsync",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "PlanCondenser",
+            "support": "implemented",
+            "when": "parallel environment and task capacity configured",
+            "outcomes": [
+              {
+                "condition": "start helper returns task status",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "PSCustomObject",
+                "shape": [
+                  {
+                    "path": "TaskId",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "owned task identity",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "TaskName",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "configured task name",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "OwnerId",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "item owner identity",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "State",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "Queued/Running/Completed/Failed/Cancelled",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "CreatedUtc",
+                    "type": "DateTime",
+                    "presence": "required",
+                    "meaning": "creation time",
+                    "origin": "measured"
+                  },
+                  {
+                    "path": "StartedUtc",
+                    "type": "DateTime/null",
+                    "presence": "required",
+                    "meaning": "start time",
+                    "origin": "measured"
+                  },
+                  {
+                    "path": "CompletedUtc",
+                    "type": "DateTime/null",
+                    "presence": "required",
+                    "meaning": "completion time",
+                    "origin": "measured"
+                  }
+                ]
+              },
+              {
+                "condition": "environment/config/start fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "starts owned background phase"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'InvokePhaseAsync'",
+                "line": 138,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "ConvertTo-STBackgroundTaskStatus",
+                "line": 5,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "AwaitPhase",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "PlanCondenser",
+            "support": "implemented",
+            "when": "Plan.Path selects owned task ID; collision action Error/PreserveParent/OverwriteParent",
+            "outcomes": [
+              {
+                "condition": "task completion imported",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "PSCustomObject",
+                "shape": [
+                  {
+                    "path": "TaskId",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "owned task identity",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "TaskName",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "configured task name",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "OwnerId",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "item owner identity",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "State",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "Queued/Running/Completed/Failed/Cancelled",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "CreatedUtc",
+                    "type": "DateTime",
+                    "presence": "required",
+                    "meaning": "creation time",
+                    "origin": "measured"
+                  },
+                  {
+                    "path": "StartedUtc",
+                    "type": "DateTime/null",
+                    "presence": "required",
+                    "meaning": "start time",
+                    "origin": "measured"
+                  },
+                  {
+                    "path": "CompletedUtc",
+                    "type": "DateTime/null",
+                    "presence": "required",
+                    "meaning": "completion time",
+                    "origin": "measured"
+                  }
+                ]
+              },
+              {
+                "condition": "child task, unknown handle, collision or import fails before status SetResult",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "waits for task and imports selected result"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'AwaitPhase'",
+                "line": 138,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "ConvertTo-STBackgroundTaskStatus",
+                "line": 5,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Complete-PlanPhaseTask",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Optional native Int32/Int64 Config.TimeoutMilliseconds 1..300000 uses a monotonic cooperative polling budget; omitted retains legacy waiting. Existing synchronous task update/finalization is not hard-bounded. Failed wait returns no status/result before import. Imported child result is stored on ItemSignal graph, not returned as activity Result."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "AwaitAllPhases",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "PlanCondenser",
+            "support": "implemented",
+            "when": "waits all owned phase tasks",
+            "outcomes": [
+              {
+                "condition": "wait helper returns",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Object[]",
+                "shape": [
+                  {
+                    "path": "$[*].TaskId",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "owned task identity",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "$[*].TaskName",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "configured task name",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "$[*].OwnerId",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "item owner identity",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "$[*].State",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "Queued/Running/Completed/Failed/Cancelled",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "$[*].CreatedUtc",
+                    "type": "DateTime",
+                    "presence": "required",
+                    "meaning": "creation time",
+                    "origin": "measured"
+                  },
+                  {
+                    "path": "$[*].StartedUtc",
+                    "type": "DateTime/null",
+                    "presence": "required",
+                    "meaning": "start time",
+                    "origin": "measured"
+                  },
+                  {
+                    "path": "$[*].CompletedUtc",
+                    "type": "DateTime/null",
+                    "presence": "required",
+                    "meaning": "completion time",
+                    "origin": "measured"
+                  }
+                ]
+              },
+              {
+                "condition": "one owned wait fails or times out before import",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent",
+                "limitations": "Pending task IDs/states are in Critical evidence; no child Result is imported after failed wait."
+              }
+            ],
+            "sideEffects": [
+              "waits and imports owned task results"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'AwaitAllPhases'",
+                "line": 138,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "ConvertTo-STBackgroundTaskStatus",
+                "line": 5,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Optional native Int32/Int64 Config.TimeoutMilliseconds 1..300000 is shared across cooperative owned waits; omitted retains legacy waiting. Existing synchronous task update/finalization is not hard-bounded. A later import collision is not transactionally rolled back."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "GetPhaseStatus",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "PlanCondenser",
+            "support": "implemented",
+            "when": "Plan.Path selects task ID",
+            "outcomes": [
+              {
+                "condition": "status lookup succeeds",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "PSCustomObject",
+                "shape": [
+                  {
+                    "path": "TaskId",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "owned task identity",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "TaskName",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "configured task name",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "OwnerId",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "item owner identity",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "State",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "Queued/Running/Completed/Failed/Cancelled",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "CreatedUtc",
+                    "type": "DateTime",
+                    "presence": "required",
+                    "meaning": "creation time",
+                    "origin": "measured"
+                  },
+                  {
+                    "path": "StartedUtc",
+                    "type": "DateTime/null",
+                    "presence": "required",
+                    "meaning": "start time",
+                    "origin": "measured"
+                  },
+                  {
+                    "path": "CompletedUtc",
+                    "type": "DateTime/null",
+                    "presence": "required",
+                    "meaning": "completion time",
+                    "origin": "measured"
+                  }
+                ]
+              },
+              {
+                "condition": "missing or invalid task ID",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'GetPhaseStatus'",
+                "line": 138,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "ConvertTo-STBackgroundTaskStatus",
+                "line": 5,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "StopPhase",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "PlanCondenser",
+            "support": "implemented",
+            "when": "Plan.Path selects owned task ID",
+            "outcomes": [
+              {
+                "condition": "queued cancellation, observed active stop/close, or already-terminal no-op",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "PSCustomObject",
+                "shape": [
+                  {
+                    "path": "TaskId",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "owned task identity",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "TaskName",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "configured task name",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "OwnerId",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "item owner identity",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "State",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "Queued/Running/Completed/Failed/Cancelled",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "CreatedUtc",
+                    "type": "DateTime",
+                    "presence": "required",
+                    "meaning": "creation time",
+                    "origin": "measured"
+                  },
+                  {
+                    "path": "StartedUtc",
+                    "type": "DateTime/null",
+                    "presence": "required",
+                    "meaning": "start time",
+                    "origin": "measured"
+                  },
+                  {
+                    "path": "CompletedUtc",
+                    "type": "DateTime/null",
+                    "presence": "required",
+                    "meaning": "completion time",
+                    "origin": "measured"
+                  },
+                  {
+                    "path": "PriorState",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "registered task state at Stop entry",
+                    "origin": "measured"
+                  },
+                  {
+                    "path": "StopRequested",
+                    "type": "Boolean",
+                    "presence": "required",
+                    "meaning": "new queued cancellation or active stop request",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "StopCompleted",
+                    "type": "Boolean",
+                    "presence": "required",
+                    "meaning": "observed cancellation or active stop plus close completion",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "RunspaceClosed",
+                    "type": "Boolean/null",
+                    "presence": "required",
+                    "meaning": "true for queued no-runspace or observed close; null for terminal no-op",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "AlreadyTerminal",
+                    "type": "Boolean",
+                    "presence": "required",
+                    "meaning": "Stop found Completed, Failed or Cancelled and issued no request",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "unknown or incomplete task, completion pending finalization, or uncertain stop/close/dispose",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "stops/closes task resources"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'StopPhase'",
+                "line": 138,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "ConvertTo-STBackgroundTaskStatus",
+                "line": 5,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Queued work is cancelled without a scheduler update and stays registered for status/repeated Stop. A successful explicit Stop is acknowledged only for the final structured owner drain; direct Receive and explicit Await on Cancelled still fail. Failed or unacknowledged cancellation is not suppressed. Completed-running work is not relabelled Cancelled. Async Stop/Close has a cooperative 30000 ms bound; synchronous Dispose is not a hard wall-clock guarantee. Uncertain cleanup retains registered identity/handles."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "InsertPhaseSteps",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "PlanCondenser",
+            "support": "implemented",
+            "when": "phase/step path resolves and insertion position is valid",
+            "outcomes": [
+              {
+                "condition": "phase steps mutated",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "path or current step lookup fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "mutates in-memory phase steps"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'InsertPhaseSteps'",
+                "line": 138,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "PreventReclone iteration>1 may complete as no-op."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "AddPhaseSteps",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "PlanCondenser",
+            "support": "implemented",
+            "when": "phase/step path resolves and insertion position is valid",
+            "outcomes": [
+              {
+                "condition": "phase steps mutated",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "path or current step lookup fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "mutates in-memory phase steps"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'AddPhaseSteps'",
+                "line": 138,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "PreventReclone iteration>1 may complete as no-op."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    }
+  ]
+}

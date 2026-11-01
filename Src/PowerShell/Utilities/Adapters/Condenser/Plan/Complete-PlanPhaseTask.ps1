@@ -6,7 +6,8 @@ function Complete-PlanPhaseTask {
         [Signal]$Signal,
         [ValidateSet('Error', 'PreserveParent', 'OverwriteParent')]
         [string]$CollisionAction = 'Error',
-        [switch]$RemoveAfterReceive
+        [switch]$RemoveAfterReceive,
+        [ValidateRange(0, 300000)][int]$TimeoutMilliseconds = 0
     )
 
     $opSignal = [Signal]::Start('Complete-PlanPhaseTask', $Signal) | Select-Object -Last 1
@@ -14,10 +15,11 @@ function Complete-PlanPhaseTask {
         -TaskId $TaskId `
         -Signal $opSignal `
         -Wait `
-        -RemoveAfterReceive:$RemoveAfterReceive |
+        -RemoveAfterReceive:$RemoveAfterReceive `
+        -TimeoutMilliseconds $TimeoutMilliseconds |
         Select-Object -Last 1
     $null = $opSignal.MergeSignal($receiveSignal)
-    if (-not $receiveSignal.HasResult()) { return $opSignal }
+    if ($receiveSignal.Failure() -or -not $receiveSignal.HasResult()) { return $opSignal }
 
     $received = $receiveSignal.GetResult()
     $envelope = $received.CompletionEnvelope

@@ -115,9 +115,18 @@ class TransformCondenser {
                                     }
 
                                     #$null = Add-PathToDictionary -Dictionary $ContentPlan -Path "Config" -Value $node
+                                    try {
+                                        $templateJson = ConvertTo-Json -InputObject $content -Depth 100 -Compress -ErrorAction Stop
+                                        $nodeContent = ConvertFrom-Json -InputObject $templateJson -Depth 100 -NoEnumerate -ErrorAction Stop
+                                    }
+                                    catch {
+                                        $null = $opSignal.LogCritical("Failed to clone Project template for a node: $($_.Exception.Message)", $null, $_)
+                                        return $opSignal
+                                    }
+                                    $nodeTemplateSignal = [Signal]::Start("TransformCondenser.Project.NodeTemplate", $ItemSignal) | Select-Object -Last 1
+                                    $nodeTemplateSignal.SetResult($nodeContent)
                                     $HydrationSignal = [Signal]::Start("TransformCondenser.Invoke.Hydration") | Select-Object -Last 1
-                                    $SourceContentResultSignal.SetResult($content)
-                                    $HydrationSignal.SetJacket($SourceContentResultSignal)
+                                    $HydrationSignal.SetJacket($nodeTemplateSignal)
                                     $HydrationSignal.SetPointer($ItemSignal.GetPointer())
                                     $HydrationSignal.SetResult($node)
                                     
@@ -193,6 +202,45 @@ class TransformCondenser {
                 # Injects using a path to an xml or json object.
                 "Inject" {
                     $sourceSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.Content" | Select-Object -Last 1
+                    $config = $Plan.Config
+                    $hasIfPresent = $null -ne $config -and $(if ($config -is [System.Collections.IDictionary]) { $config.Contains('IfPresent') } else { $null -ne $config.PSObject.Properties['IfPresent'] })
+                    if ($hasIfPresent) {
+                        $ifPresent = if ($config -is [System.Collections.IDictionary]) { $config['IfPresent'] } else { $config.IfPresent }
+                        if ($ifPresent -isnot [string] -or $ifPresent -cne 'Error') {
+                            return $opSignal.LogCritical("Config.IfPresent supports only the exact string 'Error'.")
+                        }
+                        if ($sourceSignal.Failure() -or -not $sourceSignal.HasResult()) {
+                            return $opSignal.LogCritical('Inject Content is required for IfPresent=Error.')
+                        }
+                        if ($Plan.Path -cnotmatch '^\*\.\#\.([A-Za-z0-9_-]+)\.@\.([A-Za-z0-9_-]+)$') {
+                            return $opSignal.LogCritical('IfPresent=Error requires a single graph Result member target.')
+                        }
+                        $reservedSegments = @('Signal', 'Grid', 'Result', 'Pointer', 'Jacket', 'ReversePointer')
+                        if ($reservedSegments -icontains $Matches[1] -or $reservedSegments -icontains $Matches[2]) {
+                            return $opSignal.LogCritical('IfPresent=Error target segments must be literal members, not graph control words.')
+                        }
+                        $parentPath = "*.#.$($Matches[1]).@"
+                        $member = $Matches[2]
+                        $parentSignal = Resolve-PathFromDictionary -Dictionary $ItemSignal -Path $parentPath | Select-Object -Last 1
+                        if ($parentSignal.Failure() -or -not $parentSignal.HasResult()) {
+                            return $opSignal.LogCritical('IfPresent=Error target parent must already exist.')
+                        }
+                        $parent = $parentSignal.GetResult()
+                        if ($parent -is [System.Collections.IDictionary]) {
+                            if ($parent.Contains($member)) { return $opSignal.LogCritical("Inject target '$member' already exists.") }
+                        }
+                        elseif ($parent -is [pscustomobject]) {
+                            if ($null -ne $parent.PSObject.Properties[$member]) { return $opSignal.LogCritical("Inject target '$member' already exists.") }
+                        }
+                        else {
+                            return $opSignal.LogCritical('IfPresent=Error target parent must be a dictionary or PSCustomObject.')
+                        }
+                        $insertSignal = Add-PathToDictionary -Dictionary $ItemSignal -Path $Plan.Path -Value $sourceSignal.GetResult() | Select-Object -Last 1
+                        if ($null -eq $insertSignal -or $opSignal.MergeSignalAndVerifyFailure($insertSignal)) {
+                            return $opSignal.LogCritical('IfPresent=Error insertion failed.')
+                        }
+                        break
+                    }
                     $null = Add-PathToDictionary -Dictionary $ItemSignal -AddStyle "Append" -Path $Plan.Path -Value $sourceSignal.GetResult() | Select-Object -Last 1
                     break
                 }
@@ -223,7 +271,18 @@ class TransformCondenser {
                     $path = $pathSignal.GetResult()
 
                     $sourceSignal = Resolve-PathFromDictionary -Dictionary $ItemSignal -Path $path | Select-Object -Last 1
-                    $source = $sourceSignal.GetResult() | ConvertTo-Json -Depth 10 | ConvertFrom-Json -Depth 10
+                    if ($opSignal.MergeSignalAndVerifyFailure($sourceSignal) -or -not $sourceSignal.HasResult()) {
+                        $null = $opSignal.LogCritical("Clone source path did not resolve to a result: $path")
+                        return $opSignal
+                    }
+                    try {
+                        $json = ConvertTo-Json -InputObject $sourceSignal.GetResult() -Depth 10 -ErrorAction Stop
+                        $source = ConvertFrom-Json -InputObject $json -Depth 10 -NoEnumerate -ErrorAction Stop
+                    }
+                    catch {
+                        $null = $opSignal.LogCritical("Clone JSON conversion failed: $($_.Exception.Message)", $null, $_)
+                        return $opSignal
+                    }
                     
                     $opSignal.SetResult($source )
                     break
@@ -231,6 +290,33 @@ class TransformCondenser {
 
                 # Merges Json objects or builds an array
                 "Merge" {
+
+                    $mergeInputSignal = Resolve-PathFromDictionary -Dictionary $ItemSignal -Path $DefaultPath | Select-Object -Last 1
+                    if ($opSignal.MergeSignalAndVerifyFailure($mergeInputSignal) -or -not $mergeInputSignal.HasResult()) {
+                        $null = $opSignal.LogCritical('Transform.Merge requires an object with Base and Overlay members.')
+                        return $opSignal
+                    }
+                    $mergeInput = $mergeInputSignal.GetResult()
+                    if ($mergeInput -is [System.Collections.IDictionary]) {
+                        $hasBase = $mergeInput.Contains('Base')
+                        $hasOverlay = $mergeInput.Contains('Overlay')
+                    }
+                    elseif ($mergeInput -is [pscustomobject]) {
+                        $hasBase = $null -ne $mergeInput.PSObject.Properties['Base']
+                        $hasOverlay = $null -ne $mergeInput.PSObject.Properties['Overlay']
+                    }
+                    else {
+                        $null = $opSignal.LogCritical('Transform.Merge input must be a dictionary or PSCustomObject.')
+                        return $opSignal
+                    }
+                    if (-not $hasBase) {
+                        $null = $opSignal.LogCritical('Transform.Merge input is missing Base.')
+                        return $opSignal
+                    }
+                    if (-not $hasOverlay) {
+                        $null = $opSignal.LogCritical('Transform.Merge input is missing Overlay.')
+                        return $opSignal
+                    }
 
                     $BaseSignal = Resolve-PathFromDictionary -Dictionary $ItemSignal -Path "$DefaultPath.Base" | Select-Object -Last 1
                     $OverlaySignal = Resolve-PathFromDictionary -Dictionary $ItemSignal -Path "$DefaultPath.Overlay" | Select-Object -Last 1

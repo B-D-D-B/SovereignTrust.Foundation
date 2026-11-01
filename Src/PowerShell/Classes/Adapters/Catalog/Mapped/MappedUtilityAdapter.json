@@ -3,11 +3,13 @@
   "activities": [
     {
       "name": "Resize",
+      "whenToUse": "Use to resize a local input image to an output file through the media helper. Select dimensions or TargetLongest, quality and overwrite policy in Config; Density is accepted but currently unused by final magick arguments. This reads and can write local files.",
       "description": "Resize an image.",
       "properties": [
         {
           "path": "Config.Density",
           "description": "Configure image resize Density.",
+          "whenToUse": "Set rendering density for Resize when the default 72 is unsuitable; the current helper passes Density to a nested resize call, but the final magick argument list does not use it.",
           "adapters": [
             "Utility_Media"
           ]
@@ -15,6 +17,7 @@
         {
           "path": "Config.InputFullPath",
           "description": "Configure image resize InputFullPath.",
+          "whenToUse": "Supply an existing local image file to resize. The helper checks that the source file exists before processing.",
           "adapters": [
             "Utility_Media"
           ]
@@ -22,6 +25,7 @@
         {
           "path": "Config.OutputFullPath",
           "description": "Configure image resize OutputFullPath.",
+          "whenToUse": "Supply the destination file for resized output. The helper creates or overwrites it according to Config.Overwrite.",
           "adapters": [
             "Utility_Media"
           ]
@@ -29,6 +33,7 @@
         {
           "path": "Config.Overwrite",
           "description": "Configure image resize Overwrite.",
+          "whenToUse": "Set true only when an existing output file may be replaced. Omit or false to skip processing when OutputFullPath already exists.",
           "adapters": [
             "Utility_Media"
           ]
@@ -36,6 +41,7 @@
         {
           "path": "Config.Quality",
           "description": "Configure image resize Quality.",
+          "whenToUse": "Set image output quality for Resize when the default 80 is unsuitable.",
           "adapters": [
             "Utility_Media"
           ]
@@ -43,6 +49,7 @@
         {
           "path": "Config.TargetHeight",
           "description": "Configure image resize TargetHeight.",
+          "whenToUse": "Set a target image height when resizing by explicit dimensions; omit or zero when height should be inferred from width or TargetLongest.",
           "adapters": [
             "Utility_Media"
           ]
@@ -50,6 +57,7 @@
         {
           "path": "Config.TargetLongest",
           "description": "Configure image resize TargetLongest.",
+          "whenToUse": "Set the desired longest edge when resize dimensions should follow source orientation. A positive value chooses width or height before explicit resize arguments.",
           "adapters": [
             "Utility_Media"
           ]
@@ -57,6 +65,7 @@
         {
           "path": "Config.TargetWidth",
           "description": "Configure image resize TargetWidth.",
+          "whenToUse": "Set a target image width when resizing by explicit dimensions; omit or zero when width should be inferred from height or TargetLongest.",
           "adapters": [
             "Utility_Media"
           ]
@@ -64,6 +73,7 @@
         {
           "path": "Config.VirtualPath",
           "description": "Check for an explicit utility virtual path before synthesizing a top-level path.",
+          "whenToUse": "The mapped wrapper checks whether this has a Result before optional Container/Resource synthesis. It does not copy Config.VirtualPath into top-level VirtualPath; the media helper uses its own image Config paths.",
           "adapters": [
             "Utility_Media"
           ],
@@ -74,6 +84,7 @@
         {
           "path": "Container",
           "description": "Build the generated utility virtual path when no explicit path is resolved.",
+          "whenToUse": "When Config.VirtualPath has no Result, supply Container with Resource if the mapped wrapper should synthesize a top-level utility VirtualPath. Resize file paths remain Config.InputFullPath/OutputFullPath.",
           "adapters": [
             "Utility_Media"
           ]
@@ -81,6 +92,7 @@
         {
           "path": "Path",
           "description": "Read the image-operation path passed to the selected helper.",
+          "whenToUse": "Supply the image-operation Path forwarded to the selected Resize helper when its route uses it; source/destination files are configured separately.",
           "adapters": [
             "Utility_Media"
           ]
@@ -88,6 +100,7 @@
         {
           "path": "Phase",
           "description": "Preserve conduction context while cloning the image plan.",
+          "whenToUse": "Retain incoming parent Phase when the concrete media adapter clones the image Plan to preserve conduction context.",
           "adapters": [
             "Utility_Media"
           ]
@@ -95,6 +108,7 @@
         {
           "path": "Plan",
           "description": "Preserve conduction context while cloning the image plan.",
+          "whenToUse": "Retain incoming parent Plan when the concrete media adapter clones the image Plan to preserve conduction context.",
           "adapters": [
             "Utility_Media"
           ]
@@ -102,19 +116,64 @@
         {
           "path": "Resource",
           "description": "Build the generated utility virtual path when no explicit path is resolved.",
+          "whenToUse": "When Config.VirtualPath has no Result, supply Resource with Container to synthesize a top-level utility VirtualPath; this does not replace the configured image file paths.",
           "adapters": [
             "Utility_Media"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "Boolean",
+          "description": "When Config supplies source/target/options; existing/skip/overwrite branches are helper-controlled; ImageMagick helper reports success.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Boolean",
+          "description": "When Config supplies source/target/options; existing/skip/overwrite branches are helper-controlled; target already exists and Overwrite=false; successful skip.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Utility_Media: True does not prove dimensions, pixels, placement, opacity or byte change; inspect output independently"
       ]
     },
     {
+      "name": "Inspect",
+      "whenToUse": "Use to read bytes and a hash from an absolute local file without writing output. The trusted Utility_Media adapter must supply four bounded Inspect limits even in hash-only mode. Optionally set DecodePixels true for a verified single-frame PNG/GIF and zero-based samples; unsupported formats or frames fail before pixel output.",
+      "description": "Read actual local file bytes and optionally bounded lossless raster pixels without writing output.",
+      "properties": [
+        {"path":"Config.InputFullPath","description":"Required existing local file path; hash-only accepts arbitrary bytes including zero length.","whenToUse": "Supply an existing absolute local file path; relative, UNC and network-drive paths are rejected. Hash-only mode accepts arbitrary bytes, including a zero-length file.","adapters":["Utility_Media"]},
+        {"path":"Config.DecodePixels","description":"Optional native Boolean, default false; true decodes only verified single-frame PNG/GIF.","whenToUse": "Set native Boolean true only when bounded pixel decoding of a supported single-frame PNG/GIF is needed. Omit or false for hash/byte facts without decoding.","adapters":["Utility_Media"]},
+        {"path":"Config.SamplePoints[*].X","description":"Native integral zero-based pixel X in the decoded image; requires DecodePixels=true.","whenToUse": "When DecodePixels is true, supply a native integral zero-based X coordinate for each requested sample within the decoded image.","adapters":["Utility_Media"]},
+        {"path":"Config.SamplePoints[*].Y","description":"Native integral zero-based pixel Y in the decoded image; requires DecodePixels=true.","whenToUse": "When DecodePixels is true, supply a native integral zero-based Y coordinate for each requested sample within the decoded image.","adapters":["Utility_Media"]}
+      ],
+      "result": [
+        {"path":"Path","type":"String","description":"Absolute local path whose bytes were read; not an echoed proof of content.","adapters":["Utility_Media"]},
+        {"path":"ByteLength","type":"Int64","description":"Measured raw file byte count, including zero.","adapters":["Utility_Media"]},
+        {"path":"Sha256","type":"String","description":"Uppercase SHA-256 of the actual raw file bytes.","adapters":["Utility_Media"]},
+        {"path":"Width","type":"Int32","description":"Only with DecodePixels=true: decoded first-frame width after single-frame validation.","adapters":["Utility_Media"]},
+        {"path":"Height","type":"Int32","description":"Only with DecodePixels=true: decoded first-frame height after single-frame validation.","adapters":["Utility_Media"]},
+        {"path":"PixelFormat","type":"String","description":"Only with DecodePixels=true: normalized sRGBA8 output, not source-file metadata.","adapters":["Utility_Media"]},
+        {"path":"Samples[*]","type":"Object","description":"Only with DecodePixels=true: selected X,Y and straight-alpha R,G,B,A integer channels (0–255).","adapters":["Utility_Media"]}
+      ],
+      "resultNotes": ["Failure has no public Result; decode rejects unsupported/multiple frames, invalid points and detected input changes. Hash-only mode does not prove pixel placement."]
+    },
+    {
       "name": "Overlay",
+      "whenToUse": "Use to compose one or more local overlay images onto an input image and write OutputFullPath. Prefer Config.Overlays entries for multiple images; the legacy single-overlay fields are used when filtering Config.Overlays leaves no non-null entries. Overwrite controls an existing output.",
       "description": "Overlay one image on another.",
       "properties": [
         {
           "path": "Config.InputFullPath",
           "description": "Configure image overlay InputFullPath.",
+          "whenToUse": "Supply the existing base image file for Overlay.",
           "adapters": [
             "Utility_Media"
           ]
@@ -122,6 +181,7 @@
         {
           "path": "Config.Location",
           "description": "Configure the legacy single overlay Location.",
+          "whenToUse": "For the legacy single-overlay form, select where the overlay is placed. Use per-entry Location when Config.Overlays is supplied.",
           "adapters": [
             "Utility_Media"
           ]
@@ -129,6 +189,7 @@
         {
           "path": "Config.Opacity",
           "description": "Configure the legacy single overlay Opacity.",
+          "whenToUse": "For the legacy single-overlay form, set opacity from 0 to 100; omit to use 100. Use per-entry Opacity for Config.Overlays.",
           "adapters": [
             "Utility_Media"
           ]
@@ -136,6 +197,7 @@
         {
           "path": "Config.OutputFullPath",
           "description": "Configure image overlay OutputFullPath.",
+          "whenToUse": "Supply the local file destination for the composed image. Overwrite policy applies if it already exists.",
           "adapters": [
             "Utility_Media"
           ]
@@ -143,6 +205,7 @@
         {
           "path": "Config.OverlayFullPath",
           "description": "Configure the legacy single overlay OverlayFullPath.",
+          "whenToUse": "For the legacy single-overlay form, supply the overlay image file. Use per-entry OverlayFullPath when Config.Overlays is supplied.",
           "adapters": [
             "Utility_Media"
           ]
@@ -150,6 +213,7 @@
         {
           "path": "Config.Overlays",
           "description": "Configure image overlay Overlays.",
+          "whenToUse": "Supply a collection of overlay entries for multi-image composition. The helper filters null entries; if at least one remains, it uses those entries instead of legacy single-overlay fields.",
           "adapters": [
             "Utility_Media"
           ]
@@ -157,6 +221,7 @@
         {
           "path": "Config.Overlays[*].Location",
           "description": "Configure a supplied overlay entry Location.",
+          "whenToUse": "For each supplied overlay entry, choose a supported placement location; omission uses Center.",
           "adapters": [
             "Utility_Media"
           ]
@@ -164,6 +229,7 @@
         {
           "path": "Config.Overlays[*].Opacity",
           "description": "Configure a supplied overlay entry Opacity.",
+          "whenToUse": "For each supplied overlay entry, set opacity from 0 to 100; omission uses 100.",
           "adapters": [
             "Utility_Media"
           ]
@@ -171,6 +237,7 @@
         {
           "path": "Config.Overlays[*].OverlayFullPath",
           "description": "Configure a supplied overlay entry OverlayFullPath.",
+          "whenToUse": "For each supplied overlay entry, provide the existing overlay image file path.",
           "adapters": [
             "Utility_Media"
           ]
@@ -178,6 +245,7 @@
         {
           "path": "Config.Overlays[*].ResizeX",
           "description": "Configure a supplied overlay entry ResizeX.",
+          "whenToUse": "For each overlay entry, set horizontal resize pixels when resizing that overlay; both ResizeX and ResizeY must be positive for that resize branch.",
           "adapters": [
             "Utility_Media"
           ]
@@ -185,6 +253,7 @@
         {
           "path": "Config.Overlays[*].ResizeY",
           "description": "Configure a supplied overlay entry ResizeY.",
+          "whenToUse": "For each overlay entry, set vertical resize pixels when resizing that overlay; both ResizeX and ResizeY must be positive for that resize branch.",
           "adapters": [
             "Utility_Media"
           ]
@@ -192,6 +261,7 @@
         {
           "path": "Config.Overwrite",
           "description": "Configure image overlay Overwrite.",
+          "whenToUse": "Set true only when the existing OutputFullPath may be replaced. Omit or false to skip composition when output already exists.",
           "adapters": [
             "Utility_Media"
           ]
@@ -199,6 +269,7 @@
         {
           "path": "Config.ResizeX",
           "description": "Configure the legacy single overlay ResizeX.",
+          "whenToUse": "For the legacy single-overlay form, set horizontal resize pixels with positive ResizeY when resizing that overlay.",
           "adapters": [
             "Utility_Media"
           ]
@@ -206,6 +277,7 @@
         {
           "path": "Config.ResizeY",
           "description": "Configure the legacy single overlay ResizeY.",
+          "whenToUse": "For the legacy single-overlay form, set vertical resize pixels with positive ResizeX when resizing that overlay.",
           "adapters": [
             "Utility_Media"
           ]
@@ -213,6 +285,7 @@
         {
           "path": "Config.VirtualPath",
           "description": "Check for an explicit utility virtual path before synthesizing a top-level path.",
+          "whenToUse": "The mapped wrapper checks this before optional Container/Resource synthesis but does not copy it to top-level VirtualPath. Overlay image files come from Config.InputFullPath/OutputFullPath/Overlays.",
           "adapters": [
             "Utility_Media"
           ],
@@ -223,6 +296,7 @@
         {
           "path": "Container",
           "description": "Build the generated utility virtual path when no explicit path is resolved.",
+          "whenToUse": "When Config.VirtualPath has no Result, supply Container with Resource to synthesize a top-level utility VirtualPath; image files remain configured in Overlay Config.",
           "adapters": [
             "Utility_Media"
           ]
@@ -230,6 +304,7 @@
         {
           "path": "Path",
           "description": "Read the image-operation path passed to the selected helper.",
+          "whenToUse": "Supply the image-operation Path forwarded to the selected Overlay helper when used; base, overlay and output files are separate Config paths.",
           "adapters": [
             "Utility_Media"
           ]
@@ -237,6 +312,7 @@
         {
           "path": "Phase",
           "description": "Preserve conduction context while cloning the image plan.",
+          "whenToUse": "Retain incoming parent Phase when concrete media code clones the overlay Plan to preserve conduction context.",
           "adapters": [
             "Utility_Media"
           ]
@@ -244,6 +320,7 @@
         {
           "path": "Plan",
           "description": "Preserve conduction context while cloning the image plan.",
+          "whenToUse": "Retain incoming parent Plan when concrete media code clones the overlay Plan to preserve conduction context.",
           "adapters": [
             "Utility_Media"
           ]
@@ -251,10 +328,32 @@
         {
           "path": "Resource",
           "description": "Build the generated utility virtual path when no explicit path is resolved.",
+          "whenToUse": "When Config.VirtualPath has no Result, supply Resource with Container to synthesize top-level utility VirtualPath; this does not set image file paths.",
           "adapters": [
             "Utility_Media"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "Boolean",
+          "description": "When Config supplies source/target/options; existing/skip/overwrite branches are helper-controlled; ImageMagick helper reports success.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Boolean",
+          "description": "When Config supplies source/target/options; existing/skip/overwrite branches are helper-controlled; target already exists and Overwrite=false; successful skip.",
+          "adapters": [
+            "Utility_Media"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Utility_Media: True does not prove dimensions, pixels, placement, opacity or byte change; inspect output independently"
       ]
     }
   ],
@@ -264,5 +363,6 @@
       "repository": "SDAFusion.Adapters",
       "path": "Src/Utility/Media/PowerShell/Utility_Media.psm1"
     }
-  ]
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Mapped/MappedUtilityAdapter.json","version":1}
 }

@@ -3,11 +3,13 @@
   "activities": [
     {
       "name": "SendFile",
+      "whenToUse": "Use to send Config.Content with an attachment file from Config.FullPath to the channel identified by ItemSignal @.Id. The Discord provider constructs a multipart REST request, so the file path and provider resource/address must be available.",
       "description": "Send a file through a network service.",
       "properties": [
         {
           "path": "Config",
           "description": "Read the configuration object and warn when it is absent or false-valued.",
+          "whenToUse": "Supply the request Config object for Network_DiscordBot SendFile. The provider warns when it is absent or false-valued and has no enabled environment fallback.",
           "adapters": [
             "Network_DiscordBot"
           ]
@@ -15,6 +17,7 @@
         {
           "path": "Config.Content",
           "description": "Provide text serialized into the multipart message payload when sending a file.",
+          "whenToUse": "Supply message text to accompany the uploaded file. SendFile converts this value to text in its multipart message payload.",
           "adapters": [
             "Network_DiscordBot"
           ]
@@ -22,19 +25,35 @@
         {
           "path": "Config.FullPath",
           "description": "Provide the attachment file path used in the multipart file upload.",
+          "whenToUse": "Supply the local attachment file path used by the multipart upload. This is an effectful file-read and network-send path.",
           "adapters": [
             "Network_DiscordBot"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "$[*]",
+          "type": "provider response",
+          "description": "Discord response body [provider-returned]. When configured Discord channel and REST POST; REST response succeeds.",
+          "adapters": [
+            "Network_DiscordBot"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Network_DiscordBot: Response schema and delivery state depend on provider; no live send receipt was observed"
       ]
     },
     {
       "name": "SendMessage",
+      "whenToUse": "Use to send Config.Content to the channel identified by ItemSignal @.Id. The provider splits text into chunks of at most 2000 characters and sends each through a REST request.",
       "description": "Send a message.",
       "properties": [
         {
           "path": "Config",
           "description": "Read the configuration object and warn when it is absent or false-valued.",
+          "whenToUse": "Supply the request Config object for Network_DiscordBot SendMessage. The provider warns when absent or false-valued; no environment Config fallback is enabled.",
           "adapters": [
             "Network_DiscordBot"
           ]
@@ -42,19 +61,35 @@
         {
           "path": "Config.Content",
           "description": "Provide message text split into chunks of at most 2000 characters and sent as message bodies.",
+          "whenToUse": "Supply message text to send. The provider splits it into at-most-2000-character chunks before constructing network requests.",
           "adapters": [
             "Network_DiscordBot"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "$[*]",
+          "type": "provider response",
+          "description": "Discord response body [provider-returned]. When configured Discord channel and REST POST; REST response succeeds.",
+          "adapters": [
+            "Network_DiscordBot"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Network_DiscordBot: Response schema and delivery state depend on provider; no live send receipt was observed"
       ]
     },
     {
       "name": "ReadBatch",
+      "whenToUse": "Use to fetch Discord channel messages and optionally poll for a reply to prior message objects located through Plan.Path; each object must carry an id for matching. PollUntilResponse true has no finite internal bound and can continue indefinitely without a matching reply or failure.",
       "description": "Read a batch of messages.",
       "properties": [
         {
           "path": "Config",
           "description": "Read the configuration object and warn when it is absent or false-valued.",
+          "whenToUse": "Supply the request Config object for Network_DiscordBot ReadBatch. The provider warns when absent or false-valued; channel/resource inputs come from its current signals.",
           "adapters": [
             "Network_DiscordBot"
           ]
@@ -62,6 +97,7 @@
         {
           "path": "Config.MessageLimit",
           "description": "Set the message limit query parameter for the batch request.",
+          "whenToUse": "Set the message limit in the batch request query. Omit to use the provider's default 10.",
           "adapters": [
             "Network_DiscordBot"
           ],
@@ -72,6 +108,7 @@
         {
           "path": "Config.PollingDelayMS",
           "description": "Set the delay in milliseconds between polling iterations when polling continues.",
+          "whenToUse": "Set the milliseconds between ReadBatch polling iterations when polling continues. Omit to use 5000 milliseconds.",
           "adapters": [
             "Network_DiscordBot"
           ],
@@ -82,6 +119,7 @@
         {
           "path": "Config.PollUntilResponse",
           "description": "Control whether batch polling continues after a response unless a matching reply ends the operation.",
+          "whenToUse": "Set true only when continued polling for a matching reply is intended; there is no finite internal iteration bound, so without matching prior-message context it can continue indefinitely. Omit or false for one request.",
           "adapters": [
             "Network_DiscordBot"
           ],
@@ -92,19 +130,43 @@
         {
           "path": "Path",
           "description": "Optionally locate prior messages in ItemSignal to match replies in the fetched batch.",
+          "whenToUse": "Optionally supply an ItemSignal path holding prior message objects, each with an id member, for matching fetched message_reference.message_id values. Bare ID strings do not match the source's object-member read.",
           "adapters": [
             "Network_DiscordBot"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "provider message object",
+          "description": "When configured Discord message GET; message_reference.message_id matches.",
+          "adapters": [
+            "Network_DiscordBot"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "provider message object/array",
+          "description": "When configured Discord message GET; nonpoll response.",
+          "adapters": [
+            "Network_DiscordBot"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Network_DiscordBot: Provider envelope/cardinality needs a bound response; poll mode lacks a deadline"
       ]
     },
     {
       "name": "HandleMessage",
+      "whenToUse": "Use to select existing message content from ItemSignal at Plan.Path for a local result. This branch does not itself send a Discord request.",
       "description": "Process message content.",
       "properties": [
         {
           "path": "Config",
           "description": "Read the configuration object and warn when it is absent or false-valued.",
+          "whenToUse": "The provider reads Config before HandleMessage and warns if absent or false-valued, though message lookup uses Plan.Path on ItemSignal.",
           "adapters": [
             "Network_DiscordBot"
           ]
@@ -112,10 +174,24 @@
         {
           "path": "Path",
           "description": "Select message content from ItemSignal for the activity result.",
+          "whenToUse": "Supply the ItemSignal path containing message content to return from HandleMessage.",
           "adapters": [
             "Network_DiscordBot"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "selected message native value",
+          "description": "When Path selects message from ItemSignal; message resolves.",
+          "adapters": [
+            "Network_DiscordBot"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Network_DiscordBot: No Format postprocessing occurs in this branch"
       ]
     }
   ],
@@ -125,5 +201,6 @@
       "repository": "SovereignTrust.Adapters",
       "path": "Src/Network/DiscordBot/PowerShell/Network_DiscordBot.psm1"
     }
-  ]
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Mapped/MappedNetworkAdapter.json","version":1}
 }

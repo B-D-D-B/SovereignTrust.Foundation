@@ -5,6 +5,7 @@ function Invoke-EmbeddedFileSystem_ReadObject {
         [Parameter()][string]$PathSuffix,
         [Parameter()][AllowNull()][string]$TargetPath,
         [switch]$TargetPathProvided,
+        [bool]$ResultDetail = $false,
         [string]$SignalLevel = "Critical",
         [Parameter()][object]$Addresses
     )
@@ -39,7 +40,32 @@ function Invoke-EmbeddedFileSystem_ReadObject {
                         $tempPath = [System.IO.Path]::Combine($parent, '.st-read-' + [guid]::NewGuid().ToString('N') + '.tmp')
                         [System.IO.File]::Copy($sourcePath, $tempPath, $false)
                         [System.IO.File]::Move($tempPath, $TargetPath, $true)
-                        $opSignal.SetResult($TargetPath)
+                        if ($ResultDetail) {
+                            $stream = [System.IO.File]::Open($TargetPath, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Read, [System.IO.FileShare]::Read)
+                            $detailReceipt = $null
+                            try {
+                                $before = [System.IO.FileInfo]::new($TargetPath)
+                                $beforeLength = [long]$before.Length
+                                $beforeWrite = $before.LastWriteTimeUtc
+                                $beforeCreated = $before.CreationTimeUtc
+                                $length = [long]$stream.Length
+                                $digest = [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($stream))
+                                $after = [System.IO.FileInfo]::new($TargetPath)
+                                if ($beforeLength -ne $length -or $after.Length -ne $length -or
+                                    $beforeWrite -ne $after.LastWriteTimeUtc -or
+                                    $beforeCreated -ne $after.CreationTimeUtc) {
+                                    throw 'Config.TargetPath changed while computing result detail.'
+                                }
+                                $detailReceipt = [pscustomobject]@{
+                                    TargetPath = $TargetPath
+                                    ByteLength = $length
+                                    Sha256 = $digest
+                                }
+                            }
+                            finally { $stream.Dispose() }
+                            $opSignal.SetResult($detailReceipt)
+                        }
+                        else { $opSignal.SetResult($TargetPath) }
                         return $opSignal
                     }
                     finally {

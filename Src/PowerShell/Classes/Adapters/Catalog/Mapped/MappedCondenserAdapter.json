@@ -54,5 +54,7 @@
       "name": "TransformCondenser",
       "file": "../Condensers/TransformCondenser.json"
     }
-  ]
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Mapped/MappedCondenserAdapter.json","version":1},
+  "resultInventorySummary": {"status":"no-declared-activities","detail":"This catalog declares no activity Result fields."}
 }

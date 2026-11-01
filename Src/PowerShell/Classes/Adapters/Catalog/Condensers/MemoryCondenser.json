@@ -5,11 +5,13 @@
   "activities": [
     {
       "name": "Persist",
+      "whenToUse": "Reserved activity with no persistence implementation in the current branch. Use only to inspect the shared ReturnItemSignal behavior; do not choose it to save memory.",
       "description": "Reserved memory persistence activity; its current branch has no implementation.",
       "properties": [
         {
           "path": "ReturnItemSignal",
           "description": "Return ItemSignal after the reserved Persist branch when requested.",
+          "whenToUse": "Set true to return the current ItemSignal after the reserved Persist branch. Omit or false leaves no persistence result; this property does not implement saving.",
           "adapters": [
             "MemoryCondenser"
           ],
@@ -17,15 +19,22 @@
             "MemoryCondenser": false
           }
         }
+      ],
+      "result": [],
+      "resultNotes": [
+        "No stable public Result field is available for this activity; inspect the Signal/effect at its actual boundary.",
+        "MemoryCondenser: reserved"
       ]
     },
     {
       "name": "Generate",
+      "whenToUse": "Use with a phase Plan containing ordered Steps. Each enabled step can dispatch a mapped adapter, register a result and conditionally format, transform or hydrate it. On the ordinary completed path the branch updates and awaits background phase tasks; early failure or no-result returns bypass that final wait and the trailing ReturnItemSignal check.",
       "description": "Generate memory content.",
       "properties": [
         {
           "path": "ReturnItemSignal",
           "description": "Return ItemSignal after generating all steps when requested.",
+          "whenToUse": "Set true to return ItemSignal when Generate reaches the shared trailing resolver after ordinary step completion. Early failure or no-result returns bypass this check; omission defaults false.",
           "adapters": [
             "MemoryCondenser"
           ],
@@ -36,6 +45,7 @@
         {
           "path": "Steps",
           "description": "Enumerate phase steps for execution and step-to-step navigation.",
+          "whenToUse": "Supply ordered phase steps for Generate to select and clone. Omit or provide none when there are no steps to execute; Goto navigation also searches this collection.",
           "adapters": [
             "MemoryCondenser"
           ]
@@ -43,6 +53,7 @@
         {
           "path": "Steps[*].Activity",
           "description": "Identify step tracing and select the dispatched activity or Goto control flow.",
+          "whenToUse": "For a mapped adapter step, set the activity forwarded to Invoke-MappedAdapter. An Adapter-free Goto selects the target-search branch, but its current TestAllTrue call omits the required Operator and can fail before navigation.",
           "adapters": [
             "MemoryCondenser"
           ]
@@ -50,6 +61,7 @@
         {
           "path": "Steps[*].Adapter",
           "description": "Identify step tracing and select the mapped adapter or goto branch.",
+          "whenToUse": "Set a mapped adapter name when this step should dispatch through Invoke-MappedAdapter. An absent Adapter with Goto Activity selects a currently limited branch whose enablement call lacks the required Operator.",
           "adapters": [
             "MemoryCondenser"
           ]
@@ -57,6 +69,7 @@
         {
           "path": "Steps[*].Config",
           "description": "Forward the step configuration into its constructed deferred hydration plan.",
+          "whenToUse": "Supply step configuration when needed by its selected adapter or deferred hydration. Generate forwards the full step and copies Config into a constructed deferred hydration plan.",
           "adapters": [
             "MemoryCondenser"
           ]
@@ -64,6 +77,7 @@
         {
           "path": "Steps[*].Config.Break",
           "description": "Evaluate a diagnostic break condition for each step.",
+          "whenToUse": "Set true only for the current diagnostic assignment branch. It assigns a local Check value and does not itself stop or pause execution; omit or false for ordinary steps.",
           "adapters": [
             "MemoryCondenser"
           ],
@@ -74,6 +88,7 @@
         {
           "path": "Steps[*].Config.Iteration",
           "description": "Read the previous iteration counter before incrementing the original selected step.",
+          "whenToUse": "Supply the prior counter when Config.PreventReclone is true. GetNextStep reads it with zero default, increments the selected original step, then clones it.",
           "adapters": [
             "MemoryCondenser"
           ],
@@ -84,6 +99,7 @@
         {
           "path": "Steps[*].Config.PreventReclone",
           "description": "Decide whether to track an execution iteration before cloning the selected step.",
+          "whenToUse": "Set true when GetNextStep should track an iteration counter on the selected original step before cloning. Omit or false to clone without that increment.",
           "adapters": [
             "MemoryCondenser"
           ]
@@ -91,6 +107,7 @@
         {
           "path": "Steps[*].Config.SkipSteps",
           "description": "Offset the selected Goto target; a direct null-coalescing expression uses zero when null.",
+          "whenToUse": "On an Adapter-free Goto target-search path, this offsets the matched step index; omission or null coalesces to zero. The current Goto enablement call can fail before this offset is reached.",
           "adapters": [
             "MemoryCondenser"
           ]
@@ -98,6 +115,7 @@
         {
           "path": "Steps[*].Container",
           "description": "Read the container used in missing-transform-result diagnostics.",
+          "whenToUse": "Supply a container label when missing transform results need a diagnostic location. The current branch reads it for that error message, not for choosing the transform slot.",
           "adapters": [
             "MemoryCondenser"
           ]
@@ -105,6 +123,7 @@
         {
           "path": "Steps[*].ContentFormat",
           "description": "Select optional formatting of final step content.",
+          "whenToUse": "Set a final Format condenser activity when a step result should be formatted after optional transform and hydration. This branch runs only when a result is present and ExitAfterAdapter is false.",
           "adapters": [
             "MemoryCondenser"
           ]
@@ -112,6 +131,7 @@
         {
           "path": "Steps[*].DeferredHydrationPlan",
           "description": "Select deferred hydration applied before step execution.",
+          "whenToUse": "Set a hydration sequence to apply to the selected step before enablement and adapter dispatch. The constructed plan uses HydrationStyle Deferred and forwards step Config.",
           "adapters": [
             "MemoryCondenser"
           ],
@@ -122,6 +142,7 @@
         {
           "path": "Steps[*].ExitAfterAdapter",
           "description": "Skip post-adapter formatting/transform/hydration when true.",
+          "whenToUse": "Set true to skip the post-adapter format, transform, hydration and final content-format block for a step with a result. It does not skip the subsequent step loop by itself.",
           "adapters": [
             "MemoryCondenser"
           ],
@@ -132,6 +153,7 @@
         {
           "path": "Steps[*].ExitAfterAdapterNoResult",
           "description": "Return early when the adapter has no result and this flag is true.",
+          "whenToUse": "Set true to return from Generate early if the adapter step has no Result. Omit or false to continue the remaining step processing path.",
           "adapters": [
             "MemoryCondenser"
           ],
@@ -142,6 +164,7 @@
         {
           "path": "Steps[*].Format",
           "description": "Select optional formatting before transformation.",
+          "whenToUse": "Set a Format condenser activity for formatting the adapter result before a Path-triggered transform. This branch requires a result and ExitAfterAdapter false.",
           "adapters": [
             "MemoryCondenser"
           ]
@@ -149,6 +172,7 @@
         {
           "path": "Steps[*].HydrationPlan",
           "description": "Select optional post-adapter hydration.",
+          "whenToUse": "Set a post-adapter hydration sequence for a result after optional formatting and transform. The branch clones the step, sets HydrationPlan and Path %.@, then dispatches Hydration.",
           "adapters": [
             "MemoryCondenser"
           ],
@@ -158,7 +182,8 @@
         },
         {
           "path": "Steps[*].IsEnabled",
-          "description": "Check enablement before following a Goto target.",
+          "description": "Read Goto enablement before target search; the current TestAllTrue call omits its required Operator and can fail.",
+          "whenToUse": "For an Adapter-free Goto, GetNextStep reads enablement with true default before intended target search. Its current TestAllTrue call omits the required Operator and can fail instead of following or falling through; do not rely on this Goto path as working navigation.",
           "adapters": [
             "MemoryCondenser"
           ],
@@ -169,6 +194,7 @@
         {
           "path": "Steps[*].IsEnabled",
           "description": "Evaluate whether the step executes.",
+          "whenToUse": "Set the selected step's execution condition. Generate combines it through IsEnabledOperator; omitted value defaults true and a false decision skips the step body.",
           "adapters": [
             "MemoryCondenser"
           ],
@@ -179,6 +205,7 @@
         {
           "path": "Steps[*].IsEnabledOperator",
           "description": "Choose how step enablement values are combined.",
+          "whenToUse": "Choose how a selected step's IsEnabled values are combined by TestAllTrue. Omit to use And for the main step enablement check.",
           "adapters": [
             "MemoryCondenser"
           ],
@@ -189,6 +216,7 @@
         {
           "path": "Steps[*].Key",
           "description": "Choose the key used to register step results.",
+          "whenToUse": "Set a nonempty registration key when the step's adapter or post-processing results should be stored on ItemSignal.Pointer. Omit to skip named registration.",
           "adapters": [
             "MemoryCondenser"
           ],
@@ -199,6 +227,7 @@
         {
           "path": "Steps[*].Mode",
           "description": "Choose the transform activity when a step Path is present.",
+          "whenToUse": "When Path triggers a transform, choose the activity sent to the selected transform condenser slot. Omit to use Select.",
           "adapters": [
             "MemoryCondenser"
           ],
@@ -209,6 +238,7 @@
         {
           "path": "Steps[*].Name",
           "description": "Identify step tracing and match names during next-step and goto selection.",
+          "whenToUse": "Name the step for tracing and sequential next-step matching. Adapter-free Goto intends exact then suffix target search by Name, but its current enablement call can fail first.",
           "adapters": [
             "MemoryCondenser"
           ]
@@ -216,6 +246,7 @@
         {
           "path": "Steps[*].Path",
           "description": "Select transformation data and the target name for Goto navigation.",
+          "whenToUse": "For an executed step, a truthy Path triggers transform dispatch. An Adapter-free Goto intends Path as a target name, but the current enablement call can fail before target search.",
           "adapters": [
             "MemoryCondenser"
           ]
@@ -223,6 +254,7 @@
         {
           "path": "Steps[*].Phase",
           "description": "Preserve the parent-phase reference while cloning.",
+          "whenToUse": "Retain an incoming parent-phase reference when cloning a selected step requires its lineage. Generate later assigns Phase from the current Plan on the working step before dispatch.",
           "adapters": [
             "MemoryCondenser"
           ]
@@ -230,6 +262,7 @@
         {
           "path": "Steps[*].Plan",
           "description": "Preserve the parent-plan reference while cloning.",
+          "whenToUse": "Retain an incoming parent-plan reference when Resolve-ClonePlan copies a selected step's lineage. Generate passes the current full phase as Plan and does not use this field to select an activity.",
           "adapters": [
             "MemoryCondenser"
           ]
@@ -237,6 +270,7 @@
         {
           "path": "Steps[*].Resource",
           "description": "Read the resource used in missing-transform-result diagnostics.",
+          "whenToUse": "Supply a resource label when missing transform results need a diagnostic location. The current branch reads it for that error message.",
           "adapters": [
             "MemoryCondenser"
           ]
@@ -244,6 +278,7 @@
         {
           "path": "Steps[*].Type",
           "description": "Choose the transform condenser slot when a step Path is present.",
+          "whenToUse": "When Path triggers a transform, choose the transform condenser slot. Omit to use Transform; Mode then selects that slot's activity.",
           "adapters": [
             "MemoryCondenser"
           ],
@@ -251,7 +286,22 @@
             "MemoryCondenser": "Transform"
           }
         }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "Signal",
+          "description": "current ItemSignal [computed]. When ordered enabled steps, optional Key/Format/Path/Hydration/ContentFormat pipeline; ReturnItemSignal is true.",
+          "adapters": [
+            "MemoryCondenser"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "MemoryCondenser: success can have no Result (steps finish and ReturnItemSignal is false)",
+        "MemoryCondenser: A successful keyed Signal may have no Result; a later stage can overwrite its graph entry or fail"
       ]
     }
-  ]
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Condensers/MemoryCondenser.json","version":1}
 }

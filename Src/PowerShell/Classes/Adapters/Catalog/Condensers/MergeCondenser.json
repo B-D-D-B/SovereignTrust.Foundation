@@ -5,11 +5,13 @@
   "activities": [
     {
       "name": "Merge",
+      "whenToUse": "Use when ItemSignal contains Base and Overlay under %.@ for structured JSON overlay merging. The branch reads Plan settings with defaults, passes them to Invoke-MergeJson and returns its merged Result on success.",
       "description": "Merge signal data.",
       "properties": [
         {
           "path": "Depth",
           "description": "Set the JSON merge depth.",
+          "whenToUse": "Set the JSON serialization/parsing depth when the default 20 is insufficient for the Base/Overlay structure. The Merge branch forwards this resolved value to Invoke-MergeJson.",
           "adapters": [
             "MergeCondenser"
           ],
@@ -20,6 +22,7 @@
         {
           "path": "MergeArrayHandling",
           "description": "Choose array merging behavior.",
+          "whenToUse": "Choose the array merge behavior to forward to Invoke-MergeJson. Omit to use the Merge branch's default Merge; this explicit forwarding overrides the helper's separate Replace parameter default.",
           "adapters": [
             "MergeCondenser"
           ],
@@ -30,6 +33,7 @@
         {
           "path": "MergeNullValueHandling",
           "description": "Choose how null overlay values are handled.",
+          "whenToUse": "Choose how null overlay values are handled by the JSON merge helper. Omit to use Ignore in the Merge branch.",
           "adapters": [
             "MergeCondenser"
           ],
@@ -37,7 +41,19 @@
             "MergeCondenser": "Ignore"
           }
         }
-      ]
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "native JSON-like object",
+          "description": "When Base and Overlay resolve; merge options valid; Invoke-MergeJson succeeds.",
+          "adapters": [
+            "MergeCondenser"
+          ]
+        }
+      ],
+      "resultNotes": []
     }
-  ]
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Condensers/MergeCondenser.json","version":1}
 }

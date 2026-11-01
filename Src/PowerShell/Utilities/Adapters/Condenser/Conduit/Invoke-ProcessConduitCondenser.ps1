@@ -44,6 +44,12 @@ function Invoke-ProcessConduitCondenser {
 
     $SourceAdapter = $SourceAdapterSignal.GetResult()
     $SourceActivity = $SourceActivitySignal.GetResult()
+    $detailSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path 'Config.ResultDetail' -Default $false -SignalLevel 'Warning' | Select-Object -Last 1
+    $detailValue = $detailSignal.GetResult()
+    $resultDetail = $detailValue -is [bool] -and $detailValue -eq $true
+    $attemptedCount = 0
+    $completedCount = 0
+    $completedItems = [System.Collections.Generic.List[object]]::new()
 
     #    $mySignal = Remove-ReversePointersFromSignal -RootSignal $Signal
     #    $Signalx = $mySignal | ConvertTo-Json -Depth 100 
@@ -69,6 +75,7 @@ function Invoke-ProcessConduitCondenser {
             $stThrew=$false;$stResult=$null
             try {
             $plan = ($item.Value).HasResult() ? ($item.Value).GetResult() : $Plan
+            $attemptedCount++
             $MappingResultSignal = Invoke-MappedAdapter `
                 -Signal $Signal `
                 -Adapter $SourceAdapter `
@@ -78,8 +85,16 @@ function Invoke-ProcessConduitCondenser {
             | Select-Object -Last 1
 
             $stResult=$MappingResultSignal
-            } catch { $stThrew=$true; throw }
+            } catch {
+                $stThrew=$true
+                return $opSignal.LogCritical("Conduit.Process child '$($item.Key)' threw: $($_.Exception.Message)", $null, $_)
+            }
             finally { Exit-STExecutionTrace $stTrace $stResult $stThrew }
+            if ($null -eq $MappingResultSignal -or $opSignal.MergeSignalAndVerifyFailure($MappingResultSignal)) {
+                return $opSignal.LogCritical("Conduit.Process child '$($item.Key)' failed.")
+            }
+            $completedCount++
+            $completedItems.Add([pscustomobject]@{ Key = [string]$item.Key; Completed = $true })
             $stIndex++
             <#
             $cloneStatus = Resolve-PathFromDictionary -Dictionary $cloneStep -Path "Status"
@@ -205,7 +220,14 @@ $MappingResultSignal = Invoke-MappedAdapter `
     }
                 
     # TODO: Change result to something meaningful or not at all.
-    $opSignal.SetResult($ItemSignal)
+    if ($resultDetail) {
+        $opSignal.SetResult([pscustomobject]@{
+            AttemptedCount = [int]$attemptedCount
+            CompletedCount = [int]$completedCount
+            Items = @($completedItems.ToArray())
+        })
+    }
+    else { $opSignal.SetResult($ItemSignal) }
     $opSignal.LogInformation("✅ Graph plan '$PlanName' completed successfully.")
     return $opSignal
 }

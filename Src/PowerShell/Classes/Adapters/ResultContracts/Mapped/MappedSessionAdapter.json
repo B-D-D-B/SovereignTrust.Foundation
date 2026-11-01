@@ -1,0 +1,83 @@
+{
+  "name": "MappedSessionAdapter",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedSessionAdapter.ps1",
+      "sha256": "E56F67A2FEB4B9E2D4B7B48047F68C88F86EE558520C69B5A33FF07167D82D29"
+    },
+    {
+      "id": "s2",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Session/ST/PowerShell/Session_ST.psm1",
+      "sha256": "ABF100E2089BDE919C8C255BF6F5AC0D8F221FCA66A0F821EB9458E649806E1B"
+    },
+    {
+      "id": "s3",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Session/ST/PowerShell/Invoke-Session_ST.ps1",
+      "sha256": "6AF36D4EE053910EE6DF1F5C4DF54C0807323FCF08FE3B4B9DECD8B8785F4748"
+    }
+  ],
+  "activities": [
+    {
+      "name": "RequestOrRegister",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Session_ST",
+            "support": "implemented",
+            "when": "existing session lookup or item-jacket registration",
+            "outcomes": [
+              {
+                "condition": "existing session found",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "unwrapped session native value"
+              },
+              {
+                "condition": "new session branch",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "unwrapped ItemSignal jacket native value"
+              },
+              {
+                "condition": "lookup/registration failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "may register new session jacket"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'RequestOrRegister'",
+                "line": 75,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Mapped GetResult($true) recursively unwraps returned Signal; empty/null jacket may yield no public Result. Failure path drops any helper result."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -5,8 +5,23 @@
   "activities": [
     {
       "name": "Parse",
+      "whenToUse": "Use when ItemSignal Result, or its Jacket Result when absent, holds a token path. The first dot-separated component selects Token.<slot>; the full path is sent to that mapped adapter's Get activity. The incoming Plan is not read on this reachable path.",
       "description": "Resolve a token through the token condenser.",
-      "properties": []
+      "properties": [],
+      "result": [
+        {
+          "path": "$",
+          "type": "arbitrary native token result",
+          "description": "When ItemSignal Result/Jacket selects delegated Token.Get; Token.Get succeeds (Result presence conditional).",
+          "adapters": [
+            "TokenCondenser"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "TokenCondenser: Private XML GetToken InnerXml return is not the public Parse result"
+      ]
     }
-  ]
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Condensers/TokenCondenser.json","version":1}
 }

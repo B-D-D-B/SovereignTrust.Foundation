@@ -132,12 +132,22 @@ class Storage_EmbeddedFileSystem {
             switch ($activity) {
                 "Read" {
                     $targetPathSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path 'Config.TargetPath' -SignalLevel 'Warning' | Select-Object -Last 1
-                    $hasTargetPath = $null -ne $Plan.Config -and $null -ne $Plan.Config.PSObject.Properties['TargetPath']
+                    $config = $Plan.Config
+                    $hasTargetPath = $null -ne $config -and $(if ($config -is [System.Collections.IDictionary]) { $config.Contains('TargetPath') } else { $null -ne $config.PSObject.Properties['TargetPath'] })
+                    $hasDetail = $null -ne $config -and $(if ($config -is [System.Collections.IDictionary]) { $config.Contains('ResultDetail') } else { $null -ne $config.PSObject.Properties['ResultDetail'] })
+                    $resultDetail = $false
+                    if ($hasDetail) {
+                        $detailValue = if ($config -is [System.Collections.IDictionary]) { $config['ResultDetail'] } else { $config.ResultDetail }
+                        if ($detailValue -isnot [bool]) { return $opSignal.LogCritical('Config.ResultDetail must be a native Boolean.') }
+                        $resultDetail = $detailValue
+                    }
+                    if ($resultDetail -and -not $hasTargetPath) { return $opSignal.LogCritical('Config.ResultDetail requires Config.TargetPath for Read.') }
                     $callSignal = Invoke-EmbeddedFileSystem_ReadObject `
                         -Signal $this.Signal `
                         -VirtualPath $virtualPath `
                         -TargetPath $(if ($hasTargetPath) { [string]$targetPathSignal.GetResult() } else { $null }) `
                         -TargetPathProvided:$hasTargetPath `
+                        -ResultDetail:$resultDetail `
                         -SignalLevel $signalLevelSignal.GetResult() `
                         -Addresses @($addressSignal.GetResult()) |
                     Select-Object -Last 1

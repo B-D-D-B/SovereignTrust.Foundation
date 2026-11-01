@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "layoutVersion": 1,
+  "layoutVersion": 2,
   "mappedAdapters": [
     {
       "name": "MappedAdapterTemplate",
@@ -9,14 +9,17 @@
     },
     {
       "name": "MappedCondenserAdapter",
+      "whenToUse": "Choose this group for named-slot routing to a registered condenser. It forwards Activity unchanged and declares no mapped-level activities; use the direct condenser entries to choose an operation and its inputs.",
       "file": "Mapped/MappedCondenserAdapter.json"
     },
     {
       "name": "MappedConductionAdapter",
+      "whenToUse": "Choose this mapped group to route an Invoke, Run or ST activity to a registered conduction slot. The three labels are forwarded through mapped dispatch; the catalog's contextual plan properties are attributed to Conduction_ST. Conduction_SDA is also listed but its five-argument Invoke does not consume the forwarded Plan.",
       "file": "Mapped/MappedConductionAdapter.json"
     },
     {
       "name": "MappedConduitAdapter",
+      "whenToUse": "This catalog group declares no activities or concrete adapters, so it offers no mapped activity choice. The separate two-argument class Invoke(Context, Plan) iterates registered conduit adapters and stops at the first successful Invoke; that registration path is outside this empty catalog inventory.",
       "file": "Mapped/MappedConduitAdapter.json"
     },
     {
@@ -25,39 +28,115 @@
     },
     {
       "name": "MappedIntelligenceAdapter",
+      "whenToUse": "Choose this mapped group for a registered intelligence provider's SendMessage, SendMessageOriginal or HandleMessage activity. The wrapper canonicalizes the activity label and forwards Plan to the selected concrete adapter; request fields vary by AzureFoundry, CodexCLI and OpenAI association, and send activities can make external provider calls.",
       "file": "Mapped/MappedIntelligenceAdapter.json"
     },
     {
       "name": "MappedNetworkAdapter",
+      "whenToUse": "Choose this mapped group for Network_DiscordBot SendFile, SendMessage, ReadBatch or HandleMessage. The first three can make Discord network requests or read a local attachment; HandleMessage selects existing ItemSignal content. Use the activity's contextual inputs and current provider configuration.",
       "file": "Mapped/MappedNetworkAdapter.json"
     },
     {
       "name": "MappedQuantumAdapter",
+      "whenToUse": "This catalog group declares no activities or concrete quantum adapters, so it offers no mapped activity or provider choice. The separate class SubmitQuantumJob(CircuitName, QuantumJobParameters) iterates registered providers with SubmitCircuit and stops after a successful submission; those registrations are outside this empty catalog inventory.",
       "file": "Mapped/MappedQuantumAdapter.json"
     },
     {
       "name": "MappedQueueAdapter",
+      "whenToUse": "Choose this mapped group for Queue_AzureStorageQueue reads, writes, acknowledgement or message handling. PeekBatch forwards to ReadBatch with visibility behavior; DeferItem is reserved and unfinished. Queue read/write/ack paths can make storage requests, while HandleMessage may resolve a session/plan and run conduction.",
       "file": "Mapped/MappedQueueAdapter.json"
     },
     {
       "name": "MappedSatelliteAdapter",
+      "whenToUse": "Choose this mapped group for Azure Application Insights telemetry emission, raw message POST or local response normalization. EmitEntries/EmitSignal run configured plan tokens and forward a stored handled result, SendMessage posts an unchanged JSON body, HandleResponse normalizes a receipt without calling the provider, and EmitSignalFull is an incomplete skip-tag branch.",
       "file": "Mapped/MappedSatelliteAdapter.json"
     },
     {
       "name": "MappedSessionAdapter",
+      "whenToUse": "Choose this mapped group to request or register a Session_ST session at Plan.Path. RequestOrRegister returns an existing mapped-adapter value if found; otherwise it stores and returns the current ItemSignal jacket at that path, changing mapped session state.",
       "file": "Mapped/MappedSessionAdapter.json"
     },
     {
       "name": "MappedStorageAdapter",
+      "whenToUse": "Choose this mapped group for provider-specific List, Read, Write, Delete or Exists operations through an implementing slot. EmbeddedFileSystem and AzureStorageAccount have mapped operation paths; AzureKeyVault lists secrets or uses Config.VirtualPath to select its sole non-List Read branch. LocalFileSystem is listed but has no five-argument Invoke for this mapped route.",
       "file": "Mapped/MappedStorageAdapter.json"
     },
     {
       "name": "MappedTokenAdapter",
+      "whenToUse": "Choose this mapped group for the declared Get activity when a token Path selects a registered Token provider such as Memory, Dynamic, Storage or SDA. The first path component selects the provider; Container and Resource together can override with a Memory path. Get is not uniformly read-only: Token_SDA ID/enrollment branches can update ItemSignal state and call storage writes. Source-accepted Read is not declared in this catalog.",
       "file": "Mapped/MappedTokenAdapter.json"
     },
     {
       "name": "MappedUtilityAdapter",
+      "whenToUse": "Choose this mapped group for Utility_Media Resize, Inspect or Overlay. Resize and Overlay read local images and can write output files; Inspect reads actual bytes and optionally bounded PNG/GIF pixels without writing an output. Each activity has distinct Config fields and current helper limits.",
       "file": "Mapped/MappedUtilityAdapter.json"
+    }
+  ],
+  "condensers": [
+    {
+      "name": "ConductionCondenser",
+      "whenToUse": "Choose this condenser to delegate an ST conduction plan or pause for a requested duration. Select ST for mapped Conduction.ST dispatch and Sleep for a local synchronous delay.",
+      "file": "Condensers/ConductionCondenser.json"
+    },
+    {
+      "name": "ConduitCondenser",
+      "whenToUse": "Choose this condenser to dispatch a mapped adapter over an existing signal grid, or to build a named graph from a selected array. Use Process for grid dispatch and Graph for graph construction.",
+      "file": "Condensers/ConduitCondenser.json"
+    },
+    {
+      "name": "FabCondenser",
+      "whenToUse": "Choose this condenser to register an adapter from the current source jacket, or to resolve a Fab-registered mapped adapter and inspect its retained identity. Use Invoke for registration and ObserveMappedAdapter for identity observation.",
+      "file": "Condensers/FabCondenser.json"
+    },
+    {
+      "name": "FormatCondenser",
+      "whenToUse": "Choose this condenser to parse content from ItemSignal at %.@ as JSON, XML, or text. Json and JsonArray both use the JSON helper, where Plan.Format selects Json or JsonArray parsing; Xml parses or passes through an XML document, and Text returns text or the original native value.",
+      "file": "Condensers/FormatCondenser.json"
+    },
+    {
+      "name": "GraphCondenser",
+      "whenToUse": "This catalog owner declares no activities or contextual properties, so there is no GraphCondenser activity to select through mapped condenser dispatch. Its separate two-argument Invoke reads Conductor FlatFormulaSource and launches graph processing; use ConduitCondenser's Graph activity for the mapped graph-construction choice.",
+      "file": "Condensers/GraphCondenser.json"
+    },
+    {
+      "name": "HydrationCondenser",
+      "whenToUse": "Choose this condenser to apply a HydrationPlan sequence to a signal through mapped condenser slot dispatch. The default ^ step recursively invokes the same unchanged plan and may not terminate; select explicit dispatch symbols only with current source verification.",
+      "file": "Condensers/HydrationCondenser.json"
+    },
+    {
+      "name": "MapCondenser",
+      "whenToUse": "Choose this condenser for token substitution into ItemSignal content or proposal-driven mapping. Invoke resolves a Plan.Path and writes substituted content back to ItemSignal; Map uses a proposal Signal for Direct or Template mapping with separate conditional inputs.",
+      "file": "Condensers/MapCondenser.json"
+    },
+    {
+      "name": "MemoryCondenser",
+      "whenToUse": "Choose this condenser for Generate to process a phase's ordered Steps, including mapped adapter dispatch and conditional result formatting, transform, hydration and registration. Persist is reserved with no implementation; ReturnItemSignal is checked only when a branch reaches the shared trailing resolver.",
+      "file": "Condensers/MemoryCondenser.json"
+    },
+    {
+      "name": "MergeCondenser",
+      "whenToUse": "Choose this condenser to merge Base and Overlay values resolved from ItemSignal at %.@.Base and %.@.Overlay. The Merge activity forwards Plan depth, array and null-overlay settings to the JSON merge helper; both inputs must resolve with a Result.",
+      "file": "Condensers/MergeCondenser.json"
+    },
+    {
+      "name": "PlanCondenser",
+      "whenToUse": "Choose this condenser for plan iteration, phase execution and task lifecycle operations, or phase-step insertion and replacement. Follow the activity guidance; InvokePlan is reserved and unimplemented.",
+      "file": "Condensers/PlanCondenser.json"
+    },
+    {
+      "name": "RestCondenser",
+      "whenToUse": "Choose this condenser for effectful HTTP REST requests with URI, authentication, headers, body or file options. Select a declared activity label, then set Plan.Config.Method for the actual HTTP verb; the core's method-specific fallbacks can differ from the label. Config.TargetPath is a GET-only output-file path.",
+      "file": "Condensers/RestCondenser.json"
+    },
+    {
+      "name": "TokenCondenser",
+      "whenToUse": "Choose this condenser for the declared Parse activity when ItemSignal carries a token path to resolve through a mapped Token slot. Parse reads the path from ItemSignal Result or Jacket, constructs a token Get plan and does not read the incoming Plan; the catalog declares no contextual properties.",
+      "file": "Condensers/TokenCondenser.json"
+    },
+    {
+      "name": "TransformCondenser",
+      "whenToUse": "Choose this condenser for source-node projection, content selection, ItemSignal graph insertion or registration, JSON cloning, or Base/Overlay merging. Each activity has distinct contextual inputs and some mutate ItemSignal; use its activity guidance before selecting a plan.",
+      "file": "Condensers/TransformCondenser.json"
     }
   ]
 }

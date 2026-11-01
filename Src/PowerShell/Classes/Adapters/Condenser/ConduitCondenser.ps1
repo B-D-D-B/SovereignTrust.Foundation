@@ -80,6 +80,20 @@ class ConduitCondenser {
                 # Process a Signal Graph's Grid 
                 "Process" {
                     $opSignal = [Signal]::Start("GraphLauncher.Invoke", $ItemSignal) | Select-Object -Last 1
+                    $config = $Plan.Config
+                    $hasDetail = $null -ne $config -and $(if ($config -is [System.Collections.IDictionary]) { $config.Contains('ResultDetail') } else { $null -ne $config.PSObject.Properties['ResultDetail'] })
+                    $resultDetail = $false
+                    if ($hasDetail) {
+                        $detailValue = if ($config -is [System.Collections.IDictionary]) { $config['ResultDetail'] } else { $config.ResultDetail }
+                        if ($detailValue -isnot [bool]) { return $opSignal.LogCritical('Config.ResultDetail must be a native Boolean.') }
+                        $resultDetail = $detailValue
+                    }
+                    if ($resultDetail) {
+                        $hasParallel = if ($Plan -is [System.Collections.IDictionary]) { $Plan.Contains('SupportParallelism') } else { $null -ne $Plan.PSObject.Properties['SupportParallelism'] }
+                        $parallel = if ($hasParallel) { if ($Plan -is [System.Collections.IDictionary]) { $Plan['SupportParallelism'] } else { $Plan.SupportParallelism } } else { $false }
+                        if ($parallel -isnot [bool]) { return $opSignal.LogCritical('SupportParallelism must be a native Boolean with ResultDetail.') }
+                        if ($parallel) { return $opSignal.LogCritical('ResultDetail is available for serial Conduit.Process only.') }
+                    }
                     $SourcePathSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "ForEachPath" | Select-Object -Last 1
                     
                     if ($opSignal.MergeSignalAndVerifyFailure($SourcePathSignal)) {
@@ -101,7 +115,9 @@ class ConduitCondenser {
                     
                     # Call our declarative plan processor
                     $resultSignal = Invoke-ProcessConduitCondenser -Signal $ConductionSignal -ItemSignal $sourceSignal -Plan $clonePlan | Select-Object -Last 1
-                    $opSignal.MergeSignal($resultSignal) | Out-Null
+                    if ($null -eq $resultSignal -or $opSignal.MergeSignalAndVerifyFailure($resultSignal)) {
+                        return $opSignal.LogCritical('Conduit.Process child dispatch failed.')
+                    }
 
                     if ($resultSignal.HasResult()) {
                         $opSignal.SetResult($resultSignal.GetResult())

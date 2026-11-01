@@ -5,11 +5,13 @@
   "activities": [
     {
       "name": "Invoke",
+      "whenToUse": "Use when Plan.Path identifies content in ItemSignal for JSON token substitution and writeback. String content is temporarily wrapped as Message; the original Plan is forwarded to the token helper, and this branch mutates ItemSignal at the selected path.",
       "description": "Invoke a condenser operation.",
       "properties": [
         {
           "path": "Config",
           "description": "Forward the configuration object into a constructed token lookup plan.",
+          "whenToUse": "Supply token lookup configuration when the JSON token helper reaches its adapter-lookup branch; that branch copies Plan.Config into a constructed TokenPlan. Omit when that conditional lookup is not used.",
           "adapters": [
             "MapCondenser"
           ]
@@ -17,6 +19,7 @@
         {
           "path": "HydrationStyle",
           "description": "Select deferred token delimiters when the style is Deferred.",
+          "whenToUse": "Set Deferred to select pipe-terminated [token|] syntax for token matching and replacement in the JSON token crawl. The helper reads this from the original Plan without a supplied default; omission uses its other matching path.",
           "adapters": [
             "MapCondenser"
           ]
@@ -24,19 +27,47 @@
         {
           "path": "Path",
           "description": "Locate source content in ItemSignal for token substitution and writeback.",
+          "whenToUse": "Supply the ItemSignal path holding source content to substitute. Invoke resolves that path, passes the original Plan to the JSON token helper and writes its result back at the same path.",
           "adapters": [
             "MapCondenser"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "mapped value or Signal",
+          "description": "When Plan mapping branch using ItemSignal; mapping succeeds (Result presence conditional).",
+          "adapters": [
+            "MapCondenser"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "MapCondenser: Condenser helper failure is not consistently merged before result extraction"
       ]
     },
     {
       "name": "Map",
+      "whenToUse": "Use with a proposal Signal that has a Result, either passed directly as Plan or resolved from Config.ProposalPath. The proposal's CondenserMode selects Direct by default or Template; optional Config.DataPath selects source data. The Template helper reads proposal members directly and has separate relay-data conditions.",
       "description": "Map values.",
       "properties": [
         {
+          "path": "Config.ProposalPath",
+          "description": "Required for ordinary JSON Map plan: resolve a graph Signal holding the proposal; a terminal @ unwrapping to a plain object is invalid. Existing direct Signal proposal callers remain supported.",
+          "whenToUse": "For an ordinary JSON Plan, supply a nonblank ItemSignal path that resolves to a proposal Signal with a Result. Omit only when Plan itself is the proposal Signal; a path ending in @ that unwraps to a plain object is not sufficient.",
+          "adapters": ["MapCondenser"]
+        },
+        {
+          "path": "Config.DataPath",
+          "description": "Optional source data lookup for an operation-local proxy; absent uses current ItemSignal Result. Native false, zero and empty results remain present.",
+          "whenToUse": "Optionally select ItemSignal source data for the Map operation when using a JSON Plan. Omit to use the current ItemSignal Result; a supplied path must resolve with a Result.",
+          "adapters": ["MapCondenser"]
+        },
+        {
           "path": "@.CondenserMode",
           "description": "Select Direct or Template mapping from the incoming proposal signal payload.",
+          "whenToUse": "Set the proposal Signal payload mode to Direct or Template to choose the helper branch. Omit for the mapped entry's Direct default; an explicitly blank or unsupported value is rejected before helper dispatch.",
           "adapters": [
             "MapCondenser"
           ]
@@ -44,6 +75,7 @@
         {
           "path": "@.Content",
           "description": "Read the incoming proposal signal payload content for direct substitution.",
+          "whenToUse": "Supply proposal Signal payload content containing direct-substitution tags when CondenserMode is Direct; the direct helper resolves this exact @.Content path before replacing tags.",
           "adapters": [
             "MapCondenser"
           ]
@@ -51,6 +83,7 @@
         {
           "path": "@.ReplacementType",
           "description": "Select the direct-substitution tag format from the proposal signal payload.",
+          "whenToUse": "For Direct mode, set the proposal Signal payload tag syntax when AtAt is not desired. The direct helper starts with AtAt and reads this path conditionally; no resolver default is supplied.",
           "adapters": [
             "MapCondenser"
           ]
@@ -58,6 +91,7 @@
         {
           "path": "Content",
           "description": "Validate template content, derive tags and return substituted content.",
+          "whenToUse": "For Template mode, supply template content on the proposal object so the helper can derive tags and return substituted content. This is a direct proposal member in the template branch, distinct from Direct mode's @.Content resolver path.",
           "adapters": [
             "MapCondenser"
           ]
@@ -65,6 +99,7 @@
         {
           "path": "MappingType",
           "description": "Select the mapping behavior passed to replacement.",
+          "whenToUse": "For Template mode with a matching relay tag, supply the mapping behavior forwarded to Replace-MapCondenserTags. The direct helper's similarly named relay loop is disabled in current source.",
           "adapters": [
             "MapCondenser"
           ]
@@ -72,6 +107,7 @@
         {
           "path": "RelayData",
           "description": "Select relay entries associated with each requested source.",
+          "whenToUse": "For Template mode with tags and listed sources, provide relay entries to match by Key.RelayFilename. The direct helper's relay-data loop is disabled in current source.",
           "adapters": [
             "MapCondenser"
           ]
@@ -79,6 +115,7 @@
         {
           "path": "RelayData.Key.RelayFilename",
           "description": "Match each relay entry filename against the current source.",
+          "whenToUse": "For a Template relay entry, set the filename to match a SourceRelayList source. The helper selects matching entries before checking their Value.",
           "adapters": [
             "MapCondenser"
           ]
@@ -86,6 +123,7 @@
         {
           "path": "RelayData.Value",
           "description": "Test and read each selected relay value object before resolving a tag.",
+          "whenToUse": "For a selected Template relay entry, provide a truthy Value object so the helper attempts tag resolution. A falsey Value skips that entry in current source.",
           "adapters": [
             "MapCondenser"
           ]
@@ -93,6 +131,7 @@
         {
           "path": "RelayData[*].Value[$tag]",
           "description": "Resolve each runtime template tag against selected incoming relay data values.",
+          "whenToUse": "Within a truthy selected Template relay Value, provide the runtime tag path to resolve. The tag is derived from Content, so this contextual path has no fixed literal child-name inventory.",
           "adapters": [
             "MapCondenser"
           ],
@@ -102,6 +141,7 @@
         {
           "path": "ReplacementType",
           "description": "Choose template tag parsing and replacement syntax.",
+          "whenToUse": "For Template mode, choose the proposal member tag syntax used for tag discovery and replacement. This direct member is separate from Direct mode's @.ReplacementType lookup.",
           "adapters": [
             "MapCondenser"
           ]
@@ -109,11 +149,25 @@
         {
           "path": "SourceRelayList",
           "description": "Enumerate the relay sources for each template tag.",
+          "whenToUse": "For Template mode with derived tags, list the relay source filenames to inspect. Each source is matched against RelayData entries before tag resolution.",
           "adapters": [
             "MapCondenser"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "String",
+          "description": "When a valid proposal Signal selects Direct mode and Content resolves, the literal substituted text; false/zero/empty and dollar-containing values are inserted without mutating original source data.",
+          "adapters": ["MapCondenser"]
+        }
+      ],
+      "resultNotes": [
+        "No stable public Result field is available for this activity; inspect the Signal/effect at its actual boundary.",
+        "MapCondenser: Direct mode now accepts a proposal Graph Signal with optional data proxy and literal substitutions; missing tag may leave unresolved text. Template mode retains legacy behavior/mutation and has no new correctness claim."
       ]
     }
-  ]
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Condensers/MapCondenser.json","version":1}
 }

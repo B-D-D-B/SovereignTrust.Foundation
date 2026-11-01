@@ -5,11 +5,13 @@
   "activities": [
     {
       "name": "Invoke",
+      "whenToUse": "Use to register the adapter described by the current ItemSignal source jacket into its mapped kind and slot. VirtualPath must encode the kind and slot; any nonblank Kind or Slot must match it. Loading is lazy by default, with Eager resolving before registration.",
       "description": "Invoke a condenser operation.",
       "properties": [
         {
           "path": "Config.AdapterLoading.Mode",
           "description": "Choose lazy registration unless the loading mode is Eager.",
+          "whenToUse": "Omit or use Lazy to register a deferred adapter handle. Set Eager when the adapter must be resolved before registration; the branch treats modes other than Eager as lazy.",
           "adapters": [
             "FabCondenser"
           ],
@@ -20,6 +22,7 @@
         {
           "path": "Config.AdapterLoading.RetryFailedResolution",
           "description": "Allow a failed lazy adapter resolution to be retried.",
+          "whenToUse": "Set Boolean true when a later resolution attempt should be allowed after a lazy registration has failed. Omit or use false to retain the failed-state rejection; this option is forwarded only for lazy registration.",
           "adapters": [
             "FabCondenser"
           ],
@@ -27,17 +30,85 @@
             "FabCondenser": false
           }
         }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "adapter handle",
+          "description": "When valid source jacket Kind/Slot/VirtualPath and mapped registration; registration and identity attachment complete.",
+          "adapters": [
+            "FabCondenser"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "FabCondenser: A returned handle does not prove unrelated graph state is unchanged"
       ]
     },
     {
       "name": "ObserveMappedAdapter",
+      "whenToUse": "Use to resolve a selected Fab-registered mapped adapter and report its source, module, class and slot identity together with membership of a distinct comparison slot. Resolution can construct and cache the selected adapter; this activity does not dispatch its provider operation.",
       "description": "Resolve a selected mapped adapter and report its Fab-retained source mapping, loaded module, instance class, slot, constructed jacket path and absent-slot graph membership. Invoke retains only source Kind, Slot and VirtualPath on the mapped slot signal after verified registration. First observation may import and construct the adapter and update its registration cache. No provider activity is invoked. Missing or ambiguous provenance and failed resolution return a failed signal with no observation.",
       "properties": [
-        { "path": "Config.Kind", "description": "Required mapped adapter kind.", "adapters": ["FabCondenser"] },
-        { "path": "Config.Slot", "description": "Required selected mapped slot.", "adapters": ["FabCondenser"] },
-        { "path": "Config.AbsentSlot", "description": "Required distinct slot to inspect for absence without resolving it.", "adapters": ["FabCondenser"] }
+        { "path": "Config.Kind", "description": "Required mapped adapter kind.", "whenToUse": "Supply the existing mapped adapter kind using letters only and the exact casing retained in its Fab source identity.", "adapters": ["FabCondenser"] },
+        { "path": "Config.Slot", "description": "Required selected mapped slot.", "whenToUse": "Supply the existing registered slot to resolve, using letters, digits, underscores or hyphens and the exact casing in its Fab source identity. It must differ from Config.AbsentSlot.", "adapters": ["FabCondenser"] },
+        { "path": "Config.AbsentSlot", "description": "Required distinct slot to inspect for absence without resolving it.", "whenToUse": "Supply a different slot name using letters, digits, underscores or hyphens when its graph membership should be checked without resolving it. MissingSlotAbsent reports whether that slot was absent; a present comparison slot is reported as false.", "adapters": ["FabCondenser"] }
       ],
-      "result": ["SourceMapping", "ModuleName", "ClassName", "MappedSlot", "JacketVirtualPath", "MissingSlotAbsent"]
+      "result": ["SourceMapping", "ModuleName", "ClassName", "MappedSlot", "JacketVirtualPath", "MissingSlotAbsent"],
+      "resultFields": [
+        {
+          "path": "SourceMapping",
+          "type": "Boolean",
+          "description": "source Kind/Slot/VirtualPath match constructed jacket [computed]. When existing mapping/slot and distinct AbsentSlot supplied; mapped, module, class, slot and absence checks pass.",
+          "adapters": [
+            "FabCondenser"
+          ]
+        },
+        {
+          "path": "ModuleName",
+          "type": "String",
+          "description": "loaded module name [provider-returned]. When existing mapping/slot and distinct AbsentSlot supplied; mapped, module, class, slot and absence checks pass.",
+          "adapters": [
+            "FabCondenser"
+          ]
+        },
+        {
+          "path": "ClassName",
+          "type": "String",
+          "description": "constructed class name [computed]. When existing mapping/slot and distinct AbsentSlot supplied; mapped, module, class, slot and absence checks pass.",
+          "adapters": [
+            "FabCondenser"
+          ]
+        },
+        {
+          "path": "MappedSlot",
+          "type": "String",
+          "description": "selected slot [echoed-input]. When existing mapping/slot and distinct AbsentSlot supplied; mapped, module, class, slot and absence checks pass.",
+          "adapters": [
+            "FabCondenser"
+          ]
+        },
+        {
+          "path": "JacketVirtualPath",
+          "type": "String",
+          "description": "constructed jacket path [computed]. When existing mapping/slot and distinct AbsentSlot supplied; mapped, module, class, slot and absence checks pass.",
+          "adapters": [
+            "FabCondenser"
+          ]
+        },
+        {
+          "path": "MissingSlotAbsent",
+          "type": "Boolean",
+          "description": "distinct absent slot was absent [computed]. When existing mapping/slot and distinct AbsentSlot supplied; mapped, module, class, slot and absence checks pass.",
+          "adapters": [
+            "FabCondenser"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "FabCondenser: Original result array remains unchanged"
+      ]
     }
-  ]
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Condensers/FabCondenser.json","version":1}
 }

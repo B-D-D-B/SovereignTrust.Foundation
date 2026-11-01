@@ -1,0 +1,3887 @@
+{
+  "name": "MappedDataAdapter",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedDataAdapter.ps1",
+      "sha256": "45CBA6E7D2C2955BD1820C0A81B6BA5859451990C418E0A32C63E9C1D5CB7464"
+    },
+    {
+      "id": "s2",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Data/ArtifactProcess/PowerShell/Data_ArtifactProcess.psm1",
+      "sha256": "10E250C25F0A72F4D9AE53B97EDA787B08E92883B7D0681FB9A29975FE39EF75"
+    },
+    {
+      "id": "s3",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Data/ArtifactProcess/Runtime/Host.cs",
+      "sha256": "CAC8C37988FDAF53DBA0C94D7F75274558E05D528F6BFEA89AAD655332ED788D"
+    },
+    {
+      "id": "s4",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Data/ArtifactProcess/Runtime/Coordinator.cs",
+      "sha256": "B6B5DE269E267EF2BDD28B2B12A6252DA6452A689D02F6A3692C5717C1C0F5A3"
+    },
+    {
+      "id": "s5",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureDataExplorer/PowerShell/Data_AzureDataExplorer.psm1",
+      "sha256": "6701AF2BBBAA15EA94703B47B3DC126ED49040D2F28AF559383BF1AFD9FADCBC"
+    },
+    {
+      "id": "s6",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureSql/PowerShell/Invoke-Data_AzureSql.ps1",
+      "sha256": "11492F8BF69456283A39EBB07708BA587D2DC4AACED7D39EE78D9C7BA5ED6E59"
+    },
+    {
+      "id": "s7",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Data/ArtifactProcess/Runtime/ProcessReport.cs",
+      "sha256": "3AADEEF898690A50E413102A034D4447DDB22BC43326803B5F97C8EDC78FFAEB"
+    },
+    {
+      "id": "s8",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureSql/PowerShell/Data_AzureSql.ps1",
+      "sha256": "DC54B58C395082C5A612701D006EA0CD625B9D4EF71794A7556B58B4CB096264"
+    },
+    {
+      "id": "s9",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureSql/PowerShell/ConvertTo-AzureSqlJsonResult.ps1",
+      "sha256": "7267B588E88803253FAB59E01AF50F92A2FADFEA76A48C53293C5BC132954180"
+    },
+    {
+      "id": "s10",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureDataExplorer/PowerShell/Invoke-AzureDataExplorerAdmin.ps1",
+      "sha256": "815FBE34E5A66402A49EE57FBFC4079D2E461EA97E14CD99A2FE67CD67D27EFC"
+    },
+    {
+      "id": "s11",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureDataExplorer/PowerShell/Invoke-AzureDataExplorerData.ps1",
+      "sha256": "3C2FAA8B0A5A8BBE2088977A9C970D08B0FEF9FB28F420B21C8A8A7E813F2FEE"
+    }
+  ],
+  "activities": [
+    {
+      "name": "Write",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_AzureSql",
+            "support": "implemented",
+            "when": "valid Config and SQL destination; stored procedure selected",
+            "outcomes": [
+              {
+                "condition": "SQL execution returns validated envelope",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Operation",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "selected verb",
+                    "origin": "constant"
+                  },
+                  {
+                    "path": "ResultSets",
+                    "type": "array",
+                    "presence": "required",
+                    "meaning": "reader sets; Admin has empty array",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ResultSets[*].Name",
+                    "type": "String",
+                    "presence": "conditional",
+                    "meaning": "result-set name",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ResultSets[*].Columns",
+                    "type": "array",
+                    "presence": "conditional",
+                    "meaning": "column descriptors",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ResultSets[*].Rows",
+                    "type": "array",
+                    "presence": "conditional",
+                    "meaning": "result rows; can be empty",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "RowsAffected",
+                    "type": "Int32/null",
+                    "presence": "required",
+                    "meaning": "provider affected count or unavailable",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "OutputParameters",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "SQL output parameters",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "Write transaction rolls back with normalized input",
+                "signalState": "failure",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Outcome",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "RolledBack",
+                    "origin": "constant"
+                  },
+                  {
+                    "path": "PayloadSha256",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "normalized payload digest",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "InvocationId",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "new receipt ID",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "invalid input, uncertain commit, provider error or cleanup failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "executes Write against SQL; Write/Delete/Admin can mutate"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Write'",
+                "line": 102,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s8",
+                "symbol": "Invoke",
+                "line": 26,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "'Write'",
+                "line": 11,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s9",
+                "symbol": "'Write'",
+                "line": 216,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Decimal/large integer values may be strings, byte arrays base64, dates UTC strings. Data mapped wrapper retains failure Result when supplied."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "implemented",
+            "when": "ADX target, validated command and token",
+            "outcomes": [
+              {
+                "condition": "ADX response validated",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Operation",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "Write",
+                    "origin": "constant"
+                  },
+                  {
+                    "path": "Tables",
+                    "type": "array",
+                    "presence": "required",
+                    "meaning": "validated ADX tables",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "invalid command/token, HTTP or malformed response; correlation may report OutcomeUnknown",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "issues ADX Write request"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Write'",
+                "line": 102,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "'Write'",
+                "line": 73,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s11",
+                "symbol": "'Write'",
+                "line": 13,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "No live ADX response was observed."
+          },
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "unsupported",
+            "when": "Host.cs has no Write case",
+            "outcomes": [
+              {
+                "condition": "Host throws UnsupportedHostActivity; PowerShell bridge returns failed Signal without Result",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Write'",
+                "line": 102,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "'Write'",
+                "line": 26,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "switch (activity)",
+                "line": 116,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog properties include Data_ArtifactProcess for this verb but checked-in host does not implement it."
+          }
+        ]
+      }
+    },
+    {
+      "name": "Query",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_AzureSql",
+            "support": "implemented",
+            "when": "valid Config and SQL destination; CommandText selected",
+            "outcomes": [
+              {
+                "condition": "SQL execution returns validated envelope",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Operation",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "selected verb",
+                    "origin": "constant"
+                  },
+                  {
+                    "path": "ResultSets",
+                    "type": "array",
+                    "presence": "required",
+                    "meaning": "reader sets; Admin has empty array",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ResultSets[*].Name",
+                    "type": "String",
+                    "presence": "conditional",
+                    "meaning": "result-set name",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ResultSets[*].Columns",
+                    "type": "array",
+                    "presence": "conditional",
+                    "meaning": "column descriptors",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ResultSets[*].Rows",
+                    "type": "array",
+                    "presence": "conditional",
+                    "meaning": "result rows; can be empty",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "RowsAffected",
+                    "type": "Int32/null",
+                    "presence": "required",
+                    "meaning": "provider affected count or unavailable",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "OutputParameters",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "SQL output parameters",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "invalid input, uncertain commit, provider error or cleanup failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "executes Query against SQL; Write/Delete/Admin can mutate"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Query'",
+                "line": 102,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s8",
+                "symbol": "Invoke",
+                "line": 26,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "'Query'",
+                "line": 12,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s9",
+                "symbol": "'Query'",
+                "line": 216,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Decimal/large integer values may be strings, byte arrays base64, dates UTC strings. Data mapped wrapper retains failure Result when supplied."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "implemented",
+            "when": "ADX target, validated command and token",
+            "outcomes": [
+              {
+                "condition": "ADX response validated",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Operation",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "Query",
+                    "origin": "constant"
+                  },
+                  {
+                    "path": "ResultSets",
+                    "type": "array",
+                    "presence": "required",
+                    "meaning": "tables excluding QueryStatus, with Rows",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "invalid command/token, HTTP or malformed response; correlation may report OutcomeUnknown",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "issues ADX Query request"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Query'",
+                "line": 102,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "'Query'",
+                "line": 73,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s11",
+                "symbol": "'Query'",
+                "line": 10,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "No live ADX response was observed."
+          },
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "unsupported",
+            "when": "Host.cs has no Query case",
+            "outcomes": [
+              {
+                "condition": "Host throws UnsupportedHostActivity; PowerShell bridge returns failed Signal without Result",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Query'",
+                "line": 102,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "'Query'",
+                "line": 16,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"Query\"",
+                "line": 70,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog properties include Data_ArtifactProcess for this verb but checked-in host does not implement it."
+          }
+        ]
+      }
+    },
+    {
+      "name": "Delete",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_AzureSql",
+            "support": "implemented",
+            "when": "valid Config and SQL destination; CommandText selected",
+            "outcomes": [
+              {
+                "condition": "SQL execution returns validated envelope",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Operation",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "selected verb",
+                    "origin": "constant"
+                  },
+                  {
+                    "path": "ResultSets",
+                    "type": "array",
+                    "presence": "required",
+                    "meaning": "reader sets; Admin has empty array",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ResultSets[*].Name",
+                    "type": "String",
+                    "presence": "conditional",
+                    "meaning": "result-set name",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ResultSets[*].Columns",
+                    "type": "array",
+                    "presence": "conditional",
+                    "meaning": "column descriptors",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ResultSets[*].Rows",
+                    "type": "array",
+                    "presence": "conditional",
+                    "meaning": "result rows; can be empty",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "RowsAffected",
+                    "type": "Int32/null",
+                    "presence": "required",
+                    "meaning": "provider affected count or unavailable",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "OutputParameters",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "SQL output parameters",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "invalid input, uncertain commit, provider error or cleanup failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "executes Delete against SQL; Write/Delete/Admin can mutate"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Delete'",
+                "line": 102,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s8",
+                "symbol": "Invoke",
+                "line": 26,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "'Delete'",
+                "line": 34,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s9",
+                "symbol": "'Delete'",
+                "line": 216,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Decimal/large integer values may be strings, byte arrays base64, dates UTC strings. Data mapped wrapper retains failure Result when supplied."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "implemented",
+            "when": "ADX target, validated command and token",
+            "outcomes": [
+              {
+                "condition": "ADX response validated",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Operation",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "Delete",
+                    "origin": "constant"
+                  },
+                  {
+                    "path": "Tables",
+                    "type": "array",
+                    "presence": "required",
+                    "meaning": "validated ADX tables",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "invalid command/token, HTTP or malformed response; correlation may report OutcomeUnknown",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "issues ADX Delete request"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Delete'",
+                "line": 102,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "'Delete'",
+                "line": 73,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s11",
+                "symbol": "'Delete'",
+                "line": 16,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "No live ADX response was observed."
+          },
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "unsupported",
+            "when": "Host.cs has no Delete case",
+            "outcomes": [
+              {
+                "condition": "Host throws UnsupportedHostActivity; PowerShell bridge returns failed Signal without Result",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Delete'",
+                "line": 102,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "switch (activity)",
+                "line": 116,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog properties include Data_ArtifactProcess for this verb but checked-in host does not implement it."
+          }
+        ]
+      }
+    },
+    {
+      "name": "Admin",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_AzureSql",
+            "support": "implemented",
+            "when": "valid Config and SQL destination; CommandText selected",
+            "outcomes": [
+              {
+                "condition": "SQL execution returns validated envelope",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Operation",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "selected verb",
+                    "origin": "constant"
+                  },
+                  {
+                    "path": "ResultSets",
+                    "type": "array",
+                    "presence": "required",
+                    "meaning": "reader sets; Admin has empty array",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ResultSets[*].Name",
+                    "type": "String",
+                    "presence": "conditional",
+                    "meaning": "result-set name",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ResultSets[*].Columns",
+                    "type": "array",
+                    "presence": "conditional",
+                    "meaning": "column descriptors",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ResultSets[*].Rows",
+                    "type": "array",
+                    "presence": "conditional",
+                    "meaning": "result rows; can be empty",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "RowsAffected",
+                    "type": "Int32/null",
+                    "presence": "required",
+                    "meaning": "provider affected count or unavailable",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "OutputParameters",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "SQL output parameters",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "invalid input, uncertain commit, provider error or cleanup failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "executes Admin against SQL; Write/Delete/Admin can mutate"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Admin'",
+                "line": 102,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s8",
+                "symbol": "Invoke",
+                "line": 26,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "'Admin'",
+                "line": 11,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s9",
+                "symbol": "'Admin'",
+                "line": 216,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Decimal/large integer values may be strings, byte arrays base64, dates UTC strings. Data mapped wrapper retains failure Result when supplied."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "implemented",
+            "when": "ADX target, validated command and token",
+            "outcomes": [
+              {
+                "condition": "ADX response validated",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Operation",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "Admin",
+                    "origin": "constant"
+                  },
+                  {
+                    "path": "Tables",
+                    "type": "array",
+                    "presence": "required",
+                    "meaning": "validated ADX tables",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "invalid command/token, HTTP or malformed response; correlation may report OutcomeUnknown",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "issues ADX Admin request"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Admin'",
+                "line": 102,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "'Admin'",
+                "line": 73,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s10",
+                "symbol": "'Admin'",
+                "line": 127,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "No live ADX response was observed."
+          },
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "unsupported",
+            "when": "Host.cs has no Admin case",
+            "outcomes": [
+              {
+                "condition": "Host throws UnsupportedHostActivity; PowerShell bridge returns failed Signal without Result",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Admin'",
+                "line": 102,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "switch (activity)",
+                "line": 116,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog properties include Data_ArtifactProcess for this verb but checked-in host does not implement it."
+          }
+        ]
+      }
+    },
+    {
+      "name": "WriteItem",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "implemented",
+            "when": "TableName/MappingName/Rows supplied",
+            "outcomes": [
+              {
+                "condition": "REST ingest call succeeds, but source never assigns resultSignal",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "input, REST or source parsing failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "posts ADX ingest body"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'WriteItem'",
+                "line": 102,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "\"WriteItem\"",
+                "line": 112,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Neither branch exposes a factual ingestion/ack receipt; WriteBatch source appears copied from queue logic."
+          },
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "unsupported",
+            "when": "host has no WriteItem case",
+            "outcomes": [
+              {
+                "condition": "UnsupportedHostActivity caught by PowerShell bridge",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'WriteItem'",
+                "line": 102,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "switch (activity)",
+                "line": 116,
+                "kind": "source-derived"
+              }
+            ]
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'WriteItem'",
+                "line": 102,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "WriteBatch",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "implemented",
+            "when": "queue-shaped MessageId/PopReceipt branch",
+            "outcomes": [
+              {
+                "condition": "REST delete call succeeds, but unresolved resultSignal has no Result",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "input, REST or source parsing failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "issues queue-shaped delete request"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'WriteBatch'",
+                "line": 102,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "\"WriteBatch\"",
+                "line": 166,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Neither branch exposes a factual ingestion/ack receipt; WriteBatch source appears copied from queue logic."
+          },
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "unsupported",
+            "when": "host has no WriteBatch case",
+            "outcomes": [
+              {
+                "condition": "UnsupportedHostActivity caught by PowerShell bridge",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'WriteBatch'",
+                "line": 102,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "switch (activity)",
+                "line": 116,
+                "kind": "source-derived"
+              }
+            ]
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'WriteBatch'",
+                "line": 102,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "OpenCanonical",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "existing canonical file is read or validated default is published",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "canonical JSON document text; decode once for object",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "untrusted Plan override, missing identity/part, journal, filesystem, SQL bridge or contract failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "may publish default canonical document when absent"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'OpenCanonical'",
+                "line": 103,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"OpenCanonical\"",
+                "line": 118,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. Read-looking verb can mutate canonical file."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no OpenCanonical case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'OpenCanonical'",
+                "line": 103,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'OpenCanonical'",
+                "line": 103,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "CaptureWriter",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "writer capture succeeds",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "OperationId",
+                    "type": "Guid string",
+                    "presence": "required",
+                    "meaning": "new capture ID",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "ArtifactName",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "validated artifact name",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "Container",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "validated container",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "Resource",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "validated resource",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "SourceText",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "existing or default baseline text",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "GenerationToken",
+                    "type": "Guid string/null",
+                    "presence": "required",
+                    "meaning": "curation generation if started",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "untrusted Plan override, missing identity/part, journal, filesystem, SQL bridge or contract failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "captures writer journal; may start curation generation"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'CaptureWriter'",
+                "line": 103,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"CaptureWriter\"",
+                "line": 129,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. "
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no CaptureWriter case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'CaptureWriter'",
+                "line": 103,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'CaptureWriter'",
+                "line": 103,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "ReadCaptured",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "known capture operation ID",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "stored baseline JSON document text; decode once for object",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "untrusted Plan override, missing identity/part, journal, filesystem, SQL bridge or contract failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "opens coordinator journal"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'ReadCaptured'",
+                "line": 103,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"ReadCaptured\"",
+                "line": 150,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. Unknown capture fails; this is not a fresh file read."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no ReadCaptured case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'ReadCaptured'",
+                "line": 103,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'ReadCaptured'",
+                "line": 103,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "PublishWriter",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "publication status Published or Superseded",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Status",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "Published or Superseded",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "IngestionEligible",
+                    "type": "Boolean",
+                    "presence": "required",
+                    "meaning": "writer is not Draft",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "AuxiliaryRepair",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "repair instruction",
+                    "origin": "constant"
+                  }
+                ]
+              },
+              {
+                "condition": "status differs or publication fails; PowerShell throws before SetResult",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "publishes captured candidate"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'PublishWriter'",
+                "line": 103,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "'PublishWriter'",
+                "line": 111,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"PublishWriter\"",
+                "line": 152,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. Nonpublished host status is discarded by bridge and absent from public Result."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no PublishWriter case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'PublishWriter'",
+                "line": 103,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'PublishWriter'",
+                "line": 103,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreateEntry",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "entry status Published or Superseded",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Status",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "publication status",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "IngestionEligible",
+                    "type": "Boolean",
+                    "presence": "required",
+                    "meaning": "true",
+                    "origin": "constant"
+                  }
+                ]
+              },
+              {
+                "condition": "invalid draft scope or other status; no Result",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "captures and publishes draft-to-entry candidate"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'CreateEntry'",
+                "line": 104,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "'CreateEntry'",
+                "line": 111,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"CreateEntry\"",
+                "line": 167,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. "
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no CreateEntry case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'CreateEntry'",
+                "line": 104,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'CreateEntry'",
+                "line": 104,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "OpenArtifactProcess",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "process report opens",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Process.Parts",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "declared parts; ingestion VerificationStatus Unknown",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "untrusted Plan override, missing identity/part, journal, filesystem, SQL bridge or contract failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "opens coordinator and may reconcile journal ownership"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'OpenArtifactProcess'",
+                "line": 104,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"OpenArtifactProcess\"",
+                "line": 181,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s7",
+                "symbol": "ProcessReport",
+                "line": 5,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. This is report construction, not SQL verification."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no OpenArtifactProcess case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'OpenArtifactProcess'",
+                "line": 104,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'OpenArtifactProcess'",
+                "line": 104,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "InspectArtifactParts",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "content/part report generated",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Process.Parts.*.Content.Status",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "Present/Missing/Invalid from observed content",
+                    "origin": "measured"
+                  },
+                  {
+                    "path": "Process.Parts.*.Ingestion.VerificationStatus",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "SQL verification or Unknown",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "untrusted Plan override, missing identity/part, journal, filesystem, SQL bridge or contract failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "reads files and attempts scoped SQL query"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'InspectArtifactParts'",
+                "line": 104,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"InspectArtifactParts\"",
+                "line": 182,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s7",
+                "symbol": "ProcessReport",
+                "line": 5,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. SQL query exceptions are caught and reported as Unknown while Signal can remain success."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no InspectArtifactParts case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'InspectArtifactParts'",
+                "line": 104,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'InspectArtifactParts'",
+                "line": 104,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "StartArtifactGeneration",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "generation starts",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "OperationId",
+                    "type": "Guid string",
+                    "presence": "required",
+                    "meaning": "generation ID",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "untrusted Plan override, missing identity/part, journal, filesystem, SQL bridge or contract failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "starts generation in journal"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'StartArtifactGeneration'",
+                "line": 105,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"StartArtifactGeneration\"",
+                "line": 183,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. "
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no StartArtifactGeneration case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'StartArtifactGeneration'",
+                "line": 105,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'StartArtifactGeneration'",
+                "line": 105,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "PublishArtifactCandidate",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "status Published or Superseded",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Status",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "publication state",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "other publication status or exception; no public Result",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "publishes candidate file"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'PublishArtifactCandidate'",
+                "line": 105,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "'PublishArtifactCandidate'",
+                "line": 111,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"PublishArtifactCandidate\"",
+                "line": 188,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. Bridge discards nonpublished status before SetResult."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no PublishArtifactCandidate case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'PublishArtifactCandidate'",
+                "line": 105,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'PublishArtifactCandidate'",
+                "line": 105,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "FailArtifactGeneration",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "coordinator transition completes",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Artifact",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "coordinator artifact identity",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "Revision",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "journal revision",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Generations",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "generation lifecycle",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Deliveries",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "delivery lifecycle",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "SyncCheckpoint",
+                    "type": "object/null",
+                    "presence": "conditional",
+                    "meaning": "last sync checkpoint",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "untrusted Plan override, missing identity/part, journal, filesystem, SQL bridge or contract failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "transitions journal state for FailArtifactGeneration"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'FailArtifactGeneration'",
+                "line": 106,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"FailArtifactGeneration\"",
+                "line": 193,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Coordinator",
+                "line": 67,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. State includes Owner, Completed, Rejections, Snapshots, WorkerEpoch and PublicationUnknown beyond abbreviated shape."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no FailArtifactGeneration case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'FailArtifactGeneration'",
+                "line": 106,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'FailArtifactGeneration'",
+                "line": 106,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "CompleteArtifactGeneration",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "coordinator transition completes",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Artifact",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "coordinator artifact identity",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "Revision",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "journal revision",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Generations",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "generation lifecycle",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Deliveries",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "delivery lifecycle",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "SyncCheckpoint",
+                    "type": "object/null",
+                    "presence": "conditional",
+                    "meaning": "last sync checkpoint",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "untrusted Plan override, missing identity/part, journal, filesystem, SQL bridge or contract failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "reads/checks published generation"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'CompleteArtifactGeneration'",
+                "line": 106,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"CompleteArtifactGeneration\"",
+                "line": 194,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Coordinator",
+                "line": 67,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. State includes Owner, Completed, Rejections, Snapshots, WorkerEpoch and PublicationUnknown beyond abbreviated shape."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no CompleteArtifactGeneration case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'CompleteArtifactGeneration'",
+                "line": 106,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'CompleteArtifactGeneration'",
+                "line": 106,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "RetryRejectedPart",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "freshness not NotIngested or Changed",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Status",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "freshness disposition",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "delivery enqueued/adopted/submitted",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Artifact",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "coordinator artifact identity",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "Revision",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "journal revision",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Generations",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "generation lifecycle",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Deliveries",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "delivery lifecycle",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "SyncCheckpoint",
+                    "type": "object/null",
+                    "presence": "conditional",
+                    "meaning": "last sync checkpoint",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "untrusted Plan override, missing identity/part, journal, filesystem, SQL bridge or contract failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "may submit SQL Apply and transition delivery journal"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'RetryRejectedPart'",
+                "line": 107,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"RetryRejectedPart\"",
+                "line": 198,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Coordinator",
+                "line": 67,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. Early freshness branch is a status-only object, not full coordinator State."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no RetryRejectedPart case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'RetryRejectedPart'",
+                "line": 107,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'RetryRejectedPart'",
+                "line": 107,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "IngestArtifactPart",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "freshness not NotIngested or Changed",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Status",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "freshness disposition",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "delivery enqueued/adopted/submitted",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Artifact",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "coordinator artifact identity",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "Revision",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "journal revision",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Generations",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "generation lifecycle",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Deliveries",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "delivery lifecycle",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "SyncCheckpoint",
+                    "type": "object/null",
+                    "presence": "conditional",
+                    "meaning": "last sync checkpoint",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "untrusted Plan override, missing identity/part, journal, filesystem, SQL bridge or contract failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "may submit SQL Apply and transition delivery journal"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'IngestArtifactPart'",
+                "line": 107,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"IngestArtifactPart\"",
+                "line": 200,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Coordinator",
+                "line": 67,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. Early freshness branch is a status-only object, not full coordinator State."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no IngestArtifactPart case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'IngestArtifactPart'",
+                "line": 107,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'IngestArtifactPart'",
+                "line": 107,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "ReconcileDelivery",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "reconciliation evaluates scoped SQL result",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Resolved",
+                    "type": "Boolean",
+                    "presence": "required",
+                    "meaning": "whether uncertain delivery resolved",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "untrusted Plan override, missing identity/part, journal, filesystem, SQL bridge or contract failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "queries SQL and updates delivery journal"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'ReconcileDelivery'",
+                "line": 107,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"ReconcileDelivery\"",
+                "line": 228,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Coordinator",
+                "line": 67,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. Resolved=false can be a successful Signal."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no ReconcileDelivery case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'ReconcileDelivery'",
+                "line": 107,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'ReconcileDelivery'",
+                "line": 107,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "ResumeDelivery",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "coordinator transition completes",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Artifact",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "coordinator artifact identity",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "Revision",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "journal revision",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Generations",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "generation lifecycle",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Deliveries",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "delivery lifecycle",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "SyncCheckpoint",
+                    "type": "object/null",
+                    "presence": "conditional",
+                    "meaning": "last sync checkpoint",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "untrusted Plan override, missing identity/part, journal, filesystem, SQL bridge or contract failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "transitions journal state for ResumeDelivery"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'ResumeDelivery'",
+                "line": 108,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"ResumeDelivery\"",
+                "line": 233,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "\"ResumeDelivery\"",
+                "line": 55,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. State includes Owner, Completed, Rejections, Snapshots, WorkerEpoch and PublicationUnknown beyond abbreviated shape."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no ResumeDelivery case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'ResumeDelivery'",
+                "line": 108,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'ResumeDelivery'",
+                "line": 108,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "RetireDelivery",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "coordinator transition completes",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Artifact",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "coordinator artifact identity",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "Revision",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "journal revision",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Generations",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "generation lifecycle",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Deliveries",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "delivery lifecycle",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "SyncCheckpoint",
+                    "type": "object/null",
+                    "presence": "conditional",
+                    "meaning": "last sync checkpoint",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "untrusted Plan override, missing identity/part, journal, filesystem, SQL bridge or contract failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "transitions journal state for RetireDelivery"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'RetireDelivery'",
+                "line": 108,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"RetireDelivery\"",
+                "line": 237,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Coordinator",
+                "line": 67,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. State includes Owner, Completed, Rejections, Snapshots, WorkerEpoch and PublicationUnknown beyond abbreviated shape."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no RetireDelivery case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'RetireDelivery'",
+                "line": 108,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'RetireDelivery'",
+                "line": 108,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "RepairUnpublished",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "coordinator transition completes",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Artifact",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "coordinator artifact identity",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "Revision",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "journal revision",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Generations",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "generation lifecycle",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Deliveries",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "delivery lifecycle",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "SyncCheckpoint",
+                    "type": "object/null",
+                    "presence": "conditional",
+                    "meaning": "last sync checkpoint",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "untrusted Plan override, missing identity/part, journal, filesystem, SQL bridge or contract failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "transitions journal state for RepairUnpublished"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'RepairUnpublished'",
+                "line": 108,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"RepairUnpublished\"",
+                "line": 60,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Coordinator",
+                "line": 67,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. State includes Owner, Completed, Rejections, Snapshots, WorkerEpoch and PublicationUnknown beyond abbreviated shape."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no RepairUnpublished case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'RepairUnpublished'",
+                "line": 108,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'RepairUnpublished'",
+                "line": 108,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "SaveArtifactProcess",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "snapshot saved or existing pending snapshot retried",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Version",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "document revision",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Status",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "publication outcome",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "untrusted Plan override, missing identity/part, journal, filesystem, SQL bridge or contract failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "queries watermark and may publish _Process document"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'SaveArtifactProcess'",
+                "line": 109,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"SaveArtifactProcess\"",
+                "line": 239,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s7",
+                "symbol": "ProcessReport",
+                "line": 5,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Coordinator",
+                "line": 67,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. "
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no SaveArtifactProcess case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'SaveArtifactProcess'",
+                "line": 109,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'SaveArtifactProcess'",
+                "line": 109,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "SyncArtifactProcess",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "sync preparation/submission completes",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "OperationId",
+                    "type": "Guid string",
+                    "presence": "conditional",
+                    "meaning": "sync operation",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Version",
+                    "type": "Int64",
+                    "presence": "conditional",
+                    "meaning": "checkpoint version",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Hash",
+                    "type": "String",
+                    "presence": "conditional",
+                    "meaning": "snapshot hash",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "untrusted Plan override, missing identity/part, journal, filesystem, SQL bridge or contract failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "may submit SQL Sync"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'SyncArtifactProcess'",
+                "line": 109,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"SyncArtifactProcess\"",
+                "line": 253,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Coordinator",
+                "line": 67,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. No-op sync can retain prior checkpoint; do not infer new SQL effect from Result alone."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no SyncArtifactProcess case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'SyncArtifactProcess'",
+                "line": 109,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'SyncArtifactProcess'",
+                "line": 109,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "ReconcileArtifactProcess",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Data_ArtifactProcess",
+            "support": "implemented",
+            "when": "jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only",
+            "outcomes": [
+              {
+                "condition": "coordinator transition completes",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "Artifact",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "coordinator artifact identity",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "Revision",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "journal revision",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Generations",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "generation lifecycle",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Deliveries",
+                    "type": "object",
+                    "presence": "required",
+                    "meaning": "delivery lifecycle",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "SyncCheckpoint",
+                    "type": "object/null",
+                    "presence": "conditional",
+                    "meaning": "last sync checkpoint",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "untrusted Plan override, missing identity/part, journal, filesystem, SQL bridge or contract failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "transitions journal state for ReconcileArtifactProcess"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'ReconcileArtifactProcess'",
+                "line": 109,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 13,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "\"ReconcileArtifactProcess\"",
+                "line": 60,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Coordinator",
+                "line": 67,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. State includes Owner, Completed, Rejections, Snapshots, WorkerEpoch and PublicationUnknown beyond abbreviated shape."
+          },
+          {
+            "adapter": "Data_AzureDataExplorer",
+            "support": "unsupported",
+            "when": "provider switch has no ReconcileArtifactProcess case",
+            "outcomes": [
+              {
+                "condition": "unsupported activity warning/Signal; no host operation",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'ReconcileArtifactProcess'",
+                "line": 109,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property applicability overstates ADX support for this ArtifactProcess verb."
+          },
+          {
+            "adapter": "Data_AzureSql",
+            "support": "unsupported",
+            "when": "SQL dispatcher accepts only Write/Query/Delete/Admin",
+            "outcomes": [
+              {
+                "condition": "Unsupported AzureSql activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'ReconcileArtifactProcess'",
+                "line": 109,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 3,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

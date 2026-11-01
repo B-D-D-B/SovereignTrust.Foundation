@@ -45,6 +45,26 @@ class PlanCondenser {
         return $instance
     }
 
+    [Signal] TestIterationFilter([Signal]$ParentSignal, $Item, [object[]]$Criteria, [string]$Operator) {
+        $filterSignal = [Signal]::Start('PlanCondenser.TestIterationFilter', $ParentSignal) | Select-Object -Last 1
+        $matched = $Operator -eq 'And'
+        foreach ($criterion in $Criteria) {
+            $value = $criterion.Default
+            if ($null -ne $Item) {
+                $valueSignal = Resolve-PathFromDictionary -Dictionary $Item -Path $criterion.Path -Default $criterion.Default | Select-Object -Last 1
+                if ($filterSignal.MergeSignalAndVerifyFailure(@($valueSignal))) { return $filterSignal }
+                $value = $valueSignal.GetResult()
+            }
+
+            $isTrue = $value.ToString().Trim() -ieq 'true'
+
+            if ($Operator -eq 'And') { $matched = $matched -and $isTrue }
+            else { $matched = $matched -or $isTrue }
+        }
+        $filterSignal.SetResult([bool]$matched)
+        return $filterSignal
+    }
+
     [Signal] ResolveInsertPhaseSteps(
         [Signal]$ParentSignal,
         $ConductionSignal,
@@ -147,18 +167,86 @@ class PlanCondenser {
         $PlanPathSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Path" | Select-Object -Last 1
         $DefaultPath = $PlanPathSignal.GetResult()
 
+        $awaitTimeoutMilliseconds = 0
+        if ($Activity -in @('AwaitPhase', 'AwaitAllPhases')) {
+            $config = $Plan.Config
+            $timeoutPresent = $false
+            $timeoutValue = $null
+            if ($config -is [System.Collections.IDictionary]) {
+                $timeoutPresent = $config.Contains('TimeoutMilliseconds')
+                if ($timeoutPresent) { $timeoutValue = $config['TimeoutMilliseconds'] }
+            }
+            elseif ($null -ne $config) {
+                $property = $config.PSObject.Properties['TimeoutMilliseconds']
+                $timeoutPresent = $null -ne $property
+                if ($timeoutPresent) { $timeoutValue = $property.Value }
+            }
+            if ($timeoutPresent) {
+                if (($timeoutValue -isnot [int] -and $timeoutValue -isnot [long]) -or
+                    $timeoutValue -lt 1 -or $timeoutValue -gt 300000) {
+                    $null = $opSignal.LogCritical('Config.TimeoutMilliseconds must be a native Int32 or Int64 from 1 through 300000.')
+                    return $opSignal
+                }
+                $awaitTimeoutMilliseconds = [int]$timeoutValue
+            }
+        }
+
         if ($Activity) {
             switch ($Activity) {
                 "IteratePhase" {
                     $iterationArraySignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.IterationArray" | Select-Object -Last 1
                     $iterationNameSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.IterationName" -Default "Iteration" | Select-Object -Last 1
                     $threadingEnabledSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.Threading.Enabled" -Default $false | Select-Object -Last 1
+                    $filterSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.Filter" -Default $null -SignalLevel "Information" | Select-Object -Last 1
+                    $filterOperatorSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.FilterOperator" -Default "And" -SignalLevel "Information" | Select-Object -Last 1
 
-                    if ($opSignal.MergeSignalAndVerifyFailure(@($iterationArraySignal, $iterationNameSignal, $threadingEnabledSignal))) {
+                    if ($opSignal.MergeSignalAndVerifyFailure(@($iterationArraySignal, $iterationNameSignal, $threadingEnabledSignal, $filterSignal, $filterOperatorSignal))) {
                         return $opSignal
                     }
 
                     $iterationArray = @($iterationArraySignal.GetResult())
+                    $filterValue = $filterSignal.HasResult() ? $filterSignal.GetResult() : $null
+                    $operatorValue = $filterOperatorSignal.GetResult()
+                    if ($operatorValue -isnot [string] -or $operatorValue.Trim() -notin @('And', 'Or')) {
+                        $null = $opSignal.LogCritical('Plan.Config.FilterOperator must be And or Or.')
+                        return $opSignal
+                    }
+                    $filterOperator = $operatorValue.Trim()
+                    if ($null -ne $filterValue) {
+                        $filterDefinitions = @($filterValue)
+                        if ($filterDefinitions.Count -eq 0) {
+                            $null = $opSignal.LogCritical('Plan.Config.Filter must be a Path|Default string or nonempty string array.')
+                            return $opSignal
+                        }
+                        $criteria = [System.Collections.Generic.List[object]]::new()
+                        foreach ($definition in $filterDefinitions) {
+                            if ($definition -isnot [string] -or ($definition.ToCharArray() | Where-Object { $_ -eq '|' }).Count -ne 1) {
+                                $null = $opSignal.LogCritical('Each Plan.Config.Filter criterion must be a Path|Default string.')
+                                return $opSignal
+                            }
+                            $parts = $definition.Split('|')
+                            $path = $parts[0].Trim()
+                            $defaultText = $parts[1].Trim()
+                            if ([string]::IsNullOrWhiteSpace($path) -or $defaultText -notin @('true', 'false')) {
+                                $null = $opSignal.LogCritical('Each Plan.Config.Filter criterion needs a nonblank path and boolean default.')
+                                return $opSignal
+                            }
+                            $criteria.Add([pscustomobject]@{ Path = $path; Default = ($defaultText -ieq 'true') })
+                        }
+                        $retained = [System.Collections.Generic.List[object]]::new()
+                        foreach ($iteration in $iterationArray) {
+                            try {
+                                $filterSignal = $this.TestIterationFilter($opSignal, $iteration, @($criteria.ToArray()), $filterOperator)
+                                if ($opSignal.MergeSignalAndVerifyFailure(@($filterSignal))) { return $opSignal }
+                                if ($filterSignal.GetResult()) { $retained.Add($iteration) }
+                            }
+                            catch {
+                                $null = $opSignal.LogCritical("Plan.Config.Filter evaluation failed: $($_.Exception.Message)", $null, $_)
+                                return $opSignal
+                            }
+                        }
+                        $iterationArray = $retained.ToArray()
+                    }
                     $iterationName = [string]$iterationNameSignal.GetResult()
                     Write-STExecutionTraceDecision $stPlanTrace 'IterationArray' ($iterationArray.Count -gt 0) 'Required' $null $null $iterationArray.Count
                     if ($iterationArray.Count -eq 0) {
@@ -457,9 +545,11 @@ class PlanCondenser {
                         -ItemSignal $ItemSignal `
                         -Signal $opSignal `
                         -CollisionAction ([string]$collisionSignal.GetResult()) `
+                        -TimeoutMilliseconds $awaitTimeoutMilliseconds `
                         -RemoveAfterReceive |
                         Select-Object -Last 1
                     $null = $opSignal.MergeSignal($completeSignal)
+                    if ($completeSignal.Failure()) { return $opSignal }
                     if ($completeSignal.HasResult()) { $opSignal.SetResult($completeSignal.GetResult()) }
 
                     break
@@ -474,8 +564,9 @@ class PlanCondenser {
                         return $opSignal
                     }
 
-                    $waitSignal = Wait-STBackgroundTasks -OwnerId $ownerId -Signal $opSignal | Select-Object -Last 1
+                    $waitSignal = Wait-STBackgroundTasks -OwnerId $ownerId -Signal $opSignal -TimeoutMilliseconds $awaitTimeoutMilliseconds | Select-Object -Last 1
                     $null = $opSignal.MergeSignal($waitSignal)
+                    if ($waitSignal.Failure()) { return $opSignal }
                     foreach ($received in @($waitSignal.GetResult())) {
                         $completeSignal = Complete-PlanPhaseTask `
                             -TaskId ([string]$received.Status.TaskId) `
@@ -485,6 +576,7 @@ class PlanCondenser {
                             -RemoveAfterReceive |
                             Select-Object -Last 1
                         $null = $opSignal.MergeSignal($completeSignal)
+                        if ($completeSignal.Failure()) { return $opSignal }
                     }
                     $opSignal.SetResult(@($waitSignal.GetResult() | ForEach-Object Status))
 

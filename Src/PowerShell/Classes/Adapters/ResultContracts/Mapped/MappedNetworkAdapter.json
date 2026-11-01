@@ -1,0 +1,230 @@
+{
+  "name": "MappedNetworkAdapter",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedNetworkAdapter.ps1",
+      "sha256": "BBA32609723509071469F6DD09D61B8868F957F840F29E83F67FF5A57CA3D842"
+    },
+    {
+      "id": "s2",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Network/DiscordBot/PowerShell/Network_DiscordBot.psm1",
+      "sha256": "DBBE85CC453F129A47759BAE879A0F03CFBC53083F2B5452BFBB8B834DC673BF"
+    }
+  ],
+  "activities": [
+    {
+      "name": "SendFile",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Network_DiscordBot",
+            "support": "implemented",
+            "when": "configured Discord channel and REST POST",
+            "outcomes": [
+              {
+                "condition": "REST response succeeds",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Object[]",
+                "shape": [
+                  {
+                    "path": "$[*]",
+                    "type": "provider response",
+                    "presence": "required",
+                    "meaning": "Discord response body",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "channel/content/file or REST failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "sends Discord message and attachment"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'SendFile'",
+                "line": 79,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "\"SendFile\"",
+                "line": 122,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Response schema and delivery state depend on provider; no live send receipt was observed."
+          }
+        ]
+      }
+    },
+    {
+      "name": "SendMessage",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Network_DiscordBot",
+            "support": "implemented",
+            "when": "configured Discord channel and REST POST",
+            "outcomes": [
+              {
+                "condition": "REST response succeeds",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Object[]",
+                "shape": [
+                  {
+                    "path": "$[*]",
+                    "type": "provider response",
+                    "presence": "required",
+                    "meaning": "Discord response body",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "channel/content/file or REST failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "sends Discord message"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'SendMessage'",
+                "line": 79,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "\"SendMessage\"",
+                "line": 173,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Response schema and delivery state depend on provider; no live send receipt was observed."
+          }
+        ]
+      }
+    },
+    {
+      "name": "ReadBatch",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Network_DiscordBot",
+            "support": "implemented",
+            "when": "configured Discord message GET",
+            "outcomes": [
+              {
+                "condition": "message_reference.message_id matches",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "provider message object"
+              },
+              {
+                "condition": "nonpoll response",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "provider message object/array"
+              },
+              {
+                "condition": "PollUntilResponse=true and no match",
+                "signalState": "unknown",
+                "hasResult": false,
+                "resultType": "absent",
+                "unresolved": "source sleeps/retries without deadline; operation may not terminate"
+              },
+              {
+                "condition": "REST or message parsing fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "reads channel messages"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'ReadBatch'",
+                "line": 79,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "\"ReadBatch\"",
+                "line": 221,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Provider envelope/cardinality needs a bound response; poll mode lacks a deadline."
+          }
+        ]
+      }
+    },
+    {
+      "name": "HandleMessage",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Network_DiscordBot",
+            "support": "implemented",
+            "when": "Path selects message from ItemSignal",
+            "outcomes": [
+              {
+                "condition": "message resolves",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "selected message native value"
+              },
+              {
+                "condition": "message path missing",
+                "signalState": "conditional",
+                "hasResult": false,
+                "resultType": "absent",
+                "limitations": "resolver failure is not merged; no-result warning possible"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'HandleMessage'",
+                "line": 79,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "\"HandleMessage\"",
+                "line": 284,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "No Format postprocessing occurs in this branch."
+          }
+        ]
+      }
+    }
+  ]
+}

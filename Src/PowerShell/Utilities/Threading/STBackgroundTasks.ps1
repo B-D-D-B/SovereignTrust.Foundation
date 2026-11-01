@@ -16,6 +16,19 @@ function ConvertTo-STBackgroundTaskStatus {
     }
 }
 
+function ConvertTo-STBackgroundStopStatus {
+    param([object]$Task, [string]$PriorState, [bool]$StopRequested, [bool]$StopCompleted,
+          [AllowNull()][object]$RunspaceClosed, [bool]$AlreadyTerminal)
+
+    $status = ConvertTo-STBackgroundTaskStatus $Task
+    $status | Add-Member -NotePropertyName PriorState -NotePropertyValue $PriorState
+    $status | Add-Member -NotePropertyName StopRequested -NotePropertyValue $StopRequested
+    $status | Add-Member -NotePropertyName StopCompleted -NotePropertyValue $StopCompleted
+    $status | Add-Member -NotePropertyName RunspaceClosed -NotePropertyValue $RunspaceClosed
+    $status | Add-Member -NotePropertyName AlreadyTerminal -NotePropertyValue $AlreadyTerminal
+    return $status
+}
+
 function ConvertFrom-STSignalRecord {
     [CmdletBinding()]
     param([AllowNull()][object]$Record)
@@ -286,6 +299,7 @@ function Start-STBackgroundTask {
             Handle              = $null
             CompletionEnvelope  = $null
             Error               = $null
+            CancellationAcknowledged = $false
         }
         $script:STBackgroundTasks[$taskId] = $task
 
@@ -329,7 +343,9 @@ function Receive-STBackgroundTask {
         [Parameter(Mandatory)][string]$TaskId,
         [Signal]$Signal,
         [switch]$Wait,
-        [switch]$RemoveAfterReceive
+        [switch]$RemoveAfterReceive,
+        [switch]$AcknowledgeIntentionalCancellation,
+        [ValidateRange(0, 300000)][int]$TimeoutMilliseconds = 0
     )
 
     $opSignal = [Signal]::Start('Receive-STBackgroundTask', $Signal) | Select-Object -Last 1
@@ -338,12 +354,21 @@ function Receive-STBackgroundTask {
         return $opSignal
     }
 
+    $timer = [System.Diagnostics.Stopwatch]::StartNew()
     do {
         $updateSignal = Update-STBackgroundTasks -Signal $opSignal | Select-Object -Last 1
         if ($opSignal.MergeSignalAndVerifyFailure($updateSignal)) { return $opSignal }
         $task = $script:STBackgroundTasks[$TaskId]
         if ($task.State -notin @('Queued', 'Running') -or -not $Wait) { break }
-        Start-Sleep -Milliseconds 100
+        if ($TimeoutMilliseconds -gt 0) {
+            $remaining = $TimeoutMilliseconds - $timer.ElapsedMilliseconds
+            if ($remaining -le 0) {
+                $null = $opSignal.LogCritical("Background task '$TaskId' timed out after $TimeoutMilliseconds ms in state '$($task.State)'.")
+                return $opSignal
+            }
+            Start-Sleep -Milliseconds ([int][Math]::Min(100, $remaining))
+        }
+        else { Start-Sleep -Milliseconds 100 }
     } while ($true)
 
     if ($task.State -in @('Queued', 'Running')) {
@@ -357,7 +382,8 @@ function Receive-STBackgroundTask {
         Error              = $task.Error
     }
     $opSignal.SetResult($result)
-    if ($task.State -in @('Failed', 'Cancelled')) {
+    if ($task.State -eq 'Failed' -or
+        ($task.State -eq 'Cancelled' -and -not ($AcknowledgeIntentionalCancellation -and $task.CancellationAcknowledged))) {
         $null = $opSignal.LogCritical("Background task '$TaskId' finished with state '$($task.State)'. $($task.Error)")
     }
     if ($RemoveAfterReceive) { $script:STBackgroundTasks.Remove($TaskId) }
@@ -370,14 +396,32 @@ function Wait-STBackgroundTasks {
         [string]$OwnerId,
         [Signal]$Signal,
         [switch]$RemoveAfterReceive,
-        [switch]$MergeWorkerSignals
+        [switch]$MergeWorkerSignals,
+        [ValidateRange(0, 300000)][int]$TimeoutMilliseconds = 0
     )
 
     $opSignal = [Signal]::Start('Wait-STBackgroundTasks', $Signal) | Select-Object -Last 1
     $ids = @($script:STBackgroundTasks.Values | Where-Object { [string]::IsNullOrWhiteSpace($OwnerId) -or $_.OwnerId -eq $OwnerId } | ForEach-Object TaskId)
+    $timer = [System.Diagnostics.Stopwatch]::StartNew()
     $results = foreach ($id in $ids) {
-        $receiveSignal = Receive-STBackgroundTask -TaskId $id -Signal $opSignal -Wait -RemoveAfterReceive:$RemoveAfterReceive | Select-Object -Last 1
+        $remaining = if ($TimeoutMilliseconds -gt 0) { [int]($TimeoutMilliseconds - $timer.ElapsedMilliseconds) } else { 0 }
+        if ($TimeoutMilliseconds -gt 0 -and $remaining -le 0) {
+            $updateSignal = Update-STBackgroundTasks -Signal $opSignal | Select-Object -Last 1
+            if ($opSignal.MergeSignalAndVerifyFailure($updateSignal)) { return $opSignal }
+            $pending = @($ids | Where-Object { $script:STBackgroundTasks.ContainsKey($_) -and $script:STBackgroundTasks[$_].State -in @('Queued', 'Running') } | ForEach-Object { "$($_):$($script:STBackgroundTasks[$_].State)" })
+            if ($pending.Count -gt 0) {
+                $null = $opSignal.LogCritical("Background tasks timed out after $TimeoutMilliseconds ms. Pending: $($pending -join ', ').")
+                return $opSignal
+            }
+            $remaining = 1
+        }
+        $receiveSignal = Receive-STBackgroundTask -TaskId $id -Signal $opSignal -Wait -RemoveAfterReceive:$RemoveAfterReceive -AcknowledgeIntentionalCancellation:$MergeWorkerSignals -TimeoutMilliseconds $remaining | Select-Object -Last 1
         $null = $opSignal.MergeSignal($receiveSignal)
+        if ($receiveSignal.Failure()) {
+            $pending = @($ids | Where-Object { $script:STBackgroundTasks.ContainsKey($_) -and $script:STBackgroundTasks[$_].State -in @('Queued', 'Running') } | ForEach-Object { "$($_):$($script:STBackgroundTasks[$_].State)" })
+            if ($pending.Count -gt 0) { $null = $opSignal.LogCritical("Pending owned background tasks: $($pending -join ', ').") }
+            return $opSignal
+        }
         if ($receiveSignal.HasResult()) {
             $received = $receiveSignal.GetResult()
             if ($MergeWorkerSignals -and $null -ne $received.CompletionEnvelope) {
@@ -406,16 +450,55 @@ function Stop-STBackgroundTask {
         return $opSignal
     }
     $task = $script:STBackgroundTasks[$TaskId]
-    if ($task.State -eq 'Running' -and $null -ne $task.PowerShell) {
-        try { $task.PowerShell.Stop() } catch { }
+    $priorState = [string]$task.State
+    if ($priorState -in @('Completed', 'Failed', 'Cancelled')) {
+        $opSignal.SetResult((ConvertTo-STBackgroundStopStatus $task $priorState $false $false $null $true))
+        return $opSignal
+    }
+    if ($priorState -eq 'Queued') {
+        $task.State = 'Cancelled'
+        $task.CompletedUtc = [DateTime]::UtcNow
+        $task.CancellationAcknowledged = $true
+        $opSignal.SetResult((ConvertTo-STBackgroundStopStatus $task $priorState $true $true $true $false))
+        return $opSignal
+    }
+    if ($priorState -ne 'Running' -or $null -eq $task.PowerShell -or $null -eq $task.Runspace -or $null -eq $task.Handle) {
+        $null = $opSignal.LogCritical("Background task '$TaskId' has an unsupported or incomplete active state '$priorState'; ownership retained.")
+        return $opSignal
+    }
+    if ($task.Handle.IsCompleted) {
+        $null = $opSignal.LogCritical("Background task '$TaskId' has completed but is pending finalization; use GetPhaseStatus or AwaitPhase. Ownership retained.")
+        return $opSignal
+    }
+    $timer = [System.Diagnostics.Stopwatch]::StartNew()
+    try {
+        $stopTask = $task.PowerShell.StopAsync($null, $null)
+        if (-not $stopTask.Wait(30000)) { throw 'StopAsync did not complete within 30000 ms.' }
+        $null = $stopTask.GetAwaiter().GetResult()
+        if ($task.PowerShell.InvocationStateInfo.State -ne [System.Management.Automation.PSInvocationState]::Stopped) {
+            throw "StopAsync completed with PowerShell state '$($task.PowerShell.InvocationStateInfo.State)', not Stopped."
+        }
+        $task.Runspace.CloseAsync()
+        while ($task.Runspace.RunspaceStateInfo.State -ne [System.Management.Automation.Runspaces.RunspaceState]::Closed) {
+            if ($task.Runspace.RunspaceStateInfo.State -eq [System.Management.Automation.Runspaces.RunspaceState]::Broken) {
+                throw 'Runspace became broken during CloseAsync.'
+            }
+            if ($timer.ElapsedMilliseconds -ge 30000) { throw 'CloseAsync did not close within the remaining 30000 ms budget.' }
+            Start-Sleep -Milliseconds ([int][Math]::Min(100, 30000 - $timer.ElapsedMilliseconds))
+        }
         $task.PowerShell.Dispose()
-        if ($null -ne $task.Runspace) { try { $task.Runspace.Close() } catch { }; $task.Runspace.Dispose() }
+        $task.Runspace.Dispose()
+    }
+    catch {
+        $null = $opSignal.LogCritical("Failed to stop background task '$TaskId'; ownership retained: $($_.Exception.Message)", $null, $_)
+        return $opSignal
     }
     $task.PowerShell = $null
     $task.Runspace = $null
     $task.Handle = $null
     $task.State = 'Cancelled'
     $task.CompletedUtc = [DateTime]::UtcNow
-    $opSignal.SetResult((ConvertTo-STBackgroundTaskStatus $task))
+    $task.CancellationAcknowledged = $true
+    $opSignal.SetResult((ConvertTo-STBackgroundStopStatus $task $priorState $true $true $true $false))
     return $opSignal
 }

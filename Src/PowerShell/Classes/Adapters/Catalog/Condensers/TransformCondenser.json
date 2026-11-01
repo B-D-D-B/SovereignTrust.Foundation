@@ -5,18 +5,21 @@
   "activities": [
     {
       "name": "Project",
+      "whenToUse": "Use when Plan.Key identifies registered source transform nodes in ItemSignal and Plan.Path identifies shared content through Token.Memory. Each node receives a cloned template and deferred Hydration plan; results are collected.",
       "description": "Project signal data.",
       "properties": [
         {
           "path": "Config",
           "description": "Forward the incoming configuration into each constructed hydration plan.",
+          "whenToUse": "Supply configuration to forward into each constructed deferred Hydration plan for a projected node. Omit only when the selected hydration path does not need it.",
           "adapters": [
             "TransformCondenser"
           ]
         },
         {
           "path": "Config.DefaultPath",
-          "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "description": "Resolved with default %.@ before dispatch; Project does not use its value.",
+          "whenToUse": "The common resolver reads this with %.@ default before Project dispatch, but Project does not use its value. Choose Project inputs through Key and Path instead.",
           "adapters": [
             "TransformCondenser"
           ],
@@ -27,6 +30,7 @@
         {
           "path": "Key",
           "description": "Select the registered source transform nodes.",
+          "whenToUse": "Set a registration key for ItemSignal graph nodes to project. Project resolves *.#.<Key>; without a resulting key or node set it returns an empty collection.",
           "adapters": [
             "TransformCondenser"
           ]
@@ -34,19 +38,33 @@
         {
           "path": "Path",
           "description": "Supply the content lookup path forwarded to Token.Memory.",
+          "whenToUse": "Supply the shared content path forwarded in a Token.Memory Get plan before per-node hydration. Project uses this Plan.Path only after matching source nodes are found.",
           "adapters": [
             "TransformCondenser"
           ]
         }
-      ]
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "Object[]",
+          "description": "When mapping nodes selected by Key; each JSON-like content template is cloned before node-specific hydration, preserving ordered independent results and the source template, including empty selection.",
+          "adapters": [
+            "TransformCondenser"
+          ]
+        }
+      ],
+      "resultNotes": []
     },
     {
       "name": "Select",
+      "whenToUse": "Use to resolve source content at Config.DefaultPath and optionally select Path when Format is explicitly Json or Xml. With omitted Format, the helper returns source content without Path selection, optionally HTML-decoded; Config.Hydrate can then run deferred Hydration.",
       "description": "Select signal data.",
       "properties": [
         {
           "path": "Config",
           "description": "Forward configuration into the constructed hydration plan for the selected result.",
+          "whenToUse": "When Config.Hydrate is true, supply configuration to forward into the constructed deferred Hydration plan for the selected result.",
           "adapters": [
             "TransformCondenser"
           ]
@@ -54,6 +72,7 @@
         {
           "path": "Config.DefaultPath",
           "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "whenToUse": "Set the ItemSignal path holding source content; omission uses %.@. Select resolves this before applying Plan.Path.",
           "adapters": [
             "TransformCondenser"
           ],
@@ -64,6 +83,7 @@
         {
           "path": "Config.Hydrate",
           "description": "Request hydration of the selected result.",
+          "whenToUse": "Set true to run deferred Hydration on the selected result after Invoke-TransformSelect. Omit or false to return the selected content without that branch.",
           "adapters": [
             "TransformCondenser"
           ],
@@ -74,6 +94,7 @@
         {
           "path": "Format",
           "description": "Identify the source content format used by selection.",
+          "whenToUse": "Set Json or Xml when Plan.Path should select within source content. Omit for the empty-string default, which returns source content without Path selection, optionally HTML-decoded.",
           "adapters": [
             "TransformCondenser"
           ],
@@ -84,6 +105,7 @@
         {
           "path": "HtmlDecode",
           "description": "Control HTML decoding of selected source content.",
+          "whenToUse": "Set false to avoid HTML decoding in the selection helper. Omission defaults true before Invoke-TransformSelect.",
           "adapters": [
             "TransformCondenser"
           ],
@@ -93,27 +115,50 @@
         },
         {
           "path": "Path",
-          "description": "Select the requested path within resolved source content.",
+          "description": "Select the requested path only when Format is Json or Xml; other formats return source without Path selection.",
+          "whenToUse": "Supply the path to select within source content only with Format Json or Xml; those helper branches use SourcePath. With omitted/default Format, the helper ignores Path and returns source content.",
           "adapters": [
             "TransformCondenser"
           ]
         }
-      ]
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "native selected scalar/object/array",
+          "description": "When SourcePath/SourceFormat selects source value; optional HydrationPlan; selection succeeds.",
+          "adapters": [
+            "TransformCondenser"
+          ]
+        }
+      ],
+      "resultNotes": []
     },
     {
       "name": "Inject",
+      "whenToUse": "Use to append Config.Content at Plan.Path in ItemSignal. Config.IfPresent='Error' selects a narrower one-member graph Result insertion that fails when the target member already exists, including false, zero, empty or null values.",
       "description": "Inject signal data.",
       "properties": [
         {
           "path": "Config.Content",
           "description": "Provide content appended into ItemSignal.",
+          "whenToUse": "Supply the content to append or insert into ItemSignal at Plan.Path. IfPresent=Error requires this resolver to have a Result before any mutation.",
+          "adapters": [
+            "TransformCondenser"
+          ]
+        },
+        {
+          "path": "Config.IfPresent",
+          "description": "Optional exact string Error: for an existing serial graph Result dictionary/object parent and one final literal-safe member, fail before mutation when that member exists, including a false, zero, empty or null value. Symbolic or reserved graph-control segments, unsupported parent/path/mode fail. Absent retains Append behavior.",
+          "whenToUse": "Set the exact string Error only for a single literal graph Result member target with an existing dictionary/object parent. It fails before insertion if the member is already present, including false, zero, empty or null. Omit for the ordinary Append branch; unsupported modes/paths fail.",
           "adapters": [
             "TransformCondenser"
           ]
         },
         {
           "path": "Config.DefaultPath",
-          "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "description": "Resolved with default %.@ before dispatch; Inject does not use its value.",
+          "whenToUse": "The common resolver reads this with %.@ default before Inject dispatch, but Inject does not use its value. Set the mutation destination through Plan.Path.",
           "adapters": [
             "TransformCondenser"
           ],
@@ -124,26 +169,35 @@
         {
           "path": "Path",
           "description": "Choose the ItemSignal destination for appended content.",
+          "whenToUse": "Supply the ItemSignal destination for injected content. Ordinary mode appends; IfPresent=Error requires the exact one-member graph Result path shape and absent final member.",
           "adapters": [
             "TransformCondenser"
           ]
         }
+      ],
+      "result": [],
+      "resultNotes": [
+        "No stable public Result field is available for this activity; inspect the Signal/effect at its actual boundary.",
+        "TransformCondenser: success can have no Result (item path or graph mutation completes)"
       ]
     },
     {
       "name": "RegisterSignal",
+      "whenToUse": "Use to register the resolver-returned Signal for the literal Plan.Config.Content value on ItemSignal's pointer under Config.Key. This branch does not dereference Config.Content as another path or register a supplied Signal object directly.",
       "description": "Register a signal.",
       "properties": [
         {
           "path": "Config.Content",
-          "description": "Provide the content signal registered in the ItemSignal graph.",
+          "description": "Provide the Config.Content value read into a resolver Signal, which is registered in the ItemSignal graph.",
+          "whenToUse": "Supply the literal Config.Content value to read from Plan. RegisterSignal stores the Resolve-PathFromDictionary return Signal wrapping that value, not a further path lookup or the supplied value itself.",
           "adapters": [
             "TransformCondenser"
           ]
         },
         {
           "path": "Config.DefaultPath",
-          "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "description": "Resolved with default %.@ before dispatch; RegisterSignal does not use its value.",
+          "whenToUse": "The common resolver reads this with %.@ default before RegisterSignal dispatch, but RegisterSignal does not use its value. It reads Config.Content and Config.Key directly.",
           "adapters": [
             "TransformCondenser"
           ],
@@ -154,19 +208,27 @@
         {
           "path": "Config.Key",
           "description": "Name the graph registration key.",
+          "whenToUse": "Supply the key under which the resolved content Signal should be registered on ItemSignal's pointer.",
           "adapters": [
             "TransformCondenser"
           ]
         }
+      ],
+      "result": [],
+      "resultNotes": [
+        "No stable public Result field is available for this activity; inspect the Signal/effect at its actual boundary.",
+        "TransformCondenser: success can have no Result (item path or graph mutation completes)"
       ]
     },
     {
       "name": "UnregisterSignalKeys",
+      "whenToUse": "Use to remove each Config.Keys entry from the ItemSignal pointer graph. This is an effectful registration change; the branch does not set a separate value result.",
       "description": "Remove registered signal keys.",
       "properties": [
         {
           "path": "Config.DefaultPath",
-          "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "description": "Resolved with default %.@ before dispatch; UnregisterSignalKeys does not use its value.",
+          "whenToUse": "The common resolver reads this with %.@ default before UnregisterSignalKeys dispatch, but this branch does not use its value. It operates on ItemSignal's pointer.",
           "adapters": [
             "TransformCondenser"
           ],
@@ -177,19 +239,27 @@
         {
           "path": "Config.Keys",
           "description": "Choose graph keys to unregister.",
+          "whenToUse": "Supply the graph registration keys to remove. The branch iterates their resolved collection and unregisters each from ItemSignal's pointer.",
           "adapters": [
             "TransformCondenser"
           ]
         }
+      ],
+      "result": [],
+      "resultNotes": [
+        "No stable public Result field is available for this activity; inspect the Signal/effect at its actual boundary.",
+        "TransformCondenser: success can have no Result (item path or graph mutation completes)"
       ]
     },
     {
       "name": "Clone",
+      "whenToUse": "Use to resolve Plan.Path from ItemSignal and return a JSON-serialization copy. Source resolution or JSON conversion failure returns a failure signal; this is not a pointer/graph clone.",
       "description": "Clone signal data.",
       "properties": [
         {
           "path": "Config.DefaultPath",
-          "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "description": "Resolved with default %.@ before dispatch; Clone does not use its value.",
+          "whenToUse": "The common resolver reads this with %.@ default before Clone dispatch, but Clone does not use its value. Supply the clone source through explicit Plan.Path.",
           "adapters": [
             "TransformCondenser"
           ],
@@ -200,19 +270,35 @@
         {
           "path": "Path",
           "description": "Select ItemSignal content to clone through JSON serialization.",
+          "whenToUse": "Supply the ItemSignal path whose Result should be cloned through ConvertTo-Json/ConvertFrom-Json at depth 10.",
           "adapters": [
             "TransformCondenser"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "native JSON-like object",
+          "description": "When source path resolves; JSON round-trip clone succeeds.",
+          "adapters": [
+            "TransformCondenser"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "TransformCondenser: Clone preserves present empty and multi-element JSON arrays through InputObject/NoEnumerate serialization at depth 10; missing source or conversion failure has no Result. Unsupported native types can still change."
       ]
     },
     {
       "name": "Merge",
-      "description": "Merge signal data.",
+      "whenToUse": "Use to merge present Base and Overlay members of an ItemSignal dictionary/object at Config.DefaultPath. Missing members fail before Invoke-MergeJson; present null members retain the helper's merge policy semantics.",
+      "description": "Merge JSON-like Base and Overlay members; absent members fail before merge, while present null values retain helper policy semantics.",
       "properties": [
         {
           "path": "Config.DefaultPath",
           "description": "Choose the default ItemSignal source location before activity dispatch.",
+          "whenToUse": "Set the ItemSignal dictionary/object holding Base and Overlay; omission uses %.@. The branch also reads merge array/null/depth settings from this object, with source defaults Merge, Ignore and 100.",
           "adapters": [
             "TransformCondenser"
           ],
@@ -220,7 +306,19 @@
             "TransformCondenser": "%.@"
           }
         }
-      ]
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "native merged JSON-like value",
+          "description": "When Base/Overlay resolve; merge succeeds (Result presence conditional).",
+          "adapters": [
+            "TransformCondenser"
+          ]
+        }
+      ],
+      "resultNotes": []
     }
-  ]
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Condensers/TransformCondenser.json","version":1}
 }

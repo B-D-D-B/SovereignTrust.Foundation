@@ -1,0 +1,176 @@
+{
+  "name": "ConduitCondenser",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/ConduitCondenser.ps1",
+      "sha256": "7315ED1773F0F3633B66C6FD22FC7C5B03299EA935FD8BA46F14118C078C7413"
+    },
+    {
+      "id": "s2",
+      "repository": "SignalGraph",
+      "path": "Src/PowerShell/SignalGraph/Utilities/Resolve-GraphForJsonArray.ps1",
+      "sha256": "C2A08C97545A701C774A2FEBACF3F03AAF58500DC98A5556F503F28948D9BE74"
+    },
+    {
+      "id": "s3",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedCondenserAdapter.ps1",
+      "sha256": "CDB170DE2EB8292E350DD924703F26EF17E4839B85120D183A138221826C939E"
+    },
+    {
+      "id": "s4",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Conduit/Invoke-ProcessConduitCondenser.ps1",
+      "sha256": "F9A59D482013A953DF85B8750ECAA3559BEFE3A9A66B9D73B9FD260BF0D73AFF"
+    }
+  ],
+  "activities": [
+    {
+      "name": "Process",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "ConduitCondenser",
+            "support": "implemented",
+        "when": "formula source resolves; Config.ResultDetail absent/false preserves the source ItemSignal, true selects serial child-dispatch detail",
+            "outcomes": [
+              {
+            "condition": "Config.ResultDetail absent/false and every serial child returns a nonfailed Signal",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Signal",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "Signal",
+                    "presence": "required",
+                    "meaning": "source grid ItemSignal",
+                    "origin": "computed"
+                  }
+                ]
+              },
+          {
+            "condition": "Config.ResultDetail=true and every serial child returns a nonfailed Signal",
+            "signalState": "success",
+            "hasResult": true,
+            "resultType": "PSCustomObject",
+            "shape": [
+              { "path": "$.AttemptedCount", "type": "Int32", "presence": "required", "meaning": "serial mapped child invocations started", "origin": "computed" },
+              { "path": "$.CompletedCount", "type": "Int32", "presence": "required", "meaning": "nonfailed child Signals returned", "origin": "computed" },
+              { "path": "$.Items", "type": "Object[]", "presence": "required", "meaning": "completed child identities in serial order, including empty", "origin": "computed" },
+              { "path": "$.Items[*].Key", "type": "String", "presence": "per item", "meaning": "copied source Grid key", "origin": "copied-input" },
+              { "path": "$.Items[*].Completed", "type": "Boolean", "presence": "per item", "meaning": "true after nonfailed child return, not domain-effect proof", "origin": "computed" }
+            ]
+          },
+          {
+            "condition": "invalid ResultDetail, detail with non-Boolean/true SupportParallelism, source resolution failure, or missing/failed serial child",
+            "signalState": "failure",
+            "hasResult": false,
+            "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "processes formula grid nodes; child effects depend on selected steps"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Process'",
+            "line": 81,
+                "kind": "source-derived"
+              },
+              {
+            "source": "s4",
+            "symbol": "SetResult",
+            "line": 224,
+            "kind": "source-derived"
+          },
+          {
+            "source": "s4",
+            "symbol": "$attemptedCount",
+            "line": 78,
+            "kind": "source-derived"
+          },
+              {
+                "source": "s3",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+        "limitations": "Serial child failure now propagates even for default callers and no success Result is published. Detail counts prove child invocation/Signal return only; test node effects with an independent marker. Detail with SupportParallelism is rejected."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "Graph",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "ConduitCondenser",
+            "support": "implemented",
+            "when": "graph creation from formula source",
+            "outcomes": [
+              {
+                "condition": "graph helper returns nested graph Signal",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Signal",
+                "shape": [
+                  {
+                    "path": "Result",
+                    "type": "Graph",
+                    "presence": "required",
+                    "meaning": "resolved graph inside nested Signal",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "graph construction fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "creates in-memory graph"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Graph'",
+                "line": 72,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Resolve-GraphForJsonArray",
+                "line": 26,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    }
+  ]
+}

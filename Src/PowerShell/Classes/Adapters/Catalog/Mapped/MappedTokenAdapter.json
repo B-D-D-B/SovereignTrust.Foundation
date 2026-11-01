@@ -3,11 +3,13 @@
   "activities": [
     {
       "name": "Get",
+      "whenToUse": "Use with a string Plan.Path naming the Token provider and expression, or with both Container and Resource for a Memory.<Container>.<Resource> override. The wrapper trims token brackets, selects the first component, forwards Config and invokes concrete Get. Token_SDA enrollment/ID-state flows may mutate ItemSignal and call Invoke-WriteFile; treat this choice as effectful when that slot is selected.",
       "description": "Resolve a token value from a path.",
       "properties": [
         {
           "path": "[$path]",
           "description": "Resolve a dynamically selected descendant of the original forwarded configuration.",
+          "whenToUse": "For Token_Memory only, use a dynamically selected descendant of the forwarded Config when its token expression requires that lookup. This is a dynamic path context, not a fixed child name.",
           "adapters": [
             "Token_Memory"
           ],
@@ -23,6 +25,7 @@
         {
           "path": "Config",
           "description": "Forward the incoming configuration object into the constructed concrete token plan.",
+          "whenToUse": "Supply the configuration needed by the selected concrete Token provider. The mapped wrapper copies an incoming Config Result into its constructed token plan; provider-specific child fields apply only to their listed adapters.",
           "adapters": [
             "Token_Conduction",
             "Token_Dynamic",
@@ -39,6 +42,7 @@
         {
           "path": "Config",
           "description": "Preserve configuration for a nested dynamic token reference.",
+          "whenToUse": "For Token_Dynamic nested token references, retain Config so the nested lookup receives the original configuration. This contextual read is distinct from the wrapper's general Config forwarding.",
           "adapters": [
             "Token_Dynamic"
           ]
@@ -46,6 +50,7 @@
         {
           "path": "Config.Content.Meta.Type",
           "description": "Fall back to the content entity type while generating an ID code.",
+          "whenToUse": "For Token_SDA ID-code generation, provide the content entity type when its other entity-type selection needs this fallback.",
           "adapters": [
             "Token_SDA"
           ]
@@ -53,6 +58,7 @@
         {
           "path": "Config.EmojiSets.MasterEmojiList",
           "description": "Use the configured non-artifact master emoji sheet before loading it from storage.",
+          "whenToUse": "For Token_SDA emoji enrollment, provide a configured non-artifact master emoji sheet when it should be used before storage loading.",
           "adapters": [
             "Token_SDA"
           ]
@@ -60,6 +66,7 @@
         {
           "path": "Config.EmojiSets.MasterEmojiList_Artifact",
           "description": "Use the configured artifact master emoji sheet before loading it from storage.",
+          "whenToUse": "For Token_SDA artifact emoji enrollment, provide the configured artifact master sheet before storage loading.",
           "adapters": [
             "Token_SDA"
           ]
@@ -67,6 +74,7 @@
         {
           "path": "Config.EmojiSets[$emojiSheetName]",
           "description": "Resolve the selected emoji sheet from preserved incoming configuration.",
+          "whenToUse": "For Token_SDA, provide the selected named emoji sheet in preserved Config when that enrollment level requests it. The sheet name is dynamic, not a fixed catalog property.",
           "adapters": [
             "Token_SDA"
           ],
@@ -76,13 +84,15 @@
         {
           "path": "Config.EmojiSetSources",
           "description": "Read configured emoji-set sources during OCIID enrollment.",
+          "whenToUse": "For Token_SDA OCIID enrollment, supply configured emoji-set sources when that flow reads them.",
           "adapters": [
             "Token_SDA"
           ]
         },
         {
           "path": "Config.EntityType",
-          "description": "Select entity-specific enrollment, context, reference-tag, ID, lineage and emoji behavior.",
+          "description": "Select entity-specific enrollment, reference-tag, ID, lineage and emoji behavior; current AIContext uses a fixed Artifact path.",
+          "whenToUse": "For Token_SDA, select entity-specific enrollment, reference tag, ID, lineage or emoji handling where those flows read it. Current Add-SDAAIContext immediately replaces the entity-specific path with fixed Artifact; this field does not select AIContext entity there.",
           "adapters": [
             "Token_SDA"
           ]
@@ -90,6 +100,7 @@
         {
           "path": "Config.Hours",
           "description": "Provide the hourly weather observations used for closest-time selection.",
+          "whenToUse": "For Token_SDA closest-time weather selection, supply hourly observations to compare against the requested time.",
           "adapters": [
             "Token_SDA"
           ],
@@ -100,6 +111,7 @@
         {
           "path": "Config.PrimaryAttributeName",
           "description": "Build the ItemSignal lookup for the existing primary attribute.",
+          "whenToUse": "For Token_SDA existing-primary-attribute lookup, name the attribute used to build the ItemSignal lookup path.",
           "adapters": [
             "Token_SDA"
           ]
@@ -107,6 +119,7 @@
         {
           "path": "Config.SpecifiedTime",
           "description": "Select the weather observation nearest the requested time.",
+          "whenToUse": "For Token_SDA weather selection, supply the target time for the closest hourly observation.",
           "adapters": [
             "Token_SDA"
           ],
@@ -117,6 +130,7 @@
         {
           "path": "Config.StateFile",
           "description": "Name state resources and reverse-index files, or describe the OCIID write.",
+          "whenToUse": "For Token_SDA ID/OCIID state handling, name the state resource or reverse-index file used by that branch.",
           "adapters": [
             "Token_SDA"
           ]
@@ -124,6 +138,7 @@
         {
           "path": "Config.StatePath",
           "description": "Name the state entry used when reading and incrementing the ID index.",
+          "whenToUse": "For Token_SDA ID-index handling, name the state entry read and incremented by the selected flow.",
           "adapters": [
             "Token_SDA"
           ]
@@ -131,6 +146,7 @@
         {
           "path": "Config.Stations",
           "description": "Attach station information to the selected weather result.",
+          "whenToUse": "For Token_SDA weather output, supply station information to attach to the selected result.",
           "adapters": [
             "Token_SDA"
           ],
@@ -141,6 +157,7 @@
         {
           "path": "Config.UserEntry",
           "description": "Read an explicit user entry or generation directive for ID, reference-tag or OCIID processing.",
+          "whenToUse": "For Token_SDA ID, reference-tag or OCIID processing, supply an explicit user entry or generation directive when the chosen branch reads it.",
           "adapters": [
             "Token_SDA"
           ],
@@ -151,6 +168,7 @@
         {
           "path": "Config.VirtualPath",
           "description": "Use an existing virtual storage path before deriving one from the token expression.",
+          "whenToUse": "For Token_Storage, supply an existing virtual storage path when that provider should use it before deriving a path from the token expression.",
           "adapters": [
             "Token_Storage"
           ]
@@ -158,6 +176,7 @@
         {
           "path": "Container",
           "description": "Override the token expression with a memory container/resource path when both values exist.",
+          "whenToUse": "Supply Container together with Resource only when the token expression should be replaced by Memory.<Container>.<Resource>. A single field alone does not trigger this wrapper override.",
           "adapters": [
             "Token_Conduction",
             "Token_Dynamic",
@@ -174,6 +193,7 @@
         {
           "path": "Path",
           "description": "Select the token provider and expression, and describe the resolution in diagnostics.",
+          "whenToUse": "Supply a string token expression whose first dot-separated component names the registered Token provider. The wrapper trims enclosing token brackets and uses the expression in diagnostics.",
           "adapters": [
             "Token_Conduction",
             "Token_Dynamic",
@@ -190,6 +210,7 @@
         {
           "path": "Resource",
           "description": "Override the token expression with a memory container/resource path when both values exist.",
+          "whenToUse": "Supply Resource together with Container only for the wrapper's Memory.<Container>.<Resource> expression override. A single field alone does not trigger it.",
           "adapters": [
             "Token_Conduction",
             "Token_Dynamic",
@@ -203,6 +224,288 @@
             "Token_SDA"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "Boolean or matching collection elements",
+          "description": "When Dynamic expression function name in Path/Key selects branch; Config.Operator does not dispatch; Equals/NotEquals.",
+          "adapters": [
+            "Token_Dynamic"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Boolean",
+          "description": "When Dynamic expression function name in Path/Key selects branch; Config.Operator does not dispatch; In/NotIn, IsNull/IsNotNull, Gt/Lt, normalized Not/And/Or.",
+          "adapters": [
+            "Token_Dynamic"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Int32",
+          "description": "When Dynamic expression function name in Path/Key selects branch; Config.Operator does not dispatch; Add/Subtract/ToInt converts operands to Int32.",
+          "adapters": [
+            "Token_Dynamic"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "selected native typed-reference value or text; false literal null becomes absent",
+          "description": "When Dynamic expression function name in Path/Key selects branch; Config.Operator does not dispatch; If branch (Result presence conditional).",
+          "adapters": [
+            "Token_Dynamic"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Object[]",
+          "description": "When Dynamic expression function name in Path/Key selects branch; Config.Operator does not dispatch; ToArray returns enumerable copy or literal-delimiter split.",
+          "adapters": [
+            "Token_Dynamic"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "String",
+          "description": "When Dynamic expression function name in Path/Key selects branch; Config.Operator does not dispatch; JoinArrays joins inner arrays without inner delimiter, then outer values with supplied delimiter.",
+          "adapters": [
+            "Token_Dynamic"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "native parsed value/String/DateTime",
+          "description": "When Dynamic expression function name in Path/Key selects branch; Config.Operator does not dispatch; FromJson/Guid/NewGuid/LocalToUtc and text branches.",
+          "adapters": [
+            "Token_Dynamic"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "String",
+          "description": "environment value [provider-returned]. When explicit process/user/machine scope or default process→user→machine fallback; value found, including explicit-scope empty String.",
+          "adapters": [
+            "Token_Environment"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "String",
+          "description": "When System path uses shared environment helper; helper resolves value (Result presence conditional).",
+          "adapters": [
+            "Token_System"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "String",
+          "description": "When Path formatter branch chooses JSON serialize/parse or path formatting; JSON encode branch.",
+          "adapters": [
+            "Token_Formatter"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "native JSON value; JSON null is absent",
+          "description": "When Path formatter branch chooses JSON serialize/parse or path formatting; JSON decode branch (Result presence conditional).",
+          "adapters": [
+            "Token_Formatter"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "String",
+          "description": "When Path formatter branch chooses JSON serialize/parse or path formatting; FilePath/VirtualFolder/String branch.",
+          "adapters": [
+            "Token_Formatter"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "native value including false, zero or empty string",
+          "description": "When item graph path resolution; optional textual default; path resolves.",
+          "adapters": [
+            "Token_Memory"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "textual default value",
+          "description": "When item graph path resolution; optional textual default; default supplied.",
+          "adapters": [
+            "Token_Memory"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "selected storage result",
+          "description": "When Path selects delegated mapped storage verb; delegated storage succeeds (Result presence conditional).",
+          "adapters": [
+            "Token_Storage"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When Path second segment selects SDA handler and third segment selects operation; Enrollment branch.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Int32",
+          "description": "When Path second segment selects SDA handler and third segment selects operation; EntityLevel branch maps Platform=-1 through Artifact=7.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "selected weather native object",
+          "description": "When Path second segment selects SDA handler and third segment selects operation; WeatherVaults branch (Result presence conditional).",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "Width",
+          "type": "Int32",
+          "description": "decoded image width [measured]. When Path second segment selects SDA handler and third segment selects operation; ImageDimensions branch.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "Height",
+          "type": "Int32",
+          "description": "decoded image height [measured]. When Path second segment selects SDA handler and third segment selects operation; ImageDimensions branch.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "AspectRatio",
+          "type": "String",
+          "description": "formatted ratio [computed]. When Path second segment selects SDA handler and third segment selects operation; ImageDimensions branch.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "AspectRatioDecimal",
+          "type": "Number",
+          "description": "ratio [computed]. When Path second segment selects SDA handler and third segment selects operation; ImageDimensions branch.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "<ancestor>.Level",
+          "type": "String",
+          "description": "ancestor entity label [computed] (conditional). When Path second segment selects SDA handler and third segment selects operation; Lineage/ELineage branch.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "<ancestor>.Code",
+          "type": "native copied value",
+          "description": "ancestor code [echoed-input] (conditional). When Path second segment selects SDA handler and third segment selects operation; Lineage/ELineage branch.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "<ancestor>.ID",
+          "type": "native copied value (String or Number)",
+          "description": "ancestor ID without string conversion [echoed-input] (conditional). When Path second segment selects SDA handler and third segment selects operation; Lineage/ELineage branch.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "<ancestor>.FullName",
+          "type": "native copied value",
+          "description": "ancestor full name [echoed-input] (conditional). When Path second segment selects SDA handler and third segment selects operation; Lineage/ELineage branch.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "<ancestor>.RefTag",
+          "type": "native copied value",
+          "description": "ancestor reference tag [echoed-input] (conditional). When Path second segment selects SDA handler and third segment selects operation; Lineage/ELineage branch.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Boolean",
+          "description": "When Path second segment selects SDA handler and third segment selects operation; AIContext.HasPattern branch.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "String; may be empty",
+          "description": "When Path second segment selects SDA handler and third segment selects operation; AIContext content branch.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Int32 index or String code",
+          "description": "When Path second segment selects SDA handler and third segment selects operation; ID branch (Result presence conditional).",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Int64",
+          "description": "seed from ordinal conversion [computed]. When Path second segment selects SDA handler and third segment selects operation; OCIID.EID branch.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Object[] of emoji/code values",
+          "description": "When Path second segment selects SDA handler and third segment selects operation; OCIID.ECodeSet branch.",
+          "adapters": [
+            "Token_SDA"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "native existing entry or String tag",
+          "description": "When Path second segment selects SDA handler and third segment selects operation; RefTag branch (Result presence conditional).",
+          "adapters": [
+            "Token_SDA"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Token_Dynamic: success can have no Result (Null branch)",
+        "Token_Dynamic: In/NotIn are overlap tests; not exact-set identity, deduplication or cardinality",
+        "Token_Environment: success can have no Result (all scopes return null)",
+        "Token_Environment: Only default fallback treats empty string as false and tries the next scope; explicit scope retains empty string",
+        "Token_System: Helper strips Environment prefix rather than System; System-prefixed paths can miss",
+        "Token_Memory: success can have no Result (path unresolved with no default; warning only)",
+        "Token_Memory: Empty inner path invokes misspelled $opSlignal.SetResult and catches technical failure",
+        "Token_Storage: Token Get is not intrinsically read-only",
+        "Token_Generator: unknown — No generated/navigation/conduction result is asserted from the class wrapper alone",
+        "Token_Navigator: unknown — No generated/navigation/conduction result is asserted from the class wrapper alone",
+        "Token_Conduction: unknown — No generated/navigation/conduction result is asserted from the class wrapper alone",
+        "Token_SDA: success can have no Result (OCIID Config.UserEntry=%S returns without result)",
+        "Token_SDA: success can have no Result (EntityLevel unknown entity label sets null without Critical)",
+        "Token_SDA: Dispatcher requires at least three path segments. Unknown nonnull Enrollment EntityType has no default and can fail to terminate"
       ]
     }
   ],
@@ -257,5 +560,6 @@
       "repository": "SDAFusion.Adapters",
       "path": "Src/Token/SDA/PowerShell/Token_SDA.psm1"
     }
-  ]
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Mapped/MappedTokenAdapter.json","version":1}
 }

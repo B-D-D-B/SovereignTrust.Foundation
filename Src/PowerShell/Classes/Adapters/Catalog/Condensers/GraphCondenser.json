@@ -2,5 +2,7 @@
   "name": "GraphCondenser",
   "repository": "SovereignTrust.Foundation",
   "path": "Src/PowerShell/Classes/Adapters/Condenser/GraphCondenser.ps1",
-  "activities": []
+  "activities": [],
+  "resultContractRef": {"file":"../../ResultContracts/Condensers/GraphCondenser.json","version":1},
+  "resultInventorySummary": {"status":"no-declared-activities","detail":"This catalog declares no activity Result fields."}
 }

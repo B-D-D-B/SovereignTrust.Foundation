@@ -1,0 +1,65 @@
+{
+  "name": "MergeCondenser",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/MergeCondenser.ps1",
+      "sha256": "A44DCE5EC9EE65810B0FD4F96C260C9FC16B689622E324AAE9178258B5AA1613"
+    },
+    {
+      "id": "s2",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedCondenserAdapter.ps1",
+      "sha256": "CDB170DE2EB8292E350DD924703F26EF17E4839B85120D183A138221826C939E"
+    }
+  ],
+  "activities": [
+    {
+      "name": "Merge",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "MergeCondenser",
+            "support": "implemented",
+            "when": "Base and Overlay resolve; merge options valid",
+            "outcomes": [
+              {
+                "condition": "Invoke-MergeJson succeeds",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "native JSON-like object"
+              },
+              {
+                "condition": "missing Base/Overlay, invalid options or helper failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Merge'",
+                "line": 60,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    }
+  ]
+}

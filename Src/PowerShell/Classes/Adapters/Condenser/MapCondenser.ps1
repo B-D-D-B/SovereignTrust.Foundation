@@ -96,26 +96,40 @@ class MapCondenser {
                 }
 
                 "Map" {
-
-                    if ($null -eq $Plan) {
-                        $PlanSignal = Resolve-PathFromDictionary -Dictionary $ItemSignal -Path "%.@.Plan" | Select-Object -Last 1
-                        $Plan = $PlanSignal.GetResult()
+                    $proposalSignal = $null
+                    $data = $ItemSignal.GetResult()
+                    if ($Plan -is $ItemSignal.GetType()) {
+                        $proposalSignal = $Plan
                     }
-
-                    <#
-                    if ($null -eq $Context) {
-                        $ContextSignal = Resolve-PathFromDictionary -Dictionary $ItemSignal -Path "%.@.Context" | Select-Object -Last 1
-                        $Context = $ContextSignal.GetResult()
+                    else {
+                        if ($null -eq $Plan) { return $opSignal.LogCritical('Map requires Config.ProposalPath or a Proposal Signal.') }
+                        $proposalPathSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path 'Config.ProposalPath' -SignalLevel 'Warning' | Select-Object -Last 1
+                        if ($proposalPathSignal.Failure() -or -not $proposalPathSignal.HasResult() -or [string]::IsNullOrWhiteSpace([string]$proposalPathSignal.GetResult())) {
+                            return $opSignal.LogCritical('Map requires a nonempty Config.ProposalPath.')
+                        }
+                        $proposalAccessor = Resolve-PathFromDictionary -Dictionary $ItemSignal -Path ([string]$proposalPathSignal.GetResult()) | Select-Object -Last 1
+                        if ($proposalAccessor.Failure() -or -not $proposalAccessor.HasResult()) { return $opSignal.LogCritical('Map ProposalPath did not resolve.') }
+                        $proposalSignal = $proposalAccessor.GetResult()
+                        $dataPathSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path 'Config.DataPath' -Default $null -SignalLevel 'Warning' | Select-Object -Last 1
+                        if ($dataPathSignal.HasResult()) {
+                            $dataSignal = Resolve-PathFromDictionary -Dictionary $ItemSignal -Path ([string]$dataPathSignal.GetResult()) | Select-Object -Last 1
+                            if ($dataSignal.Failure() -or -not $dataSignal.HasResult()) { return $opSignal.LogCritical('Map DataPath did not resolve.') }
+                            $data = $dataSignal.GetResult()
+                        }
                     }
-                        #>
-                    # HACKED TOGETHER TO MAKE WORK FROM BELOW, NOT CURRENTLY FUNCTIONAL
-                        $Context = $ItemSignal
-                    $resultSignal = Invoke-MapCondenser -Signal $ItemSignal -ProposalSignal $Plan -Context $Context | Select-Object -Last 1
-                    $opSignal.MergeSignal($resultSignal)
-
-                    if ($resultSignal.HasResult()) {
-                        $opSignal.SetResult($resultSignal.GetResult())
+                    if ($proposalSignal -isnot $ItemSignal.GetType() -or -not $proposalSignal.HasResult()) {
+                        return $opSignal.LogCritical('Map proposal must be a Signal with a Result.')
                     }
+                    $contentSignal = Resolve-PathFromDictionary -Dictionary $proposalSignal -Path '@.Content' -SignalLevel 'Warning' | Select-Object -Last 1
+                    if ($contentSignal.Failure() -or -not $contentSignal.HasResult()) { return $opSignal.LogCritical('Map proposal Content is missing.') }
+                    $modeSignal = Resolve-PathFromDictionary -Dictionary $proposalSignal -Path '@.CondenserMode' -Default 'Direct' -SignalLevel 'Warning' | Select-Object -Last 1
+                    if ($modeSignal.Failure() -or $modeSignal.GetResult() -notin @('Direct','Template')) { return $opSignal.LogCritical('Map proposal CondenserMode is unsupported.') }
+                    $dataProxy = [Signal]::Start('MapCondenser.DataProxy', $ItemSignal) | Select-Object -Last 1
+                    $dataProxy.SetResult($data)
+                    $Context = $ItemSignal
+                    $resultSignal = Invoke-MapCondenser -Signal $dataProxy -ProposalSignal $proposalSignal -Context $Context | Select-Object -Last 1
+                    if ($null -eq $resultSignal -or $opSignal.MergeSignalAndVerifyFailure($resultSignal)) { return $opSignal.LogCritical('Map proposal dispatch failed.') }
+                    if ($resultSignal.HasResult()) { $opSignal.SetResult($resultSignal.GetResult()) }
                     
                     break
                 }
@@ -151,8 +165,12 @@ class MapCondenser {
             $Context = $ContextSignal.GetResult()
         }
 
+        if ($Plan -isnot $ItemSignal.GetType() -or -not $Plan.HasResult()) {
+            return $opSignal.LogCritical('Map proposal must be a Signal with a Result.')
+        }
+
         $resultSignal = Invoke-MapCondenser -Signal $ItemSignal -ProposalSignal $Plan -Context $Context | Select-Object -Last 1
-        $opSignal.MergeSignal($resultSignal)
+        if ($null -eq $resultSignal -or $opSignal.MergeSignalAndVerifyFailure($resultSignal)) { return $opSignal.LogCritical('Map proposal dispatch failed.') }
 
         if ($resultSignal.HasResult()) {
             $opSignal.SetResult($resultSignal.GetResult())

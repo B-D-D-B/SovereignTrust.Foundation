@@ -1,0 +1,296 @@
+{
+  "name": "MappedConductionAdapter",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedConductionAdapter.ps1",
+      "sha256": "0EA34996E84E56C510E4719DA207174E08B6C5DC02A229683EBEC50F0DF6CB2B"
+    },
+    {
+      "id": "s2",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Conduction/ST/PowerShell/Conduction_ST.psm1",
+      "sha256": "3FE632CD6F83F2139E034C0B8FAE3BECD911084DDE54587D55D44D0385C55A3E"
+    },
+    {
+      "id": "s3",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Conduction/ST/PowerShell/Invoke-Conduction_ST.ps1",
+      "sha256": "CA79AD924DB3E92ECA27EA234605AC347ADC830294252A129A466ECE7BBC401E"
+    },
+    {
+      "id": "s4",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Conduction/SDA/PowerShell/Conduction_SDA.psm1",
+      "sha256": "F82363A1305DA7F95020D03C98231CF27466BC83297DDC273CC20A2B8DD5A125"
+    }
+  ],
+  "activities": [
+    {
+      "name": "Invoke",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Conduction_ST",
+            "support": "implemented",
+            "when": "mapped slot selects ST conduction class",
+            "outcomes": [
+              {
+                "condition": "underlying conductor completes; mapped wrapper calls GetResult(value) rather than SetResult",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "underlying conductor fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "executes child conduction phases"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Invoke'",
+                "line": 77,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Concrete class may yield ItemSignal, but public mapped boundary loses it."
+          },
+          {
+            "adapter": "Conduction_SDA",
+            "support": "implemented",
+            "when": "mapped slot selects SDA class; class ignores Activity",
+            "outcomes": [
+              {
+                "condition": "SDA conductor completes; mapped wrapper drops returned result",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "SDA conductor fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "executes SDA conduction phases"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Invoke'",
+                "line": 77,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Invoke",
+                "line": 38,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property adapters name only Conduction_ST although Conduction_SDA is mapped; source applicability differs from declaration."
+          }
+        ]
+      }
+    },
+    {
+      "name": "Run",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Conduction_ST",
+            "support": "implemented",
+            "when": "mapped slot selects ST conduction class",
+            "outcomes": [
+              {
+                "condition": "underlying conductor completes; mapped wrapper calls GetResult(value) rather than SetResult",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "underlying conductor fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "executes child conduction phases"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Run'",
+                "line": 77,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Concrete class may yield ItemSignal, but public mapped boundary loses it."
+          },
+          {
+            "adapter": "Conduction_SDA",
+            "support": "implemented",
+            "when": "mapped slot selects SDA class; class ignores Activity",
+            "outcomes": [
+              {
+                "condition": "SDA conductor completes; mapped wrapper drops returned result",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "SDA conductor fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "executes SDA conduction phases"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Run'",
+                "line": 77,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Invoke",
+                "line": 38,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property adapters name only Conduction_ST although Conduction_SDA is mapped; source applicability differs from declaration."
+          }
+        ]
+      }
+    },
+    {
+      "name": "ST",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Conduction_ST",
+            "support": "implemented",
+            "when": "mapped slot selects ST conduction class",
+            "outcomes": [
+              {
+                "condition": "underlying conductor completes; mapped wrapper calls GetResult(value) rather than SetResult",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "underlying conductor fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "executes child conduction phases"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'ST'",
+                "line": 77,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 9,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Concrete class may yield ItemSignal, but public mapped boundary loses it."
+          },
+          {
+            "adapter": "Conduction_SDA",
+            "support": "implemented",
+            "when": "mapped slot selects SDA class; class ignores Activity",
+            "outcomes": [
+              {
+                "condition": "SDA conductor completes; mapped wrapper drops returned result",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "SDA conductor fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "executes SDA conduction phases"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'ST'",
+                "line": 77,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Invoke",
+                "line": 38,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property adapters name only Conduction_ST although Conduction_SDA is mapped; source applicability differs from declaration."
+          }
+        ]
+      }
+    }
+  ]
+}

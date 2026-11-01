@@ -5,11 +5,13 @@
   "activities": [
     {
       "name": "IteratePhase",
+      "whenToUse": "Use to dispatch a cloned plan for each retained Config.IterationArray item, using Config.Activity as the per-item activity. Optional filtering runs before iteration; threading settings choose the serial or worker path.",
       "description": "Iterate a plan phase.",
       "properties": [
         {
           "path": "Adapter",
           "description": "Identify the iteration trace adapter and select the condenser slot for the cloned iteration plan.",
+          "whenToUse": "Supply the iteration adapter with a nonblank condenser slot after the first dot, such as Condenser.Plan, when dispatching each clone. The helper uses that slot and fails if it is absent.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -17,6 +19,7 @@
         {
           "path": "Config.Activity",
           "description": "Name the iteration trace activity and select the activity executed for the cloned iteration plan.",
+          "whenToUse": "Supply the activity to execute for each iteration; it replaces the clone Activity and is passed to the selected condenser slot.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -24,13 +27,34 @@
         {
           "path": "Config.IterationArray",
           "description": "Supply the iteration values and cardinality used to select serial and parallel work.",
+          "whenToUse": "Supply the collection whose values should drive the phase iterations. Filtering runs before work selection; an empty resulting collection performs no iterations.",
           "adapters": [
             "PlanCondenser"
           ]
         },
         {
+          "path": "Config.Filter",
+          "description": "Optionally retain iteration items using one Path|Default string or a nonempty array of them. Missing or null Filter leaves the collection unchanged. Each path resolves against an item; an absent or null path uses its literal boolean default. Native booleans and trimmed true/false text determine membership; other resolved values are false. Invalid non-null criteria fail before iteration.",
+          "whenToUse": "Supply one Path|Default string or a nonempty array when only matching items should run. Use true or false as each missing/null-path fallback; omit or use null to keep every item. Native booleans and trimmed true/false text determine membership; other values do not match.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "Config.FilterOperator",
+          "description": "Combine per-item Filter criteria using And or Or, case-insensitively. Missing or null FilterOperator defaults to And. Invalid non-null operators fail even when Filter is absent.",
+          "whenToUse": "Set Or when any Filter criterion should retain an item; omit or use null for And, requiring all criteria. Use only And or Or (case-insensitive); an invalid non-null operator fails even without Filter.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": "And"
+          }
+        },
+        {
           "path": "Config.IterationName",
           "description": "Name the registered iteration signal.",
+          "whenToUse": "Supply a name when downstream steps should find the registered iteration signal under a key other than Iteration; omission uses Iteration.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -41,6 +65,7 @@
         {
           "path": "Config.Threading.DebugInline",
           "description": "Select inline debug execution when deciding and invoking parallel work.",
+          "whenToUse": "With Enabled true, set true to run all post-warmup worker items sequentially in the current runspace for debugging. Omit or set false for normal worker eligibility checks. Remaining items and environment details are still required; warmup items retain the serial path.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -50,7 +75,8 @@
         },
         {
           "path": "Config.Threading.DebugWorkItemIndex",
-          "description": "Select the work-item index for inline debugging.",
+          "description": "Retain the compatibility work-item index; it is parsed as an integer but does not filter inline worker items.",
+          "whenToUse": "Normally omit this compatibility-only option. With Enabled true and filtered items remaining it is parsed as an integer, defaulting to the capped warmup count, but the current runspace pool ignores it for item selection: DebugInline executes every worker item.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -64,6 +90,7 @@
         {
           "path": "Config.Threading.Enabled",
           "description": "Enable consideration of threaded iteration and validate that the option is boolean.",
+          "whenToUse": "Set true when this phase iteration should consider the worker execution path. Omit or set false for serial iteration; other Config.Threading options are read only when Enabled is true and filtered items remain. True alone does not guarantee parallel work: remaining items, warmup, environment support, MaxThreads and DebugInline determine the path.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -74,6 +101,7 @@
         {
           "path": "Config.Threading.MaxThreads",
           "description": "Set the iteration worker throttle, clamped to at least one.",
+          "whenToUse": "With Enabled true and filtered items remaining, supply an integer to override environment Config.MaxParallelism (fallback 1); values are clamped to at least one. Normal parallel work also needs environment support and multiple post-warmup items; the runspace-pool throttle accepts 1 through 1024.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -87,6 +115,7 @@
         {
           "path": "Config.Threading.ReuseItemSignalGrid",
           "description": "Request reuse of the source ItemSignal grid in iteration workers.",
+          "whenToUse": "With Config.Threading.Enabled true and filtered items remaining, set true when iteration workers should receive a fork of the source ItemSignal grid; omit or set false for a fresh worker item signal. This affects worker-path items (including DebugInline), not serial or warmup items. With Enabled false this option is not read.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -97,6 +126,7 @@
         {
           "path": "Config.Threading.Warmup",
           "description": "Set the nonnegative number of warmup iterations before parallel work, capped by the iteration count.",
+          "whenToUse": "With Enabled true and filtered items remaining, supply a nonnegative integer for initial serial iterations before eligible worker execution; omission uses zero and the count is capped at the filtered collection size. If worker eligibility fails, all items run serially.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -107,6 +137,7 @@
         {
           "path": "Name",
           "description": "Identify the iteration template and input hash in execution tracing.",
+          "whenToUse": "Use a stable template name when iteration tracing should identify this input set; the name contributes to the template identifier and input hash.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -114,6 +145,7 @@
         {
           "path": "Name",
           "description": "Name the plan execution trace.",
+          "whenToUse": "Supply a recognizable step name when this activity should be identifiable in the shared execution trace; this read labels the trace rather than selecting the operation.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -121,6 +153,7 @@
         {
           "path": "Path",
           "description": "Resolve the activity path before dispatch.",
+          "whenToUse": "No activity-specific selection is made from this shared Path read. Use Config.IterationArray to choose iteration values.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -128,6 +161,7 @@
         {
           "path": "Phase",
           "description": "Temporarily preserve the parent-phase reference while cloning the iteration plan.",
+          "whenToUse": "Leave an existing parent-phase reference supplied by the invoking framework intact; MemoryCondenser supplies it for executing steps. The clone helper temporarily removes and restores it by reference. Do not create one solely to enable iteration; absent references remain absent.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -135,19 +169,28 @@
         {
           "path": "Plan",
           "description": "Temporarily preserve the parent-plan reference while cloning the iteration plan.",
+          "whenToUse": "Leave any existing parent-plan reference intact when iterating a framework-owned plan. The clone helper temporarily removes and restores that reference; do not manufacture a parent Plan solely for cloning, since absent references remain absent.",
           "adapters": [
             "PlanCondenser"
           ]
         }
+      ],
+      "result": [],
+      "resultNotes": [
+        "No stable public Result field is available for this activity; inspect the Signal/effect at its actual boundary.",
+        "PlanCondenser: success can have no Result (empty or completed iteration; no aggregate Result)",
+        "PlanCondenser: No aggregate child result at this public boundary"
       ]
     },
     {
       "name": "InvokePlan",
+      "whenToUse": "Reserved and currently unimplemented; do not select this activity to execute a plan. Choose an implemented phase activity for phase execution.",
       "description": "Reserved plan invocation activity; its current branch has no implementation.",
       "properties": [
         {
           "path": "Name",
           "description": "Name the plan execution trace.",
+          "whenToUse": "Do not supply this to obtain plan invocation: InvokePlan is reserved and its branch has no implementation. Name is still read for the shared execution trace.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -155,19 +198,27 @@
         {
           "path": "Path",
           "description": "Resolve the activity path before dispatch.",
+          "whenToUse": "Do not supply this to obtain plan invocation: InvokePlan is reserved and its branch has no implementation. Path is still resolved by shared pre-dispatch code, but does not select an implemented operation.",
           "adapters": [
             "PlanCondenser"
           ]
         }
+      ],
+      "result": [],
+      "resultNotes": [
+        "No stable public Result field is available for this activity; inspect the Signal/effect at its actual boundary.",
+        "PlanCondenser: reserved"
       ]
     },
     {
       "name": "InvokePhase",
+      "whenToUse": "Use to resolve, clone and hydrate the steps at Plan.Path in the current ItemSignal, then invoke them as a phase synchronously in the current context.",
       "description": "Invoke a phase.",
       "properties": [
         {
           "path": "Config",
           "description": "Forward the incoming configuration object into the constructed hydration plan.",
+          "whenToUse": "Supply configuration here when injected steps need hydration settings or the helper options below; this object is forwarded to the constructed hydration plan.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -175,6 +226,7 @@
         {
           "path": "Config.Break",
           "description": "Evaluate the helper diagnostic break condition before cloning injected steps.",
+          "whenToUse": "Omit for ordinary execution (false). Set true only when inspecting the helper diagnostic branch in a debugger; the current branch assigns a local variable and does not itself pause execution.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -185,6 +237,7 @@
         {
           "path": "Config.Iteration",
           "description": "Read the iteration number to decide whether repeated step cloning should be skipped; a null value is treated as zero by the direct expression.",
+          "whenToUse": "Supply the current iteration count when using PreventReclone to suppress repeated injection. Missing or null is treated as zero; with PreventReclone enabled, counts greater than one return before step resolution.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -192,6 +245,7 @@
         {
           "path": "Config.PreventReclone",
           "description": "Control the repeated-cloning guard; when enabled, iterations greater than one return before step resolution.",
+          "whenToUse": "Enable when injection should be skipped on Config.Iteration values greater than one. Omit or leave false for repeated resolution and cloning; the guard does not skip iteration zero or one.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -199,6 +253,7 @@
         {
           "path": "Config.SkipRename",
           "description": "Skip prefixing injected step names when true.",
+          "whenToUse": "Set true when injected steps must retain their existing names. Omit or set false to prefix each name with the current plan Name and an underscore.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -209,6 +264,7 @@
         {
           "path": "Name",
           "description": "Name the locally constructed phase passed to Invoke-PlanPhase.",
+          "whenToUse": "Supply the name that should label the locally constructed phase when invoking its steps synchronously.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -216,6 +272,7 @@
         {
           "path": "Name",
           "description": "Name the plan execution trace.",
+          "whenToUse": "Supply a recognizable step name when this activity should be identifiable in the shared execution trace; this read labels the trace rather than selecting the operation.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -223,6 +280,7 @@
         {
           "path": "Name",
           "description": "Prefix injected step names and evaluate the ManageLineage diagnostic condition.",
+          "whenToUse": "Supply the prefix for injected step names when Config.SkipRename is false or omitted. Set SkipRename true to preserve injected names; the ManageLineage name check is only a diagnostic branch.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -230,6 +288,7 @@
         {
           "path": "Path",
           "description": "Locate the steps to inject from ItemSignal.",
+          "whenToUse": "Supply the ItemSignal path containing the steps to clone and hydrate for this activity; resolution is skipped when the PreventReclone guard returns early.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -237,19 +296,28 @@
         {
           "path": "Path",
           "description": "Resolve the activity path before dispatch.",
+          "whenToUse": "Supply the ItemSignal path to the steps used by this activity; shared dispatch reads Path before the injection helper resolves those steps.",
           "adapters": [
             "PlanCondenser"
           ]
         }
+      ],
+      "result": [],
+      "resultNotes": [
+        "No stable public Result field is available for this activity; inspect the Signal/effect at its actual boundary.",
+        "PlanCondenser: success can have no Result (phase completes; helper receipt is merged but not copied)",
+        "PlanCondenser: No aggregate child result at this public boundary"
       ]
     },
     {
       "name": "InvokePhaseAsync",
+      "whenToUse": "Use to start a phase task from the resolved steps and an exported ItemSignal snapshot, then manage it by its returned task ID. Requires environment details and SupportParallelism=true; Config.DebugInline runs the worker inline for debugging.",
       "description": "Start a phase asynchronously.",
       "properties": [
         {
           "path": "Config",
           "description": "Forward the incoming configuration object into the constructed hydration plan.",
+          "whenToUse": "Supply configuration here when injected steps need hydration settings or the helper options below; this object is forwarded to the constructed hydration plan.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -257,6 +325,7 @@
         {
           "path": "Config.Break",
           "description": "Evaluate the helper diagnostic break condition before cloning injected steps.",
+          "whenToUse": "Omit for ordinary execution (false). Set true only when inspecting the helper diagnostic branch in a debugger; the current branch assigns a local variable and does not itself pause execution.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -267,6 +336,7 @@
         {
           "path": "Config.DebugInline",
           "description": "Select inline execution for the background phase task.",
+          "whenToUse": "Set true to run the background phase worker inline for debugging; omit or set false for normal background execution. InvokePhaseAsync still requires environment details and SupportParallelism=true.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -277,6 +347,7 @@
         {
           "path": "Config.Iteration",
           "description": "Read the iteration number to decide whether repeated step cloning should be skipped; a null value is treated as zero by the direct expression.",
+          "whenToUse": "Supply the current iteration count when using PreventReclone to suppress repeated injection. Missing or null is treated as zero; with PreventReclone enabled, counts greater than one return before step resolution.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -284,6 +355,7 @@
         {
           "path": "Config.MaxBackgroundPhases",
           "description": "Limit concurrent background phase tasks to a positive integer.",
+          "whenToUse": "Supply a positive integer to override the environment concurrency limit for background phase tasks. Omission uses environment Config.MaxBackgroundPhases, falling back to 4.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -297,6 +369,7 @@
         {
           "path": "Config.PreventReclone",
           "description": "Control the repeated-cloning guard; when enabled, iterations greater than one return before step resolution.",
+          "whenToUse": "Enable when injection should be skipped on Config.Iteration values greater than one. Omit or leave false for repeated resolution and cloning; the guard does not skip iteration zero or one.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -304,6 +377,7 @@
         {
           "path": "Config.ReturnKeys",
           "description": "Select result keys to export from the background phase.",
+          "whenToUse": "List registered child-graph keys when completed phase results need exporting for later import by AwaitPhase or AwaitAllPhases. Omit for no exported keys; requesting an unregistered key fails phase completion.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -314,6 +388,7 @@
         {
           "path": "Config.SkipRename",
           "description": "Skip prefixing injected step names when true.",
+          "whenToUse": "Set true when injected steps must retain their existing names. Omit or set false to prefix each name with the current plan Name and an underscore.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -324,6 +399,7 @@
         {
           "path": "Config.TaskName",
           "description": "Name the background phase task.",
+          "whenToUse": "Supply a separate label when the background task should be named differently from the invoking step; omission uses Plan.Name.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -337,6 +413,7 @@
         {
           "path": "Name",
           "description": "Name the plan execution trace.",
+          "whenToUse": "Supply a recognizable step name when this activity should be identifiable in the shared execution trace; this read labels the trace rather than selecting the operation.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -344,6 +421,7 @@
         {
           "path": "Name",
           "description": "Prefix injected step names and evaluate the ManageLineage diagnostic condition.",
+          "whenToUse": "Supply the prefix for injected step names when Config.SkipRename is false or omitted. Set SkipRename true to preserve injected names; the ManageLineage name check is only a diagnostic branch.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -351,6 +429,7 @@
         {
           "path": "Name",
           "description": "Supply the fallback expression evaluated for the background task name.",
+          "whenToUse": "Use the invoking step name as the background-task label when Config.TaskName is omitted; supply Config.TaskName when a separate label is needed.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -358,6 +437,7 @@
         {
           "path": "Path",
           "description": "Locate the steps to inject from ItemSignal.",
+          "whenToUse": "Supply the ItemSignal path containing the steps to clone and hydrate for this activity; resolution is skipped when the PreventReclone guard returns early.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -365,19 +445,87 @@
         {
           "path": "Path",
           "description": "Resolve the activity path before dispatch.",
+          "whenToUse": "Supply the ItemSignal path to the steps used by this activity; shared dispatch reads Path before the injection helper resolves those steps.",
           "adapters": [
             "PlanCondenser"
           ]
         }
-      ]
+      ],
+      "result": [
+        {
+          "path": "TaskId",
+          "type": "String",
+          "description": "owned task identity [computed]. When parallel environment and task capacity configured; start helper returns task status.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "TaskName",
+          "type": "String",
+          "description": "configured task name [echoed-input]. When parallel environment and task capacity configured; start helper returns task status.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "OwnerId",
+          "type": "String",
+          "description": "item owner identity [computed]. When parallel environment and task capacity configured; start helper returns task status.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "State",
+          "type": "String",
+          "description": "Queued/Running/Completed/Failed/Cancelled [computed]. When parallel environment and task capacity configured; start helper returns task status.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "CreatedUtc",
+          "type": "DateTime",
+          "description": "creation time [measured]. When parallel environment and task capacity configured; start helper returns task status.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "StartedUtc",
+          "type": "DateTime/null",
+          "description": "start time [measured]. When parallel environment and task capacity configured; start helper returns task status.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "CompletedUtc",
+          "type": "DateTime/null",
+          "description": "completion time [measured]. When parallel environment and task capacity configured; start helper returns task status.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        }
+      ],
+      "resultNotes": []
     },
     {
       "name": "AwaitPhase",
+      "whenToUse": "Use to wait for the task identified by Plan.Path, merge its completion signals and import its exported results into the current ItemSignal using Config.ResultCollisionAction. An optional TimeoutMilliseconds supplies a cooperative wait budget.",
       "description": "Wait for a phase.",
       "properties": [
         {
+          "path": "Config.TimeoutMilliseconds",
+          "description": "Optional native Int32 or Int64 cooperative wait budget from 1 through 300000 ms; omitted keeps legacy waiting. Existing synchronous task update/finalization is outside the hard wall-clock bound.",
+          "whenToUse": "Supply a native Int32 or Int64 from 1 through 300000 when this task wait should have a cooperative polling budget. Omit for legacy waiting. Synchronous task update/finalization is not hard wall-clock bounded; null is not a valid supplied budget.",
+          "adapters": ["PlanCondenser"]
+        },
+        {
           "path": "Config.ResultCollisionAction",
           "description": "Choose Error, PreserveParent or OverwriteParent when merging completed phase results.",
+          "whenToUse": "Choose PreserveParent to retain an existing parent-graph key, or OverwriteParent to import the child result over it. Omit for Error, which fails import on a collision; use this when awaiting exported phase results.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -388,6 +536,7 @@
         {
           "path": "Name",
           "description": "Name the plan execution trace.",
+          "whenToUse": "Supply a recognizable step name when this activity should be identifiable in the shared execution trace; this read labels the trace rather than selecting the operation.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -395,6 +544,7 @@
         {
           "path": "Path",
           "description": "Resolve the activity path before dispatch.",
+          "whenToUse": "Supply the task-ID string or an object with TaskId when selecting the task for this activity; shared dispatch resolves Path before the task branch reads it.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -402,6 +552,7 @@
         {
           "path": "Path",
           "description": "Use a string Path directly as the background task identifier.",
+          "whenToUse": "Set Path to the background task-ID string when selecting one task; alternatively pass its status object with TaskId. Use a task belonging to this ItemSignal owner.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -409,19 +560,89 @@
         {
           "path": "Path.TaskId",
           "description": "Read the task identifier when Path is an object rather than a string.",
+          "whenToUse": "Use this member when passing the task status object as Path instead of a task-ID string; it selects the background task for this activity.",
           "adapters": [
             "PlanCondenser"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "TaskId",
+          "type": "String",
+          "description": "owned task identity [computed]. When Plan.Path selects owned task ID; collision action Error/PreserveParent/OverwriteParent; task completion imported.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "TaskName",
+          "type": "String",
+          "description": "configured task name [echoed-input]. When Plan.Path selects owned task ID; collision action Error/PreserveParent/OverwriteParent; task completion imported.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "OwnerId",
+          "type": "String",
+          "description": "item owner identity [computed]. When Plan.Path selects owned task ID; collision action Error/PreserveParent/OverwriteParent; task completion imported.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "State",
+          "type": "String",
+          "description": "Queued/Running/Completed/Failed/Cancelled [computed]. When Plan.Path selects owned task ID; collision action Error/PreserveParent/OverwriteParent; task completion imported.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "CreatedUtc",
+          "type": "DateTime",
+          "description": "creation time [measured]. When Plan.Path selects owned task ID; collision action Error/PreserveParent/OverwriteParent; task completion imported.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "StartedUtc",
+          "type": "DateTime/null",
+          "description": "start time [measured]. When Plan.Path selects owned task ID; collision action Error/PreserveParent/OverwriteParent; task completion imported.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "CompletedUtc",
+          "type": "DateTime/null",
+          "description": "completion time [measured]. When Plan.Path selects owned task ID; collision action Error/PreserveParent/OverwriteParent; task completion imported.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "PlanCondenser: Optional monotonic polling deadline fails without importing on failed wait; existing synchronous update/finalization can exceed the budget. Imported child result is stored on ItemSignal graph, not returned as activity Result."
       ]
     },
     {
       "name": "AwaitAllPhases",
+      "whenToUse": "Use to wait for all phase tasks owned by the current ItemSignal, then merge their completion signals and import exported results using Config.ResultCollisionAction. The optional TimeoutMilliseconds budget is shared by the initial wait across those tasks.",
       "description": "Wait for all phases.",
       "properties": [
         {
+          "path": "Config.TimeoutMilliseconds",
+          "description": "Optional native Int32 or Int64 cooperative budget shared by owned waits, 1 through 300000 ms; omitted keeps legacy waiting. Existing synchronous task update/finalization is outside the hard wall-clock bound.",
+          "whenToUse": "Supply a native Int32 or Int64 from 1 through 300000 when all owned waits should share one cooperative polling budget. Omit for legacy waiting. Synchronous task update/finalization is not hard wall-clock bounded; null is not a valid supplied budget.",
+          "adapters": ["PlanCondenser"]
+        },
+        {
           "path": "Config.ResultCollisionAction",
           "description": "Choose Error, PreserveParent or OverwriteParent when merging all completed phase results.",
+          "whenToUse": "Choose PreserveParent to retain an existing parent-graph key, or OverwriteParent to import the child result over it. Omit for Error, which fails import on a collision; use this when awaiting exported phase results.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -432,6 +653,7 @@
         {
           "path": "Name",
           "description": "Name the plan execution trace.",
+          "whenToUse": "Supply a recognizable step name when this activity should be identifiable in the shared execution trace; this read labels the trace rather than selecting the operation.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -439,19 +661,84 @@
         {
           "path": "Path",
           "description": "Resolve the activity path before dispatch.",
+          "whenToUse": "No activity-specific selection is made from this shared Path read. AwaitAllPhases selects tasks owned by the current ItemSignal, so do not use Path to narrow the wait to one task.",
           "adapters": [
             "PlanCondenser"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "$[*].TaskId",
+          "type": "String",
+          "description": "owned task identity [computed]. When waits all owned phase tasks; wait helper returns.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "$[*].TaskName",
+          "type": "String",
+          "description": "configured task name [echoed-input]. When waits all owned phase tasks; wait helper returns.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "$[*].OwnerId",
+          "type": "String",
+          "description": "item owner identity [computed]. When waits all owned phase tasks; wait helper returns.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "$[*].State",
+          "type": "String",
+          "description": "Queued/Running/Completed/Failed/Cancelled [computed]. When waits all owned phase tasks; wait helper returns.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "$[*].CreatedUtc",
+          "type": "DateTime",
+          "description": "creation time [measured]. When waits all owned phase tasks; wait helper returns.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "$[*].StartedUtc",
+          "type": "DateTime/null",
+          "description": "start time [measured]. When waits all owned phase tasks; wait helper returns.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "$[*].CompletedUtc",
+          "type": "DateTime/null",
+          "description": "completion time [measured]. When waits all owned phase tasks; wait helper returns.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "PlanCondenser: Failed wait returns before import and without a success-shaped Result; later import collision is not transactionally rolled back.",
+        "PlanCondenser: Optional shared monotonic polling budget does not hard-bound synchronous task update/finalization."
       ]
     },
     {
       "name": "GetPhaseStatus",
+      "whenToUse": "Use to refresh and inspect the status of the task identified by Plan.Path without receiving its exported results into the current ItemSignal.",
       "description": "Read a phase status.",
       "properties": [
         {
           "path": "Name",
           "description": "Name the plan execution trace.",
+          "whenToUse": "Supply a recognizable step name when this activity should be identifiable in the shared execution trace; this read labels the trace rather than selecting the operation.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -459,6 +746,7 @@
         {
           "path": "Path",
           "description": "Resolve the activity path before dispatch.",
+          "whenToUse": "Supply the task-ID string or an object with TaskId when selecting the task for this activity; shared dispatch resolves Path before the task branch reads it.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -466,6 +754,7 @@
         {
           "path": "Path",
           "description": "Use a string Path directly as the background task identifier.",
+          "whenToUse": "Set Path to the background task-ID string when selecting one task; alternatively pass its status object with TaskId. Use a task belonging to this ItemSignal owner.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -473,19 +762,81 @@
         {
           "path": "Path.TaskId",
           "description": "Read the task identifier when Path is an object rather than a string.",
+          "whenToUse": "Use this member when passing the task status object as Path instead of a task-ID string; it selects the background task for this activity.",
           "adapters": [
             "PlanCondenser"
           ]
         }
-      ]
+      ],
+      "result": [
+        {
+          "path": "TaskId",
+          "type": "String",
+          "description": "owned task identity [computed]. When Plan.Path selects task ID; status lookup succeeds.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "TaskName",
+          "type": "String",
+          "description": "configured task name [echoed-input]. When Plan.Path selects task ID; status lookup succeeds.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "OwnerId",
+          "type": "String",
+          "description": "item owner identity [computed]. When Plan.Path selects task ID; status lookup succeeds.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "State",
+          "type": "String",
+          "description": "Queued/Running/Completed/Failed/Cancelled [computed]. When Plan.Path selects task ID; status lookup succeeds.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "CreatedUtc",
+          "type": "DateTime",
+          "description": "creation time [measured]. When Plan.Path selects task ID; status lookup succeeds.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "StartedUtc",
+          "type": "DateTime/null",
+          "description": "start time [measured]. When Plan.Path selects task ID; status lookup succeeds.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "CompletedUtc",
+          "type": "DateTime/null",
+          "description": "completion time [measured]. When Plan.Path selects task ID; status lookup succeeds.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        }
+      ],
+      "resultNotes": []
     },
     {
       "name": "StopPhase",
+      "whenToUse": "Use to request cancellation of the task identified by Plan.Path. Queued tasks can be cancelled and running tasks require confirmed shutdown; this activity does not import results, and a task awaiting finalization must be handled through GetPhaseStatus or AwaitPhase.",
       "description": "Stop a phase.",
       "properties": [
         {
           "path": "Name",
           "description": "Name the plan execution trace.",
+          "whenToUse": "Supply a recognizable step name when this activity should be identifiable in the shared execution trace; this read labels the trace rather than selecting the operation.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -493,6 +844,7 @@
         {
           "path": "Path",
           "description": "Resolve the activity path before dispatch.",
+          "whenToUse": "Supply the task-ID string or an object with TaskId when selecting the task for this activity; shared dispatch resolves Path before the task branch reads it.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -500,6 +852,7 @@
         {
           "path": "Path",
           "description": "Use a string Path directly as the background task identifier.",
+          "whenToUse": "Set Path to the background task-ID string when selecting one task; alternatively pass its status object with TaskId. Use a task belonging to this ItemSignal owner.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -507,19 +860,113 @@
         {
           "path": "Path.TaskId",
           "description": "Read the task identifier when Path is an object rather than a string.",
+          "whenToUse": "Use this member when passing the task status object as Path instead of a task-ID string; it selects the background task for this activity.",
           "adapters": [
             "PlanCondenser"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "TaskId",
+          "type": "String",
+          "description": "owned task identity [computed]. When Plan.Path selects owned task ID; stop helper returns.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "TaskName",
+          "type": "String",
+          "description": "configured task name [echoed-input]. When Plan.Path selects owned task ID; stop helper returns.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "OwnerId",
+          "type": "String",
+          "description": "item owner identity [computed]. When Plan.Path selects owned task ID; stop helper returns.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "State",
+          "type": "String",
+          "description": "Queued/Running/Completed/Failed/Cancelled [computed]. When Plan.Path selects owned task ID; stop helper returns.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "CreatedUtc",
+          "type": "DateTime",
+          "description": "creation time [measured]. When Plan.Path selects owned task ID; stop helper returns.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "StartedUtc",
+          "type": "DateTime/null",
+          "description": "start time [measured]. When Plan.Path selects owned task ID; stop helper returns.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "CompletedUtc",
+          "type": "DateTime/null",
+          "description": "completion time [measured]. When Plan.Path selects owned task ID; stop helper returns.",
+          "adapters": [
+            "PlanCondenser"
+          ]
+        },
+        {
+          "path": "PriorState",
+          "type": "String",
+          "description": "State of the registered task before this StopPhase call; completion-pending-finalization fails without a result.",
+          "adapters": ["PlanCondenser"]
+        },
+        {
+          "path": "StopRequested",
+          "type": "Boolean",
+          "description": "True when queued cancellation or active running stop was requested; false for already-terminal no-op.",
+          "adapters": ["PlanCondenser"]
+        },
+        {
+          "path": "StopCompleted",
+          "type": "Boolean",
+          "description": "True only for observed queued cancellation or active stop and runspace closure; false for already-terminal no-op.",
+          "adapters": ["PlanCondenser"]
+        },
+        {
+          "path": "RunspaceClosed",
+          "type": "Boolean/null",
+          "description": "True when no queued runspace existed or active closure was observed; null for an already-terminal no-op whose prior closure is not re-observed.",
+          "adapters": ["PlanCondenser"]
+        },
+        {
+          "path": "AlreadyTerminal",
+          "type": "Boolean",
+          "description": "True when StopPhase observed Completed, Failed or Cancelled at entry and made no new stop request.",
+          "adapters": ["PlanCondenser"]
+        }
+      ],
+      "resultNotes": [
+        "PlanCondenser: Unknown, incomplete, completed-but-unfinalized and uncertain Stop/Close paths fail without a success status while retaining registered task ownership. A successful explicit Stop is acknowledged only for the final structured owner drain; direct Receive/Await on Cancelled still fails. Synchronous disposal is not hard wall-clock bounded."
       ]
     },
     {
       "name": "InsertPhaseSteps",
+      "whenToUse": "Use to resolve, clone and hydrate steps from Plan.Path and insert them immediately after the first step named Plan.Name in Plan.Phase.Steps. The current step must be present in that phase.",
       "description": "Insert phase steps.",
       "properties": [
         {
           "path": "Config",
           "description": "Forward the incoming configuration object into the constructed hydration plan.",
+          "whenToUse": "Supply configuration here when injected steps need hydration settings or the helper options below; this object is forwarded to the constructed hydration plan.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -527,6 +974,7 @@
         {
           "path": "Config.Break",
           "description": "Evaluate the helper diagnostic break condition before cloning injected steps.",
+          "whenToUse": "Omit for ordinary execution (false). Set true only when inspecting the helper diagnostic branch in a debugger; the current branch assigns a local variable and does not itself pause execution.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -537,6 +985,7 @@
         {
           "path": "Config.Iteration",
           "description": "Read the iteration number to decide whether repeated step cloning should be skipped; a null value is treated as zero by the direct expression.",
+          "whenToUse": "Supply the current iteration count when using PreventReclone to suppress repeated injection. Missing or null is treated as zero; with PreventReclone enabled, counts greater than one return before step resolution.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -544,6 +993,7 @@
         {
           "path": "Config.PreventReclone",
           "description": "Control the repeated-cloning guard; when enabled, iterations greater than one return before step resolution.",
+          "whenToUse": "Enable when injection should be skipped on Config.Iteration values greater than one. Omit or leave false for repeated resolution and cloning; the guard does not skip iteration zero or one.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -551,6 +1001,7 @@
         {
           "path": "Config.SkipRename",
           "description": "Skip prefixing injected step names when true.",
+          "whenToUse": "Set true when injected steps must retain their existing names. Omit or set false to prefix each name with the current plan Name and an underscore.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -561,6 +1012,7 @@
         {
           "path": "Name",
           "description": "Find the current step in the existing phase steps.",
+          "whenToUse": "Set this to the current step Name in Phase.Steps when inserting steps; the first matching name is the insertion anchor and no match reports failure.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -568,6 +1020,7 @@
         {
           "path": "Name",
           "description": "Name the plan execution trace.",
+          "whenToUse": "Supply a recognizable step name when this activity should be identifiable in the shared execution trace; this read labels the trace rather than selecting the operation.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -575,6 +1028,7 @@
         {
           "path": "Name",
           "description": "Prefix injected step names and evaluate the ManageLineage diagnostic condition.",
+          "whenToUse": "Supply the prefix for injected step names when Config.SkipRename is false or omitted. Set SkipRename true to preserve injected names; the ManageLineage name check is only a diagnostic branch.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -582,6 +1036,7 @@
         {
           "path": "Path",
           "description": "Locate the steps to inject from ItemSignal.",
+          "whenToUse": "Supply the ItemSignal path containing the steps to clone and hydrate for this activity; resolution is skipped when the PreventReclone guard returns early.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -589,6 +1044,7 @@
         {
           "path": "Path",
           "description": "Resolve the activity path before dispatch.",
+          "whenToUse": "Supply the ItemSignal path to the steps used by this activity; shared dispatch reads Path before the injection helper resolves those steps.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -596,6 +1052,7 @@
         {
           "path": "Phase.Steps",
           "description": "Read the current ordered phase steps so injected steps can be inserted after the current step.",
+          "whenToUse": "Use the current parent phase supplied by MemoryCondenser execution; direct callers performing insertion must provide its ordered Steps collection so new steps can be placed after the current named step.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -603,19 +1060,28 @@
         {
           "path": "Phase.Steps.Name",
           "description": "Compare each existing phase step name with the current plan name to find the insertion position.",
+          "whenToUse": "Ensure the parent phase includes a step whose Name equals this plan Name when inserting steps. The first matching step determines the insertion position; no match reports failure.",
           "adapters": [
             "PlanCondenser"
           ]
         }
+      ],
+      "result": [],
+      "resultNotes": [
+        "No stable public Result field is available for this activity; inspect the Signal/effect at its actual boundary.",
+        "PlanCondenser: success can have no Result (phase steps mutated)",
+        "PlanCondenser: PreventReclone iteration>1 may complete as no-op"
       ]
     },
     {
       "name": "AddPhaseSteps",
+      "whenToUse": "Use to set Plan.Phase.Steps to the resolved, cloned and hydrated steps from Plan.Path. This replaces the phase step collection; it does not append to existing steps.",
       "description": "Add phase steps.",
       "properties": [
         {
           "path": "Config",
           "description": "Forward the incoming configuration object into the constructed hydration plan.",
+          "whenToUse": "Supply configuration here when injected steps need hydration settings or the helper options below; this object is forwarded to the constructed hydration plan.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -623,6 +1089,7 @@
         {
           "path": "Config.Break",
           "description": "Evaluate the helper diagnostic break condition before cloning injected steps.",
+          "whenToUse": "Omit for ordinary execution (false). Set true only when inspecting the helper diagnostic branch in a debugger; the current branch assigns a local variable and does not itself pause execution.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -633,6 +1100,7 @@
         {
           "path": "Config.Iteration",
           "description": "Read the iteration number to decide whether repeated step cloning should be skipped; a null value is treated as zero by the direct expression.",
+          "whenToUse": "Supply the current iteration count when using PreventReclone to suppress repeated injection. Missing or null is treated as zero; with PreventReclone enabled, counts greater than one return before step resolution.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -640,6 +1108,7 @@
         {
           "path": "Config.PreventReclone",
           "description": "Control the repeated-cloning guard; when enabled, iterations greater than one return before step resolution.",
+          "whenToUse": "Enable when injection should be skipped on Config.Iteration values greater than one. Omit or leave false for repeated resolution and cloning; the guard does not skip iteration zero or one.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -647,6 +1116,7 @@
         {
           "path": "Config.SkipRename",
           "description": "Skip prefixing injected step names when true.",
+          "whenToUse": "Set true when injected steps must retain their existing names. Omit or set false to prefix each name with the current plan Name and an underscore.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -657,6 +1127,7 @@
         {
           "path": "Name",
           "description": "Name the plan execution trace.",
+          "whenToUse": "Supply a recognizable step name when this activity should be identifiable in the shared execution trace; this read labels the trace rather than selecting the operation.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -664,6 +1135,7 @@
         {
           "path": "Name",
           "description": "Prefix injected step names and evaluate the ManageLineage diagnostic condition.",
+          "whenToUse": "Supply the prefix for injected step names when Config.SkipRename is false or omitted. Set SkipRename true to preserve injected names; the ManageLineage name check is only a diagnostic branch.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -671,6 +1143,7 @@
         {
           "path": "Path",
           "description": "Locate the steps to inject from ItemSignal.",
+          "whenToUse": "Supply the ItemSignal path containing the steps to clone and hydrate for this activity; resolution is skipped when the PreventReclone guard returns early.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -678,11 +1151,19 @@
         {
           "path": "Path",
           "description": "Resolve the activity path before dispatch.",
+          "whenToUse": "Supply the ItemSignal path to the steps used by this activity; shared dispatch reads Path before the injection helper resolves those steps.",
           "adapters": [
             "PlanCondenser"
           ]
         }
+      ],
+      "result": [],
+      "resultNotes": [
+        "No stable public Result field is available for this activity; inspect the Signal/effect at its actual boundary.",
+        "PlanCondenser: success can have no Result (phase steps mutated)",
+        "PlanCondenser: PreventReclone iteration>1 may complete as no-op"
       ]
     }
-  ]
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Condensers/PlanCondenser.json","version":1}
 }

@@ -5,11 +5,13 @@
   "activities": [
     {
       "name": "Json",
+      "whenToUse": "Use for JSON content at ItemSignal %.@. The original Plan is passed to the JSON helper; omit Format or set Json for single-value parsing, or set JsonArray for array aggregation.",
       "description": "Format content as JSON.",
       "properties": [
         {
           "path": "Format",
           "description": "Select Json versus JsonArray parsing in the JSON formatting helper.",
+          "whenToUse": "Omit or set Json to parse a single JSON value; set JsonArray to parse each input and return an array. This setting controls the helper for both Json and JsonArray activities.",
           "adapters": [
             "FormatCondenser"
           ],
@@ -17,15 +19,39 @@
             "FormatCondenser": "Json"
           }
         }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "native decoded scalar/object/array",
+          "description": "When both verbs call Invoke-FormatJson; Plan.Format selects actual JSON mode; Json or JsonArray parse returns nonnull value.",
+          "adapters": [
+            "FormatCondenser"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Object[]",
+          "description": "When both verbs call Invoke-FormatJson; Plan.Format selects actual JSON mode; Plan.Format=JsonArray with zero inputs or parsed null elements.",
+          "adapters": [
+            "FormatCondenser"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "FormatCondenser: success can have no Result (Plan.Format=Json parses JSON null, or unsupported Plan.Format has no SetResult)",
+        "FormatCondenser: Json/JsonArray share helper and Plan.Format selection; JsonArray aggregate remains present even when empty"
       ]
     },
     {
       "name": "JsonArray",
-      "description": "Format content as a JSON array.",
+      "whenToUse": "Use for JSON content at ItemSignal %.@ when array aggregation is intended, and set Plan.Format to JsonArray. This activity also passes the original Plan to the same helper, whose omitted Format defaults to Json.",
+      "description": "Route JSON content through the formatter; Plan.Format selects Json or JsonArray parsing.",
       "properties": [
         {
           "path": "Format",
           "description": "Select Json versus JsonArray parsing in the JSON formatting helper.",
+          "whenToUse": "Set JsonArray to parse each input and return an array. Omitted Format defaults to Json even for the JsonArray activity; Json parses one JSON value.",
           "adapters": [
             "FormatCondenser"
           ],
@@ -33,17 +59,80 @@
             "FormatCondenser": "Json"
           }
         }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "native decoded scalar/object/array",
+          "description": "When both verbs call Invoke-FormatJson; Plan.Format selects actual JSON mode; Json or JsonArray parse returns nonnull value.",
+          "adapters": [
+            "FormatCondenser"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Object[]",
+          "description": "When both verbs call Invoke-FormatJson; Plan.Format selects actual JSON mode; Plan.Format=JsonArray with zero inputs or parsed null elements.",
+          "adapters": [
+            "FormatCondenser"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "FormatCondenser: success can have no Result (Plan.Format=Json parses JSON null, or unsupported Plan.Format has no SetResult)",
+        "FormatCondenser: Json/JsonArray share helper and Plan.Format selection; JsonArray aggregate remains present even when empty"
       ]
     },
     {
       "name": "Xml",
+      "whenToUse": "Use for XML content at ItemSignal %.@. An XmlDocument input is passed through; other content is sent to the XML parser. This activity does not read Plan.Format.",
       "description": "Format content as XML.",
-      "properties": []
+      "properties": [],
+      "result": [
+        {
+          "path": "$",
+          "type": "XmlDocument",
+          "description": "When resolved content is XMLDocument or text/object parseable by Invoke-FormatXml; XMLDocument input is passed through or helper parses XML.",
+          "adapters": [
+            "FormatCondenser"
+          ]
+        }
+      ],
+      "resultNotes": []
     },
     {
       "name": "Text",
+      "whenToUse": "Use for content at ItemSignal %.@ when text output is needed. XML documents become OuterXml, PSCustomObject values become compressed JSON, and other native values pass through unchanged. This activity does not read Plan.Format.",
       "description": "Format content as text.",
-      "properties": []
+      "properties": [],
+      "result": [
+        {
+          "path": "$",
+          "type": "String",
+          "description": "OuterXml [computed]. When resolved content type controls serialization; XMLDocument input.",
+          "adapters": [
+            "FormatCondenser"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "String",
+          "description": "compressed JSON [computed]. When resolved content type controls serialization; PSCustomObject input.",
+          "adapters": [
+            "FormatCondenser"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "native input type",
+          "description": "When resolved content type controls serialization; other native input.",
+          "adapters": [
+            "FormatCondenser"
+          ]
+        }
+      ],
+      "resultNotes": []
     }
-  ]
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Condensers/FormatCondenser.json","version":1}
 }

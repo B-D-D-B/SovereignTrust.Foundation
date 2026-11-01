@@ -1,3 +1,5 @@
+using module SignalGraph
+
 function Invoke-DirectMapCondenser {
     param (
         [Signal]$Signal,
@@ -36,7 +38,7 @@ function Invoke-DirectMapCondenser {
         if ($valueSignal.HasResult()) {
             $value = $valueSignal.GetResult()
         }
-        if ($value) {
+        if ($valueSignal.HasResult()) {
 
             if ($value -is [array])
             {
@@ -48,7 +50,9 @@ function Invoke-DirectMapCondenser {
             }
 
 
-            $content = $content -replace [regex]::Escape($tag), $value
+            $replacementValue = [string]$value
+            $literalReplacement = [System.Text.RegularExpressions.MatchEvaluator]{ param($match) $replacementValue }
+            $content = [regex]::Replace([string]$content, [regex]::Escape([string]$tag), $literalReplacement)
         }
         if ($false) {
             foreach ($source in $Proposal.SourceRelayList) {

@@ -1,0 +1,9 @@
+{
+  "name": "MappedCondenserAdapter",
+  "resultContractVersion": 1,
+  "resultInventoryDisposition": {
+    "status": "no-declared-activities",
+    "detail": "Delegates to referenced condenser catalogs."
+  },
+  "activities": []
+}

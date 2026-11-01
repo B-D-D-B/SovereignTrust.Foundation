@@ -1,0 +1,227 @@
+{
+  "name": "MappedUtilityAdapter",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedUtilityAdapter.ps1",
+      "sha256": "8CBF4B23C6017729CF83ECF69F220ACED508C1D5B9A424A8F1598E1DEEF6A06C"
+    },
+    {
+      "id": "s2",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Utility/Media/PowerShell/Utility_Media.psm1",
+      "sha256": "00E7739FB187D551A48BEB45398973691C24BCA7821203C5E59658A1362D308C"
+    },
+    {
+      "id": "s3",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Utility/Media/PowerShell/Magik/Invoke-OverlayImage.ps1",
+      "sha256": "BCA7FD1692D45D521B008C74206C8D6A2EF345D7B4EFFA0C6AA8833090F149F1"
+    },
+    {
+      "id": "s4",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Utility/Media/PowerShell/Magik/Invoke-ResizeImage.ps1",
+      "sha256": "382DA31B6A61A8F09F4E67F85B9B10BA1993E15B75B3D32FF2618F9CAA8E1615"
+    },
+    {
+      "id": "s5",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Utility/Media/PowerShell/Magik/Invoke-InspectImage.ps1",
+      "sha256": "66C62E6600CCC9B3104C74AC4983B08D0A881D74F705A7F4EBA2FC470E46BEE0"
+    }
+
+  ],
+  "activities": [
+    {
+      "name": "Resize",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Utility_Media",
+            "support": "implemented",
+            "when": "Config supplies source/target/options; existing/skip/overwrite branches are helper-controlled",
+            "outcomes": [
+              {
+                "condition": "ImageMagick helper reports success",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Boolean",
+                "example": {
+                  "kind": "illustrative",
+                  "value": true
+                }
+              },
+              {
+                "condition": "target already exists and Overwrite=false; successful skip",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Boolean",
+                "example": {
+                  "kind": "illustrative",
+                  "value": false
+                },
+                "limitations": "existing output is not replaced; false is a legitimate non-failure Result"
+              },
+              {
+                "condition": "helper rejects invalid input or conversion fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent",
+                "limitations": "helper may set false and messages internally, but mapped wrapper discards failure Result"
+              }
+            ],
+            "sideEffects": [
+              "may write or replace target image"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Resize'",
+                "line": 86,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "\"Resize\"",
+                "line": 59,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "True does not prove dimensions, pixels, placement, opacity or byte change; inspect output independently."
+          }
+        ]
+      }
+    },
+    {
+      "name": "Overlay",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Utility_Media",
+            "support": "implemented",
+            "when": "Config supplies source/target/options; existing/skip/overwrite branches are helper-controlled",
+            "outcomes": [
+              {
+                "condition": "ImageMagick helper reports success",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Boolean",
+                "example": {
+                  "kind": "illustrative",
+                  "value": true
+                }
+              },
+              {
+                "condition": "target already exists and Overwrite=false; successful skip",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Boolean",
+                "example": {
+                  "kind": "illustrative",
+                  "value": false
+                },
+                "limitations": "existing output is not replaced; false is a legitimate non-failure Result"
+              },
+              {
+                "condition": "helper rejects invalid input or conversion fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent",
+                "limitations": "helper may set false and messages internally, but mapped wrapper discards failure Result"
+              }
+            ],
+            "sideEffects": [
+              "may write or replace target image"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Overlay'",
+                "line": 86,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "\"Overlay\"",
+                "line": 64,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "True does not prove dimensions, pixels, placement, opacity or byte change; inspect output independently."
+          }
+        ]
+      }
+    },
+    {
+      "name": "Inspect",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result after Utility_Media Inspect; failure Result is not copied by MappedUtilityAdapter",
+        "variants": [
+          {
+            "adapter": "Utility_Media",
+            "support": "implemented",
+            "when": "trusted jacket supplies finite limits; Config.InputFullPath identifies an existing local file",
+            "outcomes": [
+              {
+                "condition": "hash-only (Config.DecodePixels absent or native false), including zero-byte file",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "PSCustomObject",
+                "shape": [
+                  {"path":"Path","type":"String","presence":"required","meaning":"normalized absolute local path that was read","origin":"computed"},
+                  {"path":"ByteLength","type":"Int64","presence":"required","meaning":"raw file bytes read","origin":"measured"},
+                  {"path":"Sha256","type":"String","presence":"required","meaning":"uppercase SHA-256 of raw file bytes","origin":"measured"}
+                ]
+              },
+              {
+                "condition": "Config.DecodePixels native true, verified single-frame PNG/GIF, in-bounds integral samples, stable rehash",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "PSCustomObject",
+                "shape": [
+                  {"path":"Path","type":"String","presence":"required","meaning":"normalized absolute local path that was read","origin":"computed"},
+                  {"path":"ByteLength","type":"Int64","presence":"required","meaning":"raw file bytes read","origin":"measured"},
+                  {"path":"Sha256","type":"String","presence":"required","meaning":"uppercase SHA-256 of raw file bytes","origin":"measured"},
+                  {"path":"Width","type":"Int32","presence":"required","meaning":"decoded first-frame width","origin":"measured"},
+                  {"path":"Height","type":"Int32","presence":"required","meaning":"decoded first-frame height","origin":"measured"},
+                  {"path":"PixelFormat","type":"String","presence":"required","meaning":"normalized sRGBA8 output, not source format metadata","origin":"computed"},
+                  {"path":"Samples[*]","type":"PSCustomObject","presence":"required","meaning":"selected X,Y,R,G,B,A Int32; top-left origin and straight alpha channels","origin":"measured"}
+                ]
+              },
+              {
+                "condition": "missing/remote/oversize file; invalid native inputs; unsupported/multiple frames; decoder/timeout/length or detected stability failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": ["reads only local bounded input bytes; decode starts bounded ImageMagick child with verified PNG/GIF bytes via stdin, no output file"],
+            "evidence": [
+              {"source":"s1","symbol":"'Inspect'","line":87,"kind":"source-derived"},
+              {"source":"s2","symbol":"\"Inspect\"","line":69,"kind":"source-derived"},
+              {"source":"s5","symbol":"Invoke-InspectImage","line":113,"kind":"source-derived"}
+            ],
+            "limitations": "Pre/post hash and metadata detect many concurrent changes but are not a transactional snapshot. Source/decoded native types require selected JSON runtime; changed-input race and timeout remain unobserved until bound. Hash-only mode cannot prove pixel placement."
+          }
+        ]
+      }
+    }
+  ]
+}

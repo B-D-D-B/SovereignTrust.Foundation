@@ -1,4 +1,4 @@
-using module ../../../SignalGraph/Src/PowerShell/SignalGraph/SignalGraph.psd1
+using module SignalGraph
 
 function Initialize-STEnvironment {
     param([object]$Environment)

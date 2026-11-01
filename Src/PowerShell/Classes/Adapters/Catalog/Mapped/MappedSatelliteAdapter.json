@@ -3,37 +3,101 @@
   "activities": [
     {
       "name": "EmitEntries",
+      "whenToUse": "Use when an item graph and configured EmitEntries plan token should run the telemetry preparation/conduction path. The branch looks for a stored TelemetryHandled_EmitEntries result and can forward it even if conduction fails; this can emit provider telemetry.",
       "description": "Emit telemetry through a configured plan and forward the stored { ItemsReceived, ItemsAccepted, Result } outcome, including on failure.",
       "properties": [
         {
           "path": "Config",
           "description": "Read the configuration object to warn when it is absent or false-valued; no configuration child fields are consumed.",
+          "whenToUse": "The provider reads Config to warn when absent or false-valued before EmitEntries, but consumes no declared Config child field in this branch. Plan token and item graph come from provider/ItemSignal context.",
           "adapters": [
             "Satellite_AzureApplicationInsights"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "ItemsReceived",
+          "type": "Int64",
+          "description": "provider received count [provider-returned]. When telemetry item graph and emission plan available; emission and handled result found.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ]
+        },
+        {
+          "path": "ItemsAccepted",
+          "type": "Int64",
+          "description": "provider accepted count [provider-returned]. When telemetry item graph and emission plan available; emission and handled result found.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ]
+        },
+        {
+          "path": "Result",
+          "type": "Boolean",
+          "description": "accepted equals sent [computed]. When telemetry item graph and emission plan available; emission and handled result found.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Satellite_AzureApplicationInsights: Count receipt is stronger than an echoed request, but is not query/readback proof"
       ]
     },
     {
       "name": "EmitSignal",
+      "whenToUse": "Use when an item graph and configured EmitSignal plan token should run the telemetry preparation/conduction path. The branch looks for a stored TelemetryHandled_EmitSignal result and can forward it even on failure; this can emit provider telemetry.",
       "description": "Emit telemetry through a configured plan and forward the stored { ItemsReceived, ItemsAccepted, Result } outcome, including on failure.",
       "properties": [
         {
           "path": "Config",
           "description": "Read the configuration object to warn when it is absent or false-valued; no configuration child fields are consumed.",
+          "whenToUse": "The provider reads Config to warn when absent or false-valued before EmitSignal, but consumes no declared Config child field in this branch. Plan token and item graph come from provider/ItemSignal context.",
           "adapters": [
             "Satellite_AzureApplicationInsights"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "ItemsReceived",
+          "type": "Int64",
+          "description": "provider received count [provider-returned]. When telemetry item graph and emission plan available; emission and handled result found.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ]
+        },
+        {
+          "path": "ItemsAccepted",
+          "type": "Int64",
+          "description": "provider accepted count [provider-returned]. When telemetry item graph and emission plan available; emission and handled result found.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ]
+        },
+        {
+          "path": "Result",
+          "type": "Boolean",
+          "description": "accepted equals sent [computed]. When telemetry item graph and emission plan available; emission and handled result found.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Satellite_AzureApplicationInsights: Count receipt is stronger than an echoed request, but is not query/readback proof"
       ]
     },
     {
       "name": "SendMessage",
+      "whenToUse": "Use when Plan.Path identifies nonempty JSON text through Token.Memory/Get and Config.CountKey names an item graph entry for its exact outbound object-envelope count. The branch stores that count before posting the unchanged body and returns the raw REST receipt.",
       "description": "Count outbound JSON envelopes on the item graph, post the unchanged body, and return the raw REST receipt.",
       "properties": [
         {
           "path": "Config",
           "description": "Read Config.CountKey to store the submitted envelope count on the current item graph before POST.",
+          "whenToUse": "Supply Config.CountKey for SendMessage; it is read after the body has been resolved and parsed, and the item graph must exist before POST.",
           "adapters": [
             "Satellite_AzureApplicationInsights"
           ]
@@ -41,6 +105,7 @@
         {
           "path": "Path",
           "description": "Provide the content lookup path forwarded to Token.Memory/Get to obtain the message body.",
+          "whenToUse": "Supply the content lookup path forwarded to Token.Memory/Get. SendMessage requires the result to be nonempty JSON text representing one object or a nonempty array of objects; the body is posted unchanged.",
           "adapters": [
             "Satellite_AzureApplicationInsights"
           ]
@@ -48,19 +113,33 @@
         {
           "path": "Config.CountKey",
           "description": "Item graph key for the count parsed from the exact outbound JSON body before POST.",
+          "whenToUse": "Supply a nonblank item graph key for the count parsed from the exact outbound JSON body. The provider registers that count before its REST POST; it is not inferred from the response.",
           "adapters": [
             "Satellite_AzureApplicationInsights"
           ]
         }
-      ]
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "provider response body",
+          "description": "When nonempty JSON telemetry body and CountKey supplied; REST POST returns (Result presence conditional).",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ]
+        }
+      ],
+      "resultNotes": []
     },
     {
       "name": "HandleResponse",
+      "whenToUse": "Use to normalize a raw telemetry REST response locally, without a provider request. It validates Config.RawResponse and Config.ItemsSent, stores {ItemsReceived, ItemsAccepted, Result} at Config.HandledResultKey, then logs any service errors; Result is accepted==sent even if the Signal fails on errors.",
       "description": "Provider-free normalization of Config.RawResponse and Config.ItemsSent into { ItemsReceived, ItemsAccepted, Result }; Result is exactly ItemsAccepted == ItemsSent regardless of errors. Store at Config.HandledResultKey before LogCritical per error; a count match with errors retains Result true in a failed Signal.",
       "properties": [
         {
           "path": "Config.RawResponse",
           "description": "Raw REST response property bag or JSON object from the matching SendMessage Key.",
+          "whenToUse": "Supply a raw REST response property bag or JSON object from the matching SendMessage request. HandleResponse requires receipt counts and validates optional errors before normalization.",
           "adapters": [
             "Satellite_AzureApplicationInsights"
           ]
@@ -68,6 +147,7 @@
         {
           "path": "Config.ItemsSent",
           "description": "Positive whole item count from the matching SendMessage CountKey; never inferred from service counts.",
+          "whenToUse": "Supply the positive whole item count saved from the matching SendMessage CountKey. It is not inferred from service counts; normalization requires accepted<=received<=sent.",
           "adapters": [
             "Satellite_AzureApplicationInsights"
           ]
@@ -75,23 +155,61 @@
         {
           "path": "Config.HandledResultKey",
           "description": "Distinct item graph key for the normalized result, including on reported service errors.",
+          "whenToUse": "Supply a distinct nonblank item graph key for the normalized result. The provider stores it before logging any reported service errors, so a failed Signal may still contain the stored Result.",
           "adapters": [
             "Satellite_AzureApplicationInsights"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "ItemsReceived",
+          "type": "Int64",
+          "description": "parsed receipt count [provider-returned]. When raw response property bag, ItemsSent and HandledResultKey; counts valid and no error entries.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ]
+        },
+        {
+          "path": "ItemsAccepted",
+          "type": "Int64",
+          "description": "parsed receipt count [provider-returned]. When raw response property bag, ItemsSent and HandledResultKey; counts valid and no error entries.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ]
+        },
+        {
+          "path": "Result",
+          "type": "Boolean",
+          "description": "accepted equals sent; may be false without Signal failure [computed]. When raw response property bag, ItemsSent and HandledResultKey; counts valid and no error entries.",
+          "adapters": [
+            "Satellite_AzureApplicationInsights"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Satellite_AzureApplicationInsights: failed Signal can retain PSCustomObject Result (counts valid but errors array has entries); inspect detailed contract and mapped exposure before use.",
+        "Satellite_AzureApplicationInsights: False business Result alone does not fail Signal; errors do"
       ]
     },
     {
       "name": "EmitSignalFull",
+      "whenToUse": "Reserved incomplete branch: it marks ItemSignal entries to Skip but the calls that would emit them are commented out. Do not choose it to send telemetry.",
       "description": "Mark entries to skip; the current branch does not emit them.",
       "properties": [
         {
           "path": "Config",
           "description": "Read the configuration object to warn when it is absent or false-valued; no configuration child fields are consumed.",
+          "whenToUse": "The provider reads Config to warn when absent or false-valued before EmitSignalFull, but consumes no declared Config child field in this unfinished branch.",
           "adapters": [
             "Satellite_AzureApplicationInsights"
           ]
         }
+      ],
+      "result": [],
+      "resultNotes": [
+        "No stable public Result field is available for this activity; inspect the Signal/effect at its actual boundary.",
+        "Satellite_AzureApplicationInsights: reserved — No completed EmitSignalFull behavior or receipt exists"
       ]
     }
   ],
@@ -101,5 +219,6 @@
       "repository": "SovereignTrust.Adapters",
       "path": "Src/Satellite/AzureApplicationInsights/PowerShell/Satellite_AzureApplicationInsights.psm1"
     }
-  ]
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Mapped/MappedSatelliteAdapter.json","version":1}
 }

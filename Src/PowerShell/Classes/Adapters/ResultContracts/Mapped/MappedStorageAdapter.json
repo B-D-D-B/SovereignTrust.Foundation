@@ -1,0 +1,1115 @@
+{
+  "name": "MappedStorageAdapter",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedStorageAdapter.ps1",
+      "sha256": "4DBD5EF8DC1B9D141EB6FB6F7E7AB41A03DC52B7731840E6FA0DB7975C0A4AF3"
+    },
+    {
+      "id": "s2",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Storage/Storage_EmbeddedFileSystem.ps1",
+      "sha256": "6329352FFB8C9B9722249843AF7BAFB24B3A32404880AA219634AE82414AE13B"
+    },
+    {
+      "id": "s3",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Storage/Invoke-EmbeddedFileSystem_ExistsObject.ps1",
+      "sha256": "E9C431E1EF6C27A8D3B9121742A0A3D4860FA64F33F4F8A7C8BDFB16DC27AE94"
+    },
+    {
+      "id": "s4",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/LocalFileSystem/PowerShell/Storage_LocalFileSystem.ps1",
+      "sha256": "62B6C761DB2B60819E734DCF65635C82B18D3315DFC46F0E561EF0C1D785AE16"
+    },
+    {
+      "id": "s5",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureStorageAccount/PowerShell/Storage_AzureStorageAccount.psm1",
+      "sha256": "A9ACEED3798935E3294B337ED488D45A1B7FAA5EFB70C2079CB347B1C4E1BB00"
+    },
+    {
+      "id": "s6",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureStorageAccount/PowerShell/Invoke-AzureStorageAccount_ExistsObject.ps1",
+      "sha256": "133BBF41D0253DF25260524C456DEE4BB840097264F950C6D685D7F87428B28C"
+    },
+    {
+      "id": "s7",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureKeyVault/PowerShell/Storage_AzureKeyVault.psm1",
+      "sha256": "D4E523187E1AE7D260F31D1A6F2B9E3BC6FD054C704A79E9B23A6AA30FD6EBFA"
+    },
+    {
+      "id": "s8",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Storage/Invoke-EmbeddedFileSystem_DeleteObject.ps1",
+      "sha256": "4BD6BB8E9922E4422E3BC378E59F555E703C1A5DD763998035F3B806ABCCECA8"
+    },
+    {
+      "id": "s9",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureStorageAccount/PowerShell/Invoke-AzureStorageAccount_DeleteObject.ps1",
+      "sha256": "01191B6851E2DD791B13A5ED53460C5C3740AA1BFAB3E323F135EE09D2EF4116"
+    },
+    {
+      "id": "s10",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Storage/Invoke-EmbeddedFileSystem_WriteObject.ps1",
+      "sha256": "A1DF8ED027266BE89511847FB57D1C76C1F09462A6A944DADB61DA1F83C47905"
+    },
+    {
+      "id": "s11",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureStorageAccount/PowerShell/Invoke-AzureStorageAccount_WriteObject.ps1",
+      "sha256": "61DF36CB0229B06BDC924F6C306307F9EBAE1864D8408D48FC170EA808BC2FBD"
+    },
+    {
+      "id": "s12",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Storage/Invoke-EmbeddedFileSystem_ReadObject.ps1",
+      "sha256": "F595C1977F494F8BB5B8D633A6721662AC3DF5A1174B53AA5A5F38CD8E17BACE"
+    },
+    {
+      "id": "s13",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureStorageAccount/PowerShell/Invoke-AzureStorageAccount_ReadObject.ps1",
+      "sha256": "094FB05D8DA9DC57C81ED723D4BFA141E6F1FA091F3F7463EE77D93606FC91E0"
+    },
+    {
+      "id": "s14",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureStorageAccount/PowerShell/Invoke-AzureStorageAccount_ListObject.ps1",
+      "sha256": "A9366DCB494335D0F8683C80EFEA9C7208E0654CB48FF64FB005233BFE6A37D5"
+    }
+  ],
+  "activities": [
+    {
+      "name": "List",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Storage_AzureStorageAccount",
+            "support": "implemented",
+            "when": "container/address and SortBy/SortDirection/Type filters valid",
+            "outcomes": [
+              {
+                "condition": "paged blob listing completes, including zero matches",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "PSCustomObject",
+                "shape": [
+                  {
+                    "path": "Items",
+                    "type": "Object[]",
+                    "presence": "required",
+                    "meaning": "filtered blob/prefix metadata",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Count",
+                    "type": "Int32",
+                    "presence": "required",
+                    "meaning": "Items length",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Items[*].FileName",
+                    "type": "String",
+                    "presence": "conditional",
+                    "meaning": "blob or directory name",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Items[*].VirtualPath",
+                    "type": "String",
+                    "presence": "conditional",
+                    "meaning": "normalized listed path",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Items[*].DateTime",
+                    "type": "UTC ISO String/null",
+                    "presence": "conditional",
+                    "meaning": "blob timestamp or null for directory",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Items[*].Size",
+                    "type": "Int64/null",
+                    "presence": "conditional",
+                    "meaning": "blob byte length or null for directory",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "bad filter, malformed XML, repeated marker or request failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "reads blob listing"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'List'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "'List'",
+                "line": 122,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s14",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred."
+          },
+          {
+            "adapter": "Storage_AzureKeyVault",
+            "support": "implemented",
+            "when": "vault address and list filters valid",
+            "outcomes": [
+              {
+                "condition": "paged secret listing completes, including zero matches",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "PSCustomObject",
+                "shape": [
+                  {
+                    "path": "Items",
+                    "type": "Object[]",
+                    "presence": "required",
+                    "meaning": "secret metadata",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Count",
+                    "type": "Int32",
+                    "presence": "required",
+                    "meaning": "Items length",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Items[*].FileName",
+                    "type": "String",
+                    "presence": "conditional",
+                    "meaning": "secret name",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Items[*].VirtualPath",
+                    "type": "String",
+                    "presence": "conditional",
+                    "meaning": "normalized secret path",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "Items[*].DateTime",
+                    "type": "UTC ISO String/null",
+                    "presence": "conditional",
+                    "meaning": "secret timestamp when available",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Items[*].Size",
+                    "type": "null",
+                    "presence": "conditional",
+                    "meaning": "not exposed by listing",
+                    "origin": "constant"
+                  }
+                ]
+              },
+              {
+                "condition": "bad filter, invalid metadata, repeated continuation or request failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "reads vault metadata"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'List'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s7",
+                "symbol": "'List'",
+                "line": 195,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred."
+          },
+          {
+            "adapter": "Storage_EmbeddedFileSystem",
+            "support": "unsupported",
+            "when": "class validation excludes List",
+            "outcomes": [
+              {
+                "condition": "Unsupported Storage_EmbeddedFileSystem activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'List'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 12,
+                "kind": "source-derived"
+              }
+            ]
+          },
+          {
+            "adapter": "Storage_LocalFileSystem",
+            "support": "unsupported",
+            "when": "class has no public mapped Invoke",
+            "outcomes": [
+              {
+                "condition": "mapped dynamic Invoke cannot bind",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'List'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Storage_LocalFileSystem",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Read",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Storage_EmbeddedFileSystem",
+            "support": "implemented",
+            "when": "resolved local VirtualPath; optional TargetPath or Config.Content fallback",
+            "outcomes": [
+              {
+                "condition": "file exists; no TargetPath",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "raw file text",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "TargetPath provided and Config.ResultDetail absent or false; copy succeeds",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "target path",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "Config.TargetPath provided and native Boolean Config.ResultDetail=true; copy and stable target hash complete",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "PSCustomObject",
+                "shape": [
+                  {"path":"TargetPath","type":"String","presence":"required","meaning":"resolved completed local target path","origin":"computed"},
+                  {"path":"ByteLength","type":"Int64","presence":"required","meaning":"byte count read from actual completed target","origin":"measured"},
+                  {"path":"Sha256","type":"String","presence":"required","meaning":"uppercase SHA256 streamed from actual completed target bytes","origin":"measured"}
+                ]
+              },
+              {
+                "condition": "Config.ResultDetail is present but not native Boolean, true without TargetPath, or target changes during hashing",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "file missing and Config.Content supplied",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String or native scalar",
+                "limitations": "optional SaveIfNew writes fallback; PSCustomObject serialized to JSON text"
+              },
+              {
+                "condition": "file missing without fallback",
+                "signalState": "conditional",
+                "hasResult": false,
+                "resultType": "absent",
+                "limitations": "SignalLevel determines whether missing file is critical"
+              },
+              {
+                "condition": "invalid target or copy fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "TargetPath copies bytes; SaveIfNew may write source"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Read'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "'Read'",
+                "line": 113,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s12",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred."
+          },
+          {
+            "adapter": "Storage_LocalFileSystem",
+            "support": "unsupported",
+            "when": "class has no public Invoke method for mapped Read",
+            "outcomes": [
+              {
+                "condition": "mapped dynamic Invoke cannot bind",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Read'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Storage_LocalFileSystem",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Helper ReadObjectAsJson/Xml methods are not mapped activity implementations."
+          },
+          {
+            "adapter": "Storage_AzureStorageAccount",
+            "support": "implemented",
+            "when": "blob VirtualPath and container/address; optional TargetPath or Config.Content fallback",
+            "outcomes": [
+              {
+                "condition": "GET succeeds without TargetPath",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String or native response value"
+              },
+              {
+                "condition": "GET downloads to TargetPath with Config.ResultDetail absent or false",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "local target path",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "Config.TargetPath provided and native Boolean Config.ResultDetail=true; download and stable target hash complete",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "PSCustomObject",
+                "shape": [
+                  {"path":"TargetPath","type":"String","presence":"required","meaning":"resolved completed download target path","origin":"computed"},
+                  {"path":"ByteLength","type":"Int64","presence":"required","meaning":"byte count read from actual completed target","origin":"measured"},
+                  {"path":"Sha256","type":"String","presence":"required","meaning":"uppercase SHA256 streamed from actual completed target bytes","origin":"measured"}
+                ]
+              },
+              {
+                "condition": "Config.ResultDetail is present but not native Boolean, true without TargetPath, or download target changes during hashing",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "missing blob with Config.Content fallback",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String or native scalar",
+                "limitations": "SaveIfNew may write; object and array fallback serialized to JSON text"
+              },
+              {
+                "condition": "missing blob without fallback",
+                "signalState": "conditional",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "download target invalid or request failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "GET remote blob; TargetPath writes local file; SaveIfNew may write remote blob"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Read'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "\"Read\"",
+                "line": 188,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s13",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred."
+          },
+          {
+            "adapter": "Storage_AzureKeyVault",
+            "support": "implemented",
+            "when": "Config.VirtualPath names secret; REST GET",
+            "outcomes": [
+              {
+                "condition": "GET response has value",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "secret value String"
+              },
+              {
+                "condition": "response value absent",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "invalid path/auth/REST request",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "reads secret value"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Read'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s7",
+                "symbol": "\"Read\"",
+                "line": 225,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred."
+          }
+        ]
+      }
+    },
+    {
+      "name": "Write",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Storage_EmbeddedFileSystem",
+            "support": "implemented",
+            "when": "Config.Content or SourcePath and local VirtualPath",
+            "outcomes": [
+              {
+                "condition": "write/copy succeeds",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "full output path",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "content/source invalid or filesystem write fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "writes local file"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Write'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "'Write'",
+                "line": 113,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s10",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred."
+          },
+          {
+            "adapter": "Storage_LocalFileSystem",
+            "support": "unsupported",
+            "when": "class has no public Invoke method",
+            "outcomes": [
+              {
+                "condition": "mapped dynamic Invoke cannot bind",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Write'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Storage_LocalFileSystem",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ]
+          },
+          {
+            "adapter": "Storage_AzureStorageAccount",
+            "support": "implemented",
+            "when": "Config.Content/SourcePath and blob path valid",
+            "outcomes": [
+              {
+                "condition": "provider PUT succeeds",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "safe blob URI",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "invalid input/auth/PUT or uncertain provider outcome",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "writes remote blob"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Write'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "\"Write\"",
+                "line": 263,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s11",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "URI is a returned target, not independent content proof. Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred."
+          },
+          {
+            "adapter": "Storage_AzureKeyVault",
+            "support": "unsupported",
+            "when": "provider switch only Read and List",
+            "outcomes": [
+              {
+                "condition": "unsupported warning path; no write request",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Write'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s7",
+                "symbol": "Invoke",
+                "line": 16,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property lists Write but source does not dispatch it."
+          }
+        ]
+      }
+    },
+    {
+      "name": "Delete",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Storage_EmbeddedFileSystem",
+            "support": "implemented",
+            "when": "local VirtualPath resolves",
+            "outcomes": [
+              {
+                "condition": "file deleted",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Boolean",
+                "example": {
+                  "kind": "illustrative",
+                  "value": true
+                }
+              },
+              {
+                "condition": "file absent",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Boolean",
+                "example": {
+                  "kind": "illustrative",
+                  "value": false
+                }
+              },
+              {
+                "condition": "filesystem error",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "deletes local file"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Delete'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "'Delete'",
+                "line": 113,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s8",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred."
+          },
+          {
+            "adapter": "Storage_LocalFileSystem",
+            "support": "unsupported",
+            "when": "class has no public Invoke method",
+            "outcomes": [
+              {
+                "condition": "mapped dynamic Invoke cannot bind",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Delete'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Storage_LocalFileSystem",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ]
+          },
+          {
+            "adapter": "Storage_AzureStorageAccount",
+            "support": "implemented",
+            "when": "blob path/container/address valid",
+            "outcomes": [
+              {
+                "condition": "DELETE succeeds",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Boolean",
+                "example": {
+                  "kind": "illustrative",
+                  "value": true
+                }
+              },
+              {
+                "condition": "DELETE returns missing status",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Boolean",
+                "example": {
+                  "kind": "illustrative",
+                  "value": false
+                }
+              },
+              {
+                "condition": "request error or unexpected HTTP status",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "deletes remote blob"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Delete'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "\"Delete\"",
+                "line": 358,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s9",
+                "symbol": "\"Delete\"",
+                "line": 35,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred."
+          },
+          {
+            "adapter": "Storage_AzureKeyVault",
+            "support": "unsupported",
+            "when": "provider switch only Read and List",
+            "outcomes": [
+              {
+                "condition": "unsupported warning path; no provider request",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Delete'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s7",
+                "symbol": "Invoke",
+                "line": 16,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property lists Delete but source does not dispatch it."
+          }
+        ]
+      }
+    },
+    {
+      "name": "Exists",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Storage_EmbeddedFileSystem",
+            "support": "implemented",
+            "when": "local VirtualPath resolves",
+            "outcomes": [
+              {
+                "condition": "file is present",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Boolean",
+                "example": {
+                  "kind": "illustrative",
+                  "value": true
+                }
+              },
+              {
+                "condition": "file is absent",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Boolean",
+                "example": {
+                  "kind": "illustrative",
+                  "value": false
+                }
+              },
+              {
+                "condition": "filesystem error",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Exists'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "'Exists'",
+                "line": 113,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred."
+          },
+          {
+            "adapter": "Storage_LocalFileSystem",
+            "support": "unsupported",
+            "when": "class has no public Invoke method",
+            "outcomes": [
+              {
+                "condition": "mapped dynamic Invoke cannot bind",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Exists'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "Storage_LocalFileSystem",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ]
+          },
+          {
+            "adapter": "Storage_AzureStorageAccount",
+            "support": "implemented",
+            "when": "blob path/container/address valid",
+            "outcomes": [
+              {
+                "condition": "HEAD indicates blob exists",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Boolean",
+                "example": {
+                  "kind": "illustrative",
+                  "value": true
+                }
+              },
+              {
+                "condition": "all addresses indicate absence",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Boolean",
+                "example": {
+                  "kind": "illustrative",
+                  "value": false
+                }
+              },
+              {
+                "condition": "request error or unexpected HTTP status",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "issues HEAD requests"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Exists'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "\"Exists\"",
+                "line": 345,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred."
+          },
+          {
+            "adapter": "Storage_AzureKeyVault",
+            "support": "unsupported",
+            "when": "provider switch only Read and List",
+            "outcomes": [
+              {
+                "condition": "unsupported warning path; no provider request",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Exists'",
+                "line": 96,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s7",
+                "symbol": "Invoke",
+                "line": 16,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Catalog property lists Exists but source does not dispatch it."
+          }
+        ]
+      }
+    }
+  ]
+}

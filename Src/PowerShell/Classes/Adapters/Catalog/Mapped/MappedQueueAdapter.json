@@ -3,11 +3,13 @@
   "activities": [
     {
       "name": "PeekBatch",
+      "whenToUse": "Use to request a batch through the provider's ReadBatch branch; PeekBatch currently delegates there with the same Plan and ItemSignal. PeekDepth and Visibilitytimeout control read count and visibility, and the branch can make an Azure Storage Queue request.",
       "description": "Read messages using provider visibility behavior.",
       "properties": [
         {
           "path": "Config",
           "description": "Extract queue request configuration and warn when absent.",
+          "whenToUse": "Supply queue request configuration when the AzureStorageQueue provider needs it; the provider warns when absent before dispatch.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ]
@@ -15,6 +17,7 @@
         {
           "path": "Config.PeekDepth",
           "description": "Choose how many messages to read.",
+          "whenToUse": "Set how many queue messages to read through delegated ReadBatch. Omission defaults one; current branch validates range 1–32.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ],
@@ -25,6 +28,7 @@
         {
           "path": "Phase",
           "description": "Preserve conduction context while cloning the queue request.",
+          "whenToUse": "Retain incoming parent Phase when the queue request clone needs conduction context; not a queue query parameter.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ]
@@ -32,6 +36,7 @@
         {
           "path": "Plan",
           "description": "Preserve conduction context while cloning the queue request.",
+          "whenToUse": "Retain incoming parent Plan when the queue request clone needs conduction context; not a queue query parameter.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ]
@@ -39,6 +44,7 @@
         {
           "path": "Visibilitytimeout",
           "description": "Set the queue read visibility timeout.",
+          "whenToUse": "Set read visibility timeout for the delegated ReadBatch request. Omission defaults 10 and the branch requires a positive value.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ],
@@ -46,15 +52,44 @@
             "Queue_AzureStorageQueue": 10
           }
         }
+      ],
+      "result": [
+        {
+          "path": "$[*].MessageId",
+          "type": "String",
+          "description": "provider message identity [provider-returned]. When recursively delegates ReadBatch, including its visibility timeout; queue XML parsed to message objects.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "$[*].PopReceipt",
+          "type": "String",
+          "description": "provider receipt [provider-returned]. When recursively delegates ReadBatch, including its visibility timeout; queue XML parsed to message objects.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Queue_AzureStorageQueue: Name PeekBatch does not imply nondestructive peek; source calls ReadBatch"
       ]
     },
     {
       "name": "HandleMessage",
+      "whenToUse": "Use to decode a queue message from ItemSignal MessageText or Config.MessageText. The provider may resolve a path route, load a session/plan and run conduction; Config.ResultDetail true requests checked stage status only after a supported path route completes.",
       "description": "Process a message.",
       "properties": [
         {
+          "path": "Config.ResultDetail",
+          "description": "Optional native Boolean. True requires a decoded path route and returns checked session/plan/conduction stage status only after completion; absent/false preserves successful decoded-message result. Unsupported route or invalid type fails before session effects.",
+          "whenToUse": "Set native Boolean true only for a supported decoded path route with channel ID and reply path when checked session/plan/conduction stage status is needed after completion. Omit or false to keep the successful decoded-message result; invalid type or route fails before session effects.",
+          "adapters": ["Queue_AzureStorageQueue"]
+        },
+        {
           "path": "Config",
           "description": "Extract queue request configuration and warn when absent.",
+          "whenToUse": "Supply queue request configuration when HandleMessage needs Config.MessageText or ResultDetail. The provider reads Config before dispatch and warns when absent.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ]
@@ -62,6 +97,7 @@
         {
           "path": "Config.MessageText",
           "description": "Use configured message text when the item jacket has none.",
+          "whenToUse": "Supply message text when ItemSignal %.@.MessageText is absent or blank. The provider requires a resulting message text from one of these locations.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ],
@@ -69,15 +105,60 @@
             "Queue_AzureStorageQueue": null
           }
         }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "message object",
+          "description": "Decoded message object on successful absent/false Config.ResultDetail; the message alone is not completion proof.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "PSCustomObject",
+          "description": "Only ResultDetail=true on the path route after checked Session, Plan and Conduction Signals return nonfailed.",
+          "adapters": ["Queue_AzureStorageQueue"]
+        },
+        {
+          "path": "$.Route",
+          "type": "String",
+          "description": "Copied normalized path route for correlation, not an effect observation.",
+          "adapters": ["Queue_AzureStorageQueue"]
+        },
+        {
+          "path": "$.SessionResolved",
+          "type": "Boolean",
+          "description": "True only when returned Session Signal is nonfailed and its unwrapped identity matches channel.",
+          "adapters": ["Queue_AzureStorageQueue"]
+        },
+        {
+          "path": "$.PlanLoaded",
+          "type": "Boolean",
+          "description": "True only when Memory.Generate returns nonfailed and a keyed usable Name/Phases Plan resolves.",
+          "adapters": ["Queue_AzureStorageQueue"]
+        },
+        {
+          "path": "$.ConductionCompleted",
+          "type": "Boolean",
+          "description": "True only when Conduction invocation returns a nonfailed Signal; HasResult is not required. Check independent owned marker for actual work.",
+          "adapters": ["Queue_AzureStorageQueue"]
+        }
+      ],
+      "resultNotes": [
+        "Queue_AzureStorageQueue: Default decoded message is not completion proof. Opt-in path detail reflects checked child Signals, not persisted domain effect; require an independent owned marker. Mapped failure exposes no Result."
       ]
     },
     {
       "name": "ReadBatch",
+      "whenToUse": "Use to read Azure Storage Queue messages with a requested depth and visibility timeout. The provider constructs a queue read request and parses the XML response; this can change message visibility.",
       "description": "Read a batch of messages.",
       "properties": [
         {
           "path": "Config",
           "description": "Extract queue request configuration and warn when absent.",
+          "whenToUse": "Supply queue request configuration for ReadBatch; the provider warns when absent before constructing the storage request.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ]
@@ -85,6 +166,7 @@
         {
           "path": "Config.PeekDepth",
           "description": "Choose how many messages to read.",
+          "whenToUse": "Set the queue read count. Omission defaults one, and the branch validates a range of 1–32.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ],
@@ -95,6 +177,7 @@
         {
           "path": "Phase",
           "description": "Preserve conduction context while cloning the queue request.",
+          "whenToUse": "Retain incoming parent Phase when the cloned queue request needs conduction context.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ]
@@ -102,6 +185,7 @@
         {
           "path": "Plan",
           "description": "Preserve conduction context while cloning the queue request.",
+          "whenToUse": "Retain incoming parent Plan when the cloned queue request needs conduction context.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ]
@@ -109,6 +193,7 @@
         {
           "path": "Visibilitytimeout",
           "description": "Set the queue read visibility timeout.",
+          "whenToUse": "Set message visibility timeout for the read request. Omission defaults 10; current validation requires a positive value.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ],
@@ -116,15 +201,44 @@
             "Queue_AzureStorageQueue": 10
           }
         }
-      ]
+      ],
+      "result": [
+        {
+          "path": "$[*].MessageId",
+          "type": "String",
+          "description": "provider message ID [provider-returned]. When positive depth and visibility timeout; REST response XML is QueueMessagesList; valid batch, including zero messages.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "$[*].PopReceipt",
+          "type": "String",
+          "description": "provider pop receipt [provider-returned]. When positive depth and visibility timeout; REST response XML is QueueMessagesList; valid batch, including zero messages.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "$[*].MessageText",
+          "type": "String",
+          "description": "provider payload; can be empty [provider-returned]. When positive depth and visibility timeout; REST response XML is QueueMessagesList; valid batch, including zero messages.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        }
+      ],
+      "resultNotes": []
     },
     {
       "name": "WriteItem",
+      "whenToUse": "Use to enqueue Config.MessageText in Azure Storage Queue. The provider serializes the supplied text/object, sends a storage request and, on a valid response, returns MessageId and PopReceipt.",
       "description": "Enqueue an item.",
       "properties": [
         {
           "path": "Config",
           "description": "Extract queue request configuration and warn when absent.",
+          "whenToUse": "Supply queue request configuration for WriteItem; the provider warns when absent before constructing the request.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ]
@@ -132,6 +246,7 @@
         {
           "path": "Config.MessageText",
           "description": "Serialize and enqueue the supplied message text or object.",
+          "whenToUse": "Supply the message text or object to serialize and enqueue. The branch fails when this resolver has no Result.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ]
@@ -139,6 +254,7 @@
         {
           "path": "Phase",
           "description": "Preserve conduction context while cloning the queue request.",
+          "whenToUse": "Retain incoming parent Phase when the cloned write request needs conduction context.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ]
@@ -146,19 +262,41 @@
         {
           "path": "Plan",
           "description": "Preserve conduction context while cloning the queue request.",
+          "whenToUse": "Retain incoming parent Plan when the cloned write request needs conduction context.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ]
         }
-      ]
+      ],
+      "result": [
+        {
+          "path": "MessageId",
+          "type": "String",
+          "description": "created provider ID [provider-returned]. When MessageText present; REST POST returns QueueMessagesList XML; response contains nonempty identity.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        },
+        {
+          "path": "PopReceipt",
+          "type": "String",
+          "description": "provider receipt [provider-returned]. When MessageText present; REST POST returns QueueMessagesList XML; response contains nonempty identity.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        }
+      ],
+      "resultNotes": []
     },
     {
       "name": "AckItem",
+      "whenToUse": "Use to acknowledge/delete a queue message using MessageId and PopReceipt. The provider first reads Config values and falls back to ItemSignal message identity when absent, then sends a delete request.",
       "description": "Acknowledge an item.",
       "properties": [
         {
           "path": "Config",
           "description": "Extract queue request configuration and warn when absent.",
+          "whenToUse": "Supply queue request configuration for AckItem when using Config.MessageId or Config.PopReceipt; the provider warns when absent.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ]
@@ -166,6 +304,7 @@
         {
           "path": "Config.MessageId",
           "description": "Identify the queue message MessageId for acknowledgement.",
+          "whenToUse": "Supply the queue MessageId to acknowledge. If absent, the provider looks for ItemSignal %.@.MessageId.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ]
@@ -173,6 +312,7 @@
         {
           "path": "Config.PopReceipt",
           "description": "Identify the queue message PopReceipt for acknowledgement.",
+          "whenToUse": "Supply the queue PopReceipt for acknowledgement. If absent, the provider looks for ItemSignal %.@.PopReceipt.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ]
@@ -180,6 +320,7 @@
         {
           "path": "Phase",
           "description": "Preserve conduction context while cloning the queue request.",
+          "whenToUse": "Retain incoming parent Phase when the cloned acknowledgement request needs conduction context.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ]
@@ -187,19 +328,35 @@
         {
           "path": "Plan",
           "description": "Preserve conduction context while cloning the queue request.",
+          "whenToUse": "Retain incoming parent Plan when the cloned acknowledgement request needs conduction context.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "Boolean",
+          "description": "When MessageId and PopReceipt supplied; DELETE delegate succeeds.",
+          "adapters": [
+            "Queue_AzureStorageQueue"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Queue_AzureStorageQueue: True is a successful request receipt; later absence needs separate visibility-aware observation"
       ]
     },
     {
       "name": "DeferItem",
+      "whenToUse": "Reserved unfinished activity. The provider reads intended Visibilitytimeout and checks message identity, but its update-visibility call is commented out and it returns an unresolved signal; do not choose it to defer a message.",
       "description": "Defer an item; the current provider branch is unfinished.",
       "properties": [
         {
           "path": "Config",
           "description": "Extract queue request configuration and warn when absent.",
+          "whenToUse": "The provider reads queue Config before the unfinished DeferItem branch, but no working defer request is implemented.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ]
@@ -207,6 +364,7 @@
         {
           "path": "Visibilitytimeout",
           "description": "Read the intended defer visibility timeout in the unfinished branch.",
+          "whenToUse": "Supply an intended defer visibility timeout only when inspecting the unfinished branch. It defaults 30, but current code does not call the update-visibility API.",
           "adapters": [
             "Queue_AzureStorageQueue"
           ],
@@ -214,6 +372,11 @@
             "Queue_AzureStorageQueue": 30
           }
         }
+      ],
+      "result": [],
+      "resultNotes": [
+        "No stable public Result field is available for this activity; inspect the Signal/effect at its actual boundary.",
+        "Queue_AzureStorageQueue: reserved — No provider UpdateVisibility invocation is implemented"
       ]
     }
   ],
@@ -223,5 +386,6 @@
       "repository": "SovereignTrust.Adapters",
       "path": "Src/Queue/AzureStorageQueue/PowerShell/Queue_AzureStorageQueue.psm1"
     }
-  ]
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Mapped/MappedQueueAdapter.json","version":1}
 }

@@ -3,11 +3,13 @@
   "activities": [
     {
       "name": "RequestOrRegister",
+      "whenToUse": "Use with Plan.Path pointing to the desired mapped session location. Session_ST first resolves that path; when no Result is found it writes ItemSignal.GetJacket() there and returns the jacket. This operation can mutate the mapped adapter's session dictionary.",
       "description": "Return an existing session or register a new one.",
       "properties": [
         {
           "path": "Name",
           "description": "Name the session operation for diagnostics.",
+          "whenToUse": "Name the session operation for its source Signal and diagnostics. It is not the path used to find or register the session.",
           "adapters": [
             "Session_ST"
           ]
@@ -15,10 +17,32 @@
         {
           "path": "Path",
           "description": "Locate an existing session or register the item jacket at that location.",
+          "whenToUse": "Supply the mapped-adapter path to resolve an existing session. If that lookup has no Result, the provider registers the current ItemSignal jacket at this path and returns it.",
           "adapters": [
             "Session_ST"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "unwrapped session native value",
+          "description": "When existing session lookup or item-jacket registration; existing session found (Result presence conditional).",
+          "adapters": [
+            "Session_ST"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "unwrapped ItemSignal jacket native value",
+          "description": "When existing session lookup or item-jacket registration; new session branch (Result presence conditional).",
+          "adapters": [
+            "Session_ST"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Session_ST: Mapped GetResult($true) recursively unwraps returned Signal; empty/null jacket may yield no public Result. Failure path drops any helper result"
       ]
     }
   ],
@@ -28,5 +52,6 @@
       "repository": "SovereignTrust.Adapters",
       "path": "Src/Session/ST/PowerShell/Session_ST.psm1"
     }
-  ]
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Mapped/MappedSessionAdapter.json","version":1}
 }
