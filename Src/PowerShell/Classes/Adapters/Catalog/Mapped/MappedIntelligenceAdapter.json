@@ -3,56 +3,70 @@
   "activities": [
     {
       "name": "SendMessage",
+      "whenToUse": "Use to submit a message through the selected registered provider. AzureFoundry and OpenAI use the same current send helper for both send labels; CodexCLI accepts Content or structured Prompt, optional flat OutputSchema and a configured ModelKey. Choose fields by current provider source; no provider response is assured by this guidance.",
       "description": "Send a request to an intelligence service.",
       "properties": [
         {
           "path": "Config",
           "description": "Extract the message request configuration after adapter validation.",
+          "whenToUse": "Supply provider request configuration for SendMessage. The concrete adapter reads it after mapped validation; CodexCLI requires Config before resolving prompt/schema.",
           "adapters": [
             "Intelligence_AzureFoundry",
-            "Intelligence_CodexCLI"
+            "Intelligence_CodexCLI",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.Content",
           "description": "Read the message Content input after preceding request validation.",
+          "whenToUse": "Supply text content when the selected provider's message path uses it. CodexCLI rejects nontext Content and a nonempty Prompt combination; Foundry rejects Content combined with Prompt.Texts, while OpenAI rejects Content combined with Prompt.",
           "adapters": [
             "Intelligence_CodexCLI",
-            "Intelligence_AzureFoundry"
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.MediaPath",
           "description": "Read Foundry MediaPath request input.",
+          "whenToUse": "For AzureFoundry only, supply a legacy local image path when no structured Prompt.Media entries are present. OpenAI's current send helper rejects Config.MediaPath even though its catalog association remains; CodexCLI uses Prompt.Media.",
           "adapters": [
-            "Intelligence_AzureFoundry"
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.MediaUrl",
           "description": "Read Foundry MediaUrl request input.",
+          "whenToUse": "For AzureFoundry only, supply a legacy image URL when no structured Prompt.Media entries are present. OpenAI's current send helper rejects Config.MediaUrl despite its catalog association; CodexCLI uses Prompt.Media.",
           "adapters": [
-            "Intelligence_AzureFoundry"
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.Model",
-          "description": "Read Foundry Model request input.",
+          "description": "Read and reject legacy Config.Model in current Foundry/OpenAI send helpers; use ModelKey.",
+          "whenToUse": "Omit this legacy model field for current AzureFoundry/OpenAI send helpers: both reject Config.Model and select the actual model through Config.ModelKey/profile settings. Its catalog context is retained as a validation read.",
           "adapters": [
-            "Intelligence_AzureFoundry"
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.ModelKey",
           "description": "Read the request ModelKey after preceding validation.",
+          "whenToUse": "Supply a configured model/profile key when selecting the provider's request profile. CodexCLI validates a nonblank key against runtime profiles and uses its default when omitted.",
           "adapters": [
             "Intelligence_CodexCLI",
-            "Intelligence_AzureFoundry"
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.OutputSchema",
           "description": "Read CodexCLI OutputSchema input.",
+          "whenToUse": "For CodexCLI structured output, supply a flat closed object schema when a constrained JSON result is needed. The helper validates its supported keywords and scalar property types before execution.",
           "adapters": [
             "Intelligence_CodexCLI"
           ]
@@ -60,6 +74,7 @@
         {
           "path": "Config.OutputSchema.$schema",
           "description": "Validate output-schema $schema.",
+          "whenToUse": "For a CodexCLI OutputSchema, omit $schema or set the exact draft 2020-12 schema URI accepted by the validator.",
           "adapters": [
             "Intelligence_CodexCLI"
           ]
@@ -67,6 +82,7 @@
         {
           "path": "Config.OutputSchema.additionalProperties",
           "description": "Validate output-schema additionalProperties.",
+          "whenToUse": "For CodexCLI OutputSchema, set additionalProperties false to keep the object closed; the validator rejects an open object.",
           "adapters": [
             "Intelligence_CodexCLI"
           ]
@@ -74,6 +90,7 @@
         {
           "path": "Config.OutputSchema.properties",
           "description": "Validate output-schema properties.",
+          "whenToUse": "For CodexCLI OutputSchema, provide a flat object of named scalar properties. The validator requires this member and bounds its size.",
           "adapters": [
             "Intelligence_CodexCLI"
           ]
@@ -81,6 +98,7 @@
         {
           "path": "Config.OutputSchema.properties[$name]",
           "description": "Validate a caller-named output-schema property object.",
+          "whenToUse": "For each literal CodexCLI schema property name, provide its property object. The name is a literal key, not a path expression or permission for arbitrary nested schema shape.",
           "adapters": [
             "Intelligence_CodexCLI"
           ],
@@ -90,6 +108,7 @@
         {
           "path": "Config.OutputSchema.properties[$name].type",
           "description": "Validate the scalar type of a caller-named output-schema property.",
+          "whenToUse": "For each CodexCLI schema property, choose one supported scalar type: string, integer, number, boolean or null. Nested or other types are rejected.",
           "adapters": [
             "Intelligence_CodexCLI"
           ],
@@ -99,6 +118,7 @@
         {
           "path": "Config.OutputSchema.required",
           "description": "Validate output-schema required.",
+          "whenToUse": "For CodexCLI OutputSchema, list every named property exactly once in required. The validator rejects missing, duplicate or unrelated names.",
           "adapters": [
             "Intelligence_CodexCLI"
           ]
@@ -106,6 +126,7 @@
         {
           "path": "Config.OutputSchema.type",
           "description": "Validate output-schema type.",
+          "whenToUse": "For CodexCLI OutputSchema, set the root type to object; the validator requires a flat closed object.",
           "adapters": [
             "Intelligence_CodexCLI"
           ]
@@ -113,6 +134,7 @@
         {
           "path": "Config.Prompt",
           "description": "Read CodexCLI Prompt input.",
+          "whenToUse": "For CodexCLI, supply a text or structured Prompt when Content is not used. Structured Prompt accepts System, Texts and Media; nonempty Prompt conflicts with nonblank Content.",
           "adapters": [
             "Intelligence_CodexCLI"
           ]
@@ -120,46 +142,57 @@
         {
           "path": "Config.Prompt.Media",
           "description": "Read media inputs from the original structured prompt after validation.",
+          "whenToUse": "Supply structured media entries when the selected provider's prompt supports them. CodexCLI requires a list and validates entries; Foundry rejects combining populated structured media with legacy MediaPath/MediaUrl rather than replacing it. OpenAI uses structured media and rejects legacy top-level media fields.",
           "adapters": [
             "Intelligence_AzureFoundry",
-            "Intelligence_CodexCLI"
+            "Intelligence_CodexCLI",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.Prompt.Media[*].Detail",
           "description": "Read Detail from an original structured prompt media entry, after validation and only while original entries remain selected.",
+          "whenToUse": "For AzureFoundry/OpenAI structured image media, select a provider-supported Detail value when needed. For CodexCLI, omit Detail or leave it blank: its current media helper rejects every nonblank Detail value.",
           "adapters": [
             "Intelligence_AzureFoundry",
-            "Intelligence_CodexCLI"
+            "Intelligence_CodexCLI",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.Prompt.Media[*].MediaPath",
           "description": "Read MediaPath from an original structured prompt media entry, after validation and only while original entries remain selected.",
+          "whenToUse": "For a selected original structured media entry, supply a local MediaPath when media should be loaded from disk. CodexCLI validates text and media constraints before use.",
           "adapters": [
             "Intelligence_AzureFoundry",
-            "Intelligence_CodexCLI"
+            "Intelligence_CodexCLI",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.Prompt.Media[*].MediaType",
           "description": "Read MediaType from an original structured prompt media entry, after validation and only while original entries remain selected.",
+          "whenToUse": "For a selected original structured media entry, set MediaType for the media kind. CodexCLI validates text and supported type before media resolution.",
           "adapters": [
             "Intelligence_AzureFoundry",
-            "Intelligence_CodexCLI"
+            "Intelligence_CodexCLI",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.Prompt.Media[*].MediaUrl",
           "description": "Read MediaUrl from an original structured prompt media entry, after validation and only while original entries remain selected.",
+          "whenToUse": "For a selected original structured media entry, supply MediaUrl for remote media. CodexCLI validates text and allowed hosts/limits before download.",
           "adapters": [
             "Intelligence_AzureFoundry",
-            "Intelligence_CodexCLI"
+            "Intelligence_CodexCLI",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.Prompt.Media[*][$name]",
           "description": "Validate the value of an unsupported literal request member.",
+          "whenToUse": "CodexCLI reads literal extra media-entry member names only to reject unsupported members. Do not use this dynamic context as an arbitrary extension field; supported keys are MediaPath, MediaUrl, MediaType and Detail.",
           "adapters": [
             "Intelligence_CodexCLI"
           ],
@@ -169,22 +202,27 @@
         {
           "path": "Config.Prompt.System",
           "description": "Read the system input from the original structured prompt after validation.",
+          "whenToUse": "Supply system text in a structured Prompt when the selected provider accepts that channel. CodexCLI validates it as text before composing the request.",
           "adapters": [
             "Intelligence_AzureFoundry",
-            "Intelligence_CodexCLI"
+            "Intelligence_CodexCLI",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.Prompt.Texts",
           "description": "Read text inputs from the original structured prompt after validation.",
+          "whenToUse": "Supply a list of text entries in a structured Prompt. CodexCLI rejects a scalar string or non-text list entries.",
           "adapters": [
             "Intelligence_AzureFoundry",
-            "Intelligence_CodexCLI"
+            "Intelligence_CodexCLI",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.Prompt[$name]",
           "description": "Validate the value of an unsupported literal request member.",
+          "whenToUse": "CodexCLI reads literal extra Prompt member names to reject unsupported fields. Use only System, Texts and Media; this dynamic context is validation, not an extension point.",
           "adapters": [
             "Intelligence_CodexCLI"
           ],
@@ -194,6 +232,7 @@
         {
           "path": "Config[$name]",
           "description": "Validate the value of an unsupported literal request member.",
+          "whenToUse": "CodexCLI reads literal extra Config member names to reject unsupported request fields. Use its supported Prompt, Content, ModelKey, OutputSchema and Break members; this is validation, not an extension point.",
           "adapters": [
             "Intelligence_CodexCLI"
           ],
@@ -203,6 +242,7 @@
         {
           "path": "Phase",
           "description": "Preserve conduction context when cloning the Foundry request.",
+          "whenToUse": "For AzureFoundry request cloning, retain an incoming parent Phase reference when conduction context must be preserved. This is not a message body field.",
           "adapters": [
             "Intelligence_AzureFoundry"
           ]
@@ -210,110 +250,198 @@
         {
           "path": "Plan",
           "description": "Preserve conduction context when cloning the Foundry request.",
+          "whenToUse": "For AzureFoundry request cloning, retain an incoming parent Plan reference when conduction context must be preserved. This is not a provider payload field.",
           "adapters": [
             "Intelligence_AzureFoundry"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When local Codex CLI text/media execution and optional output schema; final response validated.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "decoded.choices[0].message.role",
+          "type": "String",
+          "description": "assistant constant [constant]. When local Codex CLI text/media execution and optional output schema; final response validated.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "decoded.choices[0].message.content",
+          "type": "String",
+          "description": "CLI final response [provider-returned]. When local Codex CLI text/media execution and optional output schema; final response validated.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When ApiKind OpenAIResponses; provider response normalized.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
+          ]
+        },
+        {
+          "path": "decoded.choices[0].message.role",
+          "type": "String",
+          "description": "assistant constant in decoded JSON [constant]. When ApiKind OpenAIResponses; provider response normalized.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
+          ]
+        },
+        {
+          "path": "decoded.choices[0].message.content",
+          "type": "String",
+          "description": "joined provider text [provider-returned]. When ApiKind OpenAIResponses; provider response normalized.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Intelligence_CodexCLI: Result is normalized JSON text, not a decoded object or proof the image was interpreted correctly",
+        "Intelligence_AzureFoundry: Outer result is JSON text; response values depend on bound provider. No live call made",
+        "Intelligence_OpenAI: native Responses result is normalized JSON text; no live provider call made"
       ]
     },
     {
       "name": "SendMessageOriginal",
-      "description": "Send the original message without prior transformation.",
+      "whenToUse": "For AzureFoundry or OpenAI, this label currently reaches the same send helper as SendMessage, without a distinct transformation route. No CodexCLI property association is declared here; use current provider-specific content, model-key and media rules.",
+      "description": "Send through the same current AzureFoundry/OpenAI request helper as SendMessage.",
       "properties": [
         {
           "path": "Config",
           "description": "Extract intelligence service request configuration.",
+          "whenToUse": "Supply AzureFoundry/OpenAI request configuration for the original-message branch; the selected concrete provider reads it after mapped dispatch.",
           "adapters": [
-            "Intelligence_AzureFoundry"
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.Content",
           "description": "Read Foundry Content request input.",
+          "whenToUse": "Supply content for the same current AzureFoundry/OpenAI send helper used by SendMessage. Foundry rejects combining it with Prompt.Texts; OpenAI rejects combining it with Prompt.",
           "adapters": [
-            "Intelligence_AzureFoundry"
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.MediaPath",
           "description": "Read Foundry MediaPath request input.",
+          "whenToUse": "For AzureFoundry only, supply a legacy local image path without populated structured Prompt.Media. Current OpenAI send helper rejects this legacy field despite the retained catalog association.",
           "adapters": [
-            "Intelligence_AzureFoundry"
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.MediaUrl",
           "description": "Read Foundry MediaUrl request input.",
+          "whenToUse": "For AzureFoundry only, supply a legacy image URL without populated structured Prompt.Media. Current OpenAI send helper rejects this legacy field despite the retained catalog association.",
           "adapters": [
-            "Intelligence_AzureFoundry"
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.Model",
-          "description": "Read Foundry Model request input.",
+          "description": "Read and reject legacy Config.Model in current Foundry/OpenAI send helpers; use ModelKey.",
+          "whenToUse": "Omit this legacy model field: current AzureFoundry/OpenAI send helpers reject Config.Model and select a profile through Config.ModelKey instead. The catalog retains this validation context.",
           "adapters": [
-            "Intelligence_AzureFoundry"
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.ModelKey",
           "description": "Read Foundry ModelKey request input.",
+          "whenToUse": "Select the AzureFoundry/OpenAI model profile key for the original-message request when provider configuration uses it.",
           "adapters": [
-            "Intelligence_AzureFoundry"
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.Prompt.Media",
           "description": "Read Foundry Prompt.Media request input.",
+          "whenToUse": "Supply structured prompt media entries for the current AzureFoundry/OpenAI send helper. Foundry rejects combining populated entries with legacy MediaPath/MediaUrl; OpenAI rejects those legacy top-level fields entirely.",
           "adapters": [
-            "Intelligence_AzureFoundry"
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.Prompt.Media[*].Detail",
           "description": "Read Foundry media Detail.",
+          "whenToUse": "For an original AzureFoundry/OpenAI media entry, set Detail when its selected media representation requires it.",
           "adapters": [
-            "Intelligence_AzureFoundry"
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.Prompt.Media[*].MediaPath",
           "description": "Read Foundry media MediaPath.",
+          "whenToUse": "For an original AzureFoundry/OpenAI media entry, supply MediaPath to load a local media file.",
           "adapters": [
-            "Intelligence_AzureFoundry"
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.Prompt.Media[*].MediaType",
           "description": "Read Foundry media MediaType.",
+          "whenToUse": "For an original AzureFoundry/OpenAI media entry, identify its MediaType when the provider's media path uses it.",
           "adapters": [
-            "Intelligence_AzureFoundry"
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.Prompt.Media[*].MediaUrl",
           "description": "Read Foundry media MediaUrl.",
+          "whenToUse": "For an original AzureFoundry/OpenAI media entry, supply MediaUrl when remote media is selected.",
           "adapters": [
-            "Intelligence_AzureFoundry"
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.Prompt.System",
           "description": "Read Foundry Prompt.System request input.",
+          "whenToUse": "Supply original structured system text for AzureFoundry/OpenAI when that provider branch reads it.",
           "adapters": [
-            "Intelligence_AzureFoundry"
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Config.Prompt.Texts",
           "description": "Read Foundry Prompt.Texts request input.",
+          "whenToUse": "Supply original structured text entries for AzureFoundry/OpenAI when that provider branch reads them.",
           "adapters": [
-            "Intelligence_AzureFoundry"
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Phase",
           "description": "Preserve conduction context when cloning the Foundry request.",
+          "whenToUse": "For AzureFoundry request cloning, retain an incoming parent Phase reference to preserve conduction context.",
           "adapters": [
             "Intelligence_AzureFoundry"
           ]
@@ -321,19 +449,47 @@
         {
           "path": "Plan",
           "description": "Preserve conduction context when cloning the Foundry request.",
+          "whenToUse": "For AzureFoundry request cloning, retain an incoming parent Plan reference to preserve conduction context.",
           "adapters": [
             "Intelligence_AzureFoundry"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When same OpenAIResponses call as SendMessage; provider response normalized.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "When same OpenAIResponses call as SendMessage; provider response normalized.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Intelligence_AzureFoundry: Current source does not expose a distinct raw/original provider envelope",
+        "Intelligence_CodexCLI: unsupported",
+        "Intelligence_OpenAI: native Responses result is normalized JSON text; no live provider call made"
       ]
     },
     {
       "name": "HandleMessage",
+      "whenToUse": "Use to resolve a message from ItemSignal at Plan.Path and optionally run a Format condenser activity on it. This branch is listed across providers; it handles an existing message rather than sending a new provider request.",
       "description": "Resolve and optionally format a message.",
       "properties": [
         {
           "path": "Config",
           "description": "Extract intelligence service request configuration.",
+          "whenToUse": "AzureFoundry reads Config before HandleMessage dispatch as part of its concrete request validation; other listed providers do not have this contextual Config attribution.",
           "adapters": [
             "Intelligence_AzureFoundry"
           ]
@@ -341,19 +497,46 @@
         {
           "path": "Format",
           "description": "Resolve the message format after successful message lookup.",
+          "whenToUse": "Set a Format condenser activity when the resolved message should be formatted after lookup. Omit to keep the looked-up message without this optional conversion.",
           "adapters": [
             "Intelligence_AzureFoundry",
-            "Intelligence_CodexCLI"
+            "Intelligence_CodexCLI",
+            "Intelligence_OpenAI"
           ]
         },
         {
           "path": "Path",
           "description": "Resolve the message lookup path for message handling.",
+          "whenToUse": "Supply the ItemSignal path containing the message to handle. The selected concrete adapter resolves this before optional formatting.",
           "adapters": [
             "Intelligence_AzureFoundry",
-            "Intelligence_CodexCLI"
+            "Intelligence_CodexCLI",
+            "Intelligence_OpenAI"
           ]
         }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "message native value or formatted value",
+          "description": "When Path selects message; optional Format postprocessing; selected message resolves.",
+          "adapters": [
+            "Intelligence_CodexCLI"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "native selected value",
+          "description": "When Path selects response; optional Format postprocessing; selected message resolves.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_OpenAI"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Intelligence_AzureFoundry: success can have no Result (selected MessageSignal has no Result)",
+        "Intelligence_OpenAI: native Responses result is normalized JSON text; no live provider call made"
       ]
     }
   ],
@@ -367,6 +550,12 @@
       "name": "Intelligence_AzureFoundry",
       "repository": "SovereignTrust.Adapters",
       "path": "Src/Intelligence/AzureFoundry/PowerShell/Intelligence_AzureFoundry.psm1"
+    },
+    {
+      "name": "Intelligence_OpenAI",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/OpenAI/PowerShell/Intelligence_OpenAI.psm1"
     }
-  ]
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Mapped/MappedIntelligenceAdapter.json","version":1}
 }

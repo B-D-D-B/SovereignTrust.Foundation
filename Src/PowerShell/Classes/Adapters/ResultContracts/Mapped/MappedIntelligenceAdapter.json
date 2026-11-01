@@ -1,0 +1,522 @@
+{
+  "name": "MappedIntelligenceAdapter",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedIntelligenceAdapter.ps1",
+      "sha256": "24AD791B06B17F991C7BBE3EEC3FF1AC0F34A624C999A4170E4A0A5DDC417B49"
+    },
+    {
+      "id": "s2",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/CodexCLI/PowerShell/Intelligence_CodexCLI.ps1",
+      "sha256": "CB5AD948572528F06BE4EA0488C7B3E353EF94E0E1679F63AE5A934691D306DD"
+    },
+    {
+      "id": "s3",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/CodexCLI/PowerShell/Invoke-CodexCLIExecution.ps1",
+      "sha256": "0EA2BF3F3483243BAE924CAFF4CB0962D708E4106FB0577E43DDA640256920CE"
+    },
+    {
+      "id": "s4",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/CodexCLI/PowerShell/ConvertTo-CodexCLIJsonResult.ps1",
+      "sha256": "23EC8DCB17A514D878F2BFA0DCD3BE853191952270893823910EDB16974090A6"
+    },
+    {
+      "id": "s5",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/CodexCLI/PowerShell/Invoke-Intelligence_CodexCLI.ps1",
+      "sha256": "CA1A70F373E42645D81CB8771A4AD7B70FD4E5681D25C5334CDF8D5C2A67CE1F"
+    },
+    {
+      "id": "s6",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/AzureFoundry/PowerShell/Intelligence_AzureFoundry.psm1",
+      "sha256": "1C0135E392349FA1B9D3ADC9F73F6A6F6C91021FCE1ECC8BA47B6DD430F5A278"
+    },
+    {
+      "id": "s7",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/AzureFoundry/PowerShell/Invoke-AzureFoundryOpenAIResponses.ps1",
+      "sha256": "8ACBDCDB2B355D8A5EFD4BAC37CA88CE76A2AC0ABCA1F88DAC782732D7500434"
+    },
+    {
+      "id": "s8",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/OpenAI/PowerShell/Intelligence_OpenAI.psm1",
+      "sha256": "873A5025EACA8F36C7370733614081B8970F5E8291EDBE8E2FB86BED21EDCB2D"
+    },
+    {
+      "id": "s9",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/OpenAI/PowerShell/Invoke-OpenAIResponses.ps1",
+      "sha256": "2B22906C7E33CDF21F52BED7C7E47424BF1478226F837F743ED903B07CD40A96"
+    }
+  ],
+  "activities": [
+    {
+      "name": "SendMessage",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Intelligence_CodexCLI",
+            "support": "implemented",
+            "when": "local Codex CLI text/media execution and optional output schema",
+            "outcomes": [
+              {
+                "condition": "final response validated",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "choices[0].message.role",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "assistant constant",
+                    "origin": "constant"
+                  },
+                  {
+                    "path": "choices[0].message.content",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "CLI final response",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "invalid prompt/media, CLI exit/timeout/schema or cleanup failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "launches local CLI and may download media; invocation directory cleaned up"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'SendMessage'",
+                "line": 79,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 24,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "Invoke",
+                "line": 86,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "ConvertTo-CodexCLIJsonResult",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Result is normalized JSON text, not a decoded object or proof the image was interpreted correctly."
+          },
+          {
+            "adapter": "Intelligence_AzureFoundry",
+            "support": "implemented",
+            "when": "ApiKind OpenAIResponses",
+            "outcomes": [
+              {
+                "condition": "provider response normalized",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "choices[0].message.role",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "assistant constant in decoded JSON",
+                    "origin": "constant"
+                  },
+                  {
+                    "path": "choices[0].message.content",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "joined provider text",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "unsupported API kind, provider/error or missing response",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "calls configured model endpoint"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'SendMessage'",
+                "line": 79,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "\"SendMessage\"",
+                "line": 85,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s7",
+                "symbol": "Invoke",
+                "line": 49,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Outer result is JSON text; response values depend on bound provider. No live call made."
+          },
+          {
+            "adapter": "Intelligence_OpenAI",
+            "support": "implemented",
+            "when": "native OpenAIResponses",
+            "outcomes": [
+              {
+                "condition": "provider response normalized",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string",
+                "shape": [
+                  {
+                    "path": "choices[0].message.role",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "assistant constant in decoded JSON",
+                    "origin": "constant"
+                  },
+                  {
+                    "path": "choices[0].message.content",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "joined provider text",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "unsupported API kind, provider/error or missing response",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "one native OpenAI Responses POST without automatic retry or redirect"
+            ],
+            "evidence": [
+              {
+                "source": "s8",
+                "symbol": "Invoke",
+                "line": 29,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s9",
+                "symbol": "Invoke-OpenAIResponses",
+                "line": 152,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Offline fixture evidence only; live provider behavior unverified."
+          }
+        ]
+      }
+    },
+    {
+      "name": "SendMessageOriginal",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Intelligence_AzureFoundry",
+            "support": "implemented",
+            "when": "same OpenAIResponses call as SendMessage",
+            "outcomes": [
+              {
+                "condition": "provider response normalized",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string"
+              },
+              {
+                "condition": "provider failure or response absent",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "calls model endpoint"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'SendMessageOriginal'",
+                "line": 79,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "\"SendMessageOriginal\"",
+                "line": 94,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s7",
+                "symbol": "Invoke",
+                "line": 49,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Current source does not expose a distinct raw/original provider envelope."
+          },
+          {
+            "adapter": "Intelligence_CodexCLI",
+            "support": "unsupported",
+            "when": "case-sensitive helper switch has only SendMessage and HandleMessage",
+            "outcomes": [
+              {
+                "condition": "Unsupported CodexCLI activity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'SendMessageOriginal'",
+                "line": 79,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 24,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "Invoke",
+                "line": 86,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "ConvertTo-CodexCLIJsonResult",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              }
+            ]
+          },
+          {
+            "adapter": "Intelligence_OpenAI",
+            "support": "implemented",
+            "when": "native OpenAIResponses",
+            "outcomes": [
+              {
+                "condition": "provider response normalized",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "JSON string"
+              },
+              {
+                "condition": "provider failure or response absent",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "one native OpenAI Responses POST without automatic retry or redirect"
+            ],
+            "evidence": [
+              {
+                "source": "s8",
+                "symbol": "Invoke",
+                "line": 29,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s9",
+                "symbol": "Invoke-OpenAIResponses",
+                "line": 152,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Offline fixture evidence only; live provider behavior unverified."
+          }
+        ]
+      }
+    },
+    {
+      "name": "HandleMessage",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Intelligence_CodexCLI",
+            "support": "implemented",
+            "when": "Path selects message; optional Format postprocessing",
+            "outcomes": [
+              {
+                "condition": "selected message resolves",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "message native value or formatted value"
+              },
+              {
+                "condition": "selection/format failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'HandleMessage'",
+                "line": 79,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 24,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "Invoke",
+                "line": 86,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "ConvertTo-CodexCLIJsonResult",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s5",
+                "symbol": "'HandleMessage'",
+                "line": 27,
+                "kind": "source-derived"
+              }
+            ]
+          },
+          {
+            "adapter": "Intelligence_AzureFoundry",
+            "support": "implemented",
+            "when": "Path selects response; optional Format postprocessing",
+            "outcomes": [
+              {
+                "condition": "selected message resolves",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "native selected value"
+              },
+              {
+                "condition": "selected MessageSignal has no Result",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "format failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'HandleMessage'",
+                "line": 79,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s6",
+                "symbol": "\"HandleMessage\"",
+                "line": 102,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s7",
+                "symbol": "Invoke",
+                "line": 49,
+                "kind": "source-derived"
+              }
+            ]
+          },
+          {
+            "adapter": "Intelligence_OpenAI",
+            "support": "implemented",
+            "when": "Path selection with optional Format",
+            "outcomes": [
+              {
+                "condition": "selected message resolves",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "native selected value"
+              },
+              {
+                "condition": "selected MessageSignal has no Result",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "format failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s8",
+                "symbol": "Invoke",
+                "line": 29,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Offline fixture evidence only; live provider behavior unverified."
+          }
+        ]
+      }
+    }
+  ]
+}
