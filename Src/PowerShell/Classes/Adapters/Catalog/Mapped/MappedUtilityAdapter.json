@@ -3,7 +3,7 @@
   "activities": [
     {
       "name": "Resize",
-      "whenToUse": "Use to resize a local input image to an output file through the media helper. Select dimensions or TargetLongest, quality and overwrite policy in Config; Density is accepted but currently unused by final magick arguments. This reads and can write local files.",
+      "whenToUse": "Use to resize a local input image to an output file through the media helper. Select dimensions or TargetLongest, quality and overwrite policy in Config; Density is accepted but currently unused by final magick arguments. This reads local files and promotes a staged output after validation; a completed nonzero conversion may still be accepted when it created output.",
       "description": "Resize an image.",
       "properties": [
         {
@@ -25,7 +25,7 @@
         {
           "path": "Config.OutputFullPath",
           "description": "Configure image resize OutputFullPath.",
-          "whenToUse": "Supply the destination file for resized output. The helper creates or overwrites it according to Config.Overwrite.",
+          "whenToUse": "Supply the destination file for resized output. The helper writes a same-extension sibling stage, then moves it to an absent target or replaces a verified existing target when Config.Overwrite is true.",
           "adapters": [
             "Utility_Media"
           ]
@@ -167,7 +167,7 @@
     },
     {
       "name": "Overlay",
-      "whenToUse": "Use to compose one or more local overlay images onto an input image and write OutputFullPath. Prefer Config.Overlays entries for multiple images; the legacy single-overlay fields are used when filtering Config.Overlays leaves no non-null entries. Overwrite controls an existing output.",
+      "whenToUse": "Use to compose one or more local overlay images onto an input image and write OutputFullPath. Prefer Config.Overlays entries for multiple images; the legacy single-overlay fields are used when filtering Config.Overlays leaves no non-null entries. Overwrite controls a verified existing output; a nonzero child fails even if it wrote a stage file.",
       "description": "Overlay one image on another.",
       "properties": [
         {
@@ -197,7 +197,7 @@
         {
           "path": "Config.OutputFullPath",
           "description": "Configure image overlay OutputFullPath.",
-          "whenToUse": "Supply the local file destination for the composed image. Overwrite policy applies if it already exists.",
+          "whenToUse": "Supply the local file destination for the composed image. A same-extension sibling stage is promoted only after a completed child and output check; overwrite replaces a verified existing target.",
           "adapters": [
             "Utility_Media"
           ]
@@ -355,6 +355,57 @@
       "resultNotes": [
         "Utility_Media: True does not prove dimensions, pixels, placement, opacity or byte change; inspect output independently"
       ]
+    },
+    {
+      "name": "MaterializeGeneratedImage",
+      "description": "Validate one parsed generated image and materialize a fully decoded PNG in an exclusive local case directory.",
+      "whenToUse": "Use only for the selected local image-generation test after a parsed SendMessage Result is registered under GeneratedResponse_<Producer>.",
+      "properties": [
+        {"path":"Config.Producer","description":"Exact OpenAI or FoundryOpenAI case name.","adapters":["Utility_Media"]},
+        {"path":"Config.RunId","description":"Safe selected test run identifier.","adapters":["Utility_Media"]},
+        {"path":"Config.ResultKey","description":"Exact GeneratedResponse_<Producer> item Result Key.","adapters":["Utility_Media"]}
+      ],
+      "result": [
+        {"path":"Producer","type":"String","description":"Selected producer.","adapters":["Utility_Media"]},
+        {"path":"RunId","type":"String","description":"Selected run identifier.","adapters":["Utility_Media"]},
+        {"path":"SourcePath","type":"String","description":"Exclusive decoded and inspected local PNG path.","adapters":["Utility_Media"]},
+        {"path":"ByteLength","type":"Int64","description":"Decoded byte count.","adapters":["Utility_Media"]},
+        {"path":"Sha256","type":"String","description":"Uppercase decoded byte SHA-256.","adapters":["Utility_Media"]},
+        {"path":"ManifestPath","type":"String","description":"Retained immutable pre-effect case manifest.","adapters":["Utility_Media"]},
+        {"path":"Nonce","type":"String","description":"Random exclusive directory nonce.","adapters":["Utility_Media"]}
+      ],
+      "resultNotes": ["Failure returns a failed Signal without a public Result; partial local effects require independent finalization under the immutable manifest."]
+    },
+    {
+      "name": "ValidateVisionSelection",
+      "description": "Validate raw Vision JSON without discarding duplicate properties.",
+      "whenToUse": "Use after the FoundryOpenAI Vision Result is registered under VisionResponse_<Producer>.",
+      "properties": [
+        {"path":"Config.Producer","description":"Exact OpenAI or FoundryOpenAI case name.","adapters":["Utility_Media"]},
+        {"path":"Config.ResultKey","description":"Exact VisionResponse_<Producer> item Result Key.","adapters":["Utility_Media"]}
+      ],
+      "result": [
+        {"path":"TestResult","type":"Boolean","description":"Native true only for one strict Selected SQUIRREL string.","adapters":["Utility_Media"]},
+        {"path":"Selected","type":"String|null","description":"Observed scalar word where parseable, otherwise null.","adapters":["Utility_Media"]}
+      ],
+      "resultNotes": ["Absent or wrong-type outer REST content fails without Result; a wrong raw selection returns native false."]
+    },
+    {
+      "name": "FinalizeGeneratedImage",
+      "description": "Finalize one manifest-owned local generated image through mapped LocalMedia Delete and Exists.",
+      "whenToUse": "Invoke after Vision or for an independently validated case with a complete immutable manifest.",
+      "properties": [
+        {"path":"Config.Producer","description":"Exact OpenAI or FoundryOpenAI case name.","adapters":["Utility_Media"]},
+        {"path":"Config.RunId","description":"Safe selected test run identifier.","adapters":["Utility_Media"]}
+      ],
+      "result": [
+        {"path":"Producer","type":"String","description":"Validated producer.","adapters":["Utility_Media"]},
+        {"path":"RunId","type":"String","description":"Validated run identifier.","adapters":["Utility_Media"]},
+        {"path":"TestResult","type":"Boolean","description":"Native true only after owned media absence.","adapters":["Utility_Media"]},
+        {"path":"Exists","type":"Boolean","description":"Native false after owned media absence.","adapters":["Utility_Media"]},
+        {"path":"ManifestPath","type":"String","description":"Retained immutable case manifest path.","adapters":["Utility_Media"]}
+      ],
+      "resultNotes": ["Failure has no public Result. Complete manifest is required even for repeated no-effect finalization; the shared image-gen parent persists."]
     }
   ],
   "concreteAdapters": [

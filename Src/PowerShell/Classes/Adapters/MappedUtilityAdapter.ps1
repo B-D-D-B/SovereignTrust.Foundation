@@ -7,6 +7,9 @@ Activities:
 - Resize: Resize an image.
 - Overlay: Overlay one image on another.
 - Inspect: Read file bytes and optional bounded image pixels.
+- MaterializeGeneratedImage: Materialize one bounded generated PNG in an owned local namespace.
+- ValidateVisionSelection: Validate a raw Vision selection without permissive JSON conversion.
+- FinalizeGeneratedImage: Verify manifest ownership and remove only one owned local image.
 ActivityValidation: OnInvoke, BeforeProviderResolution
 UnsupportedActivity: FailedSignal
 ActivityComparison: CaseInsensitive
@@ -84,7 +87,7 @@ class MappedUtilityAdapter {
 
         $opSignal = [Signal]::Start("MappedUtilityAdapter.Invoke:$Slot") | Select-Object -Last 1
 
-        if ($Activity -notin @('Resize', 'Overlay', 'Inspect')) {
+        if ($Activity -notin @('Resize', 'Overlay', 'Inspect', 'MaterializeGeneratedImage', 'ValidateVisionSelection', 'FinalizeGeneratedImage')) {
             $opSignal.LogCritical("Unsupported MappedUtilityAdapter activity: '$Activity'.")
             return $opSignal
         }

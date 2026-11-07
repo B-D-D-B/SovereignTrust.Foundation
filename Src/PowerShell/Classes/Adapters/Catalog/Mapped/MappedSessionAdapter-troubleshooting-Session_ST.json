@@ -1,0 +1,118 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedSessionAdapter",
+  "mappedAdapter": "MappedSessionAdapter",
+  "part": "Session_ST",
+  "sources": [
+    {
+      "id": "session-module",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Session/ST/PowerShell/Session_ST.psm1",
+      "sha256": "ABF100E2089BDE919C8C255BF6F5AC0D8F221FCA66A0F821EB9458E649806E1B",
+      "symbol": "Session_ST"
+    }
+  ],
+  "entries": [
+    {
+      "id": "session-st-construct-null-dictionary",
+      "status": "source-verified",
+      "adapters": [
+        "Session_ST"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot construct Session_ST — provided dictionary is null.",
+          "evidence": [
+            {
+              "sourceId": "session-module",
+              "startLine": 30,
+              "endLine": 30
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Session_ST.Construct receives null dictionary after optional registered Jacket hydration.",
+        "evidence": [
+          {
+            "sourceId": "session-module",
+            "startLine": 26,
+            "endLine": 32
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Session_ST.Construct receives null dictionary after optional registered Jacket hydration.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "session-module",
+              "startLine": 26,
+              "endLine": 32
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect concrete registration identity and hydrated dictionary-null flag; redact content.",
+          "expected": "Redacted flags identify this source guard without session contents.",
+          "evidence": [
+            {
+              "sourceId": "session-module",
+              "startLine": 26,
+              "endLine": 32
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional construction input proposal only; no runtime/provider action.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull Session_ST construction dictionary through owning registration/jacket plan.",
+            "expected": "Construction dictionary nonnull; Invoke remains separate.",
+            "evidence": [
+              {
+                "sourceId": "session-module",
+                "startLine": 26,
+                "endLine": 32
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Conductor, Jacket, session or slot owner cannot be identified with redacted metadata.",
+          "Proposed action would expose session/Plan data or execute graph/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Construction dictionary nonnull; Invoke remains separate.",
+          "expected": "Local guard would be false; runtime session success unverified.",
+          "evidence": [
+            {
+              "sourceId": "session-module",
+              "startLine": 26,
+              "endLine": 32
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal/session value, path/key, Conductor/Jacket, graph, credentials and exception text; retain canonical adapter/activity, exact message/pattern and presence/Failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no runtime session/provider execution.",
+        "Session_ST Invoke can return a Result while a merged Add-Path failure remains on its Signal; Result presence alone is not success."
+      ]
+    }
+  ]
+}

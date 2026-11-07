@@ -18,7 +18,7 @@
       "id": "s3",
       "repository": "SovereignTrust.Foundation",
       "path": "Src/PowerShell/Utilities/Adapters/Token/Dynamic/Resolve-TokenDynamic.ps1",
-      "sha256": "5BBB2781CA0501CA02E51DABFC280B05D6CA069C89B14E12AF841AF5857703D3"
+      "sha256": "3701D0D2B254AAAEEC4DEE580038819018BDD812E75FBF7F58C6E10B647E28FA"
     },
     {
       "id": "s4",
@@ -251,6 +251,20 @@
                 "signalState": "success",
                 "hasResult": true,
                 "resultType": "Boolean"
+              },
+              {
+                "condition": "IsNonBlankString with one whole unquoted typed reference resolved to a value",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Boolean",
+                "limitations": "False for resolved nonstring, empty or whitespace string; missing/null typed reference and malformed arguments fail without Result"
+              },
+              {
+                "condition": "EqualsOrdinalString with one whole unquoted typed native-string reference and one quoted or unquoted literal",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Boolean",
+                "limitations": "Ordinal case-sensitive equality; wrong arity, missing/null/nonstring reference, second token/expression and malformed arguments fail without Result; legacy Equals/NotEquals unchanged"
               },
               {
                 "condition": "Add/Subtract/ToInt converts operands to Int32",

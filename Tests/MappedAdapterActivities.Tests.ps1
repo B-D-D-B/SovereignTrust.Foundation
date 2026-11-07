@@ -54,6 +54,14 @@ foreach ($name in $names) {
         Assert-True ($result.Failure()) "$name accepted unsupported activity '$activity'."
         Assert-True ($script:dispatchCount -eq 0) "$name dispatched unsupported activity '$activity'."
     }
+    if ($name -ceq 'MappedIntelligenceAdapter') {
+        foreach ($removedActivity in @('SendMessageOriginal','sendmessageoriginal')) {
+            $script:dispatchCount = 0
+            $removed = $adapter.Invoke('Fixture', $removedActivity, $signal, $null, $signal) | Select-Object -Last 1
+            Assert-True ($removed.Failure() -and -not $removed.HasResult()) "Mapped intelligence accepted '$removedActivity'."
+            Assert-True ($script:dispatchCount -eq 0) "Mapped intelligence dispatched '$removedActivity'."
+        }
+    }
     if ($header -match 'ActivityComparison: CaseSensitive') {
         $script:dispatchCount = 0
         $caseMismatch = $adapter.Invoke('Fixture', $activities[0].ToLowerInvariant(), $signal, $null, $signal) | Select-Object -Last 1
@@ -84,5 +92,36 @@ $script:dispatchCount = 0
 $mapped = New-Object -TypeName MappedCondenserAdapter
 $null = $mapped.Invoke('Fixture', 'UnlistedProviderActivity', $signal, $null, $signal)
 Assert-True ($script:dispatchCount -eq 1) 'MappedCondenserAdapter rejected an activity before provider resolution.'
+
+$script:forwardedUtility = [System.Collections.Generic.List[string]]::new()
+$script:fakeUtility = [pscustomobject]@{}
+$script:fakeUtility | Add-Member -MemberType ScriptMethod -Name Invoke -Value {
+    param($slot,$activity,$conduction,$plan,$item)
+    $script:forwardedUtility.Add("$slot/$activity")
+    $answer = [Signal]::Start('ActivityFixture.UtilityForward') | Select-Object -Last 1
+    $answer.SetResult('forwarded') | Out-Null
+    return $answer
+}
+function Resolve-PathFromDictionary {
+    param($Dictionary,$Path,$SignalLevel,$Default)
+    $answer = [Signal]::Start('ActivityFixture.Resolve') | Select-Object -Last 1
+    if ($Path -eq '*.#.Media') { $answer.SetResult($script:fakeUtility) | Out-Null }
+    elseif ($Path -eq 'Config.VirtualPath') { $answer.SetResult('Media') | Out-Null }
+    return $answer
+}
+function Resolve-MappedAdapter {
+    param($AdapterSignal,$Signal,$ConductionContext)
+    $answer = [Signal]::Start('ActivityFixture.ResolveMapped') | Select-Object -Last 1
+    $answer.SetResult($script:fakeUtility) | Out-Null
+    return $answer
+}
+$utility = [MappedUtilityAdapter]::new()
+$utility.Signal = [Signal]::Start('ActivityFixture.Utility') | Select-Object -Last 1
+$utilityPlan = [pscustomobject]@{ Config=[pscustomobject]@{VirtualPath='Media'} }
+foreach ($activity in @('MaterializeGeneratedImage','ValidateVisionSelection','FinalizeGeneratedImage')) {
+    $forwarded = $utility.Invoke('Media',$activity,$signal,$utilityPlan,$signal) | Select-Object -Last 1
+    Assert-True (-not $forwarded.Failure() -and $forwarded.HasResult() -and
+        $forwarded.GetResult() -ceq 'forwarded' -and $script:forwardedUtility[-1] -ceq "Media/$activity") "$activity did not forward into the fake Utility provider."
+}
 
 Write-Output 'PASS: mapped activity guards reject before dispatch; condenser mapping forwards arbitrary activities to provider resolution.'

@@ -1,0 +1,1664 @@
+   {
+  "version": 2,
+  "ownerId": "Mapped/MappedIntelligenceAdapter",
+  "mappedAdapter": "MappedIntelligenceAdapter",
+  "part": "Intelligence_AzureFoundry",
+  "sources": [
+    {
+      "id": "foundry",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/AzureFoundry/PowerShell/Invoke-AzureFoundryOpenAIResponses.ps1",
+      "sha256": "743654EDAC106C5FC7094F9515B68F6B47620318613FD9F6FEFB92A3300D2A4C",
+      "symbol": "Invoke-AzureFoundryOpenAIResponses"
+    },
+    {
+      "id": "foundry-class",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/AzureFoundry/PowerShell/Intelligence_AzureFoundry.psm1",
+      "sha256": "59D5258ABEF86C3DA5931A67D79B01752A17152784FA053831FAF76A6522DAEF",
+      "symbol": "Intelligence_AzureFoundry"
+    }
+  ],
+  "entries": [
+    {
+      "id": "azure-foundry-empty-prompt",
+      "status": "source-verified",
+      "adapters": [
+        "Intelligence_AzureFoundry"
+      ],
+      "activities": [
+        "SendMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "throw",
+          "text": "Foundry prompt is empty.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 333,
+              "endLine": 335
+            }
+          ]
+        },
+        {
+          "kind": "log",
+          "text": "Foundry OpenAI Responses call failed: Foundry prompt is empty.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 333,
+              "endLine": 335
+            },
+            {
+              "sourceId": "foundry",
+              "startLine": 401,
+              "endLine": 401
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "After prompt and media construction, the input list has count zero before request construction and REST invocation.",
+        "evidence": [
+          {
+            "sourceId": "foundry",
+            "startLine": 264,
+            "endLine": 335
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "No nonblank System, accepted text, Content or media yielded an input item; blank Texts/Content alone do not prove this when System or media exists.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 264,
+              "endLine": 335
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm exact concrete adapter, send activity and message; inspect only presence/type/count/nonblank flags for Config.Prompt.System, Texts, Media and Config.Content in the effective Plan, plus the current helper guard.",
+          "expected": "The current source guard and redacted input metadata discriminate this exact message.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 264,
+              "endLine": 335
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal only; change the originating local configuration or plan after confirming intent. Do not run a provider call here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "If intended text is known and absent or blank, correct the originating prompt mapping to supply nonblank Prompt.Texts OR Content in its intended mode; do not invent text or add System merely to bypass the guard.",
+            "expected": "The edited local input satisfies the cited guard without changing unrelated policy or source.",
+            "evidence": [
+              {
+                "sourceId": "foundry",
+                "startLine": 264,
+                "endLine": 335
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended value or owner is unknown, the observed message differs, or source identity changed."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Compare the effective redacted plan structure with the helper's accepted input branches and the Content/Texts ambiguity guard.",
+          "expected": "The edited input no longer meets this cited failure guard; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 264,
+              "endLine": 335
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude prompt/system/content text, media bytes/URLs, credential/header values, full Plan/Jacket and provider payload; retain only adapter/activity, exact error label and presence/type/count flags.",
+      "limitations": [
+        "Source-only confidence; no provider or runtime execution was performed.",
+        "Other exceptions and upstream/downstream failures can still occur.",
+        "Media processing may have read a local file before the empty-input guard."
+      ]
+    },
+    {
+      "id": "azure-foundry-model-key-unconfigured",
+      "status": "source-verified",
+      "adapters": [
+        "Intelligence_AzureFoundry"
+      ],
+      "activities": [
+        "SendMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "throw",
+          "text": "Foundry Config.ModelKey is not configured.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 253,
+              "endLine": 255
+            }
+          ]
+        },
+        {
+          "kind": "log",
+          "text": "Foundry OpenAI Responses call failed: Foundry Config.ModelKey is not configured.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 253,
+              "endLine": 255
+            },
+            {
+              "sourceId": "foundry",
+              "startLine": 401,
+              "endLine": 401
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "The effective ModelKey is not a nonblank configured profile key, including when the default is used.",
+        "evidence": [
+          {
+            "sourceId": "foundry",
+            "startLine": 253,
+            "endLine": 255
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The selected key is absent, blank, nontext or outside Settings.Profiles.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 253,
+              "endLine": 255
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only ModelKey presence/type and whether it equals a configured profile key; redact model names if sensitive.",
+          "expected": "The current source guard and redacted input metadata discriminate this exact message.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 253,
+              "endLine": 255
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal only; change the originating local configuration or plan after confirming intent. Do not run a provider call here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Choose an existing intended profile key in Config.ModelKey or correct the jacket's default/profile mapping under its owner.",
+            "expected": "The edited local input satisfies the cited guard without changing unrelated policy or source.",
+            "evidence": [
+              {
+                "sourceId": "foundry",
+                "startLine": 253,
+                "endLine": 255
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended value or owner is unknown, the observed message differs, or source identity changed."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Compare the chosen key against the current profile-key set and the line-55 guard.",
+          "expected": "The edited input no longer meets this cited failure guard; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 253,
+              "endLine": 255
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude prompt/system/content text, media bytes/URLs, credential/header values, full Plan/Jacket and provider payload; retain only adapter/activity, exact error label and presence/type/count flags.",
+      "limitations": [
+        "Source-only confidence; no provider or runtime execution was performed.",
+        "Other exceptions and upstream/downstream failures can still occur."
+      ]
+    },
+    {
+      "id": "azure-foundry-legacy-model",
+      "status": "source-verified",
+      "adapters": [
+        "Intelligence_AzureFoundry"
+      ],
+      "activities": [
+        "SendMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "throw",
+          "text": "Foundry Config.Model is unsupported; use Config.ModelKey.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 258,
+              "endLine": 260
+            }
+          ]
+        },
+        {
+          "kind": "log",
+          "text": "Foundry OpenAI Responses call failed: Foundry Config.Model is unsupported; use Config.ModelKey.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 258,
+              "endLine": 260
+            },
+            {
+              "sourceId": "foundry",
+              "startLine": 401,
+              "endLine": 401
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Config.Model resolves with a result under the current send helper.",
+        "evidence": [
+          {
+            "sourceId": "foundry",
+            "startLine": 258,
+            "endLine": 260
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The Plan still supplies the legacy Config.Model field.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 258,
+              "endLine": 260
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Check field presence only for Config.Model and Config.ModelKey; do not print model or prompt values.",
+          "expected": "The current source guard and redacted input metadata discriminate this exact message.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 258,
+              "endLine": 260
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal only; change the originating local configuration or plan after confirming intent. Do not run a provider call here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Remove the legacy Config.Model mapping and select the intended configured profile through Config.ModelKey.",
+            "expected": "The edited local input satisfies the cited guard without changing unrelated policy or source.",
+            "evidence": [
+              {
+                "sourceId": "foundry",
+                "startLine": 258,
+                "endLine": 260
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended value or owner is unknown, the observed message differs, or source identity changed."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm Config.Model is absent and ModelKey resolves to a configured profile.",
+          "expected": "The edited input no longer meets this cited failure guard; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 258,
+              "endLine": 260
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude prompt/system/content text, media bytes/URLs, credential/header values, full Plan/Jacket and provider payload; retain only adapter/activity, exact error label and presence/type/count flags.",
+      "limitations": [
+        "Source-only confidence; no provider or runtime execution was performed.",
+        "Other exceptions and upstream/downstream failures can still occur."
+      ]
+    },
+    {
+      "id": "azure-foundry-text-sources-ambiguous",
+      "status": "source-verified",
+      "adapters": [
+        "Intelligence_AzureFoundry"
+      ],
+      "activities": [
+        "SendMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "throw",
+          "text": "Foundry Config.Content and Prompt.Texts are ambiguous.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 281,
+              "endLine": 283
+            }
+          ]
+        },
+        {
+          "kind": "log",
+          "text": "Foundry OpenAI Responses call failed: Foundry Config.Content and Prompt.Texts are ambiguous.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 281,
+              "endLine": 283
+            },
+            {
+              "sourceId": "foundry",
+              "startLine": 401,
+              "endLine": 401
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Nonblank Config.Content is present after one or more nonblank Prompt.Texts were added to parts.",
+        "evidence": [
+          {
+            "sourceId": "foundry",
+            "startLine": 281,
+            "endLine": 283
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Two text input modes are populated in the same request.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 281,
+              "endLine": 283
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only nonblank flags and count of accepted Prompt.Texts plus Content presence.",
+          "expected": "The current source guard and redacted input metadata discriminate this exact message.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 281,
+              "endLine": 283
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal only; change the originating local configuration or plan after confirming intent. Do not run a provider call here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Preserve the intended text mode and remove the competing populated mapping; do not discard unknown content.",
+            "expected": "The edited local input satisfies the cited guard without changing unrelated policy or source.",
+            "evidence": [
+              {
+                "sourceId": "foundry",
+                "startLine": 281,
+                "endLine": 283
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended value or owner is unknown, the observed message differs, or source identity changed."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm only the chosen text mode yields parts and the line-75 guard is false.",
+          "expected": "The edited input no longer meets this cited failure guard; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 281,
+              "endLine": 283
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude prompt/system/content text, media bytes/URLs, credential/header values, full Plan/Jacket and provider payload; retain only adapter/activity, exact error label and presence/type/count flags.",
+      "limitations": [
+        "Source-only confidence; no provider or runtime execution was performed.",
+        "Other exceptions and upstream/downstream failures can still occur."
+      ]
+    },
+    {
+      "id": "azure-foundry-media-sources-ambiguous",
+      "status": "source-verified",
+      "adapters": [
+        "Intelligence_AzureFoundry"
+      ],
+      "activities": [
+        "SendMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "throw",
+          "text": "Foundry media sources are ambiguous.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 295,
+              "endLine": 297
+            }
+          ]
+        },
+        {
+          "kind": "log",
+          "text": "Foundry OpenAI Responses call failed: Foundry media sources are ambiguous.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 295,
+              "endLine": 297
+            },
+            {
+              "sourceId": "foundry",
+              "startLine": 401,
+              "endLine": 401
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Populated legacy MediaPath or MediaUrl coexists with one or more structured Prompt.Media entries.",
+        "evidence": [
+          {
+            "sourceId": "foundry",
+            "startLine": 295,
+            "endLine": 297
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Legacy and structured media source modes are both populated.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 295,
+              "endLine": 297
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only media-entry count and legacy path/URL presence; omit paths and URL text.",
+          "expected": "The current source guard and redacted input metadata discriminate this exact message.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 295,
+              "endLine": 297
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal only; change the originating local configuration or plan after confirming intent. Do not run a provider call here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Keep the intended structured or legacy media mode and remove the competing mapping.",
+            "expected": "The edited local input satisfies the cited guard without changing unrelated policy or source.",
+            "evidence": [
+              {
+                "sourceId": "foundry",
+                "startLine": 295,
+                "endLine": 297
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended value or owner is unknown, the observed message differs, or source identity changed."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm no populated legacy media field coexists with structured media entries.",
+          "expected": "The edited input no longer meets this cited failure guard; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 295,
+              "endLine": 297
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude prompt/system/content text, media bytes/URLs, credential/header values, full Plan/Jacket and provider payload; retain only adapter/activity, exact error label and presence/type/count flags.",
+      "limitations": [
+        "Source-only confidence; no provider or runtime execution was performed.",
+        "Other exceptions and upstream/downstream failures can still occur."
+      ]
+    },
+    {
+      "id": "azure-foundry-image-options-invalid",
+      "status": "source-verified",
+      "adapters": [
+        "Intelligence_AzureFoundry"
+      ],
+      "activities": [
+        "SendMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "throw",
+          "text": "Foundry image media options are invalid.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 315,
+              "endLine": 317
+            }
+          ]
+        },
+        {
+          "kind": "log",
+          "text": "Foundry OpenAI Responses call failed: Foundry image media options are invalid.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 315,
+              "endLine": 317
+            },
+            {
+              "sourceId": "foundry",
+              "startLine": 401,
+              "endLine": 401
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "A media item's type is not image or Detail is outside auto, low, high and original.",
+        "evidence": [
+          {
+            "sourceId": "foundry",
+            "startLine": 315,
+            "endLine": 317
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "MediaType or Detail has an unsupported value.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 315,
+              "endLine": 317
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only MediaType/Detail enum membership for the selected media item.",
+          "expected": "The current source guard and redacted input metadata discriminate this exact message.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 315,
+              "endLine": 317
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal only; change the originating local configuration or plan after confirming intent. Do not run a provider call here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Set the intended media item to MediaType image with a supported Detail value.",
+            "expected": "The edited local input satisfies the cited guard without changing unrelated policy or source.",
+            "evidence": [
+              {
+                "sourceId": "foundry",
+                "startLine": 315,
+                "endLine": 317
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended value or owner is unknown, the observed message differs, or source identity changed."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the selected item's type and detail satisfy the line-98 guard.",
+          "expected": "The edited input no longer meets this cited failure guard; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 315,
+              "endLine": 317
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude prompt/system/content text, media bytes/URLs, credential/header values, full Plan/Jacket and provider payload; retain only adapter/activity, exact error label and presence/type/count flags.",
+      "limitations": [
+        "Source-only confidence; no provider or runtime execution was performed.",
+        "Other exceptions and upstream/downstream failures can still occur."
+      ]
+    },
+    {
+      "id": "azure-foundry-image-source-ambiguous",
+      "status": "source-verified",
+      "adapters": [
+        "Intelligence_AzureFoundry"
+      ],
+      "activities": [
+        "SendMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "throw",
+          "text": "Foundry image media source is ambiguous.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 319,
+              "endLine": 321
+            }
+          ]
+        },
+        {
+          "kind": "log",
+          "text": "Foundry OpenAI Responses call failed: Foundry image media source is ambiguous.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 319,
+              "endLine": 321
+            },
+            {
+              "sourceId": "foundry",
+              "startLine": 401,
+              "endLine": 401
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "A media item has both nonblank MediaPath and MediaUrl.",
+        "evidence": [
+          {
+            "sourceId": "foundry",
+            "startLine": 319,
+            "endLine": 321
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The same image item names two sources.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 319,
+              "endLine": 321
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only nonblank presence flags for MediaPath and MediaUrl on that item.",
+          "expected": "The current source guard and redacted input metadata discriminate this exact message.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 319,
+              "endLine": 321
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal only; change the originating local configuration or plan after confirming intent. Do not run a provider call here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Retain the intended one source and remove the other populated field without logging either value.",
+            "expected": "The edited local input satisfies the cited guard without changing unrelated policy or source.",
+            "evidence": [
+              {
+                "sourceId": "foundry",
+                "startLine": 319,
+                "endLine": 321
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended value or owner is unknown, the observed message differs, or source identity changed."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm at most one of the item's MediaPath and MediaUrl is nonblank.",
+          "expected": "The edited input no longer meets this cited failure guard; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 319,
+              "endLine": 321
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude prompt/system/content text, media bytes/URLs, credential/header values, full Plan/Jacket and provider payload; retain only adapter/activity, exact error label and presence/type/count flags.",
+      "limitations": [
+        "Source-only confidence; no provider or runtime execution was performed.",
+        "Other exceptions and upstream/downstream failures can still occur."
+      ]
+    },
+    {
+      "id": "azure-foundry-image-format-unsupported",
+      "status": "source-verified",
+      "adapters": [
+        "Intelligence_AzureFoundry"
+      ],
+      "activities": [
+        "SendMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "throw",
+          "text": "Foundry image format is unsupported.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 325,
+              "endLine": 325
+            }
+          ]
+        },
+        {
+          "kind": "log",
+          "text": "Foundry OpenAI Responses call failed: Foundry image format is unsupported.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 325,
+              "endLine": 325
+            },
+            {
+              "sourceId": "foundry",
+              "startLine": 401,
+              "endLine": 401
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "A local image path extension is outside jpg, jpeg, png, webp and gif.",
+        "evidence": [
+          {
+            "sourceId": "foundry",
+            "startLine": 325,
+            "endLine": 325
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The selected local file extension has no MIME mapping in this helper.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 325,
+              "endLine": 325
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect the extension only and compare it with the source whitelist; do not read or expose file bytes.",
+          "expected": "The current source guard and redacted input metadata discriminate this exact message.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 325,
+              "endLine": 325
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal only; change the originating local configuration or plan after confirming intent. Do not run a provider call here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use an intended supported image file/extension under the owning plan; do not simply rename unknown bytes.",
+            "expected": "The edited local input satisfies the cited guard without changing unrelated policy or source.",
+            "evidence": [
+              {
+                "sourceId": "foundry",
+                "startLine": 325,
+                "endLine": 325
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended value or owner is unknown, the observed message differs, or source identity changed."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the intended local image extension has a current source mapping.",
+          "expected": "The edited input no longer meets this cited failure guard; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 325,
+              "endLine": 325
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude prompt/system/content text, media bytes/URLs, credential/header values, full Plan/Jacket and provider payload; retain only adapter/activity, exact error label and presence/type/count flags.",
+      "limitations": [
+        "Source-only confidence; no provider or runtime execution was performed.",
+        "Other exceptions and upstream/downstream failures can still occur."
+      ]
+    },
+    {
+      "id": "azure-foundry-api-kind",
+      "status": "source-verified",
+      "adapters": [
+        "Intelligence_AzureFoundry"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Foundry ApiKind must be OpenAIResponses.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 172,
+              "endLine": 174
+            },
+            {
+              "sourceId": "foundry",
+              "startLine": 243,
+              "endLine": 243
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "The jacket ApiKind lookup fails, is absent or differs from OpenAIResponses.",
+        "evidence": [
+          {
+            "sourceId": "foundry",
+            "startLine": 172,
+            "endLine": 174
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The configured API kind does not match this helper.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 172,
+              "endLine": 174
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect ApiKind presence and exact enum only, without credential or address values.",
+          "expected": "The current source guard and redacted input metadata discriminate this exact message.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 172,
+              "endLine": 174
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal only; change the originating local configuration or plan after confirming intent. Do not run a provider call here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Set the intended jacket ApiKind to OpenAIResponses under the configuration owner.",
+            "expected": "The edited local input satisfies the cited guard without changing unrelated policy or source.",
+            "evidence": [
+              {
+                "sourceId": "foundry",
+                "startLine": 172,
+                "endLine": 174
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended value or owner is unknown, the observed message differs, or source identity changed."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the current jacket resolves ApiKind exactly as OpenAIResponses.",
+          "expected": "The edited input no longer meets this cited failure guard; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 172,
+              "endLine": 174
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude prompt/system/content text, media bytes/URLs, credential/header values, full Plan/Jacket and provider payload; retain only adapter/activity, exact error label and presence/type/count flags.",
+      "limitations": [
+        "Source-only confidence; no provider or runtime execution was performed.",
+        "Other exceptions and upstream/downstream failures can still occur."
+      ]
+    },
+    {
+      "id": "azure-foundry-profiles-invalid",
+      "status": "source-verified",
+      "adapters": [
+        "Intelligence_AzureFoundry"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Foundry profiles are invalid.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 176,
+              "endLine": 178
+            },
+            {
+              "sourceId": "foundry",
+              "startLine": 243,
+              "endLine": 243
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "One of the profile/default-key shape, required-field, allowed-effort, token-limit, uniqueness or default-membership guards fails in lines 11–34.",
+        "evidence": [
+          {
+            "sourceId": "foundry",
+            "startLine": 176,
+            "endLine": 222
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The configured profile collection or default key violates at least one current helper guard.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 176,
+              "endLine": 222
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only field presence/type, key uniqueness/membership, allowed effort and positive token-limit flags across lines 11–34.",
+          "expected": "The current source guard and redacted input metadata discriminate this exact message.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 176,
+              "endLine": 222
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal only; change the originating local configuration or plan after confirming intent. Do not run a provider call here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Correct the specific failing profile/default-key shape after identifying its guard; retain intended model/profile values and do not invent one.",
+            "expected": "The edited local input satisfies the cited guard without changing unrelated policy or source.",
+            "evidence": [
+              {
+                "sourceId": "foundry",
+                "startLine": 176,
+                "endLine": 222
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended value or owner is unknown, the observed message differs, or source identity changed."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Compare the corrected structure with each source guard at lines 11–34.",
+          "expected": "The edited input no longer meets this cited failure guard; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 176,
+              "endLine": 222
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude prompt/system/content text, media bytes/URLs, credential/header values, full Plan/Jacket and provider payload; retain only adapter/activity, exact error label and presence/type/count flags.",
+      "limitations": [
+        "Source-only confidence; no provider or runtime execution was performed.",
+        "Other exceptions and upstream/downstream failures can still occur."
+      ]
+    },
+    {
+      "id": "azure-foundry-address-invalid",
+      "status": "source-verified",
+      "adapters": [
+        "Intelligence_AzureFoundry"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Foundry Responses address is invalid.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 226,
+              "endLine": 228
+            },
+            {
+              "sourceId": "foundry",
+              "startLine": 243,
+              "endLine": 243
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Addresses is not a single string matching the current HTTPS Responses endpoint form.",
+        "evidence": [
+          {
+            "sourceId": "foundry",
+            "startLine": 226,
+            "endLine": 228
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The jacket address shape or endpoint form is invalid.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 226,
+              "endLine": 228
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect address count and URI shape locally without printing host, path query or credentials.",
+          "expected": "The current source guard and redacted input metadata discriminate this exact message.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 226,
+              "endLine": 228
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal only; change the originating local configuration or plan after confirming intent. Do not run a provider call here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Correct the owned endpoint configuration to a single intended HTTPS /openai/v1/responses address, after confirming its authoritative value.",
+            "expected": "The edited local input satisfies the cited guard without changing unrelated policy or source.",
+            "evidence": [
+              {
+                "sourceId": "foundry",
+                "startLine": 226,
+                "endLine": 228
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended value or owner is unknown, the observed message differs, or source identity changed."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the address count/type/path form satisfies the line-37 guard.",
+          "expected": "The edited input no longer meets this cited failure guard; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 226,
+              "endLine": 228
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude prompt/system/content text, media bytes/URLs, credential/header values, full Plan/Jacket and provider payload; retain only adapter/activity, exact error label and presence/type/count flags.",
+      "limitations": [
+        "Source-only confidence; no provider or runtime execution was performed.",
+        "Other exceptions and upstream/downstream failures can still occur."
+      ]
+    },
+    {
+      "id": "azure-foundry-credential-unavailable",
+      "status": "source-verified",
+      "adapters": [
+        "Intelligence_AzureFoundry"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Foundry credential is unavailable.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 230,
+              "endLine": 232
+            },
+            {
+              "sourceId": "foundry",
+              "startLine": 243,
+              "endLine": 243
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Resource is not one nonblank string in the jacket.",
+        "evidence": [
+          {
+            "sourceId": "foundry",
+            "startLine": 230,
+            "endLine": 232
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The configured credential resource is missing, blank or has the wrong cardinality/type.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 230,
+              "endLine": 232
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only Resource count/type/nonblank flags; never read or print the credential.",
+          "expected": "The current source guard and redacted input metadata discriminate this exact message.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 230,
+              "endLine": 232
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal only; change the originating local configuration or plan after confirming intent. Do not run a provider call here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Restore the intended credential reference under the jacket owner without copying secret material into logs or this document.",
+            "expected": "The edited local input satisfies the cited guard without changing unrelated policy or source.",
+            "evidence": [
+              {
+                "sourceId": "foundry",
+                "startLine": 230,
+                "endLine": 232
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended value or owner is unknown, the observed message differs, or source identity changed."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm Resource resolves as one nonblank string by metadata only.",
+          "expected": "The edited input no longer meets this cited failure guard; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 230,
+              "endLine": 232
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude prompt/system/content text, media bytes/URLs, credential/header values, full Plan/Jacket and provider payload; retain only adapter/activity, exact error label and presence/type/count flags.",
+      "limitations": [
+        "Source-only confidence; no provider or runtime execution was performed.",
+        "Other exceptions and upstream/downstream failures can still occur."
+      ]
+    },
+    {
+      "id": "azure-foundry-auth-mode",
+      "status": "source-verified",
+      "adapters": [
+        "Intelligence_AzureFoundry"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Foundry AuthenticationMode must be ApiKey or Entra.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 236,
+              "endLine": 238
+            },
+            {
+              "sourceId": "foundry",
+              "startLine": 243,
+              "endLine": 243
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Resolved AuthenticationMode is neither ApiKey nor Entra (absence defaults to ApiKey).",
+        "evidence": [
+          {
+            "sourceId": "foundry",
+            "startLine": 236,
+            "endLine": 238
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The explicit auth-mode value is unsupported.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 236,
+              "endLine": 238
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only the enum value and whether the field is explicit; redact the credential.",
+          "expected": "The current source guard and redacted input metadata discriminate this exact message.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 236,
+              "endLine": 238
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal only; change the originating local configuration or plan after confirming intent. Do not run a provider call here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Choose the intended supported ApiKey or Entra mode under the configuration owner.",
+            "expected": "The edited local input satisfies the cited guard without changing unrelated policy or source.",
+            "evidence": [
+              {
+                "sourceId": "foundry",
+                "startLine": 236,
+                "endLine": 238
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended value or owner is unknown, the observed message differs, or source identity changed."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the effective mode is one of the two source-supported values.",
+          "expected": "The edited input no longer meets this cited failure guard; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "foundry",
+              "startLine": 236,
+              "endLine": 238
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude prompt/system/content text, media bytes/URLs, credential/header values, full Plan/Jacket and provider payload; retain only adapter/activity, exact error label and presence/type/count flags.",
+      "limitations": [
+        "Source-only confidence; no provider or runtime execution was performed.",
+        "Other exceptions and upstream/downstream failures can still occur."
+      ]
+    },
+    {
+      "id": "azure-foundry-null-dictionary",
+      "status": "source-verified",
+      "adapters": [
+        "Intelligence_AzureFoundry"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot construct Intelligence_AzureFoundry — provided dictionary is null.",
+          "evidence": [
+            {
+              "sourceId": "foundry-class",
+              "startLine": 27,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "The constructor receives a null dictionary and returns before settings resolution.",
+        "evidence": [
+          {
+            "sourceId": "foundry-class",
+            "startLine": 26,
+            "endLine": 28
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The mapped adapter's construction input dictionary is missing.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "foundry-class",
+              "startLine": 26,
+              "endLine": 28
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the concrete adapter and inspect dictionary presence only; do not dump jacket contents.",
+          "expected": "The current source guard and redacted input metadata discriminate this exact message.",
+          "evidence": [
+            {
+              "sourceId": "foundry-class",
+              "startLine": 26,
+              "endLine": 28
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal only; change the originating local configuration or plan after confirming intent. Do not run a provider call here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply the intended configuration dictionary at the construction caller, after its owner confirms the required values.",
+            "expected": "The edited local input satisfies the cited guard without changing unrelated policy or source.",
+            "evidence": [
+              {
+                "sourceId": "foundry-class",
+                "startLine": 26,
+                "endLine": 28
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended value or owner is unknown, the observed message differs, or source identity changed."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm a non-null dictionary is passed and the line-26 guard is false.",
+          "expected": "The edited input no longer meets this cited failure guard; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "foundry-class",
+              "startLine": 26,
+              "endLine": 28
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude prompt/system/content text, media bytes/URLs, credential/header values, full Plan/Jacket and provider payload; retain only adapter/activity, exact error label and presence/type/count flags.",
+      "limitations": [
+        "Source-only confidence; no provider or runtime execution was performed.",
+        "Other exceptions and upstream/downstream failures can still occur."
+      ]
+    },
+    {
+      "id": "azure-foundry-null-conduction",
+      "status": "source-verified",
+      "adapters": [
+        "Intelligence_AzureFoundry"
+      ],
+      "activities": [
+        "SendMessage",
+        "HandleMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Null ConductionSignal passed to Intelligence_AzureFoundry.Invoke()",
+          "evidence": [
+            {
+              "sourceId": "foundry-class",
+              "startLine": 68,
+              "endLine": 68
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Invoke receives a null ConductionSignal and returns before activity dispatch.",
+        "evidence": [
+          {
+            "sourceId": "foundry-class",
+            "startLine": 66,
+            "endLine": 70
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The caller did not supply a conduction signal to the concrete adapter.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "foundry-class",
+              "startLine": 66,
+              "endLine": 70
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the exact log and signal-presence flag at the mapped dispatch boundary; do not dump the signal or Plan.",
+          "expected": "The current source guard and redacted input metadata discriminate this exact message.",
+          "evidence": [
+            {
+              "sourceId": "foundry-class",
+              "startLine": 66,
+              "endLine": 70
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for the owning caller/wiring only; no runtime or provider execution here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Restore the intended ConductionSignal wiring at the owning caller; stop if its ownership or lifecycle is unclear.",
+            "expected": "The edited local input satisfies the cited guard without changing unrelated policy or source.",
+            "evidence": [
+              {
+                "sourceId": "foundry-class",
+                "startLine": 66,
+                "endLine": 70
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended value or owner is unknown, the observed message differs, or source identity changed."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the current call passes a non-null ConductionSignal before activity dispatch.",
+          "expected": "The edited input no longer meets this cited failure guard; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "foundry-class",
+              "startLine": 66,
+              "endLine": 70
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude prompt/system/content text, media bytes/URLs, credential/header values, full Plan/Jacket and provider payload; retain only adapter/activity, exact error label and presence/type/count flags.",
+      "limitations": [
+        "Source-only confidence; no provider or runtime execution was performed.",
+        "Other exceptions and upstream/downstream failures can still occur."
+      ]
+    }
+  ]
+}

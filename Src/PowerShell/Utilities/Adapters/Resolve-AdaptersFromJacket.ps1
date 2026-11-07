@@ -24,6 +24,49 @@ function Resolve-AdapterFromJacket {
 
         $wirePath = $virtualPathSignal.GetResult()
 
+        # Normalize source Storage v2 before manifest defaults can add legacy fields.
+        $sourceWasStorageV2 = $false
+        $storageFamily = $null
+        $sourceWasRemainingV2 = $false
+        $remainingFamily = $null
+        if ([string]$wirePath -match '^SovereignTrust\.Adapters\.Storage\.(AzureStorageAccount|AzureKeyVault|EmbeddedFileSystem|LocalFileSystem)\.') {
+            $storageFamily = $Matches[1]
+            $sourceValue = $Jacket.GetResult($true)
+            $sourceWasStorageV2 = $null -ne $sourceValue.PSObject.Properties['SchemaVersion'] -and
+                $sourceValue.SchemaVersion -eq 2
+            $storageResolution = Resolve-StorageResourceRoutesJacket -Jacket $sourceValue -Family $storageFamily -AllowUnresolved | Select-Object -Last 1
+            if ($storageResolution.Failure() -or -not $storageResolution.HasResult()) {
+                return $opSignal.MergeSignal($storageResolution).LogCritical('Storage jacket is invalid before merge.')
+            }
+            if ($sourceWasStorageV2) {
+                $sourceClone = [Signal]::Start('StorageJacketSource', $Jacket) | Select-Object -Last 1
+                $sourceClone.SetResult($storageResolution.GetResult())
+                $Jacket = $sourceClone
+            }
+        }
+
+        if ([string]$wirePath -match '^SovereignTrust\.Adapters\.(Satellite\.AzureApplicationInsights|Queue\.AzureStorageQueue|Data\.AzureDataExplorer|Data\.AzureSql|Conduction\.ST)\.') {
+            $remainingFamily = switch ($Matches[1]) {
+                'Satellite.AzureApplicationInsights' { 'AzureApplicationInsights' }
+                'Queue.AzureStorageQueue' { 'AzureStorageQueue' }
+                'Data.AzureDataExplorer' { 'AzureDataExplorer' }
+                'Data.AzureSql' { 'AzureSql' }
+                'Conduction.ST' { 'Conduction_ST' }
+            }
+            $sourceValue = $Jacket.GetResult($true)
+            $sourceWasRemainingV2 = $null -ne $sourceValue.PSObject.Properties['SchemaVersion'] -and
+                $sourceValue.SchemaVersion -eq 2
+            $remainingResolution = Resolve-RemainingResourceRoutesJacket -Jacket $sourceValue -Family $remainingFamily -AllowUnresolved | Select-Object -Last 1
+            if ($remainingResolution.Failure() -or -not $remainingResolution.HasResult()) {
+                return $opSignal.MergeSignal($remainingResolution).LogCritical('Adapter jacket is invalid before merge.')
+            }
+            if ($sourceWasRemainingV2) {
+                $sourceClone = [Signal]::Start('RemainingJacketSource', $Jacket) | Select-Object -Last 1
+                $sourceClone.SetResult($remainingResolution.GetResult())
+                $Jacket = $sourceClone
+            }
+        }
+
         # ░▒▓█ LOAD MODULE MANIFEST GRAPH █▓▒░
         $moduleGraphSignal = Resolve-DependencyModuleFromGraph -Signal $Signal -ConductionContext $ConductionContext -WirePath $wirePath | Select-Object -Last 1
         if ($opSignal.MergeSignalAndVerifyFailure($moduleGraphSignal)) {
@@ -123,11 +166,18 @@ function Resolve-AdapterFromJacket {
         $mergedSignal = $mergeService.Invoke("Merge", "Merge", $Signal, $mergePlan, $mergeItemSignalJacket) | Select-Object -Last 1 #$manifestSignal.GetResult(), $Jacket, $true) | Select-Object -Last 1
 
         if ($opSignal.MergeSignalAndVerifyFailure($mergedSignal)) {
+            if ($sourceWasRemainingV2) { return $opSignal.LogCritical('Adapter v2 jacket merge failed.') }
             $opSignal.LogWarning("Jacket-to-Manifest merge failed; continuing with original jacket.")
         }
         else {
             $Jacket = $mergedSignal.GetResult()
             $opSignal.LogInformation("🧬 Jacket successfully merged over Manifest.")
+        }
+        if ($sourceWasRemainingV2) {
+            $selected = $remainingResolution.GetResult()
+            $Jacket.Addresses = @($selected.Addresses)
+            if ($remainingFamily -ne 'Conduction_ST') { $Jacket.Resource = $selected.Resource }
+            elseif ($null -ne $Jacket.PSObject.Properties['Resource']) { $Jacket.PSObject.Properties.Remove('Resource') }
         }
 
         # $Jacket needs to be hydrated after the merge for any tokens that couldn't be hydrated during load and required deferred token lookups
@@ -148,6 +198,19 @@ function Resolve-AdapterFromJacket {
 
             $Jacket = $StepResultSignal.GetResult()
  #       }
+
+        if ($sourceWasStorageV2) {
+            $storageHydrated = Resolve-StorageResourceRoutesJacket -Jacket $Jacket -Family $storageFamily -ValidateNormalizedV2 | Select-Object -Last 1
+            if ($storageHydrated.Failure() -or -not $storageHydrated.HasResult()) {
+                return $opSignal.MergeSignal($storageHydrated).LogCritical('Storage v2 hydration is incomplete.')
+            }
+        }
+        if ($sourceWasRemainingV2) {
+            $remainingHydrated = Resolve-RemainingResourceRoutesJacket -Jacket $Jacket -Family $remainingFamily -ValidateNormalizedV2 | Select-Object -Last 1
+            if ($remainingHydrated.Failure() -or -not $remainingHydrated.HasResult()) {
+                return $opSignal.MergeSignal($remainingHydrated).LogCritical('Adapter v2 hydration is incomplete.')
+            }
+        }
 
 
 

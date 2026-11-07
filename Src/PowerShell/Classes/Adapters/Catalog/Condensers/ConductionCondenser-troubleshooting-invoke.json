@@ -1,0 +1,223 @@
+{
+  "version": 2,
+  "ownerId": "Condensers/ConductionCondenser",
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "ConductionCondenser",
+  "part": "invoke",
+  "sources": [
+    {
+      "id": "conduction",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/ConductionCondenser.ps1",
+      "sha256": "F160AA2C14FF3B577FFF7C32342815BB120198848D2606BE5D575419BA910B1D",
+      "symbol": "ConductionCondenser"
+    }
+  ],
+  "entries": [
+    {
+      "id": "sleep-duration-required",
+      "status": "source-verified",
+      "adapters": [
+        "ConductionCondenser"
+      ],
+      "activities": [
+        "Sleep"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Plan.Config.Duration is required for Sleep.",
+          "evidence": [
+            {
+              "sourceId": "conduction",
+              "startLine": 61,
+              "endLine": 61
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Sleep reads Plan.Config.Duration and its value is null before type validation.",
+        "evidence": [
+          {
+            "sourceId": "conduction",
+            "startLine": 55,
+            "endLine": 63
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The effective Sleep Plan lacks a non-null Duration value.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "conduction",
+              "startLine": 55,
+              "endLine": 63
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm ConductionCondenser and Sleep with the exact log; inspect only whether Config.Duration is present and non-null in the effective Plan.",
+          "expected": "Presence/type/finite/sign metadata distinguishes the cited Sleep guard without exposing Plan contents.",
+          "evidence": [
+            {
+              "sourceId": "conduction",
+              "startLine": 55,
+              "endLine": 63
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for the originating Sleep Plan only; do not execute a delay or alter runtime validation here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply the intended finite, nonnegative numeric Duration in seconds at the originating Plan mapping; zero is allowed, and no value should be invented.",
+            "expected": "The intended local Duration field satisfies the cited guard without changing other Plan fields.",
+            "evidence": [
+              {
+                "sourceId": "conduction",
+                "startLine": 55,
+                "endLine": 63
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended delay is unknown, source identity changed, or the observed error differs."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm Config.Duration is non-null and separately satisfies the numeric/finite/nonnegative guard before any authorized execution.",
+          "expected": "The cited failure guard is false for the intended Plan; actual timing remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "conduction",
+              "startLine": 55,
+              "endLine": 63
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/Config, signal payloads, credentials and downstream ST results; retain only adapter/activity, exact log and Duration presence/type/finite/sign flags.",
+      "limitations": [
+        "Source-only confidence; no Sleep/runtime/provider execution was performed.",
+        "A Start-Sleep exception has a variable wrapper and is not diagnosed by this entry.",
+        "Matched=false can accompany a successful Sleep signal and is not this error."
+      ]
+    },
+    {
+      "id": "sleep-duration-invalid",
+      "status": "source-verified",
+      "adapters": [
+        "ConductionCondenser"
+      ],
+      "activities": [
+        "Sleep"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Plan.Config.Duration must be a finite, nonnegative number of seconds.",
+          "evidence": [
+            {
+              "sourceId": "conduction",
+              "startLine": 74,
+              "endLine": 74
+            },
+            {
+              "sourceId": "conduction",
+              "startLine": 80,
+              "endLine": 80
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Sleep rejects Duration if its TypeCode is not a supported numeric type, or its double conversion is NaN, infinite or negative; zero is permitted.",
+        "evidence": [
+          {
+            "sourceId": "conduction",
+            "startLine": 65,
+            "endLine": 82
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The effective Duration is a string/Boolean/other nonnumeric type or a nonfinite/negative numeric value.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "conduction",
+              "startLine": 65,
+              "endLine": 82
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the exact log and inspect only Duration type-code, finite and sign flags for both line-74 and line-80 branches; do not print the full Plan.",
+          "expected": "Presence/type/finite/sign metadata distinguishes the cited Sleep guard without exposing Plan contents.",
+          "evidence": [
+            {
+              "sourceId": "conduction",
+              "startLine": 65,
+              "endLine": 82
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for the originating Sleep Plan only; do not execute a delay or alter runtime validation here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Correct the originating Plan mapping to the intended finite, nonnegative numeric seconds value; preserve zero when intended and do not coerce a numeric string or Boolean.",
+            "expected": "The intended local Duration field satisfies the cited guard without changing other Plan fields.",
+            "evidence": [
+              {
+                "sourceId": "conduction",
+                "startLine": 65,
+                "endLine": 82
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended delay is unknown, source identity changed, or the observed error differs."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm accepted numeric type and finite/nonnegative flags make both line-74 and line-80 guards false, without running Start-Sleep.",
+          "expected": "The cited failure guard is false for the intended Plan; actual timing remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "conduction",
+              "startLine": 65,
+              "endLine": 82
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/Config, signal payloads, credentials and downstream ST results; retain only adapter/activity, exact log and Duration presence/type/finite/sign flags.",
+      "limitations": [
+        "Source-only confidence; no Sleep/runtime/provider execution was performed.",
+        "A Start-Sleep exception has a variable wrapper and is not diagnosed by this entry.",
+        "Matched=false can accompany a successful Sleep signal and is not this error."
+      ]
+    }
+  ]
+}

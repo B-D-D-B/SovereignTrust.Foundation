@@ -1,0 +1,41 @@
+{
+  "name": "SignalCondenser",
+  "repository": "SovereignTrust.Foundation",
+  "path": "Src/PowerShell/Classes/Adapters/Condenser/SignalCondenser.ps1",
+  "activities": [
+    {
+      "name": "Log",
+      "whenToUse": "Use Condenser.Signal to write one bounded Information, Warning or Critical Signal entry from a literal Message or a native string at MessagePath. Critical stops the current plan through existing failure propagation.",
+      "description": "Log bounded content at an exact Signal severity.",
+      "properties": [
+        { "path": "Config.Level", "description": "Case-sensitive Information, Warning or Critical.", "whenToUse": "Set the required level; Critical is a failed Signal without Result.", "adapters": ["SignalCondenser"] },
+        { "path": "Config.Message", "description": "Nonblank native string of at most 2048 UTF-16 code units.", "whenToUse": "Use for literal content; mutually exclusive with MessagePath. Token-shaped text remains literal.", "adapters": ["SignalCondenser"] },
+        { "path": "Config.MessagePath", "description": "ItemSignal path of at most 512 UTF-16 code units resolving one native string.", "whenToUse": "Use instead of Message for graph content. Only dot-separated property/key segments and ST symbols *, #, @, %, ~ are supported.", "adapters": ["SignalCondenser"] }
+      ],
+      "result": [
+        { "path": "$.Activity", "type": "string", "description": "Log on Information or Warning success.", "adapters": ["SignalCondenser"] },
+        { "path": "$.Passed", "type": "Boolean", "description": "True on Information or Warning success.", "adapters": ["SignalCondenser"] },
+        { "path": "$.Level", "type": "string", "description": "The validated noncritical level.", "adapters": ["SignalCondenser"] }
+      ],
+      "resultNotes": ["Critical or invalid Log returns a failed Signal without Result.", "Config.Expected is forbidden for Log; it is only valid for Assert EqualsString."]
+    },
+    {
+      "name": "Assert",
+      "whenToUse": "Use Condenser.Signal to validate a native ItemSignal value without string coercion or caller-owned sentinels. A failed assertion stops the current plan.",
+      "description": "Assert native string type and optionally nonblank content or ordinal equality.",
+      "properties": [
+        { "path": "Config.ValuePath", "description": "Required ItemSignal path of at most 512 UTF-16 code units.", "whenToUse": "Use the same bounded path grammar as MessagePath. Missing/null/collection traversal fails.", "adapters": ["SignalCondenser"] },
+        { "path": "Config.Predicate", "description": "Case-sensitive IsString, IsNonBlankString or EqualsString.", "whenToUse": "Select required native string assertion.", "adapters": ["SignalCondenser"] },
+        { "path": "Config.Expected", "description": "Native string of at most 2048 UTF-16 code units, compared ordinally.", "whenToUse": "Required for EqualsString and forbidden for other predicates.", "adapters": ["SignalCondenser"] },
+        { "path": "Config.Message", "description": "Required nonblank native string diagnostic of at most 2048 UTF-16 code units.", "whenToUse": "Supply the failed assertion explanation; no untrusted value is copied into the entry.", "adapters": ["SignalCondenser"] }
+      ],
+      "result": [
+        { "path": "$.Activity", "type": "string", "description": "Assert on success.", "adapters": ["SignalCondenser"] },
+        { "path": "$.Passed", "type": "Boolean", "description": "True on success.", "adapters": ["SignalCondenser"] },
+        { "path": "$.Predicate", "type": "string", "description": "The validated predicate.", "adapters": ["SignalCondenser"] }
+      ],
+      "resultNotes": ["Failed assertion or invalid configuration returns Critical without Result. Passing assertion logs one Information entry."]
+    }
+  ],
+  "resultContractRef": { "file": "../../ResultContracts/Condensers/SignalCondenser.json", "version": 1 }
+}

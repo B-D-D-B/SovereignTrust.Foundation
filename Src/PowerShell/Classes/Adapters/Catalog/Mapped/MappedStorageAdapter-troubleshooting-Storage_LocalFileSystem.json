@@ -1,0 +1,118 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedStorageAdapter",
+  "mappedAdapter": "MappedStorageAdapter",
+  "part": "Storage_LocalFileSystem",
+  "sources": [
+    {
+      "id": "local-class",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/LocalFileSystem/PowerShell/Storage_LocalFileSystem.ps1",
+      "sha256": "62B6C761DB2B60819E734DCF65635C82B18D3315DFC46F0E561EF0C1D785AE16",
+      "symbol": "Storage_LocalFileSystem"
+    }
+  ],
+  "entries": [
+    {
+      "id": "local-construct-null-dictionary",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_LocalFileSystem"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot construct LocalFileSystem — provided dictionary is null.",
+          "evidence": [
+            {
+              "sourceId": "local-class",
+              "startLine": 13,
+              "endLine": 13
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "LocalFileSystem.Construct receives null dictionary before Jacket assignment.",
+        "evidence": [
+          {
+            "sourceId": "local-class",
+            "startLine": 8,
+            "endLine": 15
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "LocalFileSystem.Construct receives null dictionary before Jacket assignment.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "local-class",
+              "startLine": 8,
+              "endLine": 15
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect registered Local identity and construction dictionary-null flag; redact content.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "local-class",
+              "startLine": 8,
+              "endLine": 15
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull Local construction dictionary via owning registration plan.",
+            "expected": "Construction dictionary nonnull; no mapped Invoke support is claimed.",
+            "evidence": [
+              {
+                "sourceId": "local-class",
+                "startLine": 8,
+                "endLine": 15
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Construction dictionary nonnull; no mapped Invoke support is claimed.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "local-class",
+              "startLine": 8,
+              "endLine": 15
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    }
+  ]
+}

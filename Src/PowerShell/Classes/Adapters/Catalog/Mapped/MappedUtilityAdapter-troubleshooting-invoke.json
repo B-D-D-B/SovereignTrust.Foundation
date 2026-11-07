@@ -1,0 +1,120 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedUtilityAdapter",
+  "mappedAdapter": "MappedUtilityAdapter",
+  "part": "invoke",
+  "sources": [
+    {
+      "id": "mapped-resolver",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Resolve-MappedAdapter.ps1",
+      "sha256": "5EAC4130E9BC50A67453B7AE525DD01AC01EA2E3AFFCD41B90ED8E90C187545E",
+      "symbol": "Resolve-MappedAdapter"
+    }
+  ],
+  "entries": [
+    {
+      "id": "utility-mapped-no-instance",
+      "status": "source-verified",
+      "adapters": [
+        "MappedUtilityAdapter"
+      ],
+      "activities": [
+        "Resize",
+        "Inspect",
+        "Overlay"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Mapped adapter resolution returned no instance.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 24,
+              "endLine": 24
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Mapped Utility five-argument Invoke calls Resolve-MappedAdapter; its child Resolve-RegisteredAdapter is nonfailed but has no Result, so fixed no-instance log is emitted before media dispatch.",
+        "evidence": [
+          {
+            "sourceId": "mapped-resolver",
+            "startLine": 15,
+            "endLine": 27
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Mapped Utility five-argument Invoke calls Resolve-MappedAdapter; its child Resolve-RegisteredAdapter is nonfailed but has no Result, so fixed no-instance log is emitted before media dispatch.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect selected registration identity and child Failure/HasResult flags; redact slot/graph.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record registration owner handoff; stop before state repair or media invocation.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "mapped-resolver",
+                "startLine": 15,
+                "endLine": 27
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; media instance unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    }
+  ]
+}

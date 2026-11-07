@@ -1,0 +1,122 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedStorageAdapter",
+  "mappedAdapter": "MappedStorageAdapter",
+  "part": "invoke",
+  "sources": [
+    {
+      "id": "mapped-resolver",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Resolve-MappedAdapter.ps1",
+      "sha256": "5EAC4130E9BC50A67453B7AE525DD01AC01EA2E3AFFCD41B90ED8E90C187545E",
+      "symbol": "Resolve-MappedAdapter"
+    }
+  ],
+  "entries": [
+    {
+      "id": "mapped-storage-no-instance",
+      "status": "source-verified",
+      "adapters": [
+        "MappedStorageAdapter"
+      ],
+      "activities": [
+        "List",
+        "Read",
+        "Write",
+        "Delete",
+        "Exists"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Mapped adapter resolution returned no instance.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 24,
+              "endLine": 24
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "MappedStorageAdapter calls Resolve-MappedAdapter and its nonfailed registration resolver has no Result.",
+        "evidence": [
+          {
+            "sourceId": "mapped-resolver",
+            "startLine": 15,
+            "endLine": 27
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "MappedStorageAdapter calls Resolve-MappedAdapter and its nonfailed registration resolver has no Result.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect registration identity and child Failure/HasResult flags, not registration payload.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted registration owner handoff; stop before state repair or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "mapped-resolver",
+                "startLine": 15,
+                "endLine": 27
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff identifies no-instance guard; instance resolution unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    }
+  ]
+}

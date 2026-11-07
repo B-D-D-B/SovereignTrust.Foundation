@@ -43,8 +43,16 @@
       "file": "../Condensers/PlanCondenser.json"
     },
     {
+      "name": "ProcessCondenser",
+      "file": "../Condensers/ProcessCondenser.json"
+    },
+    {
       "name": "RestCondenser",
       "file": "../Condensers/RestCondenser.json"
+    },
+    {
+      "name": "SignalCondenser",
+      "file": "../Condensers/SignalCondenser.json"
     },
     {
       "name": "TokenCondenser",

@@ -33,6 +33,12 @@ class Storage_EmbeddedFileSystem {
                 return $opSignal.LogCritical("Cannot construct EmbeddedFileSystem — provided dictionary is null.")
             }
 
+            $storageJacket = Resolve-StorageResourceRoutesJacket -Jacket $dictionary -Family EmbeddedFileSystem | Select-Object -Last 1
+            if ($storageJacket.Failure() -or -not $storageJacket.HasResult()) {
+                return $opSignal.MergeSignal($storageJacket).LogCritical('EmbeddedFileSystem jacket is invalid.')
+            }
+            $dictionary = $storageJacket.GetResult()
+
             $this.Signal = [Signal]::Start("Construct-EmbeddedFileSystem") | Select-Object -Last 1
 
             $jacket = [Signal]::Start("Construct-EmbeddedFileSystem") | Select-Object -Last 1 

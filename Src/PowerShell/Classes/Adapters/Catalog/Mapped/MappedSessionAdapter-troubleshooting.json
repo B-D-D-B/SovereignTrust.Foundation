@@ -1,0 +1,490 @@
+{
+  "version": 1,
+  "ownerId": "Mapped/MappedSessionAdapter",
+  "mappedAdapter": "MappedSessionAdapter",
+  "sources": [
+    {
+      "id": "mapped-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedSessionAdapter.ps1",
+      "sha256": "E56F67A2FEB4B9E2D4B7B48047F68C88F86EE558520C69B5A33FF07167D82D29",
+      "symbol": "MappedSessionAdapter"
+    },
+    {
+      "id": "mapped-core",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Invoke-MappedAdapterCore.ps1",
+      "sha256": "0AB004DC55D82CDC9443E123C766262A4A75FADBDAB424E22A0EC4C971008792",
+      "symbol": "Invoke-MappedAdapterCore"
+    },
+    {
+      "id": "mapped-resolver",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Resolve-MappedAdapter.ps1",
+      "sha256": "5EAC4130E9BC50A67453B7AE525DD01AC01EA2E3AFFCD41B90ED8E90C187545E",
+      "symbol": "Resolve-MappedAdapter"
+    },
+    {
+      "id": "jacket-resolver",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Resolve-AdaptersFromJacket.ps1",
+      "sha256": "AEAC662D1597F844786E366E6A36423C2796C76723415AC360492BE9B558DE68",
+      "symbol": "Resolve-AdapterFromJacket"
+    },
+    {
+      "id": "lazy-resolver",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Resolve-RegisteredAdapter.ps1",
+      "sha256": "9CE8534CA07CDF1109982BDACD50A19895FFC0235A66A1373153005423AB59F1",
+      "symbol": "Resolve-RegisteredAdapter"
+    },
+    {
+      "id": "session-module",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Session/ST/PowerShell/Session_ST.psm1",
+      "sha256": "ABF100E2089BDE919C8C255BF6F5AC0D8F221FCA66A0F821EB9458E649806E1B",
+      "symbol": "Session_ST"
+    },
+    {
+      "id": "session-invoke",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Session/ST/PowerShell/Invoke-Session_ST.ps1",
+      "sha256": "6AF36D4EE053910EE6DF1F5C4DF54C0807323FCF08FE3B4B9DECD8B8785F4748",
+      "symbol": "Invoke-Session_ST"
+    }
+  ],
+  "entries": [
+    {
+      "id": "mapped-session-start-null-conductor",
+      "status": "source-verified",
+      "adapters": [
+        "MappedSessionAdapter"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Null Conductor passed to MappedSessionAdapter.Start()",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 24,
+              "endLine": 24
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "MappedSessionAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+        "evidence": [
+          {
+            "sourceId": "mapped-class",
+            "startLine": 20,
+            "endLine": 26
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "MappedSessionAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 20,
+              "endLine": 26
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect mapped Start Conductor presence/truthy flag only.",
+          "expected": "Redacted flags identify this source guard without session contents.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 20,
+              "endLine": 26
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional construction input proposal only; no runtime/provider action.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull Conductor for authorized mapped Session construction.",
+            "expected": "Conductor present; setup/runtime remains separate.",
+            "evidence": [
+              {
+                "sourceId": "mapped-class",
+                "startLine": 20,
+                "endLine": 26
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Conductor, Jacket, session or slot owner cannot be identified with redacted metadata.",
+          "Proposed action would expose session/Plan data or execute graph/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Conductor present; setup/runtime remains separate.",
+          "expected": "Local guard would be false; runtime session success unverified.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 20,
+              "endLine": 26
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal/session value, path/key, Conductor/Jacket, graph, credentials and exception text; retain canonical adapter/activity, exact message/pattern and presence/Failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no runtime session/provider execution.",
+        "Session_ST Invoke can return a Result while a merged Add-Path failure remains on its Signal; Result presence alone is not success."
+      ]
+    },
+    {
+      "id": "session-st-construct-null-dictionary",
+      "status": "source-verified",
+      "adapters": [
+        "Session_ST"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot construct Session_ST — provided dictionary is null.",
+          "evidence": [
+            {
+              "sourceId": "session-module",
+              "startLine": 30,
+              "endLine": 30
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Session_ST.Construct receives null dictionary after optional registered Jacket hydration.",
+        "evidence": [
+          {
+            "sourceId": "session-module",
+            "startLine": 26,
+            "endLine": 32
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Session_ST.Construct receives null dictionary after optional registered Jacket hydration.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "session-module",
+              "startLine": 26,
+              "endLine": 32
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect concrete registration identity and hydrated dictionary-null flag; redact content.",
+          "expected": "Redacted flags identify this source guard without session contents.",
+          "evidence": [
+            {
+              "sourceId": "session-module",
+              "startLine": 26,
+              "endLine": 32
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional construction input proposal only; no runtime/provider action.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull Session_ST construction dictionary through owning registration/jacket plan.",
+            "expected": "Construction dictionary nonnull; Invoke remains separate.",
+            "evidence": [
+              {
+                "sourceId": "session-module",
+                "startLine": 26,
+                "endLine": 32
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Conductor, Jacket, session or slot owner cannot be identified with redacted metadata.",
+          "Proposed action would expose session/Plan data or execute graph/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Construction dictionary nonnull; Invoke remains separate.",
+          "expected": "Local guard would be false; runtime session success unverified.",
+          "evidence": [
+            {
+              "sourceId": "session-module",
+              "startLine": 26,
+              "endLine": 32
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal/session value, path/key, Conductor/Jacket, graph, credentials and exception text; retain canonical adapter/activity, exact message/pattern and presence/Failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no runtime session/provider execution.",
+        "Session_ST Invoke can return a Result while a merged Add-Path failure remains on its Signal; Result presence alone is not success."
+      ]
+    },
+    {
+      "id": "mapped-session-adapter-path-failed",
+      "status": "source-verified",
+      "adapters": [
+        "MappedSessionAdapter"
+      ],
+      "activities": [
+        "RequestOrRegister"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Adapter path '",
+          "suffix": "' not found in Conductor.",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 33,
+              "endLine": 33
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Shared mapped core tries *.#.<first slot>.@ then fallback %.*.#.<first slot>.@ on no Result, logging only after final resolver Signal Failure; label does not prove simple absence.",
+        "evidence": [
+          {
+            "sourceId": "mapped-core",
+            "startLine": 23,
+            "endLine": 35
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Shared mapped core tries *.#.<first slot>.@ then fallback %.*.#.<first slot>.@ on no Result, logging only after final resolver Signal Failure; label does not prove simple absence.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 23,
+              "endLine": 35
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect slot first-segment validity and both resolver Result/Failure flags; redact slot/path.",
+          "expected": "Redacted flags identify this source guard without session contents.",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 23,
+              "endLine": 35
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic session/registration owner handoff only; no graph/session mutation or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted mapped registration/resolver owner handoff; no graph edit or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "mapped-core",
+                "startLine": 23,
+                "endLine": 35
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Conductor, Jacket, session or slot owner cannot be identified with redacted metadata.",
+          "Proposed action would expose session/Plan data or execute graph/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff identifies final failure branch; instance resolution unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 23,
+              "endLine": 35
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal/session value, path/key, Conductor/Jacket, graph, credentials and exception text; retain canonical adapter/activity, exact message/pattern and presence/Failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no runtime session/provider execution.",
+        "Session_ST Invoke can return a Result while a merged Add-Path failure remains on its Signal; Result presence alone is not success."
+      ]
+    },
+    {
+      "id": "mapped-session-no-instance",
+      "status": "source-verified",
+      "adapters": [
+        "MappedSessionAdapter"
+      ],
+      "activities": [
+        "RequestOrRegister"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Mapped adapter resolution returned no instance.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 24,
+              "endLine": 24
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Shared Resolve-MappedAdapter receives nonfailed registered/lazy resolver Signal without Result and logs fixed no-instance message.",
+        "evidence": [
+          {
+            "sourceId": "mapped-resolver",
+            "startLine": 15,
+            "endLine": 27
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Shared Resolve-MappedAdapter receives nonfailed registered/lazy resolver Signal without Result and logs fixed no-instance message.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect registration identity and child resolver Failure/HasResult flags; redact payload.",
+          "expected": "Redacted flags identify this source guard without session contents.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic session/registration owner handoff only; no graph/session mutation or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted registration owner handoff; stop before state repair or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "mapped-resolver",
+                "startLine": 15,
+                "endLine": 27
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Conductor, Jacket, session or slot owner cannot be identified with redacted metadata.",
+          "Proposed action would expose session/Plan data or execute graph/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff identifies no-instance guard; concrete instance unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal/session value, path/key, Conductor/Jacket, graph, credentials and exception text; retain canonical adapter/activity, exact message/pattern and presence/Failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no runtime session/provider execution.",
+        "Session_ST Invoke can return a Result while a merged Add-Path failure remains on its Signal; Result presence alone is not success."
+      ]
+    }
+  ],
+  "unverified": [
+    {
+      "id": "mapped-session-setup-registration",
+      "reportedText": "💥 Exception in MappedSessionAdapter.Start(): <exception>; Failed to register adapter at key: <key>",
+      "reason": "Mapped Start catch spans Signal/Graph setup; RegisterAdapter warning is separate nonactivity method, without one source-specific correction.",
+      "neededEvidence": "Redacted failing setup/registration operation/exception class and graph status without key/object contents."
+    },
+    {
+      "id": "mapped-session-core-lazy-child",
+      "reportedText": "Adapter failed to resolve path <undefined Path> using slot <Slot>; 🔥 Exception during Invoke-ConductionAdapter: <exception>; lazy registration failure",
+      "reason": "Shared core wrapper follows any concrete child failure and interpolates undefined Path; lazy resolver errors depend on registration/child state.",
+      "neededEvidence": "Structured registration/child identity and redacted failure source/guard without slot/path/session payload."
+    },
+    {
+      "id": "session-st-construct-invoke-catches",
+      "reportedText": "Error constructing Session_ST: <exception>; 🔥 Exception in Token_Environment.Invoke: <exception>",
+      "reason": "Concrete catches span Signal/Jacket, resolver/add session path and logging; Token_Environment is a stale wrapper label and does not identify a safe correction.",
+      "neededEvidence": "Redacted concrete failed Construct/Invoke operation and exception class/site, not session or Plan content."
+    },
+    {
+      "id": "session-st-forwarded-state",
+      "reportedText": "Session_ST.Invoke resolver/Add-Path child Signal failure",
+      "reason": "Direct helper resolves Plan.Path or adds ItemSignal jacket, merges child Signals and can SetResult even when Add-Path failed; it emits no distinct cause-specific owner log.",
+      "neededEvidence": "Structured resolver/Add-Path child failure, canonical RequestOrRegister selector and redacted session path/state; no Result-as-success inference."
+    }
+  ]
+}

@@ -56,6 +56,7 @@ class RestCondenser {
             $opSignal.LogCritical("Unsupported RestCondenser activity: '$Activity'.")
             return $opSignal
         }
+        $redactDiagnostics = [bool]$Plan.Config.RedactDiagnostics
 
         $skipBearerTokenSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.SkipBearerToken" -Default $false | Select-Object -Last 1
 
@@ -64,7 +65,7 @@ class RestCondenser {
             ($null -eq $bearerTokenSignal -or $bearerTokenSignal.Failure() -or
              -not $bearerTokenSignal.HasResult() -or
              [string]::IsNullOrWhiteSpace([string]$bearerTokenSignal.GetResult()))) {
-            if ($null -ne $bearerTokenSignal) { $null = $opSignal.MergeSignal($bearerTokenSignal) }
+            if ($null -ne $bearerTokenSignal -and -not $redactDiagnostics) { $null = $opSignal.MergeSignal($bearerTokenSignal) }
             if (-not $opSignal.Failure()) { $null = $opSignal.LogCritical('Bearer token resolution failed before REST invocation.') }
             return $opSignal
         }
@@ -84,6 +85,9 @@ class RestCondenser {
         # Passing RestCondenser is an anti-pattern but I'm taking a short cut to passing back the result to inform the adapter to retry the bearer token because I want to come up with a pattern using
         # Signal with a recovery recommendation to inform the adapter to retry the bearer token. This is a temporary solution until I replace with a better pattern.
         $resultSignal = Invoke-RestCondenserCore -RestCondenser $this -Signal $ConductionSignal -Plan $clonePlan -ItemSignal $ItemSignal -Activity $Activity | Select-Object -Last 1
+        if ($redactDiagnostics -and ($null -eq $resultSignal -or $resultSignal.Failure())) {
+            return $opSignal.LogCritical('REST request failed.')
+        }
         $opSignal.MergeSignal($resultSignal)
 
         # TODO: The result will now hold recommendations if there is a failure, such as to clear bearer token and try again

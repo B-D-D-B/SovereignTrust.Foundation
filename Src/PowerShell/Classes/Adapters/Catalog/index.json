@@ -24,11 +24,12 @@
     },
     {
       "name": "MappedDataAdapter",
+      "whenToUse": "Choose the mapped Data group for the selected Azure SQL or Azure Data Explorer command route. Select provider-qualified Config.Sql or Config.ADX inputs for Write, Query, Delete, Admin or WriteItem. The declared WriteBatch legacy path is unsupported for data batch writing. This scoped hint does not describe other concrete-adapter operations.",
       "file": "Mapped/MappedDataAdapter.json"
     },
     {
       "name": "MappedIntelligenceAdapter",
-      "whenToUse": "Choose this mapped group for a registered intelligence provider's SendMessage, SendMessageOriginal or HandleMessage activity. The wrapper canonicalizes the activity label and forwards Plan to the selected concrete adapter; request fields vary by AzureFoundry, CodexCLI and OpenAI association, and send activities can make external provider calls.",
+      "whenToUse": "Choose this mapped group for a registered intelligence provider's SendMessage or HandleMessage activity. The wrapper canonicalizes the activity label and forwards Plan to the selected concrete adapter; request fields vary by AzureFoundry, CodexCLI and OpenAI association, and send activities can make external provider calls.",
       "file": "Mapped/MappedIntelligenceAdapter.json"
     },
     {
@@ -58,7 +59,7 @@
     },
     {
       "name": "MappedStorageAdapter",
-      "whenToUse": "Choose this mapped group for provider-specific List, Read, Write, Delete or Exists operations through an implementing slot. EmbeddedFileSystem and AzureStorageAccount have mapped operation paths; AzureKeyVault lists secrets or uses Config.VirtualPath to select its sole non-List Read branch. LocalFileSystem is listed but has no five-argument Invoke for this mapped route.",
+      "whenToUse": "Choose this mapped group for provider-specific List, Read, Write, Delete or Exists operations through an implementing slot. EmbeddedFileSystem and AzureStorageAccount support content and file-transfer operations; AzureKeyVault supports secret values and metadata with no binary file transfer. LocalFileSystem is listed but has no five-argument Invoke for this mapped route.",
       "file": "Mapped/MappedStorageAdapter.json"
     },
     {
@@ -124,9 +125,19 @@
       "file": "Condensers/PlanCondenser.json"
     },
     {
+      "name": "ProcessCondenser",
+      "whenToUse": "Choose Run for a bounded native application invocation with ordered arguments, optional binary stdin and separate binary stdout/stderr. The caller owns process effects and nonzero exit policy.",
+      "file": "Condensers/ProcessCondenser.json"
+    },
+    {
       "name": "RestCondenser",
       "whenToUse": "Choose this condenser for effectful HTTP REST requests with URI, authentication, headers, body or file options. Select a declared activity label, then set Plan.Config.Method for the actual HTTP verb; the core's method-specific fallbacks can differ from the label. Config.TargetPath is a GET-only output-file path.",
       "file": "Condensers/RestCondenser.json"
+    },
+    {
+      "name": "SignalCondenser",
+      "whenToUse": "Choose this condenser to write a bounded Information, Warning or Critical Signal entry or to assert a native string value from an ItemSignal path. Critical and failed assertions stop the current plan through existing failure propagation.",
+      "file": "Condensers/SignalCondenser.json"
     },
     {
       "name": "TokenCondenser",

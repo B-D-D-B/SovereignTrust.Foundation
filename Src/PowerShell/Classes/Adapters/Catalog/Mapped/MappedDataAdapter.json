@@ -3,11 +3,13 @@
   "activities": [
     {
       "name": "Write",
+      "whenToUse": "Choose Write for Azure SQL or Data Explorer data writes. SQL requires Procedure plus exactly one Content or ContentPath under Config.Sql.",
       "description": "Run a data write operation.",
       "properties": [
         {
           "path": "Config",
           "description": "Extract the operation configuration after adapter and activity validation.",
+          "whenToUse": "Supply the provider-qualified Config.Sql branch for Azure SQL or Config.ADX for Data Explorer. Legacy top-level SQL fields and target overrides are rejected.",
           "adapters": [
             "Data_AzureDataExplorer",
             "Data_AzureSql"
@@ -30,6 +32,7 @@
         {
           "path": "Config.Sql.ColumnSchema",
           "description": "Select SQL write ColumnSchema input.",
+          "whenToUse": "Supply the SQL column schema when Write uses Records mode and field conversion needs declared column types; omit for Document mode.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -37,6 +40,7 @@
         {
           "path": "Config.Sql.ColumnSchema[*].Name",
           "description": "Read column descriptor Name.",
+          "whenToUse": "Supply the SQL column schema when Write uses Records mode and field conversion needs declared column types; omit for Document mode.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -44,6 +48,7 @@
         {
           "path": "Config.Sql.ColumnSchema[*].Type",
           "description": "Read column descriptor Type.",
+          "whenToUse": "Supply the SQL column schema when Write uses Records mode and field conversion needs declared column types; omit for Document mode.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -51,6 +56,7 @@
         {
           "path": "Config.Sql.ColumnSchema[$name]",
           "description": "Read a named column type from a dictionary schema.",
+          "whenToUse": "Supply the SQL column schema when Write uses Records mode and field conversion needs declared column types; omit for Document mode.",
           "adapters": [
             "Data_AzureSql"
           ],
@@ -60,6 +66,7 @@
         {
           "path": "Config.ADX.CommandText",
           "description": "Read and validate the Data Explorer command.",
+          "whenToUse": "Supply a .ingest inline into table NAME <| command line followed by one nonempty payload line; same-line payloads and other write commands are rejected.",
           "adapters": [
             "Data_AzureDataExplorer"
           ]
@@ -67,6 +74,7 @@
         {
           "path": "Config.Sql.CommandTimeoutSeconds",
           "description": "Choose a caller-specified SQL command timeout.",
+          "whenToUse": "Set a command timeout only when the adapter default is unsuitable for this SQL operation.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -81,6 +89,7 @@
         {
           "path": "Config.Sql.Content",
           "description": "Select SQL write Content input.",
+          "whenToUse": "Supply inline SQL Write content only when not using Config.Sql.ContentPath; exactly one of these inputs is required.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -95,6 +104,7 @@
         {
           "path": "Config.Sql.Content[*][$key]",
           "description": "Read native incoming record fields before SQL payload serialization.",
+          "whenToUse": "Supply native record fields when Write uses inline Records content; SQL normalizes these against ColumnSchema before binding.",
           "adapters": [
             "Data_AzureSql"
           ],
@@ -104,6 +114,7 @@
         {
           "path": "Config.Sql.Content[$key]",
           "description": "Read native incoming record fields before SQL payload serialization.",
+          "whenToUse": "Supply native record fields when Write uses inline Records content; SQL normalizes these against ColumnSchema before binding.",
           "adapters": [
             "Data_AzureSql"
           ],
@@ -113,6 +124,7 @@
         {
           "path": "Config.Sql.ContentPath",
           "description": "Select SQL write ContentPath input.",
+          "whenToUse": "Supply a nonblank ItemSignal path to SQL Write content only when inline Config.Sql.Content is omitted; the resolved signal must have a result.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -127,6 +139,7 @@
         {
           "path": "Config.Sql.Delimiter",
           "description": "Select SQL write Delimiter input.",
+          "whenToUse": "Set a single-character delimiter when parsing Csv Write content with a separator other than the default comma.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -134,6 +147,7 @@
         {
           "path": "Config.Sql.InputFormat",
           "description": "Select SQL write InputFormat input.",
+          "whenToUse": "Set Object, Json or Csv only when the default Object interpretation does not match the supplied Write content; Csv requires Records mode.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -141,6 +155,7 @@
         {
           "path": "Config.Sql.Parameters",
           "description": "Read SQL parameters for command binding.",
+          "whenToUse": "Supply SQL parameters only when the command needs bound values or output descriptors; omit for commands with no parameters.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -148,6 +163,7 @@
         {
           "path": "Config.Sql.Parameters.Direction",
           "description": "Read SQL parameter descriptor Direction.",
+          "whenToUse": "Set Input, Output, InputOutput or ReturnValue when the default Input direction does not fit this SQL parameter.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -155,6 +171,7 @@
         {
           "path": "Config.Sql.Parameters.Name",
           "description": "Read SQL parameter descriptor Name.",
+          "whenToUse": "Supply an @-prefixed SQL parameter name in the descriptor; names must match the supported identifier pattern.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -162,6 +179,7 @@
         {
           "path": "Config.Sql.Parameters.Precision",
           "description": "Read SQL parameter descriptor Precision.",
+          "whenToUse": "Set Precision only when the SQL parameter type needs that metadata; the binder validates it before execution.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -169,6 +187,7 @@
         {
           "path": "Config.Sql.Parameters.Scale",
           "description": "Read SQL parameter descriptor Scale.",
+          "whenToUse": "Set Scale only when the SQL parameter type needs that metadata; the binder validates it before execution.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -176,6 +195,7 @@
         {
           "path": "Config.Sql.Parameters.Size",
           "description": "Read SQL parameter descriptor Size.",
+          "whenToUse": "Set Size for string or binary SQL parameters with any non-Input direction; omit it for ordinary Input parameters unless explicit size metadata is needed.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -183,6 +203,7 @@
         {
           "path": "Config.Sql.Parameters.SqlDbType",
           "description": "Read SQL parameter descriptor SqlDbType.",
+          "whenToUse": "Supply a supported SqlDbType in each SQL parameter descriptor so values can be converted and bound.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -190,6 +211,7 @@
         {
           "path": "Config.Sql.Parameters.Value",
           "description": "Read SQL parameter descriptor Value.",
+          "whenToUse": "Supply Value for Input or InputOutput descriptors; Output and ReturnValue may omit it. Null is converted to SQL DBNull for an explicitly typed descriptor.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -197,6 +219,7 @@
         {
           "path": "Config.Sql.Parameters[*].Direction",
           "description": "Read SQL parameter descriptor Direction.",
+          "whenToUse": "Set Input, Output, InputOutput or ReturnValue when the default Input direction does not fit this SQL parameter.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -204,6 +227,7 @@
         {
           "path": "Config.Sql.Parameters[*].Name",
           "description": "Read SQL parameter descriptor Name.",
+          "whenToUse": "Supply an @-prefixed SQL parameter name in the descriptor; names must match the supported identifier pattern.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -211,6 +235,7 @@
         {
           "path": "Config.Sql.Parameters[*].Precision",
           "description": "Read SQL parameter descriptor Precision.",
+          "whenToUse": "Set Precision only when the SQL parameter type needs that metadata; the binder validates it before execution.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -218,6 +243,7 @@
         {
           "path": "Config.Sql.Parameters[*].Scale",
           "description": "Read SQL parameter descriptor Scale.",
+          "whenToUse": "Set Scale only when the SQL parameter type needs that metadata; the binder validates it before execution.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -225,6 +251,7 @@
         {
           "path": "Config.Sql.Parameters[*].Size",
           "description": "Read SQL parameter descriptor Size.",
+          "whenToUse": "Set Size for string or binary SQL parameters with any non-Input direction; omit it for ordinary Input parameters unless explicit size metadata is needed.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -232,6 +259,7 @@
         {
           "path": "Config.Sql.Parameters[*].SqlDbType",
           "description": "Read SQL parameter descriptor SqlDbType.",
+          "whenToUse": "Supply a supported SqlDbType in each SQL parameter descriptor so values can be converted and bound.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -239,6 +267,7 @@
         {
           "path": "Config.Sql.Parameters[*].Value",
           "description": "Read SQL parameter descriptor Value.",
+          "whenToUse": "Supply Value for Input or InputOutput descriptors; Output and ReturnValue may omit it. Null is converted to SQL DBNull for an explicitly typed descriptor.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -246,6 +275,7 @@
         {
           "path": "Config.Sql.Parameters[$key]",
           "description": "Bind a scalar dictionary parameter by its literal key.",
+          "whenToUse": "Use the literal @-prefixed dictionary key for a supported nonnull scalar SQL parameter value when type inference is enough; use a descriptor instead for null, output direction or explicit type metadata.",
           "adapters": [
             "Data_AzureSql"
           ],
@@ -255,6 +285,7 @@
         {
           "path": "Config.Sql.PayloadMode",
           "description": "Select SQL write PayloadMode input.",
+          "whenToUse": "Set Records or Document only when the default Records normalization is unsuitable; Document cannot be paired with Csv.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -262,6 +293,7 @@
         {
           "path": "Config.Sql.PayloadParameter",
           "description": "Select SQL write PayloadParameter.",
+          "whenToUse": "Set the SQL payload parameter name only when the stored procedure expects a name other than the default @Payload.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -269,6 +301,7 @@
         {
           "path": "Config.Sql.Procedure",
           "description": "Select SQL write Procedure.",
+          "whenToUse": "Supply the stored procedure name for SQL Write; this is required before payload normalization.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -276,6 +309,7 @@
         {
           "path": "Config.Sql.TransactionMode",
           "description": "Choose and validate SQL transaction behavior.",
+          "whenToUse": "Use Required for a transaction or None only when this SQL Write/Admin operation is intentionally nontransactional; other values are rejected.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -381,11 +415,13 @@
     },
     {
       "name": "Query",
+      "whenToUse": "Choose Query for Azure SQL or Data Explorer reads. SQL rejects TransactionMode; Data Explorer dispatches before its legacy switch.",
       "description": "Read data.",
       "properties": [
         {
           "path": "Config",
           "description": "Extract the operation configuration after adapter and activity validation.",
+          "whenToUse": "Supply the provider-qualified Config.Sql branch for Azure SQL or Config.ADX for Data Explorer. Legacy top-level SQL fields and target overrides are rejected.",
           "adapters": [
             "Data_AzureDataExplorer",
             "Data_AzureSql"
@@ -408,6 +444,7 @@
         {
           "path": "Config.Sql.CommandText",
           "description": "Read and validate the operation command text.",
+          "whenToUse": "Supply nonblank SQL command text for Query; this route requires it under Config.Sql, not legacy Config.CommandText.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -415,6 +452,7 @@
         {
           "path": "Config.ADX.CommandText",
           "description": "Read and validate the operation command text.",
+          "whenToUse": "Supply a read query without a leading control dot or semicolon; Data Explorer routes it to /v1/rest/query.",
           "adapters": [
             "Data_AzureDataExplorer"
           ]
@@ -422,6 +460,7 @@
         {
           "path": "Config.Sql.CommandTimeoutSeconds",
           "description": "Choose a caller-specified SQL command timeout.",
+          "whenToUse": "Set a command timeout only when the adapter default is unsuitable for this SQL operation.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -450,6 +489,7 @@
         {
           "path": "Config.Sql.Parameters",
           "description": "Read SQL parameters for command binding.",
+          "whenToUse": "Supply SQL parameters only when the command needs bound values or output descriptors; omit for commands with no parameters.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -457,6 +497,7 @@
         {
           "path": "Config.Sql.Parameters.Direction",
           "description": "Read SQL parameter descriptor Direction.",
+          "whenToUse": "Set Input, Output, InputOutput or ReturnValue when the default Input direction does not fit this SQL parameter.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -464,6 +505,7 @@
         {
           "path": "Config.Sql.Parameters.Name",
           "description": "Read SQL parameter descriptor Name.",
+          "whenToUse": "Supply an @-prefixed SQL parameter name in the descriptor; names must match the supported identifier pattern.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -471,6 +513,7 @@
         {
           "path": "Config.Sql.Parameters.Precision",
           "description": "Read SQL parameter descriptor Precision.",
+          "whenToUse": "Set Precision only when the SQL parameter type needs that metadata; the binder validates it before execution.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -478,6 +521,7 @@
         {
           "path": "Config.Sql.Parameters.Scale",
           "description": "Read SQL parameter descriptor Scale.",
+          "whenToUse": "Set Scale only when the SQL parameter type needs that metadata; the binder validates it before execution.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -485,6 +529,7 @@
         {
           "path": "Config.Sql.Parameters.Size",
           "description": "Read SQL parameter descriptor Size.",
+          "whenToUse": "Set Size for string or binary SQL parameters with any non-Input direction; omit it for ordinary Input parameters unless explicit size metadata is needed.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -492,6 +537,7 @@
         {
           "path": "Config.Sql.Parameters.SqlDbType",
           "description": "Read SQL parameter descriptor SqlDbType.",
+          "whenToUse": "Supply a supported SqlDbType in each SQL parameter descriptor so values can be converted and bound.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -499,6 +545,7 @@
         {
           "path": "Config.Sql.Parameters.Value",
           "description": "Read SQL parameter descriptor Value.",
+          "whenToUse": "Supply Value for Input or InputOutput descriptors; Output and ReturnValue may omit it. Null is converted to SQL DBNull for an explicitly typed descriptor.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -506,6 +553,7 @@
         {
           "path": "Config.Sql.Parameters[*].Direction",
           "description": "Read SQL parameter descriptor Direction.",
+          "whenToUse": "Set Input, Output, InputOutput or ReturnValue when the default Input direction does not fit this SQL parameter.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -513,6 +561,7 @@
         {
           "path": "Config.Sql.Parameters[*].Name",
           "description": "Read SQL parameter descriptor Name.",
+          "whenToUse": "Supply an @-prefixed SQL parameter name in the descriptor; names must match the supported identifier pattern.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -520,6 +569,7 @@
         {
           "path": "Config.Sql.Parameters[*].Precision",
           "description": "Read SQL parameter descriptor Precision.",
+          "whenToUse": "Set Precision only when the SQL parameter type needs that metadata; the binder validates it before execution.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -527,6 +577,7 @@
         {
           "path": "Config.Sql.Parameters[*].Scale",
           "description": "Read SQL parameter descriptor Scale.",
+          "whenToUse": "Set Scale only when the SQL parameter type needs that metadata; the binder validates it before execution.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -534,6 +585,7 @@
         {
           "path": "Config.Sql.Parameters[*].Size",
           "description": "Read SQL parameter descriptor Size.",
+          "whenToUse": "Set Size for string or binary SQL parameters with any non-Input direction; omit it for ordinary Input parameters unless explicit size metadata is needed.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -541,6 +593,7 @@
         {
           "path": "Config.Sql.Parameters[*].SqlDbType",
           "description": "Read SQL parameter descriptor SqlDbType.",
+          "whenToUse": "Supply a supported SqlDbType in each SQL parameter descriptor so values can be converted and bound.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -548,6 +601,7 @@
         {
           "path": "Config.Sql.Parameters[*].Value",
           "description": "Read SQL parameter descriptor Value.",
+          "whenToUse": "Supply Value for Input or InputOutput descriptors; Output and ReturnValue may omit it. Null is converted to SQL DBNull for an explicitly typed descriptor.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -555,6 +609,7 @@
         {
           "path": "Config.Sql.Parameters[$key]",
           "description": "Bind a scalar dictionary parameter by its literal key.",
+          "whenToUse": "Use the literal @-prefixed dictionary key for a supported nonnull scalar SQL parameter value when type inference is enough; use a descriptor instead for null, output direction or explicit type metadata.",
           "adapters": [
             "Data_AzureSql"
           ],
@@ -564,6 +619,7 @@
         {
           "path": "Config.Sql.TransactionMode",
           "description": "Choose and validate SQL transaction behavior.",
+          "whenToUse": "Omit TransactionMode for SQL Query; the current execution boundary rejects this property for Query.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -668,11 +724,13 @@
     },
     {
       "name": "Delete",
+      "whenToUse": "Choose Delete for an Azure SQL or Data Explorer delete. SQL uses its provider-qualified command and Required transaction mode.",
       "description": "Remove data.",
       "properties": [
         {
           "path": "Config",
           "description": "Extract the operation configuration after adapter and activity validation.",
+          "whenToUse": "Supply the provider-qualified Config.Sql branch for Azure SQL or Config.ADX for Data Explorer. Legacy top-level SQL fields and target overrides are rejected.",
           "adapters": [
             "Data_AzureDataExplorer",
             "Data_AzureSql"
@@ -695,6 +753,7 @@
         {
           "path": "Config.Sql.CommandText",
           "description": "Read and validate the operation command text.",
+          "whenToUse": "Supply nonblank SQL command text for Delete; this route requires it under Config.Sql, not legacy Config.CommandText.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -702,6 +761,7 @@
         {
           "path": "Config.ADX.CommandText",
           "description": "Read and validate the operation command text.",
+          "whenToUse": "Supply the restricted .delete table ... records <| ... | where key == \"value\" form; other delete commands are rejected.",
           "adapters": [
             "Data_AzureDataExplorer"
           ]
@@ -709,6 +769,7 @@
         {
           "path": "Config.Sql.CommandTimeoutSeconds",
           "description": "Choose a caller-specified SQL command timeout.",
+          "whenToUse": "Set a command timeout only when the adapter default is unsuitable for this SQL operation.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -737,6 +798,7 @@
         {
           "path": "Config.Sql.ExpectResultSets",
           "description": "Choose whether SQL delete returns result sets.",
+          "whenToUse": "Set only when SQL Delete should return result sets; omit when no result-set payload is needed.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -744,6 +806,7 @@
         {
           "path": "Config.Sql.Parameters",
           "description": "Read SQL parameters for command binding.",
+          "whenToUse": "Supply SQL parameters only when the command needs bound values or output descriptors; omit for commands with no parameters.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -751,6 +814,7 @@
         {
           "path": "Config.Sql.Parameters.Direction",
           "description": "Read SQL parameter descriptor Direction.",
+          "whenToUse": "Set Input, Output, InputOutput or ReturnValue when the default Input direction does not fit this SQL parameter.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -758,6 +822,7 @@
         {
           "path": "Config.Sql.Parameters.Name",
           "description": "Read SQL parameter descriptor Name.",
+          "whenToUse": "Supply an @-prefixed SQL parameter name in the descriptor; names must match the supported identifier pattern.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -765,6 +830,7 @@
         {
           "path": "Config.Sql.Parameters.Precision",
           "description": "Read SQL parameter descriptor Precision.",
+          "whenToUse": "Set Precision only when the SQL parameter type needs that metadata; the binder validates it before execution.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -772,6 +838,7 @@
         {
           "path": "Config.Sql.Parameters.Scale",
           "description": "Read SQL parameter descriptor Scale.",
+          "whenToUse": "Set Scale only when the SQL parameter type needs that metadata; the binder validates it before execution.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -779,6 +846,7 @@
         {
           "path": "Config.Sql.Parameters.Size",
           "description": "Read SQL parameter descriptor Size.",
+          "whenToUse": "Set Size for string or binary SQL parameters with any non-Input direction; omit it for ordinary Input parameters unless explicit size metadata is needed.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -786,6 +854,7 @@
         {
           "path": "Config.Sql.Parameters.SqlDbType",
           "description": "Read SQL parameter descriptor SqlDbType.",
+          "whenToUse": "Supply a supported SqlDbType in each SQL parameter descriptor so values can be converted and bound.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -793,6 +862,7 @@
         {
           "path": "Config.Sql.Parameters.Value",
           "description": "Read SQL parameter descriptor Value.",
+          "whenToUse": "Supply Value for Input or InputOutput descriptors; Output and ReturnValue may omit it. Null is converted to SQL DBNull for an explicitly typed descriptor.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -800,6 +870,7 @@
         {
           "path": "Config.Sql.Parameters[*].Direction",
           "description": "Read SQL parameter descriptor Direction.",
+          "whenToUse": "Set Input, Output, InputOutput or ReturnValue when the default Input direction does not fit this SQL parameter.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -807,6 +878,7 @@
         {
           "path": "Config.Sql.Parameters[*].Name",
           "description": "Read SQL parameter descriptor Name.",
+          "whenToUse": "Supply an @-prefixed SQL parameter name in the descriptor; names must match the supported identifier pattern.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -814,6 +886,7 @@
         {
           "path": "Config.Sql.Parameters[*].Precision",
           "description": "Read SQL parameter descriptor Precision.",
+          "whenToUse": "Set Precision only when the SQL parameter type needs that metadata; the binder validates it before execution.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -821,6 +894,7 @@
         {
           "path": "Config.Sql.Parameters[*].Scale",
           "description": "Read SQL parameter descriptor Scale.",
+          "whenToUse": "Set Scale only when the SQL parameter type needs that metadata; the binder validates it before execution.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -828,6 +902,7 @@
         {
           "path": "Config.Sql.Parameters[*].Size",
           "description": "Read SQL parameter descriptor Size.",
+          "whenToUse": "Set Size for string or binary SQL parameters with any non-Input direction; omit it for ordinary Input parameters unless explicit size metadata is needed.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -835,6 +910,7 @@
         {
           "path": "Config.Sql.Parameters[*].SqlDbType",
           "description": "Read SQL parameter descriptor SqlDbType.",
+          "whenToUse": "Supply a supported SqlDbType in each SQL parameter descriptor so values can be converted and bound.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -842,6 +918,7 @@
         {
           "path": "Config.Sql.Parameters[*].Value",
           "description": "Read SQL parameter descriptor Value.",
+          "whenToUse": "Supply Value for Input or InputOutput descriptors; Output and ReturnValue may omit it. Null is converted to SQL DBNull for an explicitly typed descriptor.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -849,6 +926,7 @@
         {
           "path": "Config.Sql.Parameters[$key]",
           "description": "Bind a scalar dictionary parameter by its literal key.",
+          "whenToUse": "Use the literal @-prefixed dictionary key for a supported nonnull scalar SQL parameter value when type inference is enough; use a descriptor instead for null, output direction or explicit type metadata.",
           "adapters": [
             "Data_AzureSql"
           ],
@@ -858,6 +936,7 @@
         {
           "path": "Config.Sql.TransactionMode",
           "description": "Choose and validate SQL transaction behavior.",
+          "whenToUse": "Use Required for SQL Delete; None and other values are rejected by the execution boundary.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -962,11 +1041,13 @@
     },
     {
       "name": "Admin",
+      "whenToUse": "Choose Admin for an Azure SQL or Data Explorer administration command. SQL can use Required or None transaction mode.",
       "description": "Run an administration command.",
       "properties": [
         {
           "path": "Config",
           "description": "Extract the operation configuration after adapter and activity validation.",
+          "whenToUse": "Supply the provider-qualified Config.Sql branch for Azure SQL or Config.ADX for Data Explorer. Legacy top-level SQL fields and target overrides are rejected.",
           "adapters": [
             "Data_AzureDataExplorer",
             "Data_AzureSql"
@@ -989,6 +1070,7 @@
         {
           "path": "Config.Sql.CommandText",
           "description": "Read and validate the operation command text.",
+          "whenToUse": "Supply nonblank SQL command text for Admin; this route requires it under Config.Sql, not legacy Config.CommandText.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -996,6 +1078,7 @@
         {
           "path": "Config.ADX.CommandText",
           "description": "Read and validate the operation command text.",
+          "whenToUse": "Supply a nonblank control command beginning with a dot for the Data Explorer management endpoint.",
           "adapters": [
             "Data_AzureDataExplorer"
           ]
@@ -1003,6 +1086,7 @@
         {
           "path": "Config.Sql.CommandTimeoutSeconds",
           "description": "Choose a caller-specified SQL command timeout.",
+          "whenToUse": "Set a command timeout only when the adapter default is unsuitable for this SQL operation.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -1031,6 +1115,7 @@
         {
           "path": "Config.Sql.Parameters",
           "description": "Read SQL parameters for command binding.",
+          "whenToUse": "Supply SQL parameters only when the command needs bound values or output descriptors; omit for commands with no parameters.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -1038,6 +1123,7 @@
         {
           "path": "Config.Sql.Parameters.Direction",
           "description": "Read SQL parameter descriptor Direction.",
+          "whenToUse": "Set Input, Output, InputOutput or ReturnValue when the default Input direction does not fit this SQL parameter.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -1045,6 +1131,7 @@
         {
           "path": "Config.Sql.Parameters.Name",
           "description": "Read SQL parameter descriptor Name.",
+          "whenToUse": "Supply an @-prefixed SQL parameter name in the descriptor; names must match the supported identifier pattern.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -1052,6 +1139,7 @@
         {
           "path": "Config.Sql.Parameters.Precision",
           "description": "Read SQL parameter descriptor Precision.",
+          "whenToUse": "Set Precision only when the SQL parameter type needs that metadata; the binder validates it before execution.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -1059,6 +1147,7 @@
         {
           "path": "Config.Sql.Parameters.Scale",
           "description": "Read SQL parameter descriptor Scale.",
+          "whenToUse": "Set Scale only when the SQL parameter type needs that metadata; the binder validates it before execution.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -1066,6 +1155,7 @@
         {
           "path": "Config.Sql.Parameters.Size",
           "description": "Read SQL parameter descriptor Size.",
+          "whenToUse": "Set Size for string or binary SQL parameters with any non-Input direction; omit it for ordinary Input parameters unless explicit size metadata is needed.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -1073,6 +1163,7 @@
         {
           "path": "Config.Sql.Parameters.SqlDbType",
           "description": "Read SQL parameter descriptor SqlDbType.",
+          "whenToUse": "Supply a supported SqlDbType in each SQL parameter descriptor so values can be converted and bound.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -1080,6 +1171,7 @@
         {
           "path": "Config.Sql.Parameters.Value",
           "description": "Read SQL parameter descriptor Value.",
+          "whenToUse": "Supply Value for Input or InputOutput descriptors; Output and ReturnValue may omit it. Null is converted to SQL DBNull for an explicitly typed descriptor.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -1087,6 +1179,7 @@
         {
           "path": "Config.Sql.Parameters[*].Direction",
           "description": "Read SQL parameter descriptor Direction.",
+          "whenToUse": "Set Input, Output, InputOutput or ReturnValue when the default Input direction does not fit this SQL parameter.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -1094,6 +1187,7 @@
         {
           "path": "Config.Sql.Parameters[*].Name",
           "description": "Read SQL parameter descriptor Name.",
+          "whenToUse": "Supply an @-prefixed SQL parameter name in the descriptor; names must match the supported identifier pattern.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -1101,6 +1195,7 @@
         {
           "path": "Config.Sql.Parameters[*].Precision",
           "description": "Read SQL parameter descriptor Precision.",
+          "whenToUse": "Set Precision only when the SQL parameter type needs that metadata; the binder validates it before execution.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -1108,6 +1203,7 @@
         {
           "path": "Config.Sql.Parameters[*].Scale",
           "description": "Read SQL parameter descriptor Scale.",
+          "whenToUse": "Set Scale only when the SQL parameter type needs that metadata; the binder validates it before execution.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -1115,6 +1211,7 @@
         {
           "path": "Config.Sql.Parameters[*].Size",
           "description": "Read SQL parameter descriptor Size.",
+          "whenToUse": "Set Size for string or binary SQL parameters with any non-Input direction; omit it for ordinary Input parameters unless explicit size metadata is needed.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -1122,6 +1219,7 @@
         {
           "path": "Config.Sql.Parameters[*].SqlDbType",
           "description": "Read SQL parameter descriptor SqlDbType.",
+          "whenToUse": "Supply a supported SqlDbType in each SQL parameter descriptor so values can be converted and bound.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -1129,6 +1227,7 @@
         {
           "path": "Config.Sql.Parameters[*].Value",
           "description": "Read SQL parameter descriptor Value.",
+          "whenToUse": "Supply Value for Input or InputOutput descriptors; Output and ReturnValue may omit it. Null is converted to SQL DBNull for an explicitly typed descriptor.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -1136,6 +1235,7 @@
         {
           "path": "Config.Sql.Parameters[$key]",
           "description": "Bind a scalar dictionary parameter by its literal key.",
+          "whenToUse": "Use the literal @-prefixed dictionary key for a supported nonnull scalar SQL parameter value when type inference is enough; use a descriptor instead for null, output direction or explicit type metadata.",
           "adapters": [
             "Data_AzureSql"
           ],
@@ -1145,6 +1245,7 @@
         {
           "path": "Config.Sql.TransactionMode",
           "description": "Choose and validate SQL transaction behavior.",
+          "whenToUse": "Use Required for a transaction or None only when this SQL Write/Admin operation is intentionally nontransactional; other values are rejected.",
           "adapters": [
             "Data_AzureSql"
           ]
@@ -1249,11 +1350,13 @@
     },
     {
       "name": "WriteItem",
+      "whenToUse": "Choose WriteItem for Data Explorer single-item ingestion with table and mapping fields.",
       "description": "Write one data item.",
       "properties": [
         {
           "path": "Config",
           "description": "Extract and validate Data Explorer operation configuration.",
+          "whenToUse": "Supply Config.ADX with TableName and MappingName for WriteItem ingestion; the branch rejects legacy top-level TableName, MappingName and ContentKey fields.",
           "adapters": [
             "Data_AzureDataExplorer"
           ]
@@ -1289,6 +1392,7 @@
         {
           "path": "Config.ADX.ContentKey",
           "description": "Select Data Explorer ingestion ContentKey.",
+          "whenToUse": "Set the item content key only when the default Content field does not identify WriteItem rows.",
           "adapters": [
             "Data_AzureDataExplorer"
           ],
@@ -1306,6 +1410,7 @@
         {
           "path": "Config.ADX.MappingName",
           "description": "Select Data Explorer ingestion MappingName.",
+          "whenToUse": "Supply the Data Explorer ingestion mapping for WriteItem; it is required in the ingest request.",
           "adapters": [
             "Data_AzureDataExplorer"
           ]
@@ -1313,6 +1418,7 @@
         {
           "path": "Config.ADX.TableName",
           "description": "Select Data Explorer ingestion TableName.",
+          "whenToUse": "Supply the target Data Explorer table for WriteItem ingestion; it is required before building the ingest URL.",
           "adapters": [
             "Data_AzureDataExplorer"
           ]
@@ -1320,6 +1426,7 @@
         {
           "path": "Phase",
           "description": "Preserve conduction context references while cloning the legacy Data Explorer request.",
+          "whenToUse": "Preserve the incoming conduction context when the legacy Data Explorer request is cloned; this is context metadata, not a provider command input.",
           "adapters": [
             "Data_AzureDataExplorer"
           ]
@@ -1327,6 +1434,7 @@
         {
           "path": "Plan",
           "description": "Preserve conduction context references while cloning the legacy Data Explorer request.",
+          "whenToUse": "Preserve the incoming conduction context when the legacy Data Explorer request is cloned; this is context metadata, not a provider command input.",
           "adapters": [
             "Data_AzureDataExplorer"
           ]
@@ -1343,11 +1451,13 @@
     },
     {
       "name": "WriteBatch",
+      "whenToUse": "Do not choose WriteBatch for Data Explorer batch ingestion: its current legacy branch reads queue MessageId/PopReceipt, invokes a REST Delete and returns an unresolved signal.",
       "description": "Write a batch of data items.",
       "properties": [
         {
           "path": "Config",
           "description": "Extract and validate Data Explorer operation configuration.",
+          "whenToUse": "Do not supply Config.ADX expecting batch ingestion: this legacy WriteBatch branch instead follows queue-style acknowledgement and has no batch-data input.",
           "adapters": [
             "Data_AzureDataExplorer"
           ]
@@ -1390,6 +1500,7 @@
         {
           "path": "Phase",
           "description": "Preserve conduction context references while cloning the legacy Data Explorer request.",
+          "whenToUse": "Preserve the incoming conduction context when the legacy Data Explorer request is cloned; this is context metadata, not a provider command input.",
           "adapters": [
             "Data_AzureDataExplorer"
           ]
@@ -1397,6 +1508,7 @@
         {
           "path": "Plan",
           "description": "Preserve conduction context references while cloning the legacy Data Explorer request.",
+          "whenToUse": "Preserve the incoming conduction context when the legacy Data Explorer request is cloned; this is context metadata, not a provider command input.",
           "adapters": [
             "Data_AzureDataExplorer"
           ]

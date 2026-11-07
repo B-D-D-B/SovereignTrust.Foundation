@@ -1,0 +1,27 @@
+{
+  "name": "ProcessCondenser",
+  "repository": "SovereignTrust.Foundation",
+  "path": "Src/PowerShell/Classes/Adapters/Condenser/ProcessCondenser.ps1",
+  "activities": [
+    {
+      "name": "Run",
+      "description": "Run one bounded native process with separate binary streams.",
+      "whenToUse": "Use Condenser.Process for an already resolved local application path and ordered arguments. Inspect ExitCode and bytes in the completed Result; own any file or network effects of the child. A timeout, byte cap, start or cleanup failure has no Result.",
+      "properties": [
+        {"path":"Config.Executable","description":"Existing absolute application path; no shell or expansion.","whenToUse":"Resolve the application before invocation.","adapters":["ProcessCondenser"]},
+        {"path":"Config.Arguments","description":"Ordered native string array; at most 256 entries of 8192 characters each.","whenToUse":"Pass arguments as separate strings, including paths with spaces.","adapters":["ProcessCondenser"]},
+        {"path":"Config.InputBytes","description":"Optional byte array of at most 8388608 bytes.","whenToUse":"Supply binary stdin; omit to leave stdin unredirected.","adapters":["ProcessCondenser"]},
+        {"path":"Config.TimeoutMilliseconds","description":"Required integer from 1 through 30000 including start, IO and exit.","whenToUse":"Set the trusted total deadline; cleanup has separate bounded waits.","adapters":["ProcessCondenser"]},
+        {"path":"Config.MaximumOutputBytes","description":"Required integer from 1 through 16777216.","whenToUse":"Bound stdout before decoding or using bytes.","adapters":["ProcessCondenser"]},
+        {"path":"Config.MaximumErrorBytes","description":"Required integer from 1 through 65536.","whenToUse":"Bound stderr before decoding or logging.","adapters":["ProcessCondenser"]}
+      ],
+      "result": [
+        {"path":"$.ExitCode","type":"Int32","description":"Completed child exit code, including nonzero.","adapters":["ProcessCondenser"]},
+        {"path":"$.StandardOutputBytes","type":"byte[]","description":"Captured stdout bytes.","adapters":["ProcessCondenser"]},
+        {"path":"$.StandardErrorBytes","type":"byte[]","description":"Captured stderr bytes.","adapters":["ProcessCondenser"]}
+      ],
+      "resultNotes": ["Validation, start, timeout, cap and cleanup failures return a critical Signal without Result; a completed nonzero child returns Result.","The caller owns child effects and nonzero exit policy."]
+    }
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Condensers/ProcessCondenser.json","version":1}
+}

@@ -42,7 +42,7 @@
       "id": "s7",
       "repository": "SovereignTrust.Adapters",
       "path": "Src/Storage/AzureKeyVault/PowerShell/Storage_AzureKeyVault.psm1",
-      "sha256": "D4E523187E1AE7D260F31D1A6F2B9E3BC6FD054C704A79E9B23A6AA30FD6EBFA"
+      "sha256": "30C621EB9DA12E9FEA0E9FEF2170F420EDB0963574B7592FCF6F6667C28C6003"
     },
     {
       "id": "s8",
@@ -255,7 +255,7 @@
               {
                 "source": "s7",
                 "symbol": "'List'",
-                "line": 195,
+                "line": 214,
                 "kind": "source-derived"
               }
             ],
@@ -543,7 +543,7 @@
           {
             "adapter": "Storage_AzureKeyVault",
             "support": "implemented",
-            "when": "Config.VirtualPath names secret; REST GET",
+            "when": "valid raw name, mapped /name, or legacy Storage.Secrets.Read.name; REST GET status 200",
             "outcomes": [
               {
                 "condition": "GET response has value",
@@ -552,8 +552,8 @@
                 "resultType": "secret value String"
               },
               {
-                "condition": "response value absent",
-                "signalState": "success",
+                "condition": "response value absent or non-200 status",
+                "signalState": "failure",
                 "hasResult": false,
                 "resultType": "absent"
               },
@@ -577,7 +577,7 @@
               {
                 "source": "s7",
                 "symbol": "\"Read\"",
-                "line": 225,
+                "line": 300,
                 "kind": "source-derived"
               }
             ],
@@ -725,17 +725,17 @@
           },
           {
             "adapter": "Storage_AzureKeyVault",
-            "support": "unsupported",
-            "when": "provider switch only Read and List",
+            "support": "implemented",
+            "when": "valid secret name and string/JSON Config.Content; REST PUT status 200",
             "outcomes": [
               {
-                "condition": "unsupported warning path; no write request",
+                "condition": "versioned same-vault response id",
                 "signalState": "success",
-                "hasResult": false,
-                "resultType": "absent"
+                "hasResult": true,
+                "resultType": "versioned secret URI String"
               }
             ],
-            "sideEffects": [],
+            "sideEffects": ["creates a new secret version; no implicit purge"],
             "evidence": [
               {
                 "source": "s1",
@@ -746,11 +746,11 @@
               {
                 "source": "s7",
                 "symbol": "Invoke",
-                "line": 16,
+                "line": 262,
                 "kind": "source-derived"
               }
             ],
-            "limitations": "Catalog property lists Write but source does not dispatch it."
+            "limitations": "25 KB UTF-8 secret value ceiling; no binary SourcePath/TargetPath. Versioned URI is a receipt, not independent persistence proof."
           }
         ]
       }
@@ -904,17 +904,17 @@
           },
           {
             "adapter": "Storage_AzureKeyVault",
-            "support": "unsupported",
-            "when": "provider switch only Read and List",
+            "support": "implemented",
+            "when": "valid unversioned secret name; REST DELETE status 200",
             "outcomes": [
               {
-                "condition": "unsupported warning path; no provider request",
+                "condition": "same-name deleted-secret response",
                 "signalState": "success",
-                "hasResult": false,
-                "resultType": "absent"
+                "hasResult": true,
+                "resultType": "Boolean true"
               }
             ],
-            "sideEffects": [],
+            "sideEffects": ["soft-deletes all secret versions; does not purge"],
             "evidence": [
               {
                 "source": "s1",
@@ -925,11 +925,11 @@
               {
                 "source": "s7",
                 "symbol": "Invoke",
-                "line": 16,
+                "line": 283,
                 "kind": "source-derived"
               }
             ],
-            "limitations": "Catalog property lists Delete but source does not dispatch it."
+            "limitations": "404, permission denial and uncertain status fail without a Boolean; deleted name may remain reserved during retention."
           }
         ]
       }
@@ -1081,17 +1081,17 @@
           },
           {
             "adapter": "Storage_AzureKeyVault",
-            "support": "unsupported",
-            "when": "provider switch only Read and List",
+            "support": "implemented",
+            "when": "valid secret name; name-scoped REST GET with explicit status",
             "outcomes": [
               {
-                "condition": "unsupported warning path; no provider request",
+                "condition": "HTTP 200 / HTTP 404",
                 "signalState": "success",
-                "hasResult": false,
-                "resultType": "absent"
+                "hasResult": true,
+                "resultType": "Boolean true / Boolean false"
               }
             ],
-            "sideEffects": [],
+            "sideEffects": ["reads secret response in memory without returning value"],
             "evidence": [
               {
                 "source": "s1",
@@ -1102,11 +1102,11 @@
               {
                 "source": "s7",
                 "symbol": "Invoke",
-                "line": 16,
+                "line": 292,
                 "kind": "source-derived"
               }
             ],
-            "limitations": "Catalog property lists Exists but source does not dispatch it."
+            "limitations": "Only exact-name HTTP 404 means false; 401/403/429/5xx and malformed status fail."
           }
         ]
       }

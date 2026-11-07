@@ -5,7 +5,6 @@ ContractStatus: Enforced
 ActivityScope: AdapterAgnostic
 Activities:
 - SendMessage: Send a request to an intelligence service.
-- SendMessageOriginal: Send the original message without prior transformation.
 - HandleMessage: Resolve and optionally format a message.
 ActivityValidation: OnInvoke, BeforeProviderResolution
 UnsupportedActivity: FailedSignal
@@ -76,7 +75,7 @@ class MappedIntelligenceAdapter {
     [Signal] Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
         $opSignal = [Signal]::Start("MappedIntelligenceAdapter.Invoke:$Slot") | Select-Object -Last 1
 
-        $allowedActivities = @('SendMessage', 'SendMessageOriginal', 'HandleMessage')
+        $allowedActivities = @('SendMessage', 'HandleMessage')
         if ($Activity -notin $allowedActivities) {
             $opSignal.LogCritical("Unsupported MappedIntelligenceAdapter activity: '$Activity'.")
             return $opSignal

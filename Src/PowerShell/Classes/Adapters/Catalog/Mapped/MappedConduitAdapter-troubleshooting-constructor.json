@@ -1,0 +1,118 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedConduitAdapter",
+  "mappedAdapter": "MappedConduitAdapter",
+  "part": "constructor",
+  "sources": [
+    {
+      "id": "mapped-conduit",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedConduitAdapter.ps1",
+      "sha256": "8D18D23E1B3BF35A7820A015773C11F9679A843BE37EE022CBD16943E171EFD5",
+      "symbol": "MappedConduitAdapter"
+    }
+  ],
+  "entries": [
+    {
+      "id": "mapped-conduit-null-conductor",
+      "status": "source-verified",
+      "adapters": [
+        "MappedConduitAdapter"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Null Conductor passed to Start().",
+          "evidence": [
+            {
+              "sourceId": "mapped-conduit",
+              "startLine": 23,
+              "endLine": 23
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "MappedConduitAdapter.Start(object) receives a falsey Conductor before Signal/Graph setup; separate zero-argument Start returns a Signal without this custom log.",
+        "evidence": [
+          {
+            "sourceId": "mapped-conduit",
+            "startLine": 20,
+            "endLine": 25
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The supplied Conductor argument is null/falsey at the object overload.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-conduit",
+              "startLine": 20,
+              "endLine": 25
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm mapped Start(object) overload and Conductor presence/truthy flag only; do not inspect Conductor content.",
+          "expected": "The object overload receives a falsey Conductor at line22.",
+          "evidence": [
+            {
+              "sourceId": "mapped-conduit",
+              "startLine": 20,
+              "endLine": 25
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional construction input proposal only; do not initialize graph or invoke a conduit here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply the intended nonnull Conductor to the mapped object-overload Start; stop if owning construction context is unknown.",
+            "expected": "The null-Conductor guard would be false; later setup remains separate.",
+            "evidence": [
+              {
+                "sourceId": "mapped-conduit",
+                "startLine": 20,
+                "endLine": 25
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Exact message or mapped @construct context differs.",
+          "Conductor owner cannot be identified without dumping state.",
+          "Change would require graph, provider or source mutation."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the intended Conductor argument is present for Start(object), without executing construction.",
+          "expected": "The local guard would be false; setup/runtime success unverified.",
+          "evidence": [
+            {
+              "sourceId": "mapped-conduit",
+              "startLine": 20,
+              "endLine": 25
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Conductor object, Signal graph, registered adapters, key/Plan/Context, credentials and exception text; retain mapped @construct selector, exact log and argument-presence flag.",
+      "limitations": [
+        "Source-only confidence; no construction/runtime/provider execution.",
+        "No-argument Start and unselected Invoke/RegisterAdapter methods are outside this entry."
+      ]
+    }
+  ]
+}

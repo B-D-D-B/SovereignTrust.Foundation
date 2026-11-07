@@ -164,7 +164,7 @@
     },
     {
       "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedCondenserAdapter.json",
-      "sha256": "4773B7D8B6680C14054F5E82A89D913E802A781BBDDC2AB0F0577BF256797A3B"
+      "sha256": "C2F7CAE17B2C73B81262871F347F8745468A669E60EEF8B544F7044FAA18CE5E"
     },
     {
       "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedStorageAdapter.json",
@@ -188,7 +188,7 @@
     },
     {
       "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedIntelligenceAdapter.json",
-      "sha256": "28B1AE063AD773D6FBCAB9B1C23518476A98B2B8A8FE02A8D5430862F0D56933"
+      "sha256": "C6047F82B698D03679A8436919904947B1A938F90B97F8AE1F368FAE94046B4C"
     },
     {
       "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedQuantumAdapter.json",
@@ -204,10 +204,13 @@
     },
     {
       "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedUtilityAdapter.json",
-      "sha256": "7DA464109A242C0EA9C9B6C7B874176E971922B68331A11E92478452D49F3119"
+      "sha256": "3B20D175CF8243AA37684D41C25A0E2D98A3A861A94D82CC0058EE6E1A6AB86D"
     }
   ],
   "sources": [
+    {"id":"process-class","repository":"SovereignTrust.Foundation","path":"Src/PowerShell/Classes/Adapters/Condenser/ProcessCondenser.ps1","sha256":"8A536819FBCB70A757527CE6834E329D58BF56B57704DAF1F8709D8B8CBD71C2"},
+    {"id":"process-core","repository":"SovereignTrust.Foundation","path":"Src/PowerShell/Utilities/Adapters/Condenser/Process/Invoke-ProcessCondenserCore.ps1","sha256":"EF8E19E783FAAC77F276C92842C4D4D44E4F4A5192AE6A108066E2AD3F9C5BE9"},
+    {"id":"media-inspect","repository":"SDAFusion.Adapters","path":"Src/Utility/Media/PowerShell/Magik/Invoke-InspectImage.ps1","sha256":"9517F25628AE99B004B3ECBA09AD60E7675DBDDC30C8770454A1892638BA4D4D"},
     {
       "id": "satellite-mapped",
       "repository": "SovereignTrust.Foundation",
@@ -812,7 +815,7 @@
       "id": "intelligence-mapped",
       "repository": "SovereignTrust.Foundation",
       "path": "Src/PowerShell/Classes/Adapters/MappedIntelligenceAdapter.ps1",
-      "sha256": "24AD791B06B17F991C7BBE3EEC3FF1AC0F34A624C999A4170E4A0A5DDC417B49"
+      "sha256": "B36BC0B5D6416CF9785C14C44322A107F0A70F3D97CCADBA6D47F412C04D8D69"
     },
     {
       "id": "Intelligence_CodexCLI",
@@ -824,7 +827,7 @@
       "id": "Intelligence_AzureFoundry",
       "repository": "SovereignTrust.Adapters",
       "path": "Src/Intelligence/AzureFoundry/PowerShell/Intelligence_AzureFoundry.psm1",
-      "sha256": "1C0135E392349FA1B9D3ADC9F73F6A6F6C91021FCE1ECC8BA47B6DD430F5A278"
+      "sha256": "59D5258ABEF86C3DA5931A67D79B01752A17152784FA053831FAF76A6522DAEF"
     },
     {
       "id": "quantum-mapped",
@@ -932,13 +935,13 @@
       "id": "Resolve-CodexCLIPrompt",
       "repository": "SovereignTrust.Adapters",
       "path": "Src/Intelligence/CodexCLI/PowerShell/Resolve-CodexCLIPrompt.ps1",
-      "sha256": "F93BA127B8E865CDDFC6B63FDB7D0A91D032A3ACEA0A71A9B00F917DF9BAF02E"
+      "sha256": "9003DD475A1A4574B536E2288658297128C70AE9311B3266B8850477EA3A8BCA"
     },
     {
       "id": "Resolve-CodexCLIRuntime",
       "repository": "SovereignTrust.Adapters",
       "path": "Src/Intelligence/CodexCLI/PowerShell/Resolve-CodexCLIRuntime.ps1",
-      "sha256": "6EB2D03889A03F5969EAEEA579A30A87F4720D62DC08563A5FEA9D03CEA9CD69"
+      "sha256": "998E7E241DCF59A8FB1D3C7F250FC972CD1D9197A121776CC5E101D1AB5DD7BD"
     },
     {
       "id": "Resolve-CodexCLIMedia",
@@ -950,7 +953,7 @@
       "id": "foundry-responses",
       "repository": "SovereignTrust.Adapters",
       "path": "Src/Intelligence/AzureFoundry/PowerShell/Invoke-AzureFoundryOpenAIResponses.ps1",
-      "sha256": "8ACBDCDB2B355D8A5EFD4BAC37CA88CE76A2AC0ABCA1F88DAC782732D7500434"
+      "sha256": "743654EDAC106C5FC7094F9515B68F6B47620318613FD9F6FEFB92A3300D2A4C"
     },
     {
       "id": "artifact-host",
@@ -998,7 +1001,7 @@
       "id": "Utility_Media",
       "repository": "SDAFusion.Adapters",
       "path": "Src/Utility/Media/PowerShell/Utility_Media.psm1",
-      "sha256": "18CB236F2F9B4BCCC6A6FFC8B8F0614C5C47D58B7350AF3765EDB6B8929506D8"
+      "sha256": "B7BBD7921FADF72AC0BB1F2DBD1A6F649B1626E41E2F60BBBA2C13AEF572DEFD"
     },
     {
       "id": "session-invoke",
@@ -1010,13 +1013,25 @@
       "id": "media-resize",
       "repository": "SDAFusion.Adapters",
       "path": "Src/Utility/Media/PowerShell/Magik/Invoke-ResizeImage.ps1",
-      "sha256": "382DA31B6A61A8F09F4E67F85B9B10BA1993E15B75B3D32FF2618F9CAA8E1615"
+      "sha256": "EBDC24512F3D996767250E358BE277D18DDBFAD9CC9E9408D7360FE35D62A58A"
     },
     {
       "id": "media-overlay",
       "repository": "SDAFusion.Adapters",
       "path": "Src/Utility/Media/PowerShell/Magik/Invoke-OverlayImage.ps1",
-      "sha256": "BCA7FD1692D45D521B008C74206C8D6A2EF345D7B4EFFA0C6AA8833090F149F1"
+      "sha256": "9E154584B7E9E9C9944C2AB6DC23039AE3312C51345CCDA1D69A6E242E95B84A"
+    },
+    {
+      "id": "Intelligence_OpenAI",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/OpenAI/PowerShell/Intelligence_OpenAI.psm1",
+      "sha256": "744E5C8F391CD72E87DF188BD15029DEE3942CAE35EF2962A6A233A50FA351C9"
+    },
+    {
+      "id": "openai-responses",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Intelligence/OpenAI/PowerShell/Invoke-OpenAIResponses.ps1",
+      "sha256": "2B22906C7E33CDF21F52BED7C7E47424BF1478226F837F743ED903B07CD40A96"
     }
   ],
   "emptyGroups": [
@@ -1024,6 +1039,7 @@
     "MappedQuantumAdapter"
   ],
   "shards": [
+    {"mappedAdapter":"MappedCondenserAdapter","condenser":"ProcessCondenser","file":"Adapter-Index-Attribution-Matrix/Condensers/ProcessCondenser.json","sha256":"03F414FA90D1839AB05A92DE80463E6EDE6AB7E449D72500296020D3D39F87C5"},
     {
       "mappedAdapter": "MappedSatelliteAdapter",
       "condenser": null,
@@ -1148,7 +1164,7 @@
       "mappedAdapter": "MappedIntelligenceAdapter",
       "condenser": null,
       "file": "Adapter-Index-Attribution-Matrix/Mapped/MappedIntelligenceAdapter.json",
-      "sha256": "48715B937ED6EE8BDE8E314286F8237E45D36214ECAFC3D7DBC660CB4CC78AA4"
+      "sha256": "0DAD95969C4FFFE5C1EDF07726A0E35D867D538CF796DFAB50166E277888B4A4"
     },
     {
       "mappedAdapter": "MappedQuantumAdapter",
@@ -1172,7 +1188,7 @@
       "mappedAdapter": "MappedUtilityAdapter",
       "condenser": null,
       "file": "Adapter-Index-Attribution-Matrix/Mapped/MappedUtilityAdapter.json",
-      "sha256": "BAB6CF47FDEEE852A1AAAA269DFA120EACAC217FB043B3A4BC4073C1C6135CB2"
+      "sha256": "599F8D8B4F6C819860E487E6C9D6A917DBB2E0FF1B898C7FDE0C81E8066B2134"
     }
   ],
   "ownerBaselines": [
@@ -1224,7 +1240,7 @@
         },
         {
           "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedCondenserAdapter.json",
-          "sha256": "4773B7D8B6680C14054F5E82A89D913E802A781BBDDC2AB0F0577BF256797A3B"
+          "sha256": "C2F7CAE17B2C73B81262871F347F8745468A669E60EEF8B544F7044FAA18CE5E"
         }
       ]
     },
@@ -1252,7 +1268,7 @@
         },
         {
           "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedCondenserAdapter.json",
-          "sha256": "4773B7D8B6680C14054F5E82A89D913E802A781BBDDC2AB0F0577BF256797A3B"
+          "sha256": "C2F7CAE17B2C73B81262871F347F8745468A669E60EEF8B544F7044FAA18CE5E"
         }
       ]
     },
@@ -1336,7 +1352,7 @@
         },
         {
           "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedIntelligenceAdapter.json",
-          "sha256": "28B1AE063AD773D6FBCAB9B1C23518476A98B2B8A8FE02A8D5430862F0D56933"
+          "sha256": "C6047F82B698D03679A8436919904947B1A938F90B97F8AE1F368FAE94046B4C"
         }
       ]
     },
@@ -1392,7 +1408,7 @@
         },
         {
           "file": "../../../Src/PowerShell/Classes/Adapters/Catalog/Mapped/MappedUtilityAdapter.json",
-          "sha256": "7DA464109A242C0EA9C9B6C7B874176E971922B68331A11E92478452D49F3119"
+          "sha256": "3B20D175CF8243AA37684D41C25A0E2D98A3A861A94D82CC0058EE6E1A6AB86D"
         }
       ]
     }

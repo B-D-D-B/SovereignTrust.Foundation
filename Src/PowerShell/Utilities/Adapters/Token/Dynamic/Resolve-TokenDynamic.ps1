@@ -1247,6 +1247,28 @@ function Resolve-TokenDynamic {
                 return $opSignal
             }
 
+            'equalsordinalstring' {
+                $syntaxArgs = @(Split-DynamicArgumentText -Text $raw)
+                if ($resolvedArgs.Count -ne 2 -or $syntaxArgs.Count -ne 2 -or
+                    $syntaxArgs[0].Trim() -cnotmatch '^\[[^\[\]]+~\]$') {
+                    throw 'EqualsOrdinalString() requires a whole unquoted typed reference and one literal.'
+                }
+
+                $literal = $syntaxArgs[1].Trim()
+                $quoted = $literal.Length -ge 2 -and (
+                    ($literal.StartsWith("'") -and $literal.EndsWith("'")) -or
+                    ($literal.StartsWith('"') -and $literal.EndsWith('"'))
+                )
+                if (($literal -match '[\[\]()]') -or ($literal -match '(?i)dynamic\.') -or
+                    (($literal.StartsWith("'") -or $literal.StartsWith('"')) -and -not $quoted) -or
+                    $resolvedArgs[0] -isnot [string] -or $resolvedArgs[1] -isnot [string]) {
+                    throw 'EqualsOrdinalString() requires a native string and a literal comparison value.'
+                }
+
+                $opSignal.SetResult([string]::Equals($resolvedArgs[0], $resolvedArgs[1], [System.StringComparison]::Ordinal))
+                return $opSignal
+            }
+
             'notin' {
                 if ($resolvedArgs.Count -ne 2) {
                     throw "NotIn() requires exactly two arguments: a value and allowed values. ($($resolvedArgs.Count) was supplied)"
@@ -1356,6 +1378,17 @@ function Resolve-TokenDynamic {
 
                 $result = $hasValue -and -not [string]::IsNullOrEmpty([string]$value)
                 $opSignal.SetResult($result)
+                return $opSignal
+            }
+
+            'isnonblankstring' {
+                if (-not $resolvedArgumentSet.HasReferences -or $resolvedArgs.Count -ne 1 -or
+                    $raw.Trim() -cnotmatch '^\[[^\[\]]+~\]$') {
+                    throw 'IsNonBlankString() requires exactly one whole unquoted typed reference.'
+                }
+
+                $value = $resolvedArgs[0]
+                $opSignal.SetResult($value -is [string] -and -not [string]::IsNullOrWhiteSpace($value))
                 return $opSignal
             }
 

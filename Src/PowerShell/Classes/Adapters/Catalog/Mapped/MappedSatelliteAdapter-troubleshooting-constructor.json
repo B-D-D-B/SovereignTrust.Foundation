@@ -1,0 +1,118 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedSatelliteAdapter",
+  "mappedAdapter": "MappedSatelliteAdapter",
+  "part": "constructor",
+  "sources": [
+    {
+      "id": "mapped-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedSatelliteAdapter.ps1",
+      "sha256": "849D93BBFBECC5A509FF0202D529A0B282E451B772379F597E5A277A8F7DD4D7",
+      "symbol": "MappedSatelliteAdapter"
+    }
+  ],
+  "entries": [
+    {
+      "id": "mapped-satellite-start-null-conductor",
+      "status": "source-verified",
+      "adapters": [
+        "MappedSatelliteAdapter"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Null Conductor passed to MappedSatelliteAdapter.Start()",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 28,
+              "endLine": 28
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "MappedSatelliteAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+        "evidence": [
+          {
+            "sourceId": "mapped-class",
+            "startLine": 24,
+            "endLine": 30
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "MappedSatelliteAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 24,
+              "endLine": 30
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect mapped Start Conductor presence/truthy flag only.",
+          "expected": "Redacted flags identify this exact guard without telemetry payload.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 24,
+              "endLine": 30
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating construction/input proposal only; no telemetry/provider execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull Conductor for authorized mapped Satellite construction.",
+            "expected": "Conductor is present; setup/runtime remains separate.",
+            "evidence": [
+              {
+                "sourceId": "mapped-class",
+                "startLine": 24,
+                "endLine": 30
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message differs.",
+          "Effective telemetry, graph, Token or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose response/entries/token or execute telemetry/REST/conduction/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Conductor is present; setup/runtime remains separate.",
+          "expected": "Local guard would be false; telemetry success unverified.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 24,
+              "endLine": 30
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, telemetry body/entries/raw response/errors, counts/keys, token, URL/REST receipt, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no telemetry/REST/conduction/runtime/provider execution.",
+        "HandleResponse can retain Result true in a failed Signal when counts match but errors are logged; do not equate Result with success."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,772 @@
+{
+  "version": 1,
+  "ownerId": "Condensers/MapCondenser",
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "MapCondenser",
+  "sources": [
+    {
+      "id": "map-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/MapCondenser.ps1",
+      "sha256": "598B60A692FEF19878F0E1F4B326A06E64B670E3CBEA66768279287073FC4A05",
+      "symbol": "MapCondenser"
+    },
+    {
+      "id": "map-helper",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Map/Invoke-MapCondenser.ps1",
+      "sha256": "45EB83180FCE39F35BAF13F2403777807A604D1A2E524E671FD1405CE10E99FD",
+      "symbol": "Invoke-MapCondenser"
+    },
+    {
+      "id": "direct-helper",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Map/Invoke-DirectMapCondenser.ps1",
+      "sha256": "BB25B96B86A543643A8A42923BA024AFADA535953CFA2EA0437BA648E7A99468",
+      "symbol": "Invoke-DirectMapCondenser"
+    },
+    {
+      "id": "template-helper",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Map/Invoke-TemplateMapCondenser.ps1",
+      "sha256": "02087A99621D18CA8F8E19BE7A50A4F405FAA29CBA61993ADA603FC490F0B0A6",
+      "symbol": "Invoke-TemplateMapCondenser"
+    },
+    {
+      "id": "token-helper",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Token/Invoke-JsonTokenCondenser.ps1",
+      "sha256": "0F34A24DF3CBDA88698121EEF97951844E9B6AC49A34EF5164D23E2A1B938FE8",
+      "symbol": "Invoke-JsonTokenCondenser"
+    }
+  ],
+  "entries": [
+    {
+      "id": "map-plan-required",
+      "status": "source-verified",
+      "adapters": [
+        "MapCondenser"
+      ],
+      "activities": [
+        "Map"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Map requires Config.ProposalPath or a Proposal Signal.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 105,
+              "endLine": 105
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Map receives null Plan before any proposal-path lookup.",
+        "evidence": [
+          {
+            "sourceId": "map-class",
+            "startLine": 101,
+            "endLine": 105
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The Map Plan input is null.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 105,
+              "endLine": 105
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm canonical Map activity and Plan null flag only; do not inspect proposal content.",
+          "expected": "Plan null is true at the line-105 guard.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 105,
+              "endLine": 105
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for the originating Map Plan/proposal only; do not run helper dispatch or mutate ItemSignal here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Provide a proposal compatible with ItemSignal runtime type and with Result, or a Plan containing a nonblank Config.ProposalPath; choose the intended existing input form.",
+            "expected": "The Map Plan is no longer null; later guards still require separate validation.",
+            "evidence": [
+              {
+                "sourceId": "map-class",
+                "startLine": 105,
+                "endLine": 105
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical adapter/activity or exact log differs.",
+          "The effective Plan/proposal source cannot be identified with redacted metadata.",
+          "The proposed change would alter another owner, source implementation, provider or payload content outside the intended local input."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm Plan is nonnull and the selected input form is present before retry under separate authority.",
+          "expected": "The Map Plan is no longer null; later guards still require separate validation.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 105,
+              "endLine": 105
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude proposal/data/content, ItemSignal, full Plan, path values, token strings, credentials and provider payload; retain canonical adapter/activity, exact message and presence/type/success/HasResult flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime Map/provider execution.",
+        "Passing this guard does not prove downstream helper dispatch or result success."
+      ]
+    },
+    {
+      "id": "map-proposal-path-required",
+      "status": "source-verified",
+      "adapters": [
+        "MapCondenser"
+      ],
+      "activities": [
+        "Map"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Map requires a nonempty Config.ProposalPath.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 108,
+              "endLine": 108
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Map has a nonnull Plan not assignable to ItemSignal runtime type, but Config.ProposalPath lookup fails, has no result, or stringifies blank.",
+        "evidence": [
+          {
+            "sourceId": "map-class",
+            "startLine": 104,
+            "endLine": 108
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The Plan took the path-input branch and does not supply a usable Config.ProposalPath.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 108,
+              "endLine": 108
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect whether Plan is assignable to ItemSignal runtime type, then Config.ProposalPath lookup success/HasResult and nonblank flag; redact path value.",
+          "expected": "The path-input branch was selected and at least one required path flag fails before ItemSignal proposal lookup.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 108,
+              "endLine": 108
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for the originating Map Plan/proposal only; do not run helper dispatch or mutate ItemSignal here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Set Config.ProposalPath to an intended nonblank ItemSignal path in the originating Plan, or supply a proposal compatible with ItemSignal runtime type and with Result.",
+            "expected": "A nonblank proposal path can reach the next lookup, or a compatible direct proposal can bypass it; later guards remain conditional.",
+            "evidence": [
+              {
+                "sourceId": "map-class",
+                "startLine": 108,
+                "endLine": 108
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical adapter/activity or exact log differs.",
+          "The effective Plan/proposal source cannot be identified with redacted metadata.",
+          "The proposed change would alter another owner, source implementation, provider or payload content outside the intended local input."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm the chosen branch using the ItemSignal runtime-type compatibility check; for path input confirm member presence and nonblank result.",
+          "expected": "A nonblank proposal path can reach the next lookup, or a compatible direct proposal can bypass it; later guards remain conditional.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 108,
+              "endLine": 108
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude proposal/data/content, ItemSignal, full Plan, path values, token strings, credentials and provider payload; retain canonical adapter/activity, exact message and presence/type/success/HasResult flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime Map/provider execution.",
+        "Passing this guard does not prove downstream helper dispatch or result success."
+      ]
+    },
+    {
+      "id": "map-proposal-path-unresolved",
+      "status": "source-verified",
+      "adapters": [
+        "MapCondenser"
+      ],
+      "activities": [
+        "Map"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Map ProposalPath did not resolve.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 111,
+              "endLine": 111
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Configured Config.ProposalPath is nonblank, but lookup in ItemSignal fails or has no Result.",
+        "evidence": [
+          {
+            "sourceId": "map-class",
+            "startLine": 107,
+            "endLine": 111
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The selected proposal path has no resolved ItemSignal Result at this guard.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 111,
+              "endLine": 111
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm path lookup success/HasResult flags against ItemSignal metadata, without printing the path or proposal.",
+          "expected": "The selected proposal lookup fails or has no Result.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 111,
+              "endLine": 111
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for the originating Map Plan/proposal only; do not run helper dispatch or mutate ItemSignal here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Correct Config.ProposalPath to an existing intended proposal location, or supply a proposal compatible with ItemSignal runtime type directly; preserve the path/result type distinction.",
+            "expected": "The proposal lookup resolves with a Result; the next runtime-type compatibility guard remains separate.",
+            "evidence": [
+              {
+                "sourceId": "map-class",
+                "startLine": 111,
+                "endLine": 111
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical adapter/activity or exact log differs.",
+          "The effective Plan/proposal source cannot be identified with redacted metadata.",
+          "The proposed change would alter another owner, source implementation, provider or payload content outside the intended local input."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm the selected target exists and has a Result; do not infer that its value is compatible with ItemSignal runtime type.",
+          "expected": "The proposal lookup resolves with a Result; the next runtime-type compatibility guard remains separate.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 111,
+              "endLine": 111
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude proposal/data/content, ItemSignal, full Plan, path values, token strings, credentials and provider payload; retain canonical adapter/activity, exact message and presence/type/success/HasResult flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime Map/provider execution.",
+        "Passing this guard does not prove downstream helper dispatch or result success."
+      ]
+    },
+    {
+      "id": "map-data-path-unresolved",
+      "status": "source-verified",
+      "adapters": [
+        "MapCondenser"
+      ],
+      "activities": [
+        "Map"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Map DataPath did not resolve.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 116,
+              "endLine": 116
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Optional Config.DataPath lookup has a Result, but its selected ItemSignal lookup fails or has no Result.",
+        "evidence": [
+          {
+            "sourceId": "map-class",
+            "startLine": 112,
+            "endLine": 116
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "An explicitly selected data path does not resolve with a Result.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 116,
+              "endLine": 116
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Config.DataPath presence and selected ItemSignal lookup success/HasResult flags; redact path and data.",
+          "expected": "DataPath is supplied and its selected lookup fails or lacks Result.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 116,
+              "endLine": 116
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for the originating Map Plan/proposal only; do not run helper dispatch or mutate ItemSignal here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Point Config.DataPath to the intended ItemSignal data Result, or remove the optional member to use current ItemSignal Result.",
+            "expected": "The optional lookup resolves or is omitted; subsequent proposal/content guards remain conditional.",
+            "evidence": [
+              {
+                "sourceId": "map-class",
+                "startLine": 116,
+                "endLine": 116
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical adapter/activity or exact log differs.",
+          "The effective Plan/proposal source cannot be identified with redacted metadata.",
+          "The proposed change would alter another owner, source implementation, provider or payload content outside the intended local input."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm the chosen source data has a Result or the optional path is absent.",
+          "expected": "The optional lookup resolves or is omitted; subsequent proposal/content guards remain conditional.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 116,
+              "endLine": 116
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude proposal/data/content, ItemSignal, full Plan, path values, token strings, credentials and provider payload; retain canonical adapter/activity, exact message and presence/type/success/HasResult flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime Map/provider execution.",
+        "Passing this guard does not prove downstream helper dispatch or result success."
+      ]
+    },
+    {
+      "id": "map-proposal-signal-required",
+      "status": "source-verified",
+      "adapters": [
+        "MapCondenser"
+      ],
+      "activities": [
+        "Map"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Map proposal must be a Signal with a Result.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 121,
+              "endLine": 121
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Resolved Config.ProposalPath value fails assignability to ItemSignal runtime type or HasResult; a directly supplied compatible Plan also must have Result.",
+        "evidence": [
+          {
+            "sourceId": "map-class",
+            "startLine": 117,
+            "endLine": 121
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The selected proposal is incompatible with ItemSignal runtime type or lacks Result, even if it is generically a Signal.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 121,
+              "endLine": 121
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only proposal assignability to ItemSignal.GetType() and HasResult flags after selection; redact payload.",
+          "expected": "At least one runtime-type compatibility or Result flag fails at line 121.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 121,
+              "endLine": 121
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for the originating Map Plan/proposal only; do not run helper dispatch or mutate ItemSignal here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply a proposal assignable to ItemSignal runtime type with a Result; for path input, select the compatible Signal node rather than a terminal unwrapped payload.",
+            "expected": "The selected proposal passes actual runtime-type/Result guard; content and mode checks remain separate.",
+            "evidence": [
+              {
+                "sourceId": "map-class",
+                "startLine": 121,
+                "endLine": 121
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical adapter/activity or exact log differs.",
+          "The effective Plan/proposal source cannot be identified with redacted metadata.",
+          "The proposed change would alter another owner, source implementation, provider or payload content outside the intended local input."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm proposal -is ItemSignal.GetType() and HasResult is true; generic Signal membership alone is insufficient.",
+          "expected": "The selected proposal passes actual runtime-type/Result guard; content and mode checks remain separate.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 121,
+              "endLine": 121
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude proposal/data/content, ItemSignal, full Plan, path values, token strings, credentials and provider payload; retain canonical adapter/activity, exact message and presence/type/success/HasResult flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime Map/provider execution.",
+        "Passing this guard does not prove downstream helper dispatch or result success."
+      ]
+    },
+    {
+      "id": "map-proposal-content-missing",
+      "status": "source-verified",
+      "adapters": [
+        "MapCondenser"
+      ],
+      "activities": [
+        "Map"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Map proposal Content is missing.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 124,
+              "endLine": 124
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Proposal passes Signal/Result validation, but @.Content lookup fails or has no Result.",
+        "evidence": [
+          {
+            "sourceId": "map-class",
+            "startLine": 120,
+            "endLine": 124
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The selected proposal Signal payload lacks resolvable @.Content.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 124,
+              "endLine": 124
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only @.Content lookup success and HasResult flags on the selected proposal Signal; do not print content.",
+          "expected": "The required content lookup fails or has no Result.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 124,
+              "endLine": 124
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for the originating Map Plan/proposal only; do not run helper dispatch or mutate ItemSignal here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Add or select intended proposal payload Content at @.Content without changing unrelated relay data.",
+            "expected": "The required content lookup has a Result; Direct/Template processing remains conditional.",
+            "evidence": [
+              {
+                "sourceId": "map-class",
+                "startLine": 124,
+                "endLine": 124
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical adapter/activity or exact log differs.",
+          "The effective Plan/proposal source cannot be identified with redacted metadata.",
+          "The proposed change would alter another owner, source implementation, provider or payload content outside the intended local input."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm @.Content resolves with a Result on the selected Signal.",
+          "expected": "The required content lookup has a Result; Direct/Template processing remains conditional.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 124,
+              "endLine": 124
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude proposal/data/content, ItemSignal, full Plan, path values, token strings, credentials and provider payload; retain canonical adapter/activity, exact message and presence/type/success/HasResult flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime Map/provider execution.",
+        "Passing this guard does not prove downstream helper dispatch or result success."
+      ]
+    },
+    {
+      "id": "map-proposal-mode-unsupported",
+      "status": "source-verified",
+      "adapters": [
+        "MapCondenser"
+      ],
+      "activities": [
+        "Map"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Map proposal CondenserMode is unsupported.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 126,
+              "endLine": 126
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Proposal mode lookup fails or its result fails PowerShell case-insensitive -notin comparison with Direct/Template; missing mode uses resolver default Direct.",
+        "evidence": [
+          {
+            "sourceId": "map-class",
+            "startLine": 122,
+            "endLine": 126
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "An explicitly supplied mode is outside the two supported values under case-insensitive comparison, or the mode lookup fails despite its default.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 126,
+              "endLine": 126
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only @.CondenserMode lookup success and case-insensitive membership in Direct/Template; do not print proposal payload.",
+          "expected": "The mode resolver failed or its result is unsupported under case-insensitive membership; case variants of Direct/Template are accepted by this guard.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 126,
+              "endLine": 126
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for the originating Map Plan/proposal only; do not run helper dispatch or mutate ItemSignal here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use canonical spelling Direct or Template for clarity, or omit the mode for the source-declared Direct default after checking resolver outcome; case variants alone do not trigger this guard.",
+            "expected": "Mode selection passes the source case-insensitive supported-value guard; helper dispatch remains conditional.",
+            "evidence": [
+              {
+                "sourceId": "map-class",
+                "startLine": 126,
+                "endLine": 126
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical adapter/activity or exact log differs.",
+          "The effective Plan/proposal source cannot be identified with redacted metadata.",
+          "The proposed change would alter another owner, source implementation, provider or payload content outside the intended local input."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm resolver success and case-insensitive supported-value membership; do not classify a case variant alone as this failure.",
+          "expected": "Mode selection passes the source case-insensitive supported-value guard; helper dispatch remains conditional.",
+          "evidence": [
+            {
+              "sourceId": "map-class",
+              "startLine": 126,
+              "endLine": 126
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude proposal/data/content, ItemSignal, full Plan, path values, token strings, credentials and provider payload; retain canonical adapter/activity, exact message and presence/type/success/HasResult flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime Map/provider execution.",
+        "Passing this guard does not prove downstream helper dispatch or result success."
+      ]
+    }
+  ],
+  "unverified": [
+    {
+      "id": "map-dispatch-failed",
+      "reportedText": "Map proposal dispatch failed.",
+      "reason": "Class Map branch line 131 and non-activity Invoke overload line 173 wrap null or any failing Map helper result. The message alone does not identify Direct/Template, a failing child guard or a safe correction.",
+      "neededEvidence": "Canonical invoked overload/activity, selected mode and redacted child Signal source/failure identity; correlate to direct/template helper guard without content."
+    },
+    {
+      "id": "map-helper-failures",
+      "reportedText": "Proposal must be a Signal with a Result.; DirectMapCondenser failed.; Unknown CondenserMode: <mode>; ❌ Invalid or missing Proposal.Result.Content for condensation.; ❌ Invalid or missing Proposal.Content for condensation.",
+      "reason": "Direct Map activity prechecks proposal compatibility with ItemSignal runtime type/Result, @.Content and case-insensitive Direct/Template mode before helper dispatch, while the separate no-Activity overload can reach helper failures. Direct/template helper failures are then wrapped by Map proposal dispatch failed; current helper attribution, especially Template parameter shape, cannot be assigned a distinct declared Map route from these texts alone.",
+      "neededEvidence": "Exact declared activity/overload and redacted helper Signal origin, selected mode and failing source guard; confirm an observable emitted helper message after class dispatch before adding a route."
+    },
+    {
+      "id": "invoke-token-helper-failures",
+      "reportedText": "Invoke-JsonTokenCondenser failed <operation>. <exception>",
+      "reason": "Class Invoke forwards helper result extraction and writeback without cause-specific MergeSignal failure handling; token helper has multiple operation-specific catches and deeper crawl throws that are wrapped or caught. A catch label alone does not establish a bounded correction.",
+      "neededEvidence": "Exact emitted message, source-correlated operation and redacted exception class/child path; verify class dispatch route and safe input correction without content or token dump."
+    }
+  ]
+}

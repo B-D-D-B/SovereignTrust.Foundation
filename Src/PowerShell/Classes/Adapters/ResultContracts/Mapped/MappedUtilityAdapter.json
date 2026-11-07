@@ -6,31 +6,31 @@
       "id": "s1",
       "repository": "SovereignTrust.Foundation",
       "path": "Src/PowerShell/Classes/Adapters/MappedUtilityAdapter.ps1",
-      "sha256": "8CBF4B23C6017729CF83ECF69F220ACED508C1D5B9A424A8F1598E1DEEF6A06C"
+      "sha256": "CDE92F51376D11DD23B01DC3E07AE37D9405C7B1914EC44E623FC3CB3FD7FBD7"
     },
     {
       "id": "s2",
       "repository": "SDAFusion.Adapters",
       "path": "Src/Utility/Media/PowerShell/Utility_Media.psm1",
-      "sha256": "00E7739FB187D551A48BEB45398973691C24BCA7821203C5E59658A1362D308C"
+      "sha256": "5BB2D1A60A4D93FCE88FAA21B5AC1918468CACE8A48BD520576B0D9C2F1BB55E"
     },
     {
       "id": "s3",
       "repository": "SDAFusion.Adapters",
       "path": "Src/Utility/Media/PowerShell/Magik/Invoke-OverlayImage.ps1",
-      "sha256": "BCA7FD1692D45D521B008C74206C8D6A2EF345D7B4EFFA0C6AA8833090F149F1"
+      "sha256": "9E154584B7E9E9C9944C2AB6DC23039AE3312C51345CCDA1D69A6E242E95B84A"
     },
     {
       "id": "s4",
       "repository": "SDAFusion.Adapters",
       "path": "Src/Utility/Media/PowerShell/Magik/Invoke-ResizeImage.ps1",
-      "sha256": "382DA31B6A61A8F09F4E67F85B9B10BA1993E15B75B3D32FF2618F9CAA8E1615"
+      "sha256": "EBDC24512F3D996767250E358BE277D18DDBFAD9CC9E9408D7360FE35D62A58A"
     },
     {
       "id": "s5",
       "repository": "SDAFusion.Adapters",
       "path": "Src/Utility/Media/PowerShell/Magik/Invoke-InspectImage.ps1",
-      "sha256": "66C62E6600CCC9B3104C74AC4983B08D0A881D74F705A7F4EBA2FC470E46BEE0"
+      "sha256": "9517F25628AE99B004B3ECBA09AD60E7675DBDDC30C8770454A1892638BA4D4D"
     }
 
   ],
@@ -46,7 +46,7 @@
             "when": "Config supplies source/target/options; existing/skip/overwrite branches are helper-controlled",
             "outcomes": [
               {
-                "condition": "ImageMagick helper reports success",
+                "condition": "child created staged output; Resize accepts completed zero or nonzero exit and promotes it",
                 "signalState": "success",
                 "hasResult": true,
                 "resultType": "Boolean",
@@ -71,17 +71,17 @@
                 "signalState": "failure",
                 "hasResult": false,
                 "resultType": "absent",
-                "limitations": "helper may set false and messages internally, but mapped wrapper discards failure Result"
+                "limitations": "helper returns Critical without Result; mapped wrapper retains failure"
               }
             ],
             "sideEffects": [
-              "may write or replace target image"
+              "may create a sibling stage and move or replace the verified target image"
             ],
             "evidence": [
               {
                 "source": "s1",
                 "symbol": "'Resize'",
-                "line": 86,
+                "line": 87,
                 "kind": "source-derived"
               },
               {
@@ -113,7 +113,7 @@
             "when": "Config supplies source/target/options; existing/skip/overwrite branches are helper-controlled",
             "outcomes": [
               {
-                "condition": "ImageMagick helper reports success",
+                "condition": "child exited zero, created staged output and promotion succeeded",
                 "signalState": "success",
                 "hasResult": true,
                 "resultType": "Boolean",
@@ -138,17 +138,17 @@
                 "signalState": "failure",
                 "hasResult": false,
                 "resultType": "absent",
-                "limitations": "helper may set false and messages internally, but mapped wrapper discards failure Result"
+                "limitations": "helper returns Critical without Result; mapped wrapper retains failure"
               }
             ],
             "sideEffects": [
-              "may write or replace target image"
+              "may create a sibling stage and move or replace the verified target image"
             ],
             "evidence": [
               {
                 "source": "s1",
                 "symbol": "'Overlay'",
-                "line": 86,
+                "line": 87,
                 "kind": "source-derived"
               },
               {
@@ -216,9 +216,84 @@
             "evidence": [
               {"source":"s1","symbol":"'Inspect'","line":87,"kind":"source-derived"},
               {"source":"s2","symbol":"\"Inspect\"","line":69,"kind":"source-derived"},
-              {"source":"s5","symbol":"Invoke-InspectImage","line":113,"kind":"source-derived"}
+              {"source":"s5","symbol":"Invoke-InspectImage","line":15,"kind":"source-derived"}
             ],
             "limitations": "Pre/post hash and metadata detect many concurrent changes but are not a transactional snapshot. Source/decoded native types require selected JSON runtime; changed-input race and timeout remain unobserved until bound. Hash-only mode cannot prove pixel placement."
+          }
+        ]
+      }
+    },
+    {
+      "name": "MaterializeGeneratedImage",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result after Utility_Media materialization",
+        "variants": [
+          {
+            "adapter": "Utility_Media",
+            "support": "implemented",
+            "when": "exact producer/run/ResultKey; one bounded parsed base64 image; trusted roots and full PNG decoder available",
+            "outcomes": [
+              {
+                "condition": "immutable manifest was verified before stage creation and stage/source fully decoded and hashed",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "PSCustomObject",
+                "shape": [
+                  {"path":"Producer","type":"String","presence":"required","origin":"validated"},
+                  {"path":"RunId","type":"String","presence":"required","origin":"validated"},
+                  {"path":"SourcePath","type":"String","presence":"required","origin":"derived and verified"},
+                  {"path":"ByteLength","type":"Int64","presence":"required","origin":"measured"},
+                  {"path":"Sha256","type":"String","presence":"required","origin":"measured"},
+                  {"path":"ManifestPath","type":"String","presence":"required","origin":"derived and retained"},
+                  {"path":"Nonce","type":"String","presence":"required","origin":"random reservation"}
+                ]
+              },
+              {"condition":"invalid Result, PNG, root, manifest or collision","signalState":"failure","hasResult":false,"resultType":"absent"}
+            ],
+            "sideEffects": ["retains an immutable local manifest; may create shared image-gen parent and one nonce directory, stage and source files"],
+            "evidence": [{"source":"s1","symbol":"MaterializeGeneratedImage","kind":"source-derived"},{"source":"s2","symbol":"MaterializeGeneratedImage","kind":"source-derived"}],
+            "limitations": "This local provider-free contract does not establish a live provider image or an accepted cleanup result."
+          }
+        ]
+      }
+    },
+    {
+      "name": "ValidateVisionSelection",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result after strict raw JSON inspection",
+        "variants": [
+          {
+            "adapter": "Utility_Media",
+            "support": "implemented",
+            "when": "raw normalized Vision content string is registered under the exact Result Key",
+            "outcomes": [
+              {"condition":"one Selected string exactly SQUIRREL","signalState":"success","hasResult":true,"resultType":"PSCustomObject","shape":[{"path":"TestResult","type":"Boolean","presence":"required","origin":"strict parser"},{"path":"Selected","type":"String","presence":"required","origin":"raw JSON"}]},
+              {"condition":"wrong or malformed raw JSON selection","signalState":"success","hasResult":true,"resultType":"PSCustomObject","shape":[{"path":"TestResult","type":"Boolean","presence":"required","origin":"strict parser"},{"path":"Selected","type":"String|null","presence":"required","origin":"raw JSON where available"}]},
+              {"condition":"absent or wrong-type outer REST content","signalState":"failure","hasResult":false,"resultType":"absent"}
+            ],
+            "sideEffects": [],
+            "evidence": [{"source":"s1","symbol":"ValidateVisionSelection","kind":"source-derived"},{"source":"s2","symbol":"ValidateVisionSelection","kind":"source-derived"}],
+            "limitations": "A locally valid classification does not establish the provider generated an image or the selected campaign ran."
+          }
+        ]
+      }
+    },
+    {
+      "name": "FinalizeGeneratedImage",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result after immutable-manifest ownership finalization",
+        "variants": [
+          {
+            "adapter": "Utility_Media",
+            "support": "implemented",
+            "when": "exact producer/run; complete immutable manifest; exclusive case mutex; mapped LocalMedia operations",
+            "outcomes": [
+              {"condition":"owned stage/source deleted and Exists false, or complete manifest proves an already-cleaned case","signalState":"success","hasResult":true,"resultType":"PSCustomObject","shape":[{"path":"Producer","type":"String","presence":"required","origin":"validated"},{"path":"RunId","type":"String","presence":"required","origin":"validated"},{"path":"TestResult","type":"Boolean","presence":"required","origin":"verified cleanup"},{"path":"Exists","type":"Boolean","presence":"required","origin":"verified cleanup"},{"path":"ManifestPath","type":"String","presence":"required","origin":"validated retained manifest"}]},
+              {"condition":"manifest/ownership/mutex/LocalMedia operation is invalid or uncertain","signalState":"failure","hasResult":false,"resultType":"absent"}
+            ],
+            "sideEffects": ["mapped LocalMedia Delete may remove exactly one manifest-owned stage or source; removes an empty nonce directory; retains immutable manifest and shared image-gen parent"],
+            "evidence": [{"source":"s1","symbol":"FinalizeGeneratedImage","kind":"source-derived"},{"source":"s2","symbol":"FinalizeGeneratedImage","kind":"source-derived"}],
+            "limitations": "No remote media, provider call or live image acceptance follows from this local cleanup Result."
           }
         ]
       }

@@ -1,0 +1,1498 @@
+{
+  "version": 1,
+  "ownerId": "Condensers/TransformCondenser",
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "TransformCondenser",
+  "sources": [
+    {
+      "id": "transform-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/TransformCondenser.ps1",
+      "sha256": "A1D647F33BF1D357EC38666A5A6DE1EC30E0DB785ED0F974C5DFF2A8F1D72583",
+      "symbol": "TransformCondenser"
+    },
+    {
+      "id": "select-helper",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Transform/Invoke-TransformSelect.ps1",
+      "sha256": "FF9E5878CC98FAC8E942FFE03B0C5A5AF2B5439B41E730F2F7292AB7E9E28511",
+      "symbol": "Invoke-TransformSelect"
+    },
+    {
+      "id": "merge-helper",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Merge/Merge-CondenserCore.ps1",
+      "sha256": "4D47C7DAB443673EEE6306753DEAB3ECBBBD5F320F4F1191ACCB684EDCDDCF2A",
+      "symbol": "Invoke-MergeJson"
+    }
+  ],
+  "entries": [
+    {
+      "id": "select-content-resolver-failed",
+      "status": "source-verified",
+      "adapters": [
+        "TransformCondenser"
+      ],
+      "activities": [
+        "Select"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Failed to resolve content for Transform",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 162,
+              "endLine": 162
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Select merges failure from source, Path, Format or HtmlDecode resolver before Invoke-TransformSelect.",
+        "evidence": [
+          {
+            "sourceId": "transform-class",
+            "startLine": 152,
+            "endLine": 164
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Select merges failure from source, Path, Format or HtmlDecode resolver before Invoke-TransformSelect.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 152,
+              "endLine": 164
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect four resolver Failure flags separately and selected DefaultPath/Plan.Path presence only; redact source/path values.",
+          "expected": "Redacted metadata identifies this source guard; underlying child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 152,
+              "endLine": 164
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no graph/data overwrite, helper execution or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted failing resolver identity for its Plan/ItemSignal owner; stop before formatting, hydration or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "transform-class",
+                "startLine": 152,
+                "endLine": 164
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical Transform activity or exact message/pattern differs.",
+          "Effective Plan/data owner or intended semantics cannot be established from redacted metadata.",
+          "A proposed change would expose content, overwrite graph state or execute a child/provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff identifies failing resolver; clearance remains unverified.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 152,
+              "endLine": 164
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, graph values, source/path/member names, JSON/XML content, credentials, exception text and provider payload; retain canonical activity, exact message/pattern and presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no runtime transform/provider execution.",
+        "Passing this guard does not establish child/helper or data mutation success."
+      ]
+    },
+    {
+      "id": "inject-if-present-value",
+      "status": "source-verified",
+      "adapters": [
+        "TransformCondenser"
+      ],
+      "activities": [
+        "Inject"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Config.IfPresent supports only the exact string 'Error'.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 210,
+              "endLine": 210
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Config has an IfPresent member and its value is not native string exactly Error under case-sensitive -cne.",
+        "evidence": [
+          {
+            "sourceId": "transform-class",
+            "startLine": 204,
+            "endLine": 211
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Config has an IfPresent member and its value is not native string exactly Error under case-sensitive -cne.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 204,
+              "endLine": 211
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect member presence, native-string type and exact-Error case flag; redact Config content.",
+          "expected": "Redacted metadata identifies this source guard; underlying child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 204,
+              "endLine": 211
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/data proposal only; no helper/runtime effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use exact string Error only if collision rejection is intended, or omit IfPresent to retain legacy append behavior; do not change case by assumption.",
+            "expected": "IfPresent is absent or exact native string Error; later Inject guards remain separate.",
+            "evidence": [
+              {
+                "sourceId": "transform-class",
+                "startLine": 204,
+                "endLine": 211
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical Transform activity or exact message/pattern differs.",
+          "Effective Plan/data owner or intended semantics cannot be established from redacted metadata.",
+          "A proposed change would expose content, overwrite graph state or execute a child/provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "IfPresent is absent or exact native string Error; later Inject guards remain separate.",
+          "expected": "Local guard would be false; runtime transform success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 204,
+              "endLine": 211
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, graph values, source/path/member names, JSON/XML content, credentials, exception text and provider payload; retain canonical activity, exact message/pattern and presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no runtime transform/provider execution.",
+        "Passing this guard does not establish child/helper or data mutation success."
+      ]
+    },
+    {
+      "id": "inject-content-required",
+      "status": "source-verified",
+      "adapters": [
+        "TransformCondenser"
+      ],
+      "activities": [
+        "Inject"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inject Content is required for IfPresent=Error.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 213,
+              "endLine": 213
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "IfPresent is exact Error but Config.Content resolver failed or has no Result.",
+        "evidence": [
+          {
+            "sourceId": "transform-class",
+            "startLine": 204,
+            "endLine": 214
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "IfPresent is exact Error but Config.Content resolver failed or has no Result.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 204,
+              "endLine": 214
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Content resolver Failure/HasResult flags without content.",
+          "expected": "Redacted metadata identifies this source guard; underlying child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 204,
+              "endLine": 214
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/data proposal only; no helper/runtime effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended Config.Content with a Result in the originating Inject Plan before attempting insertion.",
+            "expected": "Content resolver succeeds with Result; target guards remain separate.",
+            "evidence": [
+              {
+                "sourceId": "transform-class",
+                "startLine": 204,
+                "endLine": 214
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical Transform activity or exact message/pattern differs.",
+          "Effective Plan/data owner or intended semantics cannot be established from redacted metadata.",
+          "A proposed change would expose content, overwrite graph state or execute a child/provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Content resolver succeeds with Result; target guards remain separate.",
+          "expected": "Local guard would be false; runtime transform success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 204,
+              "endLine": 214
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, graph values, source/path/member names, JSON/XML content, credentials, exception text and provider payload; retain canonical activity, exact message/pattern and presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no runtime transform/provider execution.",
+        "Passing this guard does not establish child/helper or data mutation success."
+      ]
+    },
+    {
+      "id": "inject-target-shape",
+      "status": "source-verified",
+      "adapters": [
+        "TransformCondenser"
+      ],
+      "activities": [
+        "Inject"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "IfPresent=Error requires a single graph Result member target.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 216,
+              "endLine": 216
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "IfPresent is Error but Plan.Path fails the exact *.#.<node>.@.<member> regex with one node/member segment.",
+        "evidence": [
+          {
+            "sourceId": "transform-class",
+            "startLine": 205,
+            "endLine": 217
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "IfPresent is Error but Plan.Path fails the exact *.#.<node>.@.<member> regex with one node/member segment.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 205,
+              "endLine": 217
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Plan.Path shape only: graph Result prefix and exactly one node/member segment; redact literal names.",
+          "expected": "Redacted metadata identifies this source guard; underlying child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 205,
+              "endLine": 217
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/data proposal only; no helper/runtime effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use the intended single graph Result member target satisfying the source grammar, or stop if the intended target is not representable.",
+            "expected": "Path matches exact required shape; parent existence remains separate.",
+            "evidence": [
+              {
+                "sourceId": "transform-class",
+                "startLine": 205,
+                "endLine": 217
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical Transform activity or exact message/pattern differs.",
+          "Effective Plan/data owner or intended semantics cannot be established from redacted metadata.",
+          "A proposed change would expose content, overwrite graph state or execute a child/provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Path matches exact required shape; parent existence remains separate.",
+          "expected": "Local guard would be false; runtime transform success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 205,
+              "endLine": 217
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, graph values, source/path/member names, JSON/XML content, credentials, exception text and provider payload; retain canonical activity, exact message/pattern and presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no runtime transform/provider execution.",
+        "Passing this guard does not establish child/helper or data mutation success."
+      ]
+    },
+    {
+      "id": "inject-reserved-segment",
+      "status": "source-verified",
+      "adapters": [
+        "TransformCondenser"
+      ],
+      "activities": [
+        "Inject"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "IfPresent=Error target segments must be literal members, not graph control words.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 220,
+              "endLine": 220
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Path shape passed, but node or member segment equals one of Signal, Grid, Result, Pointer, Jacket or ReversePointer case-insensitively.",
+        "evidence": [
+          {
+            "sourceId": "transform-class",
+            "startLine": 215,
+            "endLine": 221
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Path shape passed, but node or member segment equals one of Signal, Grid, Result, Pointer, Jacket or ReversePointer case-insensitively.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 215,
+              "endLine": 221
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect reserved-name flags for both path segments, without retaining names.",
+          "expected": "Redacted metadata identifies this source guard; underlying child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 215,
+              "endLine": 221
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/data proposal only; no helper/runtime effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Choose intended literal nonreserved node/member names; do not bypass graph control semantics.",
+            "expected": "Both segments are outside reserved set; parent existence remains separate.",
+            "evidence": [
+              {
+                "sourceId": "transform-class",
+                "startLine": 215,
+                "endLine": 221
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical Transform activity or exact message/pattern differs.",
+          "Effective Plan/data owner or intended semantics cannot be established from redacted metadata.",
+          "A proposed change would expose content, overwrite graph state or execute a child/provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Both segments are outside reserved set; parent existence remains separate.",
+          "expected": "Local guard would be false; runtime transform success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 215,
+              "endLine": 221
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, graph values, source/path/member names, JSON/XML content, credentials, exception text and provider payload; retain canonical activity, exact message/pattern and presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no runtime transform/provider execution.",
+        "Passing this guard does not establish child/helper or data mutation success."
+      ]
+    },
+    {
+      "id": "inject-parent-missing",
+      "status": "source-verified",
+      "adapters": [
+        "TransformCondenser"
+      ],
+      "activities": [
+        "Inject"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "IfPresent=Error target parent must already exist.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 226,
+              "endLine": 226
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Existing parent path *.#.<node>.@ resolver failed or has no Result.",
+        "evidence": [
+          {
+            "sourceId": "transform-class",
+            "startLine": 222,
+            "endLine": 227
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Existing parent path *.#.<node>.@ resolver failed or has no Result.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 222,
+              "endLine": 227
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect parent resolver Failure/HasResult flags and source path-shape metadata only.",
+          "expected": "Redacted metadata identifies this source guard; underlying child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 222,
+              "endLine": 227
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no graph/data overwrite, helper execution or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted target-parent evidence for graph owner and stop before creating graph state or retrying.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "transform-class",
+                "startLine": 222,
+                "endLine": 227
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical Transform activity or exact message/pattern differs.",
+          "Effective Plan/data owner or intended semantics cannot be established from redacted metadata.",
+          "A proposed change would expose content, overwrite graph state or execute a child/provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Owner handoff recorded; parent guard clearance is not claimed.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 222,
+              "endLine": 227
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, graph values, source/path/member names, JSON/XML content, credentials, exception text and provider payload; retain canonical activity, exact message/pattern and presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no runtime transform/provider execution.",
+        "Passing this guard does not establish child/helper or data mutation success."
+      ]
+    },
+    {
+      "id": "inject-target-already-exists",
+      "status": "source-verified",
+      "adapters": [
+        "TransformCondenser"
+      ],
+      "activities": [
+        "Inject"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Inject target '",
+          "suffix": "' already exists.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 230,
+              "endLine": 230
+            },
+            {
+              "sourceId": "transform-class",
+              "startLine": 233,
+              "endLine": 233
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "IfPresent=Error and parent dictionary/PSCustomObject already contains target member.",
+        "evidence": [
+          {
+            "sourceId": "transform-class",
+            "startLine": 228,
+            "endLine": 234
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "IfPresent=Error and parent dictionary/PSCustomObject already contains target member.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 228,
+              "endLine": 234
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect parent type and member-exists flag, without retaining member or existing value.",
+          "expected": "Redacted metadata identifies this source guard; underlying child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 228,
+              "endLine": 234
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no graph/data overwrite, helper execution or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record collision and intended write owner for decision; do not overwrite or choose a different key without approved data semantics.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "transform-class",
+                "startLine": 228,
+                "endLine": 234
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical Transform activity or exact message/pattern differs.",
+          "Effective Plan/data owner or intended semantics cannot be established from redacted metadata.",
+          "A proposed change would expose content, overwrite graph state or execute a child/provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Collision handoff recorded; no insertion/clearance claimed.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 228,
+              "endLine": 234
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, graph values, source/path/member names, JSON/XML content, credentials, exception text and provider payload; retain canonical activity, exact message/pattern and presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no runtime transform/provider execution.",
+        "Passing this guard does not establish child/helper or data mutation success."
+      ]
+    },
+    {
+      "id": "inject-parent-type",
+      "status": "source-verified",
+      "adapters": [
+        "TransformCondenser"
+      ],
+      "activities": [
+        "Inject"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "IfPresent=Error target parent must be a dictionary or PSCustomObject.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 236,
+              "endLine": 236
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Existing parent Result is neither IDictionary nor PSCustomObject.",
+        "evidence": [
+          {
+            "sourceId": "transform-class",
+            "startLine": 228,
+            "endLine": 237
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Existing parent Result is neither IDictionary nor PSCustomObject.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 228,
+              "endLine": 237
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only parent type-is-dictionary/type-is-PSCustomObject flags.",
+          "expected": "Redacted metadata identifies this source guard; underlying child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 228,
+              "endLine": 237
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no graph/data overwrite, helper execution or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record parent type and graph owner for correction; stop before replacing parent value or retrying.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "transform-class",
+                "startLine": 228,
+                "endLine": 237
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical Transform activity or exact message/pattern differs.",
+          "Effective Plan/data owner or intended semantics cannot be established from redacted metadata.",
+          "A proposed change would expose content, overwrite graph state or execute a child/provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Owner handoff recorded; parent type remains unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 228,
+              "endLine": 237
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, graph values, source/path/member names, JSON/XML content, credentials, exception text and provider payload; retain canonical activity, exact message/pattern and presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no runtime transform/provider execution.",
+        "Passing this guard does not establish child/helper or data mutation success."
+      ]
+    },
+    {
+      "id": "clone-source-unresolved",
+      "status": "source-verified",
+      "adapters": [
+        "TransformCondenser"
+      ],
+      "activities": [
+        "Clone"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Clone source path did not resolve to a result: ",
+          "suffix": "",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 275,
+              "endLine": 275
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Clone source lookup at Plan.Path failed or has no Result, then class logs variable path.",
+        "evidence": [
+          {
+            "sourceId": "transform-class",
+            "startLine": 268,
+            "endLine": 276
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Clone source lookup at Plan.Path failed or has no Result, then class logs variable path.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 268,
+              "endLine": 276
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Plan.Path presence and source resolver Failure/HasResult flags, without path or value.",
+          "expected": "Redacted metadata identifies this source guard; underlying child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 268,
+              "endLine": 276
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/data proposal only; no helper/runtime effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use an intended ItemSignal path that resolves with Result in originating Clone Plan, or stop if source ownership is unknown.",
+            "expected": "Selected source lookup has Result; JSON conversion remains separate.",
+            "evidence": [
+              {
+                "sourceId": "transform-class",
+                "startLine": 268,
+                "endLine": 276
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical Transform activity or exact message/pattern differs.",
+          "Effective Plan/data owner or intended semantics cannot be established from redacted metadata.",
+          "A proposed change would expose content, overwrite graph state or execute a child/provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Selected source lookup has Result; JSON conversion remains separate.",
+          "expected": "Local guard would be false; runtime transform success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 268,
+              "endLine": 276
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, graph values, source/path/member names, JSON/XML content, credentials, exception text and provider payload; retain canonical activity, exact message/pattern and presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no runtime transform/provider execution.",
+        "Passing this guard does not establish child/helper or data mutation success."
+      ]
+    },
+    {
+      "id": "merge-input-unavailable",
+      "status": "source-verified",
+      "adapters": [
+        "TransformCondenser"
+      ],
+      "activities": [
+        "Merge"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Transform.Merge requires an object with Base and Overlay members.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 296,
+              "endLine": 296
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Merge lookup at Config.DefaultPath (default %.@) failed or has no Result.",
+        "evidence": [
+          {
+            "sourceId": "transform-class",
+            "startLine": 293,
+            "endLine": 298
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Merge lookup at Config.DefaultPath (default %.@) failed or has no Result.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 293,
+              "endLine": 298
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect DefaultPath provenance and merge-input resolver Failure/HasResult flags; redact path/input.",
+          "expected": "Redacted metadata identifies this source guard; underlying child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 293,
+              "endLine": 298
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no graph/data overwrite, helper execution or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted missing merge-input evidence for ItemSignal/Plan owner; stop before graph mutation or merge execution.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "transform-class",
+                "startLine": 293,
+                "endLine": 298
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical Transform activity or exact message/pattern differs.",
+          "Effective Plan/data owner or intended semantics cannot be established from redacted metadata.",
+          "A proposed change would expose content, overwrite graph state or execute a child/provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Owner handoff recorded; input guard clearance unverified.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 293,
+              "endLine": 298
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, graph values, source/path/member names, JSON/XML content, credentials, exception text and provider payload; retain canonical activity, exact message/pattern and presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no runtime transform/provider execution.",
+        "Passing this guard does not establish child/helper or data mutation success."
+      ]
+    },
+    {
+      "id": "merge-input-type",
+      "status": "source-verified",
+      "adapters": [
+        "TransformCondenser"
+      ],
+      "activities": [
+        "Merge"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Transform.Merge input must be a dictionary or PSCustomObject.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 309,
+              "endLine": 309
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Resolved merge input has Result but is neither IDictionary nor PSCustomObject.",
+        "evidence": [
+          {
+            "sourceId": "transform-class",
+            "startLine": 299,
+            "endLine": 310
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Resolved merge input has Result but is neither IDictionary nor PSCustomObject.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 299,
+              "endLine": 310
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only input type flags, not Base/Overlay content.",
+          "expected": "Redacted metadata identifies this source guard; underlying child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 299,
+              "endLine": 310
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/data proposal only; no helper/runtime effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended dictionary or PSCustomObject merge container at selected source under owning Plan/data approval.",
+            "expected": "Selected input has supported object type; member guards remain separate.",
+            "evidence": [
+              {
+                "sourceId": "transform-class",
+                "startLine": 299,
+                "endLine": 310
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical Transform activity or exact message/pattern differs.",
+          "Effective Plan/data owner or intended semantics cannot be established from redacted metadata.",
+          "A proposed change would expose content, overwrite graph state or execute a child/provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Selected input has supported object type; member guards remain separate.",
+          "expected": "Local guard would be false; runtime transform success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 299,
+              "endLine": 310
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, graph values, source/path/member names, JSON/XML content, credentials, exception text and provider payload; retain canonical activity, exact message/pattern and presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no runtime transform/provider execution.",
+        "Passing this guard does not establish child/helper or data mutation success."
+      ]
+    },
+    {
+      "id": "merge-base-member-missing",
+      "status": "source-verified",
+      "adapters": [
+        "TransformCondenser"
+      ],
+      "activities": [
+        "Merge"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Transform.Merge input is missing Base.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 313,
+              "endLine": 313
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Resolved dictionary/PSCustomObject merge input lacks Base member; presence is checked, not value truthiness.",
+        "evidence": [
+          {
+            "sourceId": "transform-class",
+            "startLine": 299,
+            "endLine": 314
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Resolved dictionary/PSCustomObject merge input lacks Base member; presence is checked, not value truthiness.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 299,
+              "endLine": 314
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect input type and Base member-presence flag only.",
+          "expected": "Redacted metadata identifies this source guard; underlying child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 299,
+              "endLine": 314
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/data proposal only; no helper/runtime effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Add intended Base member to originating merge input under data owner approval; native false/null values may still count present.",
+            "expected": "Base member is present; Overlay/result behavior remains separate.",
+            "evidence": [
+              {
+                "sourceId": "transform-class",
+                "startLine": 299,
+                "endLine": 314
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical Transform activity or exact message/pattern differs.",
+          "Effective Plan/data owner or intended semantics cannot be established from redacted metadata.",
+          "A proposed change would expose content, overwrite graph state or execute a child/provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Base member is present; Overlay/result behavior remains separate.",
+          "expected": "Local guard would be false; runtime transform success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 299,
+              "endLine": 314
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, graph values, source/path/member names, JSON/XML content, credentials, exception text and provider payload; retain canonical activity, exact message/pattern and presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no runtime transform/provider execution.",
+        "Passing this guard does not establish child/helper or data mutation success."
+      ]
+    },
+    {
+      "id": "merge-overlay-member-missing",
+      "status": "source-verified",
+      "adapters": [
+        "TransformCondenser"
+      ],
+      "activities": [
+        "Merge"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Transform.Merge input is missing Overlay.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 317,
+              "endLine": 317
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Resolved dictionary/PSCustomObject has Base but lacks Overlay member; presence is checked, not value truthiness.",
+        "evidence": [
+          {
+            "sourceId": "transform-class",
+            "startLine": 299,
+            "endLine": 318
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Resolved dictionary/PSCustomObject has Base but lacks Overlay member; presence is checked, not value truthiness.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 299,
+              "endLine": 318
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect input type, Base-present and Overlay-present flags only.",
+          "expected": "Redacted metadata identifies this source guard; underlying child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 299,
+              "endLine": 318
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/data proposal only; no helper/runtime effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Add intended Overlay member to originating merge input under data owner approval; native false/null values may still count present.",
+            "expected": "Overlay member is present; helper merge success remains unverified.",
+            "evidence": [
+              {
+                "sourceId": "transform-class",
+                "startLine": 299,
+                "endLine": 318
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical Transform activity or exact message/pattern differs.",
+          "Effective Plan/data owner or intended semantics cannot be established from redacted metadata.",
+          "A proposed change would expose content, overwrite graph state or execute a child/provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Overlay member is present; helper merge success remains unverified.",
+          "expected": "Local guard would be false; runtime transform success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 299,
+              "endLine": 318
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, graph values, source/path/member names, JSON/XML content, credentials, exception text and provider payload; retain canonical activity, exact message/pattern and presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no runtime transform/provider execution.",
+        "Passing this guard does not establish child/helper or data mutation success."
+      ]
+    },
+    {
+      "id": "merge-child-resolver-failed",
+      "status": "source-verified",
+      "adapters": [
+        "TransformCondenser"
+      ],
+      "activities": [
+        "Merge"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Failed to resolve content for Transform",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 328,
+              "endLine": 328
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "After member presence, Base or Overlay child resolver fails; class logs the same text as Select with disjoint activity selector.",
+        "evidence": [
+          {
+            "sourceId": "transform-class",
+            "startLine": 320,
+            "endLine": 330
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "After member presence, Base or Overlay child resolver fails; class logs the same text as Select with disjoint activity selector.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 320,
+              "endLine": 330
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Base and Overlay child resolver Failure flags separately; redact values and paths.",
+          "expected": "Redacted metadata identifies this source guard; underlying child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 320,
+              "endLine": 330
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no graph/data overwrite, helper execution or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted failing child resolver for its data owner and stop before Invoke-MergeJson or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "transform-class",
+                "startLine": 320,
+                "endLine": 330
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical Transform activity or exact message/pattern differs.",
+          "Effective Plan/data owner or intended semantics cannot be established from redacted metadata.",
+          "A proposed change would expose content, overwrite graph state or execute a child/provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Owner handoff identifies failing child; guard clearance remains unverified.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "transform-class",
+              "startLine": 320,
+              "endLine": 330
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, graph values, source/path/member names, JSON/XML content, credentials, exception text and provider payload; retain canonical activity, exact message/pattern and presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no runtime transform/provider execution.",
+        "Passing this guard does not establish child/helper or data mutation success."
+      ]
+    }
+  ],
+  "unverified": [
+    {
+      "id": "project-template-conversion",
+      "reportedText": "Failed to clone Project template for a node: <exception>",
+      "reason": "Project catch spans ConvertTo-Json and ConvertFrom-Json; wrapper does not distinguish serialization versus parsing or identify safe content correction.",
+      "neededEvidence": "Redacted conversion operation/error class and selected Project node/template type, without content."
+    },
+    {
+      "id": "select-helper-failure",
+      "reportedText": "JSON formatting failed.; 🔥 Exception in Invoke-TransformSelect: <exception>; 🔥 Exception during Convert-VirtualPathToXPath: <exception>",
+      "reason": "Select class wrapper follows any helper failed Signal; helper catches multiple JSON/XML/path/predicate operations. Neither wrapper alone identifies a bounded correction.",
+      "neededEvidence": "Redacted selected SourceFormat, failing helper operation/source site and error class, without source/path/payload text."
+    },
+    {
+      "id": "select-path-result-ambiguous",
+      "reportedText": "🔥 Path returned no result: <SourcePath>",
+      "reason": "Invoke-TransformSelect logs identical path text as Critical in Json branch line234 and Information in Xml branch line256; error-text matching alone cannot distinguish failure from nonfailure under the same Select activity.",
+      "neededEvidence": "Structured SourceFormat and severity/Signal failure plus exact helper line; do not retain SourcePath."
+    },
+    {
+      "id": "select-virtual-path-guards",
+      "reportedText": "Ordinal-based/Unrecognized/Invalid VirtualPath segment or predicate: <variable>",
+      "reason": "Convert-VirtualPathToXPath throws specific segment/predicate errors at lines139,143,150,160,165,172 and198, but its line215 catch logs one exception wrapper; Select helper may continue with original SourcePath when no converted Result. Canonical emitted failure and a bounded discriminator require source/format/severity correlation.",
+      "neededEvidence": "Redacted SourceFormat=Xml, exact inner guard line and structured helper failure/outer Select Signal propagation; never path, segment, predicate or XML content."
+    },
+    {
+      "id": "inject-insertion-failed",
+      "reportedText": "IfPresent=Error insertion failed.",
+      "reason": "Inject wrapper at line240 covers null or failed Add-PathToDictionary Signal after parent/member guards; it does not identify child insertion cause or safe state repair.",
+      "neededEvidence": "Redacted Add-PathToDictionary child failure class/site and graph owner; no content/member value."
+    },
+    {
+      "id": "clone-json-conversion",
+      "reportedText": "Clone JSON conversion failed: <exception>",
+      "reason": "Clone catch covers serialization and deserialization and does not prove a specific content defect or correction.",
+      "neededEvidence": "Redacted conversion stage/error class and source value type, without JSON or payload."
+    },
+    {
+      "id": "transform-merge-helper-and-forwarded",
+      "reportedText": "Invoke-MergeJson failure or forwarded Project/Hydration/Token child failure",
+      "reason": "Transform.Merge forwards helper failure and Project/Select child calls without a new cause-specific owner log; direct helper catches multiple JSON operations.",
+      "neededEvidence": "Exact child adapter/activity/error source and redacted helper operation/status before assigning a route."
+    }
+  ]
+}

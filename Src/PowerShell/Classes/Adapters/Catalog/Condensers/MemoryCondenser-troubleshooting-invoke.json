@@ -1,0 +1,373 @@
+{
+  "version": 2,
+  "ownerId": "Condensers/MemoryCondenser",
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "MemoryCondenser",
+  "part": "invoke",
+  "sources": [
+    {
+      "id": "memory-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/MemoryCondenser.ps1",
+      "sha256": "A721EA8063F6D83173984CC92D2C3AD1330263FDD52A9B0425DF5890C0D91303",
+      "symbol": "MemoryCondenser"
+    }
+  ],
+  "entries": [
+    {
+      "id": "generate-empty-operator",
+      "status": "source-verified",
+      "adapters": [
+        "MemoryCondenser"
+      ],
+      "activities": [
+        "Generate"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "throw",
+          "text": "Operator cannot be empty. Supported operators: And, Or.",
+          "evidence": [
+            {
+              "sourceId": "memory-class",
+              "startLine": 378,
+              "endLine": 378
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Generate main-loop TestAllTrue receives at least one IsEnabled value and a blank/null explicit IsEnabledOperator result. Missing operator uses resolver default And. Goto line 302 calls the class method with one argument and cannot enter this two-argument method body.",
+        "evidence": [
+          {
+            "sourceId": "memory-class",
+            "startLine": 106,
+            "endLine": 113
+          },
+          {
+            "sourceId": "memory-class",
+            "startLine": 370,
+            "endLine": 378
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The selected step has a nonempty IsEnabled value set and an explicitly blank/null effective IsEnabledOperator in the main Generate loop.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "memory-class",
+              "startLine": 106,
+              "endLine": 113
+            },
+            {
+              "sourceId": "memory-class",
+              "startLine": 371,
+              "endLine": 378
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm exact thrown text and Generate main-loop call at line 113; inspect only IsEnabled nonempty-value flag and effective IsEnabledOperator blank flag. Check that this is not the Goto arity path. Do not print phase/step contents.",
+          "expected": "At least one IsEnabled value reaches TestAllTrue and its Operator is blank at line 377; otherwise stop.",
+          "evidence": [
+            {
+              "sourceId": "memory-class",
+              "startLine": 106,
+              "endLine": 113
+            },
+            {
+              "sourceId": "memory-class",
+              "startLine": 370,
+              "endLine": 378
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Input-local proposal only for confirmed main-loop blank operator; no Goto or source correction here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "For the confirmed main-loop branch, set originating step IsEnabledOperator to And or Or (case-insensitive), or omit it to use the declared And default.",
+            "expected": "Effective operator is nonblank/supported before TestAllTrue; downstream success remains conditional.",
+            "evidence": [
+              {
+                "sourceId": "memory-class",
+                "startLine": 107,
+                "endLine": 113
+              },
+              {
+                "sourceId": "memory-class",
+                "startLine": 377,
+                "endLine": 384
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The main-loop call or nonempty IsEnabled prerequisite cannot be verified.",
+          "Goto line 302 or a different arity failure is implicated; this exact throw is not established there.",
+          "The proposed change touches source, runtime providers, unrelated steps or sensitive data."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm at least one IsEnabled value and effective operator nonblank And/Or on the selected main-loop step.",
+          "expected": "The empty-operator guard would be false; Generate success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "memory-class",
+              "startLine": 106,
+              "endLine": 113
+            },
+            {
+              "sourceId": "memory-class",
+              "startLine": 371,
+              "endLine": 384
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full phase/step/Plan, path/container/resource values, ItemSignal payload, credentials and child results; retain exact message, canonical Generate context and IsEnabled count/operator flags.",
+      "limitations": [
+        "Source-only confidence; no Generate/runtime/provider execution.",
+        "TestAllTrue returns before operator validation for zero IsEnabled values; Goto one-argument call has a separate arity failure, not this emitted throw."
+      ]
+    },
+    {
+      "id": "generate-unsupported-operator",
+      "status": "source-verified",
+      "adapters": [
+        "MemoryCondenser"
+      ],
+      "activities": [
+        "Generate"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Unsupported operator '",
+          "suffix": "'. Supported operators: And, Or.",
+          "evidence": [
+            {
+              "sourceId": "memory-class",
+              "startLine": 384,
+              "endLine": 384
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Generate main loop passes at least one IsEnabled value and a nonblank IsEnabledOperator to TestAllTrue, but trimmed lowercase operator is neither and nor or.",
+        "evidence": [
+          {
+            "sourceId": "memory-class",
+            "startLine": 106,
+            "endLine": 113
+          },
+          {
+            "sourceId": "memory-class",
+            "startLine": 370,
+            "endLine": 384
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The selected step has at least one IsEnabled value and an explicit nonblank unsupported IsEnabledOperator.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "memory-class",
+              "startLine": 106,
+              "endLine": 113
+            },
+            {
+              "sourceId": "memory-class",
+              "startLine": 381,
+              "endLine": 384
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the anchored prefix/suffix and Generate main-loop selector, then inspect only nonempty IsEnabled value-set flag and operator presence/nonblank/case-insensitive And/Or membership; do not retain the variable middle text.",
+          "expected": "At least one IsEnabled value reaches TestAllTrue and operator is nonblank outside And/Or after Trim/ToLowerInvariant.",
+          "evidence": [
+            {
+              "sourceId": "memory-class",
+              "startLine": 106,
+              "endLine": 113
+            },
+            {
+              "sourceId": "memory-class",
+              "startLine": 381,
+              "endLine": 384
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for the originating Generate step only; do not execute the phase here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Set IsEnabledOperator to And or Or for intended condition combination, or omit it for declared And default; choose semantics deliberately.",
+            "expected": "The effective operator is supported, leaving step conditions and downstream work separate.",
+            "evidence": [
+              {
+                "sourceId": "memory-class",
+                "startLine": 106,
+                "endLine": 113
+              },
+              {
+                "sourceId": "memory-class",
+                "startLine": 381,
+                "endLine": 384
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The exact Generate step or intended And/Or semantics are unknown.",
+          "The message is an unrelated downstream/operator log rather than the current TestAllTrue throw."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm nonempty IsEnabled values and effective operator trims to And/Or case-insensitively on the selected main-loop step.",
+          "expected": "The unsupported-operator guard would be false; runtime Generate success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "memory-class",
+              "startLine": 106,
+              "endLine": 113
+            },
+            {
+              "sourceId": "memory-class",
+              "startLine": 381,
+              "endLine": 384
+            }
+          ]
+        }
+      ],
+      "redaction": "Do not retain the variable operator middle text or full Plan/step/payload; retain only exact pattern identity, Generate selector and supported-value flag.",
+      "limitations": [
+        "Source-only confidence; no runtime Generate/provider execution.",
+        "Pattern matching does not capture the variable operator value; Goto missing-argument is a separate arity failure before this method body."
+      ]
+    },
+    {
+      "id": "generate-transform-no-result",
+      "status": "source-verified",
+      "adapters": [
+        "MemoryCondenser"
+      ],
+      "activities": [
+        "Generate"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Path Not Found: ",
+          "suffix": "",
+          "evidence": [
+            {
+              "sourceId": "memory-class",
+              "startLine": 195,
+              "endLine": 195
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Generate has a truthy step Path, invokes the selected Type/Mode condenser, and its returned StepResultSignal has no Result; the class logs on that child Signal before merging failure.",
+        "evidence": [
+          {
+            "sourceId": "memory-class",
+            "startLine": 184,
+            "endLine": 199
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The selected transform returned a Signal without Result; the log does not prove the configured Path itself is absent.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "memory-class",
+              "startLine": 184,
+              "endLine": 199
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm Generate transform branch and no-Result guard with redacted Path presence, selected Type/Mode and child HasResult/failure flags; do not retain logged path/container/resource middle.",
+          "expected": "Child HasResult is false after transform dispatch; underlying cause remains with the selected child owner.",
+          "evidence": [
+            {
+              "sourceId": "memory-class",
+              "startLine": 184,
+              "endLine": 199
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic handoff only. Do not edit Path, retry transform or infer missing data from this wrapper.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record the selected child owner and redacted no-Result/failure metadata for its owner to diagnose; stop before any input or source correction.",
+            "expected": "Owner handoff evidence is available; no state repair or guard clearance is claimed.",
+            "evidence": [
+              {
+                "sourceId": "memory-class",
+                "startLine": 184,
+                "endLine": 199
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Child owner or redacted failure identity cannot be established.",
+          "A proposed Path or provider edit is based only on this wrapper."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Verify that the child owner handoff names the selected Type/Mode and no-Result guard; any later clearance needs separately accepted owner evidence.",
+          "expected": "The handoff is complete, while transform success and Path validity remain unresolved.",
+          "evidence": [
+            {
+              "sourceId": "memory-class",
+              "startLine": 184,
+              "endLine": 199
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude variable Path/Container/Resource middle, full step/ItemSignal, payload and credentials; retain only canonical Generate context, selected child identity and no-Result/failure flags.",
+      "limitations": [
+        "Source-only confidence; no runtime transform/provider execution.",
+        "The Path Not Found text is a wrapper label for no Result and does not prove a missing path."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,228 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedConductionAdapter",
+  "mappedAdapter": "MappedConductionAdapter",
+  "part": "Conduction_ST",
+  "sources": [
+    {
+      "id": "st-module",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Conduction/ST/PowerShell/Conduction_ST.psm1",
+      "sha256": "3FE632CD6F83F2139E034C0B8FAE3BECD911084DDE54587D55D44D0385C55A3E",
+      "symbol": "Conduction_ST"
+    },
+    {
+      "id": "st-phase",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Conduction/ST/PowerShell/Invoke-ConductionPhase.ps1",
+      "sha256": "0957F1E337DEDF9E11880751368886410F7DC5C6F29D005A08ADF91AD82CAE7F",
+      "symbol": "Invoke-ConductionPhaseSet"
+    }
+  ],
+  "entries": [
+    {
+      "id": "st-construct-null-dictionary",
+      "status": "source-verified",
+      "adapters": [
+        "Conduction_ST"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot construct Conduction_ST — provided dictionary is null.",
+          "evidence": [
+            {
+              "sourceId": "st-module",
+              "startLine": 30,
+              "endLine": 30
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Conduction_ST.Construct receives null dictionary after optional jacket hydration.",
+        "evidence": [
+          {
+            "sourceId": "st-module",
+            "startLine": 26,
+            "endLine": 32
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Conduction_ST.Construct receives null dictionary after optional jacket hydration.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "st-module",
+              "startLine": 26,
+              "endLine": 32
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect registered concrete identity and hydrated Jacket dictionary-null flag; redact dictionary.",
+          "expected": "Redacted flags identify this exact source guard; downstream cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "st-module",
+              "startLine": 26,
+              "endLine": 32
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating construction input proposal only; no runtime/provider action here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply the intended nonnull ST construction dictionary through the owning registration/jacket plan.",
+            "expected": "Hydrated construction dictionary is nonnull; Invoke remains separate.",
+            "evidence": [
+              {
+                "sourceId": "st-module",
+                "startLine": 26,
+                "endLine": 32
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Conductor, Jacket, Signal or slot owner cannot be identified from redacted metadata.",
+          "Proposed action would expose Plan/phase content or execute Conduction, provider, graph or registration effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Hydrated construction dictionary is nonnull; Invoke remains separate.",
+          "expected": "Local guard would be false; construction/runtime success unverified.",
+          "evidence": [
+            {
+              "sourceId": "st-module",
+              "startLine": 26,
+              "endLine": 32
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan, phase grid, Signal/Jacket/dictionary values, slot/path, credentials, provider responses and exception text; retain canonical adapter/activity, message/pattern and presence/Failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no ST/SDA runtime/provider execution.",
+        "Mapped core may add a generic wrapper after a concrete child failure; this entry does not diagnose downstream child causes."
+      ]
+    },
+    {
+      "id": "st-phase-dictionary-resolver-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Conduction_ST"
+      ],
+      "activities": [
+        "Invoke",
+        "Run",
+        "ST"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Failed to resolve Phase dictionary from ItemSignal.",
+          "evidence": [
+            {
+              "sourceId": "st-phase",
+              "startLine": 226,
+              "endLine": 226
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "ST phase helper receives nonnull Signal/ItemSignal but %.@ phase-dictionary resolver returns a failed Signal and is merged before this log.",
+        "evidence": [
+          {
+            "sourceId": "st-phase",
+            "startLine": 219,
+            "endLine": 228
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "ST phase helper receives nonnull Signal/ItemSignal but %.@ phase-dictionary resolver returns a failed Signal and is merged before this log.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "st-phase",
+              "startLine": 219,
+              "endLine": 228
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect phase ItemSignal %.@ resolver Failure/HasResult flags and helper origin; redact phase data.",
+          "expected": "Redacted flags identify this exact source guard; downstream cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "st-phase",
+              "startLine": 219,
+              "endLine": 228
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic mapped/phase owner handoff only; no registration/graph/provider repair or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted phase ItemSignal owner/resolver evidence; stop before Memory.Generate or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "st-phase",
+                "startLine": 219,
+                "endLine": 228
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Conductor, Jacket, Signal or slot owner cannot be identified from redacted metadata.",
+          "Proposed action would expose Plan/phase content or execute Conduction, provider, graph or registration effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Owner handoff identifies phase resolver failure; clearance unverified.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "st-phase",
+              "startLine": 219,
+              "endLine": 228
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan, phase grid, Signal/Jacket/dictionary values, slot/path, credentials, provider responses and exception text; retain canonical adapter/activity, message/pattern and presence/Failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no ST/SDA runtime/provider execution.",
+        "Mapped core may add a generic wrapper after a concrete child failure; this entry does not diagnose downstream child causes."
+      ]
+    }
+  ]
+}

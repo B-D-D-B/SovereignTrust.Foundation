@@ -1,0 +1,434 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedTokenAdapter",
+  "mappedAdapter": "MappedTokenAdapter",
+  "part": "invoke",
+  "sources": [
+    {
+      "id": "mapped-helper",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-MappedTokenAdapter.ps1",
+      "sha256": "7A0BE7417CE07206063795DE314ACDCEE417C9DEFFBF508A49CC28B52BA4311F",
+      "symbol": "Invoke-MappedTokenAdapter"
+    },
+    {
+      "id": "mapped-resolver",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Resolve-MappedAdapter.ps1",
+      "sha256": "5EAC4130E9BC50A67453B7AE525DD01AC01EA2E3AFFCD41B90ED8E90C187545E",
+      "symbol": "Resolve-MappedAdapter"
+    }
+  ],
+  "entries": [
+    {
+      "id": "token-invalid-path",
+      "status": "source-verified",
+      "adapters": [
+        "MappedTokenAdapter"
+      ],
+      "activities": [
+        "Get"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Invalid or missing path: ",
+          "suffix": "",
+          "evidence": [
+            {
+              "sourceId": "mapped-helper",
+              "startLine": 47,
+              "endLine": 47
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "After Container and Resource Results can override Plan.Path, effective Path is falsey or not a string before token-key lookup.",
+        "evidence": [
+          {
+            "sourceId": "mapped-helper",
+            "startLine": 38,
+            "endLine": 49
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "After Container and Resource Results can override Plan.Path, effective Path is falsey or not a string before token-key lookup.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-helper",
+              "startLine": 38,
+              "endLine": 49
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect effective path source, truthy/string flags and Container/Resource HasResult flags; redact path.",
+          "expected": "Redacted flags identify this source guard without token value, graph, environment or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "mapped-helper",
+              "startLine": 38,
+              "endLine": 49
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan or construction input proposal only; no token/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use intended nonblank string Plan.Path, or correct the selected Container/Resource override; no token/provider call.",
+            "expected": "Selected path truthy string; token lookup separate.",
+            "evidence": [
+              {
+                "sourceId": "mapped-helper",
+                "startLine": 38,
+                "endLine": 49
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, Get activity or exact message/pattern differs.",
+          "Effective path, registration, selected scope or owner cannot be established with redacted metadata.",
+          "Proposed action would reveal token value/name, graph, credentials, SDA content or execute provider/storage/enrollment effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Selected path truthy string; token lookup separate.",
+          "expected": "Local guard would be false; token/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "mapped-helper",
+              "startLine": 38,
+              "endLine": 49
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude token path/key/value, Plan/Config/Signal/graph/Jacket/Conductor, environment name/value, storage or SDA identity/content, credentials and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no token/SDA/storage/environment/provider/runtime execution.",
+        "A passed local guard, warning or Result presence does not establish token value, absence or safe retry."
+      ]
+    },
+    {
+      "id": "token-graph-key-unresolved",
+      "status": "source-verified",
+      "adapters": [
+        "MappedTokenAdapter"
+      ],
+      "activities": [
+        "Get"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Could not resolve adapter for key: ",
+          "suffix": "",
+          "evidence": [
+            {
+              "sourceId": "mapped-helper",
+              "startLine": 72,
+              "endLine": 72
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Graph lookup #.<firstKey> Signal has Failure after key selection, before concrete resolution.",
+        "evidence": [
+          {
+            "sourceId": "mapped-helper",
+            "startLine": 61,
+            "endLine": 74
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Graph lookup #.<firstKey> Signal has Failure after key selection, before concrete resolution.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-helper",
+              "startLine": 61,
+              "endLine": 74
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect canonical first-key registration and lookup Failure/HasResult flags; redact token path.",
+          "expected": "Redacted flags identify this source guard without token value, graph, environment or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "mapped-helper",
+              "startLine": 61,
+              "endLine": 74
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no token, Signal, graph, environment, SDA, storage or provider state change/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record registration/graph owner handoff; do not synthesize provider key.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "mapped-helper",
+                "startLine": 61,
+                "endLine": 74
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, Get activity or exact message/pattern differs.",
+          "Effective path, registration, selected scope or owner cannot be established with redacted metadata.",
+          "Proposed action would reveal token value/name, graph, credentials, SDA content or execute provider/storage/enrollment effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; registration unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "mapped-helper",
+              "startLine": 61,
+              "endLine": 74
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude token path/key/value, Plan/Config/Signal/graph/Jacket/Conductor, environment name/value, storage or SDA identity/content, credentials and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no token/SDA/storage/environment/provider/runtime execution.",
+        "A passed local guard, warning or Result presence does not establish token value, absence or safe retry."
+      ]
+    },
+    {
+      "id": "token-mapped-no-instance",
+      "status": "source-verified",
+      "adapters": [
+        "MappedTokenAdapter"
+      ],
+      "activities": [
+        "Get"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Mapped adapter resolution returned no instance.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 24,
+              "endLine": 24
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Active mapped Token helper invokes Resolve-MappedAdapter after graph-key selection; its Resolve-RegisteredAdapter child is nonfailed but has no Result, so resolver logs the fixed no-instance message. Child Failure is separately merged and does not become this diagnosis.",
+        "evidence": [
+          {
+            "sourceId": "mapped-resolver",
+            "startLine": 15,
+            "endLine": 27
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Active mapped Token helper invokes Resolve-MappedAdapter after graph-key selection; its Resolve-RegisteredAdapter child is nonfailed but has no Result, so resolver logs the fixed no-instance message. Child Failure is separately merged and does not become this diagnosis.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect selected registration identity and child Failure/HasResult flags only; redact graph/token path.",
+          "expected": "Redacted flags identify this source guard without token value, graph, environment or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no token, Signal, graph, environment, SDA, storage or provider state change/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted registration owner handoff; stop before state repair or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "mapped-resolver",
+                "startLine": 15,
+                "endLine": 27
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, Get activity or exact message/pattern differs.",
+          "Effective path, registration, selected scope or owner cannot be established with redacted metadata.",
+          "Proposed action would reveal token value/name, graph, credentials, SDA content or execute provider/storage/enrollment effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff identifies nonfailed/no-Result instance guard; registration unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude token path/key/value, Plan/Config/Signal/graph/Jacket/Conductor, environment name/value, storage or SDA identity/content, credentials and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no token/SDA/storage/environment/provider/runtime execution.",
+        "A passed local guard, warning or Result presence does not establish token value, absence or safe retry."
+      ]
+    },
+    {
+      "id": "token-concrete-no-invoke",
+      "status": "source-verified",
+      "adapters": [
+        "MappedTokenAdapter"
+      ],
+      "activities": [
+        "Get"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Resolved adapter for '",
+          "suffix": "' does not implement Invoke().",
+          "evidence": [
+            {
+              "sourceId": "mapped-helper",
+              "startLine": 114,
+              "endLine": 114
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Resolved concrete object is absent or Get-Member finds no Invoke member after nonfailed registration resolution.",
+        "evidence": [
+          {
+            "sourceId": "mapped-helper",
+            "startLine": 76,
+            "endLine": 116
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Resolved concrete object is absent or Get-Member finds no Invoke member after nonfailed registration resolution.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-helper",
+              "startLine": 76,
+              "endLine": 116
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect resolved object presence/type and Invoke-member flag only; redact object.",
+          "expected": "Redacted flags identify this source guard without token value, graph, environment or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "mapped-helper",
+              "startLine": 76,
+              "endLine": 116
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no token, Signal, graph, environment, SDA, storage or provider state change/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record registration/type owner handoff; do not substitute a concrete automatically.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "mapped-helper",
+                "startLine": 76,
+                "endLine": 116
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, Get activity or exact message/pattern differs.",
+          "Effective path, registration, selected scope or owner cannot be established with redacted metadata.",
+          "Proposed action would reveal token value/name, graph, credentials, SDA content or execute provider/storage/enrollment effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; concrete capability unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "mapped-helper",
+              "startLine": 76,
+              "endLine": 116
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude token path/key/value, Plan/Config/Signal/graph/Jacket/Conductor, environment name/value, storage or SDA identity/content, credentials and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no token/SDA/storage/environment/provider/runtime execution.",
+        "A passed local guard, warning or Result presence does not establish token value, absence or safe retry."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,3165 @@
+{
+  "version": 1,
+  "ownerId": "Mapped/MappedQueueAdapter",
+  "mappedAdapter": "MappedQueueAdapter",
+  "sources": [
+    {
+      "id": "mapped-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedQueueAdapter.ps1",
+      "sha256": "CE32FEAF2D2E6345DFEA467AF7E98D3E3B71204117A24D89B79C1CA4829AA902",
+      "symbol": "MappedQueueAdapter"
+    },
+    {
+      "id": "mapped-core",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Invoke-MappedAdapterCore.ps1",
+      "sha256": "0AB004DC55D82CDC9443E123C766262A4A75FADBDAB424E22A0EC4C971008792",
+      "symbol": "Invoke-MappedAdapterCore"
+    },
+    {
+      "id": "mapped-resolver",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Resolve-MappedAdapter.ps1",
+      "sha256": "5EAC4130E9BC50A67453B7AE525DD01AC01EA2E3AFFCD41B90ED8E90C187545E",
+      "symbol": "Resolve-MappedAdapter"
+    },
+    {
+      "id": "jacket-resolver",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Resolve-AdaptersFromJacket.ps1",
+      "sha256": "AEAC662D1597F844786E366E6A36423C2796C76723415AC360492BE9B558DE68",
+      "symbol": "Resolve-AdapterFromJacket"
+    },
+    {
+      "id": "lazy-resolver",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Resolve-RegisteredAdapter.ps1",
+      "sha256": "9CE8534CA07CDF1109982BDACD50A19895FFC0235A66A1373153005423AB59F1",
+      "symbol": "Resolve-RegisteredAdapter"
+    },
+    {
+      "id": "queue-module",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Queue/AzureStorageQueue/PowerShell/Queue_AzureStorageQueue.psm1",
+      "sha256": "F2FEB89CD1FF64248C703E72A1747A97A1E928518EC780DD042F24F1D6D11E36",
+      "symbol": "Queue_AzureStorageQueue"
+    },
+    {
+      "id": "queue-unloaded-helper",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Queue/AzureStorageQueue/PowerShell/Invoke-Queue_AzureStorageQueue.ps1",
+      "sha256": "BE9028FF8C4835009ED878BDF93170B852155A3E8BA24939455D799D03C608B5",
+      "symbol": "file"
+    }
+  ],
+  "entries": [
+    {
+      "id": "mapped-queue-start-null-conductor",
+      "status": "source-verified",
+      "adapters": [
+        "MappedQueueAdapter"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Null Conductor passed to MappedQueueAdapter.Start()",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 29,
+              "endLine": 29
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "MappedQueueAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+        "evidence": [
+          {
+            "sourceId": "mapped-class",
+            "startLine": 25,
+            "endLine": 31
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "MappedQueueAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 25,
+              "endLine": 31
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect mapped Start Conductor presence/truthy flag only.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 25,
+              "endLine": 31
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no queue/provider execution here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull Conductor for authorized mapped Queue construction.",
+            "expected": "Conductor is present; setup/runtime remains separate.",
+            "evidence": [
+              {
+                "sourceId": "mapped-class",
+                "startLine": 25,
+                "endLine": 31
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Conductor is present; setup/runtime remains separate.",
+          "expected": "Local guard would be false; runtime queue success unverified.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 25,
+              "endLine": 31
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "queue-construct-null-dictionary",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot construct Queue_AzureStorageQueue — provided dictionary is null.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 44,
+              "endLine": 44
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Queue_AzureStorageQueue.Construct receives null dictionary after optional registered Jacket hydration.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 39,
+            "endLine": 46
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Queue_AzureStorageQueue.Construct receives null dictionary after optional registered Jacket hydration.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 39,
+              "endLine": 46
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect concrete registration identity and hydrated dictionary-null flag; redact content.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 39,
+              "endLine": 46
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no queue/provider execution here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull queue construction dictionary through owning registration/jacket plan.",
+            "expected": "Construction dictionary is nonnull; Invoke remains separate.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 39,
+                "endLine": 46
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Construction dictionary is nonnull; Invoke remains separate.",
+          "expected": "Local guard would be false; runtime queue success unverified.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 39,
+              "endLine": 46
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "mapped-queue-adapter-path-failed",
+      "status": "source-verified",
+      "adapters": [
+        "MappedQueueAdapter"
+      ],
+      "activities": [
+        "PeekBatch",
+        "HandleMessage",
+        "ReadBatch",
+        "WriteItem",
+        "AckItem",
+        "DeferItem"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Adapter path '",
+          "suffix": "' not found in Conductor.",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 33,
+              "endLine": 33
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Shared mapped core tries *.#.<first slot>.@ then fallback %.*.#.<first slot>.@ on no Result, logging only after final resolver Signal Failure; label does not prove simple absence.",
+        "evidence": [
+          {
+            "sourceId": "mapped-core",
+            "startLine": 23,
+            "endLine": 35
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Shared mapped core tries *.#.<first slot>.@ then fallback %.*.#.<first slot>.@ on no Result, logging only after final resolver Signal Failure; label does not prove simple absence.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 23,
+              "endLine": 35
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect slot first-segment validity and both resolver Result/Failure flags; redact slot/path.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 23,
+              "endLine": 35
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted mapped registration/resolver owner handoff and stop before graph edit or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "mapped-core",
+                "startLine": 23,
+                "endLine": 35
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff identifies final failure branch; instance resolution remains unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 23,
+              "endLine": 35
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "mapped-queue-no-instance",
+      "status": "source-verified",
+      "adapters": [
+        "MappedQueueAdapter"
+      ],
+      "activities": [
+        "PeekBatch",
+        "HandleMessage",
+        "ReadBatch",
+        "WriteItem",
+        "AckItem",
+        "DeferItem"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Mapped adapter resolution returned no instance.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 24,
+              "endLine": 24
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Shared Resolve-MappedAdapter receives nonfailed registered/lazy resolver Signal without Result and logs fixed no-instance message.",
+        "evidence": [
+          {
+            "sourceId": "mapped-resolver",
+            "startLine": 15,
+            "endLine": 27
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Shared Resolve-MappedAdapter receives nonfailed registered/lazy resolver Signal without Result and logs fixed no-instance message.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect registration identity and child resolver Failure/HasResult flags; redact registration payload.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted registration owner handoff and stop before state repair or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "mapped-resolver",
+                "startLine": 15,
+                "endLine": 27
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff identifies no-instance guard; concrete instance unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "queue-null-conduction-signal",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "PeekBatch",
+        "HandleMessage",
+        "ReadBatch",
+        "WriteItem",
+        "AckItem",
+        "DeferItem"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "❌ Null ConductionSignal passed to Queue_AzureStorageQueue.Invoke()",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 256,
+              "endLine": 256
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Concrete Queue Invoke receives falsey ConductionSignal before Config or queue/REST dispatch.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 251,
+            "endLine": 258
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Concrete Queue Invoke receives falsey ConductionSignal before Config or queue/REST dispatch.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 251,
+              "endLine": 258
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm canonical queue activity and ConductionSignal presence/truthy flag; redact Signal.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 251,
+              "endLine": 258
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted caller Signal wiring for its owner and stop before queue/REST effects.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 251,
+                "endLine": 258
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; ConductionSignal wiring unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 251,
+              "endLine": 258
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "handle-result-detail-type",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "HandleMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Config.ResultDetail must be a native Boolean for HandleMessage.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 298,
+              "endLine": 298
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "HandleMessage Plan.Config has ResultDetail member and its value is not native Boolean; absence defaults false.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 292,
+            "endLine": 300
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "HandleMessage Plan.Config has ResultDetail member and its value is not native Boolean; absence defaults false.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 292,
+              "endLine": 300
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect ResultDetail member presence and native-Boolean type flag, without Plan content.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 292,
+              "endLine": 300
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no queue/provider execution here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Set originating Config.ResultDetail to native Boolean for intended detail behavior, or omit for false default.",
+            "expected": "ResultDetail is absent or native Boolean.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 292,
+                "endLine": 300
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "ResultDetail is absent or native Boolean.",
+          "expected": "Local guard would be false; runtime queue success unverified.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 292,
+              "endLine": 300
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "handle-message-text-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "HandleMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "HandleMessage requires message text in the item jacket or Config.MessageText.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 306,
+              "endLine": 306
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "HandleMessage selects jacket %.@.MessageText unless it has no Result or stringifies blank, in which case it selects Plan.Config.MessageText fallback. The final selected MessageTextSignal emits this log when it merges as Failure or lacks Result. A jacket Signal with nonblank Result and Failure bypasses fallback yet still emits this log; a present but blank fallback without Failure passes this guard and risks later parse failure.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 301,
+            "endLine": 308
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "HandleMessage selects jacket %.@.MessageText unless it has no Result or stringifies blank, in which case it selects Plan.Config.MessageText fallback. The final selected MessageTextSignal emits this log when it merges as Failure or lacks Result. A jacket Signal with nonblank Result and Failure bypasses fallback yet still emits this log; a present but blank fallback without Failure passes this guard and risks later parse failure.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 301,
+              "endLine": 308
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect jacket HasResult/nonblank and Failure flags, whether fallback was selected, then final selected resolver Failure/HasResult flags; redact message.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 301,
+              "endLine": 308
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional missing-data input proposal or resolver-Failure owner handoff; no parse, queue effect or retry.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Only when final selected resolver has no Result and no Failure and intended source is confirmed, supply text at the selected jacket source or Plan.Config.MessageText fallback.",
+            "expected": "Selected resolver can have Result; JSON parse validity remains separate.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 301,
+                "endLine": 308
+              }
+            ]
+          },
+          {
+            "mode": "static-read",
+            "action": "When final selected resolver has Failure, including nonblank jacket Result plus Failure, record its source/provenance and stop without input edit or retry.",
+            "expected": "Resolver-failure owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 301,
+                "endLine": 308
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "For missing-data branch, final selected resolver has Result and no Failure; for Failure branch, owner handoff is recorded. JSON validity remains separate.",
+          "expected": "For confirmed nonfailed no-Result input correction, the local guard may be false after static reinspection; for selected resolver Failure, owner handoff leaves the guard unresolved and no retry is advised.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 301,
+              "endLine": 308
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "handle-detail-route-required",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "HandleMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "ResultDetail requires a path route with channel ID and reply path before session effects.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 360,
+              "endLine": 360
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "ResultDetail is true, but decoded route name is not path case-insensitively, channel ID is blank or reply is blank.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 348,
+            "endLine": 361
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "ResultDetail is true, but decoded route name is not path case-insensitively, channel ID is blank or reply is blank.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 348,
+              "endLine": 361
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only ResultDetail true, route-is-path, channel-id-nonblank and reply-nonblank flags; redact decoded message.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 348,
+              "endLine": 361
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted route/channel/reply source-owner evidence and stop before session effects; do not fabricate external message fields.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 348,
+                "endLine": 361
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff identifies failing flag; no session clearance or retry claimed.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 348,
+              "endLine": 361
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "handle-detail-reply-shape",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "HandleMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "ResultDetail requires a container and resource in the path reply before session effects.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 365,
+              "endLine": 365
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "ResultDetail is true with path route, but reply split on dots has fewer than two parts or blank first/second part.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 359,
+            "endLine": 366
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "ResultDetail is true with path route, but reply split on dots has fewer than two parts or blank first/second part.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 359,
+              "endLine": 366
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only split part count and first/second nonblank flags; redact reply.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 359,
+              "endLine": 366
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted path-reply source-owner evidence and stop before session/storage effects.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 359,
+                "endLine": 366
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff identifies reply-shape guard; clearance unverified.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 359,
+              "endLine": 366
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "handle-session-unresolved",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "HandleMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "HandleMessage path could not resolve a session.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 413,
+              "endLine": 413
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Path branch Session.System RequestOrRegister result is not Signal, is failed after merge or has no Result.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 397,
+            "endLine": 414
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Path branch Session.System RequestOrRegister result is not Signal, is failed after merge or has no Result.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 397,
+              "endLine": 414
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect child Signal type/Failure/HasResult flags and canonical Session.System owner; redact session.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 397,
+              "endLine": 414
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Hand off redacted child Session.System failure to session owner; stop before plan load/retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 397,
+                "endLine": 414
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Session-owner handoff recorded; session resolution unverified.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 397,
+              "endLine": 414
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "handle-session-unusable",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "HandleMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "HandleMessage path returned an unusable session.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 416,
+              "endLine": 416
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Path branch session Signal has Result but GetResult(true) is null.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 411,
+            "endLine": 417
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Path branch session Signal has Result but GetResult(true) is null.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 411,
+              "endLine": 417
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect session Result-present and native-result-null flags, not session object.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 411,
+              "endLine": 417
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Hand off redacted unusable session state to Session.System owner; stop before plan load/retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 411,
+                "endLine": 417
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Session-owner handoff recorded; native session remains unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 411,
+              "endLine": 417
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "handle-session-identity-mismatch",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "HandleMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "HandleMessage path session identity did not match the channel.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 419,
+              "endLine": 419
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Resolved session Id lookup fails, has no Result or its string differs from decoded channel ID under case-sensitive -cne.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 415,
+            "endLine": 420
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Resolved session Id lookup fails, has no Result or its string differs from decoded channel ID under case-sensitive -cne.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 415,
+              "endLine": 420
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect session Id resolver Failure/HasResult and equality flag to channel ID; redact both IDs.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 415,
+              "endLine": 420
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Hand off redacted session/channel identity mismatch to session owner; do not relabel session or channel automatically.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 415,
+                "endLine": 420
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Identity handoff recorded; match/clearance unverified.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 415,
+              "endLine": 420
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "handle-plan-load-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "HandleMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "HandleMessage path plan load failed.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 480,
+              "endLine": 480
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Path branch Condenser.Memory Generate plan-load child is not Signal or merges as Failure.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 455,
+            "endLine": 481
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Path branch Condenser.Memory Generate plan-load child is not Signal or merges as Failure.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 455,
+              "endLine": 481
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect child Signal type/Failure and intended Storage.Content plan-load identity; redact plan/path.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 455,
+              "endLine": 481
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Hand off redacted Memory/Storage child failure to source owner; stop before selected plan dispatch.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 455,
+                "endLine": 481
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Owner handoff recorded; plan load remains unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 455,
+              "endLine": 481
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "handle-keyed-plan-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "HandleMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "HandleMessage path did not produce a keyed plan.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 484,
+              "endLine": 484
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "After plan load, lookup at *.#.<mapping Key> is not Signal, fails after merge or lacks Result.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 478,
+            "endLine": 485
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "After plan load, lookup at *.#.<mapping Key> is not Signal, fails after merge or lacks Result.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 478,
+              "endLine": 485
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect keyed-plan resolver type/Failure/HasResult flags; redact key/plan.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 478,
+              "endLine": 485
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Hand off redacted keyed-plan source evidence to Memory/Storage owner; stop before plan dispatch.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 478,
+                "endLine": 485
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; keyed plan remains unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 478,
+              "endLine": 485
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "handle-plan-unusable",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "HandleMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "HandleMessage path produced an unusable plan.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 487,
+              "endLine": 487
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Keyed plan Result unwraps to null or a string rather than usable plan object.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 482,
+            "endLine": 488
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Keyed plan Result unwraps to null or a string rather than usable plan object.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 482,
+              "endLine": 488
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect unwrapped plan null/string-type flags only; no plan dump.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 482,
+              "endLine": 488
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Hand off redacted plan type evidence to plan-data owner; stop before conduction.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 482,
+                "endLine": 488
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; usable plan not asserted.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 482,
+              "endLine": 488
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "handle-plan-name-phases",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "HandleMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "HandleMessage path plan lacks usable Name and Phases.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 492,
+              "endLine": 492
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Selected plan Name resolver fails/has no Result/is blank, or Phases resolver fails/has no Result/is not nonstring IEnumerable.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 488,
+            "endLine": 493
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Selected plan Name resolver fails/has no Result/is blank, or Phases resolver fails/has no Result/is not nonstring IEnumerable.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 488,
+              "endLine": 493
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Name Failure/HasResult/nonblank and Phases Failure/HasResult/enumerable/nonstring flags separately; redact values.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 488,
+              "endLine": 493
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Hand off redacted plan schema flags to plan-data owner; stop before conduction or inferred repair.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 488,
+                "endLine": 493
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff records failing Name/Phases guard; plan validity unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 488,
+              "endLine": 493
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "handle-conduction-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "HandleMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "HandleMessage path conduction failed.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 497,
+              "endLine": 497
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Selected Conduction.System Invoke result is not Signal or merges as Failure.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 494,
+            "endLine": 498
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Selected Conduction.System Invoke result is not Signal or merges as Failure.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 494,
+              "endLine": 498
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect child Signal type/Failure and canonical Conduction.System identity; redact Plan/session.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 494,
+              "endLine": 498
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Hand off redacted Conduction child failure to its owner; do not replay plan or acknowledge message.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 494,
+                "endLine": 498
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Conduction-owner handoff recorded; execution remains unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 494,
+              "endLine": 498
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "read-depth-visibility-range",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "PeekBatch",
+        "ReadBatch"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Invalid ReadBatch depth or visibility timeout.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 562,
+              "endLine": 562
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "After Int32 conversions, Config.PeekDepth is outside 1..32 or top-level Plan.Visibilitytimeout is below 1; PeekBatch delegates to this ReadBatch branch.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 556,
+            "endLine": 563
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "After Int32 conversions, Config.PeekDepth is outside 1..32 or top-level Plan.Visibilitytimeout is below 1; PeekBatch delegates to this ReadBatch branch.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 556,
+              "endLine": 563
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect converted PeekDepth in-range and Visibilitytimeout-positive flags; do not inspect queue/message content.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 556,
+              "endLine": 563
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no queue/provider execution here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Set intended PeekDepth within 1..32 and Visibilitytimeout at least 1 in their actual Plan locations; conversion failures are separate.",
+            "expected": "Converted range guards are false; REST call remains separate.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 556,
+                "endLine": 563
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Converted range guards are false; REST call remains separate.",
+          "expected": "Local guard would be false; runtime queue success unverified.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 556,
+              "endLine": 563
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "read-response-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "PeekBatch",
+        "ReadBatch"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "ReadBatch returned no XML response.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 580,
+              "endLine": 580
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "REST Get child does not fail, but its Signal has no Result before XML normalization.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 574,
+            "endLine": 581
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "REST Get child does not fail, but its Signal has no Result before XML normalization.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 574,
+              "endLine": 581
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect child REST Failure/HasResult and selected queue request identity; redact response/URI.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 574,
+              "endLine": 581
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Hand off redacted no-Result REST response to REST/queue owner; do not poll or retry automatically.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 574,
+                "endLine": 581
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; response acquisition unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 574,
+              "endLine": 581
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "read-response-invalid-xml",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "PeekBatch",
+        "ReadBatch"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "ReadBatch response is not valid XML: ",
+          "suffix": "",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 585,
+              "endLine": 585
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "NormalizeXmlResponse throws for ReadBatch REST Result and catch logs a variable exception.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 583,
+            "endLine": 586
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "NormalizeXmlResponse throws for ReadBatch REST Result and catch logs a variable exception.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 583,
+              "endLine": 586
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only normalization stage and redacted exception class; do not print XML/response.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 583,
+              "endLine": 586
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Hand off redacted XML-normalization evidence to queue/REST owner; no retry or payload rewrite.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 583,
+                "endLine": 586
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; XML validity unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 583,
+              "endLine": 586
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "read-xml-document-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "PeekBatch",
+        "ReadBatch"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "ReadBatch returned no XML document.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 589,
+              "endLine": 589
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "NormalizeXmlResponse returns null without throwing after REST Result.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 583,
+            "endLine": 590
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "NormalizeXmlResponse returns null without throwing after REST Result.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 583,
+              "endLine": 590
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect normalization returned-null flag and source response type flag only.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 583,
+              "endLine": 590
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Hand off redacted null-document evidence to queue/REST owner; stop before parsing/retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 583,
+                "endLine": 590
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; XML document absent.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 583,
+              "endLine": 590
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "read-root-shape",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "PeekBatch",
+        "ReadBatch"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "ReadBatch response is not a QueueMessagesList.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 594,
+              "endLine": 594
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Normalized XML has no /QueueMessagesList root node.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 592,
+            "endLine": 595
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Normalized XML has no /QueueMessagesList root node.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 592,
+              "endLine": 595
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect root-node-presence flag only; no XML dump.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 592,
+              "endLine": 595
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Hand off redacted response-shape evidence to queue/REST owner; do not alter provider response.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 592,
+                "endLine": 595
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; expected root remains unverified.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 592,
+              "endLine": 595
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "read-message-identity-incomplete",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "PeekBatch",
+        "ReadBatch"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "ReadBatch message identity is incomplete.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 603,
+              "endLine": 603
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "A QueueMessage node has blank MessageId or PopReceipt text.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 597,
+            "endLine": 605
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "A QueueMessage node has blank MessageId or PopReceipt text.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 597,
+              "endLine": 605
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect per-node MessageId/PopReceipt nonblank flags only; redact identifiers/text.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 597,
+              "endLine": 605
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Hand off redacted malformed message identity to queue owner; do not acknowledge or fabricate receipt.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 597,
+                "endLine": 605
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; message identity remains unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 597,
+              "endLine": 605
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "write-message-text-required",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "WriteItem"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "WriteItem requires Config.MessageText.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 620,
+              "endLine": 620
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Config.MessageText is not PSCustomObject/hashtable and its string form is blank; object/hashtable values take JSON conversion branch.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 613,
+            "endLine": 622
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Config.MessageText is not PSCustomObject/hashtable and its string form is blank; object/hashtable values take JSON conversion branch.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 613,
+              "endLine": 622
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect MessageText Result/type and string-nonblank flags, never text.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 613,
+              "endLine": 622
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no queue/provider execution here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonblank MessageText or structured object/hashtable in originating WriteItem Plan before enqueue.",
+            "expected": "Input passes local text guard; enqueue remains separately authorized.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 613,
+                "endLine": 622
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Input passes local text guard; enqueue remains separately authorized.",
+          "expected": "Local guard would be false; runtime queue success unverified.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 613,
+              "endLine": 622
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "write-response-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "WriteItem"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "WriteItem returned no response.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 638,
+              "endLine": 638
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "REST Post child does not fail, but its Signal has no Result before XML normalization.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 634,
+            "endLine": 640
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "REST Post child does not fail, but its Signal has no Result before XML normalization.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 634,
+              "endLine": 640
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect REST child Failure/HasResult flags and queue request identity; redact response/URI.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 634,
+              "endLine": 640
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Hand off redacted no-Result REST response to queue/REST owner; do not resend item automatically.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 634,
+                "endLine": 640
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; response acquisition unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 634,
+              "endLine": 640
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "write-response-invalid-xml",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "WriteItem"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "WriteItem response is not valid XML: ",
+          "suffix": "",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 643,
+              "endLine": 643
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "NormalizeXmlResponse throws for WriteItem REST Result and catch logs variable exception.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 641,
+            "endLine": 644
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "NormalizeXmlResponse throws for WriteItem REST Result and catch logs variable exception.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 641,
+              "endLine": 644
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect normalization stage and redacted exception class only; no XML/response.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 641,
+              "endLine": 644
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Hand off redacted XML-normalization evidence to queue/REST owner; no resend or payload rewrite.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 641,
+                "endLine": 644
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; XML validity unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 641,
+              "endLine": 644
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "write-xml-document-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "WriteItem"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "WriteItem returned no XML document.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 647,
+              "endLine": 647
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "NormalizeXmlResponse returns null without throwing after REST Post Result.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 641,
+            "endLine": 648
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "NormalizeXmlResponse returns null without throwing after REST Post Result.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 641,
+              "endLine": 648
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect normalization returned-null and source response type flags only.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 641,
+              "endLine": 648
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Hand off redacted null-document evidence to queue/REST owner; do not resend.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 641,
+                "endLine": 648
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; XML document absent.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 641,
+              "endLine": 648
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "write-identity-node-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "WriteItem"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "WriteItem response did not contain message identity.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 652,
+              "endLine": 652
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Normalized XML lacks QueueMessagesList/QueueMessage node or MessageId/PopReceipt child node.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 650,
+            "endLine": 653
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Normalized XML lacks QueueMessagesList/QueueMessage node or MessageId/PopReceipt child node.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 650,
+              "endLine": 653
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect node-presence flags for message and both identity children; redact values.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 650,
+              "endLine": 653
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Hand off redacted response-shape evidence to queue/REST owner; do not assume write failed or resend.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 650,
+                "endLine": 653
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; identity nodes remain unverified.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 650,
+              "endLine": 653
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "write-identity-text-empty",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "WriteItem"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "WriteItem response message identity is empty.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 658,
+              "endLine": 658
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Identity nodes exist but MessageId or PopReceipt text is blank.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 650,
+            "endLine": 659
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Identity nodes exist but MessageId or PopReceipt text is blank.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 650,
+              "endLine": 659
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect MessageId/PopReceipt nonblank flags only; redact identifiers.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 650,
+              "endLine": 659
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Hand off redacted empty identity evidence to queue/REST owner; do not fabricate receipt or resend.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 650,
+                "endLine": 659
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; identity text remains unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 650,
+              "endLine": 659
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "ack-identity-required",
+      "status": "source-verified",
+      "adapters": [
+        "Queue_AzureStorageQueue"
+      ],
+      "activities": [
+        "AckItem"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "AckItem requires MessageId and PopReceipt.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 681,
+              "endLine": 681
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "For each identifier separately, Config.MessageId/PopReceipt is selected whenever its Signal HasResult is true; ItemSignal jacket fallback runs only when that Config Signal has no Result. After selection, either selected string is blank. A blank Config Result masks a valid jacket value.",
+        "evidence": [
+          {
+            "sourceId": "queue-module",
+            "startLine": 665,
+            "endLine": 682
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "For each identifier separately, Config.MessageId/PopReceipt is selected whenever its Signal HasResult is true; ItemSignal jacket fallback runs only when that Config Signal has no Result. After selection, either selected string is blank. A blank Config Result masks a valid jacket value.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 665,
+              "endLine": 682
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Config HasResult and selected-value nonblank flags separately for MessageId and PopReceipt; only if Config lacks Result inspect jacket fallback HasResult/nonblank. Redact identifiers.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 665,
+              "endLine": 682
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no queue/provider execution here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "For each blank selected identifier, correct the intended Config Result from the actual received item, or omit/remove its Config override so it has no Result and jacket fallback can be selected; confirm the jacket source is valid before relying on it. Never guess or acknowledge/delete here.",
+            "expected": "Both actually selected identifiers are nonblank under Config-first/fallback selection; delete remains separately authorized.",
+            "evidence": [
+              {
+                "sourceId": "queue-module",
+                "startLine": 665,
+                "endLine": 682
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Both actually selected identifiers are nonblank under Config-first/fallback selection; delete remains separately authorized.",
+          "expected": "Local guard would be false; runtime queue success unverified.",
+          "evidence": [
+            {
+              "sourceId": "queue-module",
+              "startLine": 665,
+              "endLine": 682
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    }
+  ],
+  "unverified": [
+    {
+      "id": "mapped-queue-setup-and-registration",
+      "reportedText": "💥 Exception in MappedQueueAdapter.Start(): <exception>; Failed to register adapter at key: <key>",
+      "reason": "Mapped Start catch spans Signal/Graph setup; RegisterAdapter warning is a separate nonactivity method with no source-specific correction.",
+      "neededEvidence": "Redacted failing setup/registration operation/exception class and graph status without key/object content."
+    },
+    {
+      "id": "mapped-queue-core-lazy-and-child",
+      "reportedText": "Adapter failed to resolve path <undefined Path> using slot <Slot>; 🔥 Exception during Invoke-ConductionAdapter: <exception>; lazy registration failures",
+      "reason": "Shared core wrapper follows any concrete child failure and interpolates undefined Path; lazy resolver errors depend on registration/child state. No wrapper-alone Queue correction.",
+      "neededEvidence": "Structured registration/child identity and redacted failure source/guard without slot/path/payload."
+    },
+    {
+      "id": "queue-construct-and-invoke-catches",
+      "reportedText": "Error constructing Queue_AzureStorageQueue: <exception>; 🔥 Exception in Queue_AzureStorageQueue.Invoke: <exception>",
+      "reason": "Concrete catches span Signal/Jacket, JSON decode, path parser, queue/REST/session/conduction operations; catch text alone does not identify a safe cause or correction.",
+      "neededEvidence": "Redacted exact concrete failing operation/exception class and child owner, no message, ID, receipt, URL or XML."
+    },
+    {
+      "id": "queue-parser-and-ack-throw",
+      "reportedText": "Invalid filter parameter/unsupported Queue XML response type; Delete-StorageQueueApi: Failed to delete message id <id>",
+      "reason": "Class parser/normalizer throws have variable fragments and are caught by branch or outer wrappers; Ack delete throw at line707 becomes outer generic catch. A stable emitted route and safe correction are not established from those texts alone.",
+      "neededEvidence": "Redacted source line, branch and structured exception class/child Signal; no filter, XML, ID or receipt."
+    },
+    {
+      "id": "queue-defer-unfinished",
+      "reportedText": "DeferItem requires ItemSignal.Result/message identity; DeferItem not implemented yet",
+      "reason": "Current DeferItem branch only warns and returns unresolved placeholder; visibility update call is commented out. No failure-specific v1 error or corrective retry route is supported.",
+      "neededEvidence": "A future implemented DeferItem source/contract and exact emitted failure before any route or correction."
+    },
+    {
+      "id": "queue-unloaded-helper",
+      "reportedText": "Cannot invoke Conduction_ST/other Invoke-Queue_AzureStorageQueue.ps1 helper logs",
+      "reason": "Current Queue_AzureStorageQueue.psm1 does not dot-source Invoke-Queue_AzureStorageQueue.ps1, so copy-like helper logs are not established on active concrete path.",
+      "neededEvidence": "Versioned module load/direct call evidence before assigning those messages to Queue_AzureStorageQueue."
+    }
+  ]
+}

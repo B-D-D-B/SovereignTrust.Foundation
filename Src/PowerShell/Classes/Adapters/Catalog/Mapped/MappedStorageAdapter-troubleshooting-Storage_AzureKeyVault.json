@@ -1,0 +1,1162 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedStorageAdapter",
+  "mappedAdapter": "MappedStorageAdapter",
+  "part": "Storage_AzureKeyVault",
+  "sources": [
+    {
+      "id": "keyvault-module",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureKeyVault/PowerShell/Storage_AzureKeyVault.psm1",
+      "sha256": "D4E523187E1AE7D260F31D1A6F2B9E3BC6FD054C704A79E9B23A6AA30FD6EBFA",
+      "symbol": "Storage_AzureKeyVault"
+    },
+    {
+      "id": "keyvault-module-current",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureKeyVault/PowerShell/Storage_AzureKeyVault.psm1",
+      "sha256": "30C621EB9DA12E9FEA0E9FEF2170F420EDB0963574B7592FCF6F6667C28C6003",
+      "symbol": "Storage_AzureKeyVault.Invoke"
+    }
+  ],
+  "entries": [
+    {
+      "id": "keyvault-construct-null-dictionary",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureKeyVault"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot construct Storage_AzureKeyVault — provided dictionary is null.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 150,
+              "endLine": 150
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Storage_AzureKeyVault.Construct receives null dictionary before Signal/Jacket setup.",
+        "evidence": [
+          {
+            "sourceId": "keyvault-module",
+            "startLine": 145,
+            "endLine": 152
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Storage_AzureKeyVault.Construct receives null dictionary before Signal/Jacket setup.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 145,
+              "endLine": 152
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect concrete registration identity and construction dictionary-null flag; redact contents.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 145,
+              "endLine": 152
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull Key Vault construction dictionary through owning Jacket plan.",
+            "expected": "Construction dictionary nonnull; Invoke separate.",
+            "evidence": [
+              {
+                "sourceId": "keyvault-module",
+                "startLine": 145,
+                "endLine": 152
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Construction dictionary nonnull; Invoke separate.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 145,
+              "endLine": 152
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "keyvault-invoke-null-signal",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureKeyVault"
+      ],
+      "activities": [
+        "List",
+        "Read",
+        "Write",
+        "Delete",
+        "Exists"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "❌ Null ConductionSignal passed to Storage_AzureKeyVault.Invoke()",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 184,
+              "endLine": 184
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Concrete Key Vault Invoke receives falsey ConductionSignal before List/Read dispatch.",
+        "evidence": [
+          {
+            "sourceId": "keyvault-module",
+            "startLine": 178,
+            "endLine": 186
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Concrete Key Vault Invoke receives falsey ConductionSignal before List/Read dispatch.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 178,
+              "endLine": 186
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect canonical activity and ConductionSignal null/truthy flag; redact Signal.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 178,
+              "endLine": 186
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record caller Signal owner handoff; stop before vault/REST effect.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "keyvault-module",
+                "startLine": 178,
+                "endLine": 186
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Signal wiring unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 178,
+              "endLine": 186
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "keyvault-list-options",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureKeyVault"
+      ],
+      "activities": [
+        "List"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Invalid Key Vault List SortBy, SortDirection or Type.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 32,
+              "endLine": 32
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Defaulted List SortBy, SortDirection or Type falls outside supported values under case-insensitive -notin.",
+        "evidence": [
+          {
+            "sourceId": "keyvault-module",
+            "startLine": 21,
+            "endLine": 34
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Defaulted List SortBy, SortDirection or Type falls outside supported values under case-insensitive -notin.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 21,
+              "endLine": 34
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect selected options and supported-membership flags separately; redact filter/prefix.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 21,
+              "endLine": 34
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use intended supported SortBy DateTime/FileName/Size, SortDirection Ascending/Descending and Type File/Directory, or omit for source defaults.",
+            "expected": "All three case-insensitive membership guards false; provider result separate.",
+            "evidence": [
+              {
+                "sourceId": "keyvault-module",
+                "startLine": 21,
+                "endLine": 34
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "All three case-insensitive membership guards false; provider result separate.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 21,
+              "endLine": 34
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "keyvault-list-address-required",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureKeyVault"
+      ],
+      "activities": [
+        "List"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Key Vault List requires a vault address.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 46,
+              "endLine": 46
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "After valid options with Type File (Directory returned an empty result first), %.@.Addresses.0 resolver Signal is null, failed or lacks Result before vault URI validation.",
+        "evidence": [
+          {
+            "sourceId": "keyvault-module",
+            "startLine": 34,
+            "endLine": 47
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "After valid options with Type File (Directory returned an empty result first), %.@.Addresses.0 resolver Signal is null, failed or lacks Result before vault URI validation.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 34,
+              "endLine": 47
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm Type File and inspect address resolver presence/Failure/HasResult flags; redact vault address.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 34,
+              "endLine": 47
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record vault configuration owner evidence; do not guess or call a vault.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "keyvault-module",
+                "startLine": 34,
+                "endLine": 47
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; vault address unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 34,
+              "endLine": 47
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "keyvault-list-address-invalid",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureKeyVault"
+      ],
+      "activities": [
+        "List"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Invalid Key Vault address.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 50,
+              "endLine": 50
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "After valid options with Type File and address Result, parsed vault URI is non-HTTPS, nonabsolute or has nonroot path; URI cast exceptions take separate broad catch.",
+        "evidence": [
+          {
+            "sourceId": "keyvault-module",
+            "startLine": 34,
+            "endLine": 52
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "After valid options with Type File and address Result, parsed vault URI is non-HTTPS, nonabsolute or has nonroot path; URI cast exceptions take separate broad catch.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 34,
+              "endLine": 52
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm Type File and inspect parsed scheme-is-HTTPS/absolute/root-path flags; redact authority.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 34,
+              "endLine": 52
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use intended approved HTTPS vault authority with root path in owning configuration; do not infer endpoint from error text.",
+            "expected": "Static URI shape guard false; vault call unverified.",
+            "evidence": [
+              {
+                "sourceId": "keyvault-module",
+                "startLine": 34,
+                "endLine": 52
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Static URI shape guard false; vault call unverified.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 34,
+              "endLine": 52
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "keyvault-list-continuation-repeat",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureKeyVault"
+      ],
+      "activities": [
+        "List"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Repeated Key Vault List continuation.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 57,
+              "endLine": 57
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "The next page URI is already in seen set before another request.",
+        "evidence": [
+          {
+            "sourceId": "keyvault-module",
+            "startLine": 53,
+            "endLine": 58
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The next page URI is already in seen set before another request.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 53,
+              "endLine": 58
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect repeated-URI Boolean and page count; redact URI/token.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 53,
+              "endLine": 58
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted pagination-loop evidence for vault owner and stop before another page.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "keyvault-module",
+                "startLine": 53,
+                "endLine": 58
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; pagination unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 53,
+              "endLine": 58
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "keyvault-list-page-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureKeyVault"
+      ],
+      "activities": [
+        "List"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Key Vault List page failed.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 64,
+              "endLine": 64
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "REST Get page Signal is null, failed or has no Result during vault secrets paging.",
+        "evidence": [
+          {
+            "sourceId": "keyvault-module",
+            "startLine": 59,
+            "endLine": 65
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "REST Get page Signal is null, failed or has no Result during vault secrets paging.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 59,
+              "endLine": 65
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect child REST Signal presence/Failure/HasResult and page count; redact response/URI.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 59,
+              "endLine": 65
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted REST/vault owner evidence; no automatic page retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "keyvault-module",
+                "startLine": 59,
+                "endLine": 65
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; page outcome unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 59,
+              "endLine": 65
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "keyvault-list-response-invalid",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureKeyVault"
+      ],
+      "activities": [
+        "List"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Invalid Key Vault List response.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 70,
+              "endLine": 70
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Parsed page is null, lacks value property or value is not array.",
+        "evidence": [
+          {
+            "sourceId": "keyvault-module",
+            "startLine": 66,
+            "endLine": 71
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Parsed page is null, lacks value property or value is not array.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 66,
+              "endLine": 71
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect page-null/value-present/value-is-array flags; no response dump.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 66,
+              "endLine": 71
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted provider response-shape evidence for vault owner.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "keyvault-module",
+                "startLine": 66,
+                "endLine": 71
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; response validity unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 66,
+              "endLine": 71
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "keyvault-list-secret-metadata",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureKeyVault"
+      ],
+      "activities": [
+        "List"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Invalid Key Vault secret metadata.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 74,
+              "endLine": 74
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "A page value entry is null or its id stringifies blank.",
+        "evidence": [
+          {
+            "sourceId": "keyvault-module",
+            "startLine": 71,
+            "endLine": 75
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "A page value entry is null or its id stringifies blank.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 71,
+              "endLine": 75
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect entry-null/id-nonblank flags only; redact secret ID.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 71,
+              "endLine": 75
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted provider metadata inconsistency for vault owner; do not synthesize secret.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "keyvault-module",
+                "startLine": 71,
+                "endLine": 75
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; metadata validity unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 71,
+              "endLine": 75
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "keyvault-list-secret-id",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureKeyVault"
+      ],
+      "activities": [
+        "List"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Invalid Key Vault secret identifier.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 79,
+              "endLine": 79
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Parsed secret id URI is not HTTPS/same authority or not exactly /secrets/<one segment>.",
+        "evidence": [
+          {
+            "sourceId": "keyvault-module",
+            "startLine": 75,
+            "endLine": 80
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Parsed secret id URI is not HTTPS/same authority or not exactly /secrets/<one segment>.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 75,
+              "endLine": 80
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect scheme/authority/path-shape flags only; redact id.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 75,
+              "endLine": 80
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted secret identifier mismatch for vault owner; do not rewrite provider id.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "keyvault-module",
+                "startLine": 75,
+                "endLine": 80
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; identifier validity unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 75,
+              "endLine": 80
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "keyvault-list-nextlink-invalid",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureKeyVault"
+      ],
+      "activities": [
+        "List"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Invalid Key Vault List nextLink.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 94,
+              "endLine": 94
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Nonblank nextLink URI is not absolute HTTPS/same authority or path differs from /secrets.",
+        "evidence": [
+          {
+            "sourceId": "keyvault-module",
+            "startLine": 89,
+            "endLine": 95
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Nonblank nextLink URI is not absolute HTTPS/same authority or path differs from /secrets.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 89,
+              "endLine": 95
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect nextLink absolute/scheme/authority/path flags only; redact link.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 89,
+              "endLine": 95
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted pagination link mismatch for vault owner; stop before following link.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "keyvault-module",
+                "startLine": 89,
+                "endLine": 95
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; nextLink validity unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "keyvault-module",
+              "startLine": 89,
+              "endLine": 95
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "keyvault-activity-status-or-name-invalid",
+      "status": "source-verified; provider-free mock-verified",
+      "adapters": ["Storage_AzureKeyVault"],
+      "activities": ["Read", "Write", "Delete", "Exists"],
+      "emittedMessages": [
+        { "kind": "log", "text": "Invalid Key Vault secret name or container." },
+        { "kind": "log", "text": "Key Vault request returned an unsuccessful status." },
+        { "kind": "log", "text": "Key Vault response status is invalid." }
+      ],
+      "trigger": { "condition": "The selected name is not one legal segment, or explicit REST status is missing/non-200 (Exists alone maps exact-name 404 to false)." },
+      "likelyCauses": [
+        { "text": "Legacy Storage.Secrets.Read.name used with a non-Read activity, nonempty Container, invalid name, permission denial, or malformed provider envelope.", "basis": "source" }
+      ],
+      "diagnostics": [
+        { "mode": "provider-free", "action": "Check activity, name validity, v2 Vault route/Resource match and HTTP status without recording secret values or response bodies.", "expected": "Invalid names fail before provider dispatch; 403 fails and 404 maps to false only for Exists." }
+      ],
+      "verification": [
+        { "mode": "provider-free", "action": "Run Storage.KeyVaultActivities.Tests.ps1 with the mocked REST boundary.", "expected": "Typed success Results and denied/invalid failure cases pass with zero live requests." }
+      ],
+      "redaction": "Do not serialize Read Result or provider error body; record only activity, validated name presence and status class.",
+      "limitations": ["Provider-free checks do not establish live permissions, durable persistence or safe name reuse after soft delete."]
+    }
+  ]
+}

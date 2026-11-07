@@ -165,7 +165,7 @@
     },
     {
       "name": "Read",
-      "whenToUse": "Use with an implementing slot to retrieve content. Embedded/Azure TargetPath mode writes a file and disables fallback Content; ResultDetail true requires that target. Key Vault non-List dispatch reads operation and secret from Config.VirtualPath and implements only Read. Listed LocalFileSystem lacks mapped Invoke.",
+      "whenToUse": "Use with an implementing slot to retrieve content. Embedded/Azure TargetPath mode writes a file and disables fallback Content; ResultDetail true requires that target. Key Vault implements Read/Write/Delete/Exists for validated names; file-transfer options are unsupported. Listed LocalFileSystem lacks mapped Invoke.",
       "description": "Retrieve content from a resource.",
       "properties": [
         {
@@ -180,7 +180,7 @@
         {
           "path": "Config",
           "description": "Extract Key Vault request configuration and check whether it is present.",
-          "whenToUse": "For Key Vault non-List dispatch, supply Config.VirtualPath to select its implemented Read operation and secret; Write/Delete/Exists labels do not establish those operations. The provider checks Config presence first.",
+          "whenToUse": "For Key Vault Read/Write/Delete/Exists, Config.VirtualPath may hold a raw secret name; legacy Storage.Secrets.Read.name is Read-only. Otherwise use mapped /name with empty Container.",
           "adapters": [
             "Storage_AzureKeyVault"
           ]
@@ -311,7 +311,7 @@
         {
           "path": "Config.VirtualPath",
           "description": "Select the Key Vault operation and secret from the virtual-path segments.",
-          "whenToUse": "For Key Vault non-List dispatch, set Config.VirtualPath segment 2 to Read and segment 3 to the secret. It overwrites the supplied activity and only implements Read; List has its separate branch.",
+          "whenToUse": "For Key Vault, the supplied Activity selects the operation. Validate a raw secret name or the legacy Storage.Secrets.Read.name form only for Read.",
           "adapters": [
             "Storage_AzureKeyVault"
           ]
@@ -319,7 +319,7 @@
         {
           "path": "Container",
           "description": "Build the generated virtual path from the container and resource.",
-          "whenToUse": "When Config.VirtualPath is absent, supply Container with Resource so mapped dispatch synthesizes top-level VirtualPath for providers that consume it. Key Vault non-List still reads Config.VirtualPath; LocalFileSystem lacks mapped Invoke.",
+          "whenToUse": "When Config.VirtualPath is absent, supply Container with Resource so mapped dispatch synthesizes top-level VirtualPath for providers that consume it. Key Vault accepts /name only with empty Container; LocalFileSystem lacks mapped Invoke.",
           "adapters": [
             "Storage_EmbeddedFileSystem",
             "Storage_LocalFileSystem",
@@ -338,8 +338,8 @@
         },
         {
           "path": "Phase",
-          "description": "Preserve the original conduction context reference while cloning the plan for a Key Vault read.",
-          "whenToUse": "For Key Vault request cloning, retain incoming Phase so original conduction context is preserved.",
+          "description": "Legacy Key Vault clone field; current Key Vault activity dispatch builds a bounded REST plan.",
+          "whenToUse": "Current Key Vault activity dispatch does not consume this field.",
           "adapters": [
             "Storage_AzureKeyVault"
           ]
@@ -355,8 +355,8 @@
         },
         {
           "path": "Plan",
-          "description": "Preserve the original conduction context reference while cloning the plan for a Key Vault read.",
-          "whenToUse": "For Key Vault request cloning, retain incoming Plan so original conduction context is preserved.",
+          "description": "Legacy Key Vault clone field; current Key Vault activity dispatch builds a bounded REST plan.",
+          "whenToUse": "Current Key Vault activity dispatch does not consume this field.",
           "adapters": [
             "Storage_AzureKeyVault"
           ]
@@ -364,7 +364,7 @@
         {
           "path": "Resource",
           "description": "Build the generated virtual path from the container and resource.",
-          "whenToUse": "When Config.VirtualPath is absent, supply Resource with Container to synthesize top-level VirtualPath for providers that consume it. Key Vault non-List needs Config.VirtualPath directly; LocalFileSystem lacks mapped Invoke.",
+          "whenToUse": "When Config.VirtualPath is absent, supply Resource with Container to synthesize top-level VirtualPath for providers that consume it. Key Vault accepts a mapped /name with empty Container; LocalFileSystem lacks mapped Invoke.",
           "adapters": [
             "Storage_EmbeddedFileSystem",
             "Storage_LocalFileSystem",
@@ -490,19 +490,19 @@
         "Storage_EmbeddedFileSystem: Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred",
         "Storage_LocalFileSystem: unsupported — Helper ReadObjectAsJson/Xml methods are not mapped activity implementations",
         "Storage_AzureStorageAccount: Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred",
-        "Storage_AzureKeyVault: success can have no Result (response value absent)",
+        "Storage_AzureKeyVault: Read requires HTTP 200 and a string value; missing value fails",
         "Storage_AzureKeyVault: Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred"
       ]
     },
     {
       "name": "Write",
-      "whenToUse": "Use with EmbeddedFileSystem or AzureStorageAccount to store Config.Content or a source file. AzureKeyVault's non-List branch derives Activity from Config.VirtualPath and implements only Read, so this label does not establish a Key Vault write; LocalFileSystem lacks mapped Invoke.",
+      "whenToUse": "Use with EmbeddedFileSystem or AzureStorageAccount for content or source-file writes. AzureKeyVault accepts string/JSON Config.Content as a secret value and returns a versioned id; it does not support SourcePath or binary upload. LocalFileSystem lacks mapped Invoke.",
       "description": "Store content in a resource.",
       "properties": [
         {
           "path": "Config",
           "description": "Extract Key Vault request configuration and check whether it is present.",
-          "whenToUse": "For Key Vault non-List dispatch, supply Config.VirtualPath to select its implemented Read operation and secret; Write/Delete/Exists labels do not establish those operations. The provider checks Config presence first.",
+          "whenToUse": "For Key Vault Read/Write/Delete/Exists, Config.VirtualPath may hold a raw secret name; legacy Storage.Secrets.Read.name is Read-only. Otherwise use mapped /name with empty Container.",
           "adapters": [
             "Storage_AzureKeyVault"
           ]
@@ -510,18 +510,20 @@
         {
           "path": "Config.Content",
           "description": "Read the content to store.",
-          "whenToUse": "For Embedded/Azure Write, supply the content to store when the operation uses a direct content value rather than only a source file.",
+          "whenToUse": "For Embedded/blob Write, supply direct content or use SourcePath. For Key Vault Write, supply a string (including empty) or JSON object/array; binary and file paths are unsupported.",
           "adapters": [
             "Storage_EmbeddedFileSystem",
-            "Storage_AzureStorageAccount"
+            "Storage_AzureStorageAccount",
+            "Storage_AzureKeyVault"
           ]
         },
         {
           "path": "Config.ContentType",
-          "description": "Select the Azure upload content type.",
-          "whenToUse": "For Azure upload or fallback write, set ContentType when the stored content needs an explicit media type.",
+          "description": "Select the blob media type or Key Vault secret content-type hint.",
+          "whenToUse": "For Azure blob upload or Key Vault Write, set ContentType when the stored value needs an explicit interpretation hint (Key Vault maximum 255 characters).",
           "adapters": [
-            "Storage_AzureStorageAccount"
+            "Storage_AzureStorageAccount",
+            "Storage_AzureKeyVault"
           ]
         },
         {
@@ -593,7 +595,7 @@
         {
           "path": "Config.VirtualPath",
           "description": "Select the Key Vault operation and secret from the virtual-path segments.",
-          "whenToUse": "For Key Vault non-List dispatch, set Config.VirtualPath segment 2 to Read and segment 3 to the secret. It overwrites the supplied activity and only implements Read; List has its separate branch.",
+          "whenToUse": "For Key Vault, the supplied Activity selects the operation. Validate a raw secret name or the legacy Storage.Secrets.Read.name form only for Read.",
           "adapters": [
             "Storage_AzureKeyVault"
           ]
@@ -601,7 +603,7 @@
         {
           "path": "Container",
           "description": "Build the generated virtual path from the container and resource.",
-          "whenToUse": "When Config.VirtualPath is absent, supply Container with Resource so mapped dispatch synthesizes top-level VirtualPath for providers that consume it. Key Vault non-List still reads Config.VirtualPath; LocalFileSystem lacks mapped Invoke.",
+          "whenToUse": "When Config.VirtualPath is absent, supply Container with Resource so mapped dispatch synthesizes top-level VirtualPath for providers that consume it. Key Vault accepts /name only with empty Container; LocalFileSystem lacks mapped Invoke.",
           "adapters": [
             "Storage_EmbeddedFileSystem",
             "Storage_LocalFileSystem",
@@ -619,8 +621,8 @@
         },
         {
           "path": "Phase",
-          "description": "Preserve the original conduction context reference while cloning the plan for a Key Vault read.",
-          "whenToUse": "For Key Vault request cloning, retain incoming Phase so original conduction context is preserved.",
+          "description": "Legacy Key Vault clone field; current Key Vault activity dispatch builds a bounded REST plan.",
+          "whenToUse": "Current Key Vault activity dispatch does not consume this field.",
           "adapters": [
             "Storage_AzureKeyVault"
           ]
@@ -635,8 +637,8 @@
         },
         {
           "path": "Plan",
-          "description": "Preserve the original conduction context reference while cloning the plan for a Key Vault read.",
-          "whenToUse": "For Key Vault request cloning, retain incoming Plan so original conduction context is preserved.",
+          "description": "Legacy Key Vault clone field; current Key Vault activity dispatch builds a bounded REST plan.",
+          "whenToUse": "Current Key Vault activity dispatch does not consume this field.",
           "adapters": [
             "Storage_AzureKeyVault"
           ]
@@ -644,7 +646,7 @@
         {
           "path": "Resource",
           "description": "Build the generated virtual path from the container and resource.",
-          "whenToUse": "When Config.VirtualPath is absent, supply Resource with Container to synthesize top-level VirtualPath for providers that consume it. Key Vault non-List needs Config.VirtualPath directly; LocalFileSystem lacks mapped Invoke.",
+          "whenToUse": "When Config.VirtualPath is absent, supply Resource with Container to synthesize top-level VirtualPath for providers that consume it. Key Vault accepts a mapped /name with empty Container; LocalFileSystem lacks mapped Invoke.",
           "adapters": [
             "Storage_EmbeddedFileSystem",
             "Storage_LocalFileSystem",
@@ -688,24 +690,30 @@
           "adapters": [
             "Storage_AzureStorageAccount"
           ]
+        },
+        {
+          "path": "$",
+          "type": "String",
+          "description": "Key Vault versioned same-vault secret URI after HTTP 200; no value returned.",
+          "adapters": ["Storage_AzureKeyVault"]
         }
       ],
       "resultNotes": [
         "Storage_EmbeddedFileSystem: Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred",
         "Storage_LocalFileSystem: unsupported",
         "Storage_AzureStorageAccount: URI is a returned target, not independent content proof. Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred",
-        "Storage_AzureKeyVault: unsupported — Catalog property lists Write but source does not dispatch it"
+        "Storage_AzureKeyVault: Write returns a versioned id on HTTP 200; the provider does not prove independent persistence"
       ]
     },
     {
       "name": "Delete",
-      "whenToUse": "Use with an implementing Embedded/AzureStorageAccount slot to remove a resource. AzureKeyVault non-List dispatch overwrites Activity from Config.VirtualPath and implements only Read; a Delete label does not establish Key Vault deletion. LocalFileSystem lacks mapped Invoke.",
+      "whenToUse": "Use with an implementing Embedded/AzureStorageAccount slot to remove a resource. AzureKeyVault Delete soft-deletes the named secret and all versions without purge. LocalFileSystem lacks mapped Invoke.",
       "description": "Remove a resource.",
       "properties": [
         {
           "path": "Config",
           "description": "Extract Key Vault request configuration and check whether it is present.",
-          "whenToUse": "For Key Vault non-List dispatch, supply Config.VirtualPath to select its implemented Read operation and secret; Write/Delete/Exists labels do not establish those operations. The provider checks Config presence first.",
+          "whenToUse": "For Key Vault Read/Write/Delete/Exists, Config.VirtualPath may hold a raw secret name; legacy Storage.Secrets.Read.name is Read-only. Otherwise use mapped /name with empty Container.",
           "adapters": [
             "Storage_AzureKeyVault"
           ]
@@ -762,7 +770,7 @@
         {
           "path": "Config.VirtualPath",
           "description": "Select the Key Vault operation and secret from the virtual-path segments.",
-          "whenToUse": "For Key Vault non-List dispatch, set Config.VirtualPath segment 2 to Read and segment 3 to the secret. It overwrites the supplied activity and only implements Read; List has its separate branch.",
+          "whenToUse": "For Key Vault, the supplied Activity selects the operation. Validate a raw secret name or the legacy Storage.Secrets.Read.name form only for Read.",
           "adapters": [
             "Storage_AzureKeyVault"
           ]
@@ -770,7 +778,7 @@
         {
           "path": "Container",
           "description": "Build the generated virtual path from the container and resource.",
-          "whenToUse": "When Config.VirtualPath is absent, supply Container with Resource so mapped dispatch synthesizes top-level VirtualPath for providers that consume it. Key Vault non-List still reads Config.VirtualPath; LocalFileSystem lacks mapped Invoke.",
+          "whenToUse": "When Config.VirtualPath is absent, supply Container with Resource so mapped dispatch synthesizes top-level VirtualPath for providers that consume it. Key Vault accepts /name only with empty Container; LocalFileSystem lacks mapped Invoke.",
           "adapters": [
             "Storage_EmbeddedFileSystem",
             "Storage_LocalFileSystem",
@@ -780,16 +788,16 @@
         },
         {
           "path": "Phase",
-          "description": "Preserve the original conduction context reference while cloning the plan for a Key Vault read.",
-          "whenToUse": "For Key Vault request cloning, retain incoming Phase so original conduction context is preserved.",
+          "description": "Legacy Key Vault clone field; current Key Vault activity dispatch builds a bounded REST plan.",
+          "whenToUse": "Current Key Vault activity dispatch does not consume this field.",
           "adapters": [
             "Storage_AzureKeyVault"
           ]
         },
         {
           "path": "Plan",
-          "description": "Preserve the original conduction context reference while cloning the plan for a Key Vault read.",
-          "whenToUse": "For Key Vault request cloning, retain incoming Plan so original conduction context is preserved.",
+          "description": "Legacy Key Vault clone field; current Key Vault activity dispatch builds a bounded REST plan.",
+          "whenToUse": "Current Key Vault activity dispatch does not consume this field.",
           "adapters": [
             "Storage_AzureKeyVault"
           ]
@@ -797,7 +805,7 @@
         {
           "path": "Resource",
           "description": "Build the generated virtual path from the container and resource.",
-          "whenToUse": "When Config.VirtualPath is absent, supply Resource with Container to synthesize top-level VirtualPath for providers that consume it. Key Vault non-List needs Config.VirtualPath directly; LocalFileSystem lacks mapped Invoke.",
+          "whenToUse": "When Config.VirtualPath is absent, supply Resource with Container to synthesize top-level VirtualPath for providers that consume it. Key Vault accepts a mapped /name with empty Container; LocalFileSystem lacks mapped Invoke.",
           "adapters": [
             "Storage_EmbeddedFileSystem",
             "Storage_LocalFileSystem",
@@ -857,24 +865,30 @@
           "adapters": [
             "Storage_AzureStorageAccount"
           ]
+        },
+        {
+          "path": "$",
+          "type": "Boolean",
+          "description": "Key Vault true only on accepted HTTP 200 soft-delete; missing and denied calls fail.",
+          "adapters": ["Storage_AzureKeyVault"]
         }
       ],
       "resultNotes": [
         "Storage_EmbeddedFileSystem: Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred",
         "Storage_LocalFileSystem: unsupported",
         "Storage_AzureStorageAccount: Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred",
-        "Storage_AzureKeyVault: unsupported — Catalog property lists Delete but source does not dispatch it"
+        "Storage_AzureKeyVault: Delete soft-deletes all versions and does not purge"
       ]
     },
     {
       "name": "Exists",
-      "whenToUse": "Use with an implementing Embedded/AzureStorageAccount slot to check a resource. AzureKeyVault non-List dispatch overwrites Activity from Config.VirtualPath and implements only Read; an Exists label does not establish a Key Vault existence check. LocalFileSystem lacks mapped Invoke.",
+      "whenToUse": "Use with an implementing Embedded/AzureStorageAccount slot to check a resource. AzureKeyVault Exists returns true on HTTP 200 and false only on exact-name 404; permission errors fail. LocalFileSystem lacks mapped Invoke.",
       "description": "Check whether a resource is present.",
       "properties": [
         {
           "path": "Config",
           "description": "Extract Key Vault request configuration and check whether it is present.",
-          "whenToUse": "For Key Vault non-List dispatch, supply Config.VirtualPath to select its implemented Read operation and secret; Write/Delete/Exists labels do not establish those operations. The provider checks Config presence first.",
+          "whenToUse": "For Key Vault Read/Write/Delete/Exists, Config.VirtualPath may hold a raw secret name; legacy Storage.Secrets.Read.name is Read-only. Otherwise use mapped /name with empty Container.",
           "adapters": [
             "Storage_AzureKeyVault"
           ]
@@ -935,7 +949,7 @@
         {
           "path": "Config.VirtualPath",
           "description": "Select the Key Vault operation and secret from the virtual-path segments.",
-          "whenToUse": "For Key Vault non-List dispatch, set Config.VirtualPath segment 2 to Read and segment 3 to the secret. It overwrites the supplied activity and only implements Read; List has its separate branch.",
+          "whenToUse": "For Key Vault, the supplied Activity selects the operation. Validate a raw secret name or the legacy Storage.Secrets.Read.name form only for Read.",
           "adapters": [
             "Storage_AzureKeyVault"
           ]
@@ -943,7 +957,7 @@
         {
           "path": "Container",
           "description": "Build the generated virtual path from the container and resource.",
-          "whenToUse": "When Config.VirtualPath is absent, supply Container with Resource so mapped dispatch synthesizes top-level VirtualPath for providers that consume it. Key Vault non-List still reads Config.VirtualPath; LocalFileSystem lacks mapped Invoke.",
+          "whenToUse": "When Config.VirtualPath is absent, supply Container with Resource so mapped dispatch synthesizes top-level VirtualPath for providers that consume it. Key Vault accepts /name only with empty Container; LocalFileSystem lacks mapped Invoke.",
           "adapters": [
             "Storage_EmbeddedFileSystem",
             "Storage_LocalFileSystem",
@@ -953,16 +967,16 @@
         },
         {
           "path": "Phase",
-          "description": "Preserve the original conduction context reference while cloning the plan for a Key Vault read.",
-          "whenToUse": "For Key Vault request cloning, retain incoming Phase so original conduction context is preserved.",
+          "description": "Legacy Key Vault clone field; current Key Vault activity dispatch builds a bounded REST plan.",
+          "whenToUse": "Current Key Vault activity dispatch does not consume this field.",
           "adapters": [
             "Storage_AzureKeyVault"
           ]
         },
         {
           "path": "Plan",
-          "description": "Preserve the original conduction context reference while cloning the plan for a Key Vault read.",
-          "whenToUse": "For Key Vault request cloning, retain incoming Plan so original conduction context is preserved.",
+          "description": "Legacy Key Vault clone field; current Key Vault activity dispatch builds a bounded REST plan.",
+          "whenToUse": "Current Key Vault activity dispatch does not consume this field.",
           "adapters": [
             "Storage_AzureKeyVault"
           ]
@@ -970,7 +984,7 @@
         {
           "path": "Resource",
           "description": "Build the generated virtual path from the container and resource.",
-          "whenToUse": "When Config.VirtualPath is absent, supply Resource with Container to synthesize top-level VirtualPath for providers that consume it. Key Vault non-List needs Config.VirtualPath directly; LocalFileSystem lacks mapped Invoke.",
+          "whenToUse": "When Config.VirtualPath is absent, supply Resource with Container to synthesize top-level VirtualPath for providers that consume it. Key Vault accepts a mapped /name with empty Container; LocalFileSystem lacks mapped Invoke.",
           "adapters": [
             "Storage_EmbeddedFileSystem",
             "Storage_LocalFileSystem",
@@ -1030,13 +1044,19 @@
           "adapters": [
             "Storage_AzureStorageAccount"
           ]
+        },
+        {
+          "path": "$",
+          "type": "Boolean",
+          "description": "Key Vault true on HTTP 200 and false only on exact-name HTTP 404.",
+          "adapters": ["Storage_AzureKeyVault"]
         }
       ],
       "resultNotes": [
         "Storage_EmbeddedFileSystem: Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred",
         "Storage_LocalFileSystem: unsupported",
         "Storage_AzureStorageAccount: Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred",
-        "Storage_AzureKeyVault: unsupported — Catalog property lists Exists but source does not dispatch it"
+        "Storage_AzureKeyVault: Exists returns false only on name-scoped HTTP 404; denial is failure"
       ]
     }
   ],

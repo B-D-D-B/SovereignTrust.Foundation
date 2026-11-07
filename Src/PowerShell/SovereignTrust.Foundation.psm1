@@ -62,6 +62,7 @@ function Invoke-Telemetry(
 . "$PSScriptRoot/Classes/Adapters/Token/Token_Storage.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Condenser/Rest/Resolve-BearerToken.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Condenser/Rest/Invoke-RestCondenserCore.ps1"
+. "$PSScriptRoot/Utilities/Adapters/Condenser/Process/Invoke-ProcessCondenserCore.ps1"
 
 . "$PSScriptRoot/Utilities/Adapters/Condenser/Plan/Resolve-ClonePlan.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Condenser/Plan/Invoke-PlanIteration.ps1"
@@ -73,6 +74,8 @@ function Invoke-Telemetry(
 . "$PSScriptRoot/Utilities/Threading/STBackgroundTasks.ps1"
 
 . "$PSScriptRoot/Utilities/Adapters/Storage/Invoke-MappedStorageAdapter.ps1"
+. "$PSScriptRoot/Utilities/Adapters/Storage/Resolve-StorageResourceRoutesJacket.ps1"
+. "$PSScriptRoot/Utilities/Adapters/Resolve-RemainingResourceRoutesJacket.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Invoke-MappedAdapterCore.ps1"
 
 . "$PSScriptRoot/Utilities/Adapters/Network/Invoke-NetworkAdapter.ps1"
@@ -86,6 +89,7 @@ function Invoke-Telemetry(
 
 
 . "$PSScriptRoot/Classes/Adapters/Condenser/RestCondenser.ps1"
+. "$PSScriptRoot/Classes/Adapters/Condenser/ProcessCondenser.ps1"
 
 . "$PSScriptRoot/Utilities/Adapters/Condenser/Format/Invoke-FormatJson.ps1"
 . "$PSScriptRoot/Utilities/Adapters/Condenser/Format/Invoke-FormatXml.ps1"
@@ -103,6 +107,7 @@ function Invoke-Telemetry(
 . "$PSScriptRoot/Classes/Adapters/Condenser/MergeCondenser.ps1"
 . "$PSScriptRoot/Classes/Adapters/Condenser/TokenCondenser.ps1"
 . "$PSScriptRoot/Classes/Adapters/Condenser/PlanCondenser.ps1"
+. "$PSScriptRoot/Classes/Adapters/Condenser/SignalCondenser.ps1"
 . "$PSScriptRoot/Classes/Adapters/Condenser/TransformCondenser.ps1"
 
 #. "$PSScriptRoot/Utilities/Adapters/Condenser/Rest/Resolve-BearerToken.ps1"
@@ -322,6 +327,8 @@ Export-ModuleMember -Function Invoke-HydrateTokenCondenser
 #        $bondingConductor = New-Conductor -HostConductor $null
 
 Export-ModuleMember -Function Invoke-MappedStorageAdapter
+Export-ModuleMember -Function Resolve-StorageResourceRoutesJacket
+Export-ModuleMember -Function Resolve-RemainingResourceRoutesJacket
 Export-ModuleMember -Function Invoke-NetworkAdapter
 Export-ModuleMember -Function Invoke-TokenStorage
 Export-ModuleMember -Function Invoke-MappedAdapter

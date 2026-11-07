@@ -3,7 +3,7 @@
   "activities": [
     {
       "name": "SendMessage",
-      "whenToUse": "Use to submit a message through the selected registered provider. AzureFoundry and OpenAI use the same current send helper for both send labels; CodexCLI accepts Content or structured Prompt, optional flat OutputSchema and a configured ModelKey. Choose fields by current provider source; no provider response is assured by this guidance.",
+      "whenToUse": "Use the registered provider's send contract. AzureFoundry and OpenAI v2 image profiles select Config.Profile.Key, pass the final native Config.Prompt through Condenser.Rest and return its parsed response. Their Responses paths return normalized JSON text. CodexCLI v2 requires Profile.Key and a scalar Prompt and returns assistant JSON text; CLI image artifacts are unsupported. Legacy CodexCLI accepts Content or structured Prompt and ModelKey.",
       "description": "Send a request to an intelligence service.",
       "properties": [
         {
@@ -132,11 +132,23 @@
           ]
         },
         {
-          "path": "Config.Prompt",
-          "description": "Read CodexCLI Prompt input.",
-          "whenToUse": "For CodexCLI, supply a text or structured Prompt when Content is not used. Structured Prompt accepts System, Texts and Media; nonempty Prompt conflicts with nonblank Content.",
+          "path": "Config.Profile",
+          "description": "Select a registered OpenAI image profile.",
+          "whenToUse": "For Foundry/OpenAI image SendMessage or CodexCLI v2 scalar SendMessage, supply an object containing only Key to select a registered profile. Foundry/OpenAI routes determine the image protocol; CodexCLI returns text only.",
           "adapters": [
-            "Intelligence_CodexCLI"
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI",
+            "Intelligence_OpenAI"
+          ]
+        },
+        {
+          "path": "Config.Prompt",
+          "description": "Read CodexCLI or OpenAI image Prompt input.",
+          "whenToUse": "For CodexCLI v2, supply a nonblank scalar instruction for exact stdin pass-through and a text result. Legacy CodexCLI accepts scalar or structured Prompt. For Foundry/OpenAI image profiles, supply the final provider-native JSON object with model equal to the registered profile; native options and references pass through without provider validation. Streaming true or malformed values fail; false passes through.",
+          "adapters": [
+            "Intelligence_AzureFoundry",
+            "Intelligence_CodexCLI",
+            "Intelligence_OpenAI"
           ]
         },
         {
@@ -307,178 +319,21 @@
             "Intelligence_AzureFoundry",
             "Intelligence_OpenAI"
           ]
+        },
+        {
+          "path": "$",
+          "type": "parsed JSON value",
+          "description": "For OpenAI image profiles only: Condenser.Rest parsed Response from the configured Images route. The adapter does not interpret generated image data.",
+          "adapters": [
+            "Intelligence_OpenAI"
+          ]
         }
       ],
       "resultNotes": [
         "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
         "Intelligence_CodexCLI: Result is normalized JSON text, not a decoded object or proof the image was interpreted correctly",
         "Intelligence_AzureFoundry: Outer result is JSON text; response values depend on bound provider. No live call made",
-        "Intelligence_OpenAI: native Responses result is normalized JSON text; no live provider call made"
-      ]
-    },
-    {
-      "name": "SendMessageOriginal",
-      "whenToUse": "For AzureFoundry or OpenAI, this label currently reaches the same send helper as SendMessage, without a distinct transformation route. No CodexCLI property association is declared here; use current provider-specific content, model-key and media rules.",
-      "description": "Send through the same current AzureFoundry/OpenAI request helper as SendMessage.",
-      "properties": [
-        {
-          "path": "Config",
-          "description": "Extract intelligence service request configuration.",
-          "whenToUse": "Supply AzureFoundry/OpenAI request configuration for the original-message branch; the selected concrete provider reads it after mapped dispatch.",
-          "adapters": [
-            "Intelligence_AzureFoundry",
-            "Intelligence_OpenAI"
-          ]
-        },
-        {
-          "path": "Config.Content",
-          "description": "Read Foundry Content request input.",
-          "whenToUse": "Supply content for the same current AzureFoundry/OpenAI send helper used by SendMessage. Foundry rejects combining it with Prompt.Texts; OpenAI rejects combining it with Prompt.",
-          "adapters": [
-            "Intelligence_AzureFoundry",
-            "Intelligence_OpenAI"
-          ]
-        },
-        {
-          "path": "Config.MediaPath",
-          "description": "Read Foundry MediaPath request input.",
-          "whenToUse": "For AzureFoundry only, supply a legacy local image path without populated structured Prompt.Media. Current OpenAI send helper rejects this legacy field despite the retained catalog association.",
-          "adapters": [
-            "Intelligence_AzureFoundry",
-            "Intelligence_OpenAI"
-          ]
-        },
-        {
-          "path": "Config.MediaUrl",
-          "description": "Read Foundry MediaUrl request input.",
-          "whenToUse": "For AzureFoundry only, supply a legacy image URL without populated structured Prompt.Media. Current OpenAI send helper rejects this legacy field despite the retained catalog association.",
-          "adapters": [
-            "Intelligence_AzureFoundry",
-            "Intelligence_OpenAI"
-          ]
-        },
-        {
-          "path": "Config.Model",
-          "description": "Read and reject legacy Config.Model in current Foundry/OpenAI send helpers; use ModelKey.",
-          "whenToUse": "Omit this legacy model field: current AzureFoundry/OpenAI send helpers reject Config.Model and select a profile through Config.ModelKey instead. The catalog retains this validation context.",
-          "adapters": [
-            "Intelligence_AzureFoundry",
-            "Intelligence_OpenAI"
-          ]
-        },
-        {
-          "path": "Config.ModelKey",
-          "description": "Read Foundry ModelKey request input.",
-          "whenToUse": "Select the AzureFoundry/OpenAI model profile key for the original-message request when provider configuration uses it.",
-          "adapters": [
-            "Intelligence_AzureFoundry",
-            "Intelligence_OpenAI"
-          ]
-        },
-        {
-          "path": "Config.Prompt.Media",
-          "description": "Read Foundry Prompt.Media request input.",
-          "whenToUse": "Supply structured prompt media entries for the current AzureFoundry/OpenAI send helper. Foundry rejects combining populated entries with legacy MediaPath/MediaUrl; OpenAI rejects those legacy top-level fields entirely.",
-          "adapters": [
-            "Intelligence_AzureFoundry",
-            "Intelligence_OpenAI"
-          ]
-        },
-        {
-          "path": "Config.Prompt.Media[*].Detail",
-          "description": "Read Foundry media Detail.",
-          "whenToUse": "For an original AzureFoundry/OpenAI media entry, set Detail when its selected media representation requires it.",
-          "adapters": [
-            "Intelligence_AzureFoundry",
-            "Intelligence_OpenAI"
-          ]
-        },
-        {
-          "path": "Config.Prompt.Media[*].MediaPath",
-          "description": "Read Foundry media MediaPath.",
-          "whenToUse": "For an original AzureFoundry/OpenAI media entry, supply MediaPath to load a local media file.",
-          "adapters": [
-            "Intelligence_AzureFoundry",
-            "Intelligence_OpenAI"
-          ]
-        },
-        {
-          "path": "Config.Prompt.Media[*].MediaType",
-          "description": "Read Foundry media MediaType.",
-          "whenToUse": "For an original AzureFoundry/OpenAI media entry, identify its MediaType when the provider's media path uses it.",
-          "adapters": [
-            "Intelligence_AzureFoundry",
-            "Intelligence_OpenAI"
-          ]
-        },
-        {
-          "path": "Config.Prompt.Media[*].MediaUrl",
-          "description": "Read Foundry media MediaUrl.",
-          "whenToUse": "For an original AzureFoundry/OpenAI media entry, supply MediaUrl when remote media is selected.",
-          "adapters": [
-            "Intelligence_AzureFoundry",
-            "Intelligence_OpenAI"
-          ]
-        },
-        {
-          "path": "Config.Prompt.System",
-          "description": "Read Foundry Prompt.System request input.",
-          "whenToUse": "Supply original structured system text for AzureFoundry/OpenAI when that provider branch reads it.",
-          "adapters": [
-            "Intelligence_AzureFoundry",
-            "Intelligence_OpenAI"
-          ]
-        },
-        {
-          "path": "Config.Prompt.Texts",
-          "description": "Read Foundry Prompt.Texts request input.",
-          "whenToUse": "Supply original structured text entries for AzureFoundry/OpenAI when that provider branch reads them.",
-          "adapters": [
-            "Intelligence_AzureFoundry",
-            "Intelligence_OpenAI"
-          ]
-        },
-        {
-          "path": "Phase",
-          "description": "Preserve conduction context when cloning the Foundry request.",
-          "whenToUse": "For AzureFoundry request cloning, retain an incoming parent Phase reference to preserve conduction context.",
-          "adapters": [
-            "Intelligence_AzureFoundry"
-          ]
-        },
-        {
-          "path": "Plan",
-          "description": "Preserve conduction context when cloning the Foundry request.",
-          "whenToUse": "For AzureFoundry request cloning, retain an incoming parent Plan reference to preserve conduction context.",
-          "adapters": [
-            "Intelligence_AzureFoundry"
-          ]
-        }
-      ],
-      "result": [
-        {
-          "path": "$",
-          "type": "JSON string",
-          "description": "Outer JSON text. When same OpenAIResponses call as SendMessage; provider response normalized.",
-          "adapters": [
-            "Intelligence_AzureFoundry",
-            "Intelligence_OpenAI"
-          ]
-        },
-        {
-          "path": "$",
-          "type": "JSON string",
-          "description": "When same OpenAIResponses call as SendMessage; provider response normalized.",
-          "adapters": [
-            "Intelligence_AzureFoundry",
-            "Intelligence_OpenAI"
-          ]
-        }
-      ],
-      "resultNotes": [
-        "Intelligence_AzureFoundry: Current source does not expose a distinct raw/original provider envelope",
-        "Intelligence_CodexCLI: unsupported",
-        "Intelligence_OpenAI: native Responses result is normalized JSON text; no live provider call made"
+        "Intelligence_OpenAI: Responses returns normalized JSON text; image generation/edit forwards the parsed Condenser.Rest Response. Offline fixture evidence only"
       ]
     },
     {

@@ -237,7 +237,7 @@
         {
           "path": "$",
           "type": "Boolean",
-          "description": "When Dynamic expression function name in Path/Key selects branch; Config.Operator does not dispatch; In/NotIn, IsNull/IsNotNull, Gt/Lt, normalized Not/And/Or.",
+          "description": "When Dynamic expression function name in Path/Key selects branch; Config.Operator does not dispatch; In/NotIn, IsNull/IsNotNull, typed IsNonBlankString, EqualsOrdinalString, Gt/Lt, normalized Not/And/Or. IsNonBlankString requires one whole unquoted typed reference and returns native Boolean only for resolved values. EqualsOrdinalString requires a whole unquoted typed native-string reference and a literal, returning ordinal Boolean equality; malformed or unresolved operands fail without Result.",
           "adapters": [
             "Token_Dynamic"
           ]

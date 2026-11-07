@@ -1,0 +1,222 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedNetworkAdapter",
+  "mappedAdapter": "MappedNetworkAdapter",
+  "part": "Network_DiscordBot",
+  "sources": [
+    {
+      "id": "discord-module",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Network/DiscordBot/PowerShell/Network_DiscordBot.psm1",
+      "sha256": "DBBE85CC453F129A47759BAE879A0F03CFBC53083F2B5452BFBB8B834DC673BF",
+      "symbol": "Network_DiscordBot"
+    }
+  ],
+  "entries": [
+    {
+      "id": "discord-construct-null-dictionary",
+      "status": "source-verified",
+      "adapters": [
+        "Network_DiscordBot"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot construct Network_DiscordBot — provided dictionary is null.",
+          "evidence": [
+            {
+              "sourceId": "discord-module",
+              "startLine": 32,
+              "endLine": 32
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Network_DiscordBot.Construct receives null dictionary after optional registered Jacket hydration.",
+        "evidence": [
+          {
+            "sourceId": "discord-module",
+            "startLine": 27,
+            "endLine": 34
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Network_DiscordBot.Construct receives null dictionary after optional registered Jacket hydration.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "discord-module",
+              "startLine": 27,
+              "endLine": 34
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect concrete registration identity and hydrated construction dictionary null flag; redact content.",
+          "expected": "Redacted flags identify this source guard without request or credential content.",
+          "evidence": [
+            {
+              "sourceId": "discord-module",
+              "startLine": 27,
+              "endLine": 34
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional construction input proposal only; no runtime/provider action.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull DiscordBot construction dictionary through owning registration/jacket plan.",
+            "expected": "Construction dictionary is nonnull; Invoke remains separate.",
+            "evidence": [
+              {
+                "sourceId": "discord-module",
+                "startLine": 27,
+                "endLine": 34
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Conductor, Jacket, Signal or slot owner is unknown.",
+          "Proposed change would expose token, message, attachment, channel, URL or execute graph/REST/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Construction dictionary is nonnull; Invoke remains separate.",
+          "expected": "Local guard would be false; construction/runtime success unverified.",
+          "evidence": [
+            {
+              "sourceId": "discord-module",
+              "startLine": 27,
+              "endLine": 34
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, Discord token, channel ID, message/file/attachment, URL/REST response, Conductor/Jacket, slot/path and exception text; retain canonical adapter/activity, message/pattern and presence/Failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no Discord/REST/runtime/provider execution.",
+        "Mapped core or concrete child may emit other failures; this entry does not diagnose downstream REST/message effects."
+      ]
+    },
+    {
+      "id": "discord-null-conduction-signal",
+      "status": "source-verified",
+      "adapters": [
+        "Network_DiscordBot"
+      ],
+      "activities": [
+        "SendFile",
+        "SendMessage",
+        "ReadBatch",
+        "HandleMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Null ConductionSignal passed to Network_DiscordBot.Invoke()",
+          "evidence": [
+            {
+              "sourceId": "discord-module",
+              "startLine": 92,
+              "endLine": 92
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Five-argument concrete Invoke receives falsey ConductionSignal before Config/REST dispatch.",
+        "evidence": [
+          {
+            "sourceId": "discord-module",
+            "startLine": 86,
+            "endLine": 95
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Five-argument concrete Invoke receives falsey ConductionSignal before Config/REST dispatch.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "discord-module",
+              "startLine": 86,
+              "endLine": 95
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm canonical DiscordBot activity and ConductionSignal presence/truthy flag; redact Signal.",
+          "expected": "Redacted flags identify this source guard without request or credential content.",
+          "evidence": [
+            {
+              "sourceId": "discord-module",
+              "startLine": 86,
+              "endLine": 95
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no registration, Discord or REST request/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted caller Signal wiring for its owner and stop before any Discord/REST request.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "discord-module",
+                "startLine": 86,
+                "endLine": 95
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Conductor, Jacket, Signal or slot owner is unknown.",
+          "Proposed change would expose token, message, attachment, channel, URL or execute graph/REST/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; ConductionSignal wiring remains unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "discord-module",
+              "startLine": 86,
+              "endLine": 95
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, Discord token, channel ID, message/file/attachment, URL/REST response, Conductor/Jacket, slot/path and exception text; retain canonical adapter/activity, message/pattern and presence/Failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no Discord/REST/runtime/provider execution.",
+        "Mapped core or concrete child may emit other failures; this entry does not diagnose downstream REST/message effects."
+      ]
+    }
+  ]
+}

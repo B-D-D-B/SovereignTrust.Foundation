@@ -1,0 +1,703 @@
+{
+  "version": 1,
+  "ownerId": "Condensers/ConduitCondenser",
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "ConduitCondenser",
+  "sources": [
+    {
+      "id": "conduit",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/ConduitCondenser.ps1",
+      "sha256": "7315ED1773F0F3633B66C6FD22FC7C5B03299EA935FD8BA46F14118C078C7413",
+      "symbol": "ConduitCondenser"
+    },
+    {
+      "id": "graph-helper",
+      "repository": "SignalGraph",
+      "path": "Src/PowerShell/SignalGraph/Utilities/Resolve-GraphForJsonArray.ps1",
+      "sha256": "C2A08C97545A701C774A2FEBACF3F03AAF58500DC98A5556F503F28948D9BE74",
+      "symbol": "Resolve-GraphForJsonArray"
+    }
+  ],
+  "entries": [
+    {
+      "id": "process-result-detail-type",
+      "status": "source-verified",
+      "adapters": [
+        "ConduitCondenser"
+      ],
+      "activities": [
+        "Process"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Config.ResultDetail must be a native Boolean.",
+          "evidence": [
+            {
+              "sourceId": "conduit",
+              "startLine": 88,
+              "endLine": 88
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Process finds Config.ResultDetail present but its value is not a native Boolean, before source-grid or child dispatch.",
+        "evidence": [
+          {
+            "sourceId": "conduit",
+            "startLine": 81,
+            "endLine": 89
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The explicitly supplied ResultDetail value has the wrong type, including null.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "conduit",
+              "startLine": 81,
+              "endLine": 89
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the exact Process log; inspect only ResultDetail member presence and native-Boolean type flag, without printing the Plan.",
+          "expected": "Redacted flag/type/resolution metadata identifies this exact Process guard before child dispatch.",
+          "evidence": [
+            {
+              "sourceId": "conduit",
+              "startLine": 81,
+              "endLine": 89
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for the originating Conduit.Process Plan only; do not execute child dispatch or change runtime source here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Set the intended ResultDetail to native true/false or omit it; do not coerce string or numeric values.",
+            "expected": "The intended local Plan satisfies this cited guard without silently changing execution mode.",
+            "evidence": [
+              {
+                "sourceId": "conduit",
+                "startLine": 81,
+                "endLine": 89
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended serial/parallel mode or source grid is unknown, source identity changed, or the observed message differs."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm a present ResultDetail is native Boolean or absent at line 88.",
+          "expected": "The cited failure guard is false for the intended Plan; child effect/runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "conduit",
+              "startLine": 81,
+              "endLine": 89
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, grid keys/items, child payloads, credentials, paths/URLs and provider content; retain only adapter/activity, exact log and presence/type/Boolean/resolution-success flags.",
+      "limitations": [
+        "Source-only confidence; no Process/Graph child or provider execution was performed.",
+        "Downstream child failures and variable Graph/helper messages have separate or unknown causes and are not inferred from this entry.",
+        "ResultDetail=false or absent retains source ItemSignal rather than serial detail."
+      ]
+    },
+    {
+      "id": "process-parallel-type-with-detail",
+      "status": "source-verified",
+      "adapters": [
+        "ConduitCondenser"
+      ],
+      "activities": [
+        "Process"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "SupportParallelism must be a native Boolean with ResultDetail.",
+          "evidence": [
+            {
+              "sourceId": "conduit",
+              "startLine": 94,
+              "endLine": 94
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Config.ResultDetail is native true and a present SupportParallelism value is not a native Boolean.",
+        "evidence": [
+          {
+            "sourceId": "conduit",
+            "startLine": 86,
+            "endLine": 95
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The explicit SupportParallelism value is the wrong type in detail mode.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "conduit",
+              "startLine": 86,
+              "endLine": 95
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm ResultDetail=true and inspect only SupportParallelism presence/native-Boolean type flags; omit Plan contents.",
+          "expected": "Redacted flag/type/resolution metadata identifies this exact Process guard before child dispatch.",
+          "evidence": [
+            {
+              "sourceId": "conduit",
+              "startLine": 86,
+              "endLine": 95
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for the originating Conduit.Process Plan only; do not execute child dispatch or change runtime source here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "If serial detail is intended, set SupportParallelism to native false or omit it; do not coerce a string/number or assume parallel intent.",
+            "expected": "The intended local Plan satisfies this cited guard without silently changing execution mode.",
+            "evidence": [
+              {
+                "sourceId": "conduit",
+                "startLine": 86,
+                "endLine": 95
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended serial/parallel mode or source grid is unknown, source identity changed, or the observed message differs."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm ResultDetail=true and SupportParallelism absent or native Boolean at line 94.",
+          "expected": "The cited failure guard is false for the intended Plan; child effect/runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "conduit",
+              "startLine": 86,
+              "endLine": 95
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, grid keys/items, child payloads, credentials, paths/URLs and provider content; retain only adapter/activity, exact log and presence/type/Boolean/resolution-success flags.",
+      "limitations": [
+        "Source-only confidence; no Process/Graph child or provider execution was performed.",
+        "Downstream child failures and variable Graph/helper messages have separate or unknown causes and are not inferred from this entry.",
+        "This type guard is evaluated only when ResultDetail is true."
+      ]
+    },
+    {
+      "id": "process-detail-serial-only",
+      "status": "source-verified",
+      "adapters": [
+        "ConduitCondenser"
+      ],
+      "activities": [
+        "Process"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "ResultDetail is available for serial Conduit.Process only.",
+          "evidence": [
+            {
+              "sourceId": "conduit",
+              "startLine": 95,
+              "endLine": 95
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Config.ResultDetail is native true and SupportParallelism is native true, before source-grid or child dispatch.",
+        "evidence": [
+          {
+            "sourceId": "conduit",
+            "startLine": 86,
+            "endLine": 96
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The Plan requests mutually exclusive serial detail and parallel execution.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "conduit",
+              "startLine": 86,
+              "endLine": 96
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm both native Boolean true flags without inspecting child data; ask the Plan owner which mode is intended.",
+          "expected": "Redacted flag/type/resolution metadata identifies this exact Process guard before child dispatch.",
+          "evidence": [
+            {
+              "sourceId": "conduit",
+              "startLine": 86,
+              "endLine": 96
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for the originating Conduit.Process Plan only; do not execute child dispatch or change runtime source here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Choose the intended mode: keep ResultDetail=true with SupportParallelism false/absent for serial detail, or disable ResultDetail if parallel execution is required; do not silently switch mode.",
+            "expected": "The intended local Plan satisfies this cited guard without silently changing execution mode.",
+            "evidence": [
+              {
+                "sourceId": "conduit",
+                "startLine": 86,
+                "endLine": 96
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended serial/parallel mode or source grid is unknown, source identity changed, or the observed message differs."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the two true flags no longer coexist and the chosen mode matches the originating intent.",
+          "expected": "The cited failure guard is false for the intended Plan; child effect/runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "conduit",
+              "startLine": 86,
+              "endLine": 96
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, grid keys/items, child payloads, credentials, paths/URLs and provider content; retain only adapter/activity, exact log and presence/type/Boolean/resolution-success flags.",
+      "limitations": [
+        "Source-only confidence; no Process/Graph child or provider execution was performed.",
+        "Downstream child failures and variable Graph/helper messages have separate or unknown causes and are not inferred from this entry.",
+        "A one-item grid may otherwise use a serial branch, but this pre-dispatch guard still rejects both true flags."
+      ]
+    },
+    {
+      "id": "process-source-grid-unavailable",
+      "status": "source-verified",
+      "adapters": [
+        "ConduitCondenser"
+      ],
+      "activities": [
+        "Process"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Failed to resolve FlatFormulaSource.",
+          "evidence": [
+            {
+              "sourceId": "conduit",
+              "startLine": 107,
+              "endLine": 107
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "ForEachPath resolves from the Plan, but resolving the ItemSignal at that path returns a failed source Signal; the log retains a legacy FlatFormulaSource label.",
+        "evidence": [
+          {
+            "sourceId": "conduit",
+            "startLine": 97,
+            "endLine": 109
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The selected source grid path is unavailable in the current ItemSignal.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "conduit",
+              "startLine": 97,
+              "endLine": 109
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm exact Process log and successful ForEachPath resolution followed by failed ItemSignal lookup; inspect path-presence/resolution flags only, not path text or grid values.",
+          "expected": "Redacted flag/type/resolution metadata identifies this exact Process guard before child dispatch.",
+          "evidence": [
+            {
+              "sourceId": "conduit",
+              "startLine": 97,
+              "endLine": 109
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for the originating Conduit.Process Plan only; do not execute child dispatch or change runtime source here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Correct the originating ForEachPath mapping or supply the intended ItemSignal grid at its authorized location after confirming ownership; do not fabricate grid content.",
+            "expected": "The intended local Plan satisfies this cited guard without silently changing execution mode.",
+            "evidence": [
+              {
+                "sourceId": "conduit",
+                "startLine": 97,
+                "endLine": 109
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended serial/parallel mode or source grid is unknown, source identity changed, or the observed message differs."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm ForEachPath resolves and the selected ItemSignal path exists before child dispatch.",
+          "expected": "The cited failure guard is false for the intended Plan; child effect/runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "conduit",
+              "startLine": 97,
+              "endLine": 109
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, grid keys/items, child payloads, credentials, paths/URLs and provider content; retain only adapter/activity, exact log and presence/type/Boolean/resolution-success flags.",
+      "limitations": [
+        "Source-only confidence; no Process/Graph child or provider execution was performed.",
+        "Downstream child failures and variable Graph/helper messages have separate or unknown causes and are not inferred from this entry.",
+        "The log text names FlatFormulaSource, but the current guard actually checks the ForEachPath-selected ItemSignal path."
+      ]
+    },
+    {
+      "id": "graph-source-array-unavailable",
+      "status": "source-verified",
+      "adapters": [
+        "ConduitCondenser"
+      ],
+      "activities": [
+        "Graph"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Failed to resolve object array via SourcesWirePathTemplate. For SourcesWirePath='",
+          "suffix": "'",
+          "evidence": [
+            {
+              "sourceId": "graph-helper",
+              "startLine": 49,
+              "endLine": 49
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Graph helper Resolve-PathFromDictionary on ItemSignal at SourcePath fails; the Conduit Graph caller passes no SourcePath, so the helper default is %.@.",
+        "evidence": [
+          {
+            "sourceId": "graph-helper",
+            "startLine": 34,
+            "endLine": 34
+          },
+          {
+            "sourceId": "graph-helper",
+            "startLine": 46,
+            "endLine": 50
+          },
+          {
+            "sourceId": "conduit",
+            "startLine": 143,
+            "endLine": 150
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The helper cannot resolve its source array from the supplied Graph sub-signal at its actual SourcePath default.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "graph-helper",
+              "startLine": 34,
+              "endLine": 34
+            },
+            {
+              "sourceId": "graph-helper",
+              "startLine": 46,
+              "endLine": 50
+            },
+            {
+              "sourceId": "conduit",
+              "startLine": 143,
+              "endLine": 150
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm ConduitCondenser/Graph and the anchored message; inspect only Plan.Path selection success, sub-signal jacket presence and helper %.@ resolution status. Ignore interpolated sourcesKey/path labels and do not print path contents.",
+          "expected": "Current helper guard and redacted presence/resolution flags discriminate this Graph error without retaining variable log segments.",
+          "evidence": [
+            {
+              "sourceId": "graph-helper",
+              "startLine": 34,
+              "endLine": 34
+            },
+            {
+              "sourceId": "graph-helper",
+              "startLine": 46,
+              "endLine": 50
+            },
+            {
+              "sourceId": "conduit",
+              "startLine": 143,
+              "endLine": 150
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for the originating Graph Plan/source signal only; do not execute graph construction or copy log variable segments.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "If the intended source array is missing, correct the originating Graph Path/source ItemSignal wiring so the selected array is available through the helper default %.@; stop if the signal-jacket contract is unclear.",
+            "expected": "The intended Plan/source structure satisfies the cited helper guard without changing unrelated graph nodes.",
+            "evidence": [
+              {
+                "sourceId": "graph-helper",
+                "startLine": 34,
+                "endLine": 34
+              },
+              {
+                "sourceId": "graph-helper",
+                "startLine": 46,
+                "endLine": 50
+              },
+              {
+                "sourceId": "conduit",
+                "startLine": 143,
+                "endLine": 150
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The originating graph/source intent is unknown, current source hash changed, or only an unmatched/broad message is available."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm the selected ItemSignal/sub-signal provides an array at the helper default SourcePath and the line-48 guard is false.",
+          "expected": "The cited helper guard is false for the intended local structure; graph runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "graph-helper",
+              "startLine": 34,
+              "endLine": 34
+            },
+            {
+              "sourceId": "graph-helper",
+              "startLine": 46,
+              "endLine": 50
+            },
+            {
+              "sourceId": "conduit",
+              "startLine": 143,
+              "endLine": 150
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude source paths, item names, graph nodes, full Plan/ItemSignal and all captured variable log segments; retain only adapter/activity, anchored pattern identity and path/property presence or resolution-success flags.",
+      "limitations": [
+        "Source-only confidence; no graph/runtime/provider execution was performed.",
+        "The source log interpolates variables that are not the actual guard input names; do not infer SourcesWirePathTemplate, sourcesKey, path or idPath as Plan fields.",
+        "The suffix is only an anchored quote; all variable middle text is transient and must never be stored or used as a source path."
+      ]
+    },
+    {
+      "id": "graph-identifier-path-unavailable",
+      "status": "source-verified",
+      "adapters": [
+        "ConduitCondenser"
+      ],
+      "activities": [
+        "Graph"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Failed to resolve identifier path '",
+          "suffix": "",
+          "evidence": [
+            {
+              "sourceId": "graph-helper",
+              "startLine": 66,
+              "endLine": 66
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "For one source-array item, resolving Plan.NamePath (default Name) against that item fails before graph node registration.",
+        "evidence": [
+          {
+            "sourceId": "graph-helper",
+            "startLine": 59,
+            "endLine": 68
+          },
+          {
+            "sourceId": "conduit",
+            "startLine": 149,
+            "endLine": 152
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The selected item lacks the intended identifier field/path for the resolved NamePath.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "graph-helper",
+              "startLine": 59,
+              "endLine": 68
+            },
+            {
+              "sourceId": "conduit",
+              "startLine": 149,
+              "endLine": 152
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm ConduitCondenser/Graph and the anchored message; inspect only NamePath/default selection and per-item identifier-path resolution flags, without logging item Name or any message variable segment.",
+          "expected": "Current helper guard and redacted presence/resolution flags discriminate this Graph error without retaining variable log segments.",
+          "evidence": [
+            {
+              "sourceId": "graph-helper",
+              "startLine": 59,
+              "endLine": 68
+            },
+            {
+              "sourceId": "conduit",
+              "startLine": 149,
+              "endLine": 152
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for the originating Graph Plan/source signal only; do not execute graph construction or copy log variable segments.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Correct the intended Plan.NamePath mapping or populate the authorized identifier field in the source array after confirming item schema ownership; do not invent identifiers.",
+            "expected": "The intended Plan/source structure satisfies the cited helper guard without changing unrelated graph nodes.",
+            "evidence": [
+              {
+                "sourceId": "graph-helper",
+                "startLine": 59,
+                "endLine": 68
+              },
+              {
+                "sourceId": "conduit",
+                "startLine": 149,
+                "endLine": 152
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The originating graph/source intent is unknown, current source hash changed, or only an unmatched/broad message is available."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm each intended source item resolves the selected NamePath before graph registration.",
+          "expected": "The cited helper guard is false for the intended local structure; graph runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "graph-helper",
+              "startLine": 59,
+              "endLine": 68
+            },
+            {
+              "sourceId": "conduit",
+              "startLine": 149,
+              "endLine": 152
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude source paths, item names, graph nodes, full Plan/ItemSignal and all captured variable log segments; retain only adapter/activity, anchored pattern identity and path/property presence or resolution-success flags.",
+      "limitations": [
+        "Source-only confidence; no graph/runtime/provider execution was performed.",
+        "The source log interpolates variables that are not the actual guard input names; do not infer SourcesWirePathTemplate, sourcesKey, path or idPath as Plan fields.",
+        "The log says idPath, but the actual lookup uses NamePath; item.Name in the log can be sensitive and is never retained."
+      ]
+    }
+  ]
+}

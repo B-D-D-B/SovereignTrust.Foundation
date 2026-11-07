@@ -1,5 +1,7 @@
 using module ../../SignalGraph/Src/PowerShell/SignalGraph/SignalGraph.psd1
 
+param([switch]$IsNonBlankOnly, [switch]$FormatterGuardsOnly)
+
 $ErrorActionPreference = 'Stop'
 
 class MappedTokenAdapter {
@@ -85,6 +87,8 @@ $adapter = [MappedTokenAdapter]::new(@{
     'Memory.Plan.Config.FilePath' = 'C:\output\image.png'
     'Memory.Plan.Config.JsonText' = '{"Name":"SDA","Count":2}'
     'Memory.Plan.Config.EmptyText' = ''
+    'Memory.Plan.Config.WhitespaceText' = " `t "
+    'Memory.Plan.Config.NullValue' = $null
     'Memory.Plan.Config.TimeText' = '17:30'
     'Memory.Plan.Config.Offset' = '+1h'
     'Memory.Plan.Config.DateText' = '2024-12-01'
@@ -92,6 +96,59 @@ $adapter = [MappedTokenAdapter]::new(@{
     'Memory.Plan.Config.DateOffset' = [DateTimeOffset]::new(2024, 12, 1, 17, 30, 0, [TimeSpan]::FromMinutes(330))
     'Memory.Plan.Config.TimeZone' = 'UTC'
 })
+
+if ($FormatterGuardsOnly) {
+    $checks = 0
+    function Assert-Guard([bool]$Condition, [string]$Message) {
+        if (-not $Condition) { throw $Message }
+        $script:checks++
+    }
+    foreach ($path in @('DisplayName','NumberText')) {
+        $result = Invoke-TestDynamic -Path "IsNonBlankString([Memory.Plan.Config.$path~])" -MappedAdapter $adapter
+        Assert-Guard (-not $result.Failure() -and $result.HasResult() -and $result.GetResult() -is [bool] -and $result.GetResult()) "Nonblank string rejected: $path"
+    }
+    foreach ($path in @('EmptyText','WhitespaceText','Integer','MyArray','MyObject','TrueValue')) {
+        $result = Invoke-TestDynamic -Path "IsNonBlankString([Memory.Plan.Config.$path~])" -MappedAdapter $adapter
+        Assert-Guard (-not $result.Failure() -and $result.HasResult() -and $result.GetResult() -is [bool] -and -not $result.GetResult()) "Invalid string accepted: $path"
+    }
+    foreach ($expression in @(
+        'EqualsOrdinalString([Memory.Plan.Config.DisplayName~],Alpha Beta)',
+        "EqualsOrdinalString([Memory.Plan.Config.DisplayName~],'Alpha Beta')"
+    )) {
+        $result = Invoke-TestDynamic -Path $expression -MappedAdapter $adapter
+        Assert-Guard (-not $result.Failure() -and $result.HasResult() -and $result.GetResult() -is [bool] -and $result.GetResult()) "Ordinal equality rejected: $expression"
+    }
+    foreach ($expression in @(
+        'EqualsOrdinalString([Memory.Plan.Config.DisplayName~],alpha beta)',
+        'EqualsOrdinalString([Memory.Plan.Config.DisplayName~],Other)',
+        'EqualsOrdinalString([Memory.Plan.Config.EmptyText~],Other)'
+    )) {
+        $result = Invoke-TestDynamic -Path $expression -MappedAdapter $adapter
+        Assert-Guard (-not $result.Failure() -and $result.HasResult() -and $result.GetResult() -is [bool] -and -not $result.GetResult()) "Ordinal inequality failed: $expression"
+    }
+    foreach ($expression in @(
+        'EqualsOrdinalString([Memory.Plan.Config.Integer~],7)',
+        'EqualsOrdinalString([Memory.Plan.Config.Missing~],Anything)',
+        'EqualsOrdinalString([Memory.Plan.Config.NullValue~],Anything)',
+        "EqualsOrdinalString('[Memory.Plan.Config.DisplayName~]',Alpha Beta)",
+        'EqualsOrdinalString(prefix-[Memory.Plan.Config.DisplayName~],Alpha Beta)',
+        'EqualsOrdinalString([Memory.Plan.Config.DisplayName~],[Memory.Plan.Config.DisplayName~])',
+        "EqualsOrdinalString([Memory.Plan.Config.DisplayName~],'[Memory.Plan.Config.DisplayName~]')",
+        'EqualsOrdinalString([Memory.Plan.Config.DisplayName~],Dynamic.Equals(a,a))',
+        "EqualsOrdinalString([Memory.Plan.Config.DisplayName~],'Dynamic.Equals(a,a)')",
+        'EqualsOrdinalString([Memory.Plan.Config.DisplayName~])',
+        'EqualsOrdinalString([Memory.Plan.Config.DisplayName~],Alpha Beta,extra)'
+    )) {
+        $result = Invoke-TestDynamic -Path $expression -MappedAdapter $adapter
+        Assert-Guard ($result.Failure() -and -not $result.HasResult()) "Malformed ordinal expression accepted: $expression"
+    }
+    $legacy = Invoke-TestDynamic -Path 'Equals([Memory.Plan.Config.DisplayName~],alpha beta)' -MappedAdapter $adapter
+    Assert-Guard (-not $legacy.Failure() -and $legacy.HasResult() -and $legacy.GetResult()) 'Legacy Equals behavior changed.'
+    $legacy = Invoke-TestDynamic -Path 'NotEquals([Memory.Plan.Config.DisplayName~],alpha beta)' -MappedAdapter $adapter
+    Assert-Guard (-not $legacy.Failure() -and $legacy.HasResult() -and -not $legacy.GetResult()) 'Legacy NotEquals behavior changed.'
+    Write-Output "PASS: formatter Dynamic guard assertions $checks/0/$checks."
+    return
+}
 
 $indexSignal = Invoke-TestDynamic -Path 'GetIndex([Memory.Plan.Config.MyArray~],1)' -MappedAdapter $adapter
 Assert-True (-not $indexSignal.Failure() -and $indexSignal.GetResult() -eq 'one') 'Typed GetIndex did not return index 1.'
@@ -173,6 +230,21 @@ Assert-True ((Invoke-TestDynamic -Path 'Or([Memory.Plan.Config.FalseValue~],true
 Assert-True ((Invoke-TestDynamic -Path 'IsNotNull([Memory.Plan.Config.Integer~])' -MappedAdapter $adapter).GetResult()) 'IsNotNull did not consume a typed value.'
 Assert-True ((Invoke-TestDynamic -Path 'IsNullOrEmpty([Memory.Plan.Config.EmptyText~])' -MappedAdapter $adapter).GetResult()) 'IsNullOrEmpty did not consume a typed empty string.'
 Assert-True (-not (Invoke-TestDynamic -Path 'IsNotNullOrEmpty([Memory.Plan.Config.EmptyText~])' -MappedAdapter $adapter).GetResult()) 'IsNotNullOrEmpty mishandled a typed empty string.'
+foreach ($path in @('DisplayName','NumberText')) {
+    $result = Invoke-TestDynamic -Path "IsNonBlankString([Memory.Plan.Config.$path~])" -MappedAdapter $adapter
+    Assert-True (-not $result.Failure() -and $result.HasResult() -and $result.GetResult() -is [bool] -and $result.GetResult()) "IsNonBlankString rejected a native nonblank string: $path."
+}
+foreach ($path in @('EmptyText','WhitespaceText','Integer','MyArray','MyObject','TrueValue')) {
+    $result = Invoke-TestDynamic -Path "IsNonBlankString([Memory.Plan.Config.$path~])" -MappedAdapter $adapter
+    Assert-True (-not $result.Failure() -and $result.HasResult() -and $result.GetResult() -is [bool] -and -not $result.GetResult()) "IsNonBlankString accepted an empty/nonstring value: $path."
+}
+foreach ($expression in @('IsNonBlankString(text)',"IsNonBlankString('text')",'IsNonBlankString([Memory.Plan.Config.NumberText~],extra)','IsNonBlankString(prefix-[Memory.Plan.Config.NumberText~])','IsNonBlankString([Memory.Plan.Config.Missing~])','IsNonBlankString([Memory.Plan.Config.NullValue~])')) {
+    Assert-True ((Invoke-TestDynamic -Path $expression -MappedAdapter $adapter).Failure()) "IsNonBlankString accepted malformed or unresolved expression: $expression."
+}
+if ($IsNonBlankOnly) {
+    Write-Output 'PASS: typed IsNonBlankString focused references and failures.'
+    return
+}
 Assert-True ((Invoke-TestDynamic -Path 'Get12HourTime([Memory.Plan.Config.TimeText~])' -MappedAdapter $adapter).GetResult() -eq '5:30 PM') 'Get12HourTime did not consume a typed time string.'
 
 Assert-True ((Invoke-TestDynamic -Path 'FormatDateTime([Memory.Plan.Config.DateOffset~],o)' -MappedAdapter $adapter).GetResult() -eq '2024-12-01T17:30:00.0000000+05:30') 'FormatDateTime did not preserve a typed date offset with a standard .NET format.'

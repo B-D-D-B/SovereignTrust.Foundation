@@ -1,0 +1,1336 @@
+{
+  "version": 2,
+  "ownerId": "Condensers/RestCondenser",
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "RestCondenser",
+  "part": "invoke",
+  "sources": [
+    {
+      "id": "rest-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/RestCondenser.ps1",
+      "sha256": "DCD661B3D59816E69F213605CF6429EED96403273BE1A31A2AC92BD40CAE2E9C",
+      "symbol": "RestCondenser"
+    },
+    {
+      "id": "rest-core",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Rest/Invoke-RestCondenserCore.ps1",
+      "sha256": "E3C44F747CE954C5D966216DBA025767763E3FCEF2342B85ACC3C37EFD63EA6D",
+      "symbol": "Invoke-RestCondenserCore"
+    },
+    {
+      "id": "bearer-helper",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Rest/Resolve-BearerToken.ps1",
+      "sha256": "CF072210B99E32F59F2318D964306276BDB8CC369A75E9C8F7E632051DFA97D8",
+      "symbol": "Resolve-BearerToken"
+    }
+  ],
+  "entries": [
+    {
+      "id": "rest-conduction-signal-null",
+      "status": "source-verified",
+      "adapters": [
+        "RestCondenser"
+      ],
+      "activities": [
+        "Get",
+        "Head",
+        "Post",
+        "Put",
+        "Patch",
+        "Delete",
+        "Options"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "ConductionSignal is null.",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 188,
+              "endLine": 188
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Bearer token lookup is enabled and ResolveBearerToken receives a null ConductionSignal before host or provider work.",
+        "evidence": [
+          {
+            "sourceId": "rest-class",
+            "startLine": 182,
+            "endLine": 190
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Bearer token lookup is enabled and ResolveBearerToken receives a null ConductionSignal before host or provider work.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 182,
+              "endLine": 190
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm SkipBearerToken is false and ConductionSignal null flag; do not inspect Signal contents.",
+          "expected": "Redacted flags identify this exact source guard without sensitive values.",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 182,
+              "endLine": 190
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no token, HTTP, file or provider action.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted caller/wiring evidence for the ConductionSignal owner; stop before token or HTTP action.",
+            "expected": "Owner handoff recorded; guard clearance is not claimed.",
+            "evidence": [
+              {
+                "sourceId": "rest-class",
+                "startLine": 182,
+                "endLine": 190
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical RestCondenser activity or exact message/pattern differs.",
+          "The effective Plan, credential, environment or target owner cannot be established from redacted metadata.",
+          "The proposed change would expose token/URL/payload or execute an HTTP, CLI, filesystem or provider effect."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Caller handoff recorded; Signal wiring remains unresolved.",
+          "expected": "Handoff complete; runtime recovery remains unresolved.",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 182,
+              "endLine": 190
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude URL/query string, host text, token, authorization/header/body/response, target path and file bytes, CLI output, full Plan/Signal and exception text; retain canonical activity, message/pattern identity and only presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no HTTP, CLI, filesystem, provider or runtime execution.",
+        "Activity names do not set Config.Method; token/header/core side effects remain separate."
+      ]
+    },
+    {
+      "id": "rest-host-empty",
+      "status": "source-verified",
+      "adapters": [
+        "RestCondenser"
+      ],
+      "activities": [
+        "Get",
+        "Head",
+        "Post",
+        "Put",
+        "Patch",
+        "Delete",
+        "Options"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Plan.Host was empty.",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 203,
+              "endLine": 203
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Bearer lookup is enabled, Config.Host resolver did not fail, but host result is falsey.",
+        "evidence": [
+          {
+            "sourceId": "rest-class",
+            "startLine": 197,
+            "endLine": 205
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Bearer lookup is enabled, Config.Host resolver did not fail, but host result is falsey.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 197,
+              "endLine": 205
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Config.Host resolver Failure/HasResult/falsey flags only; redact host.",
+          "expected": "Redacted flags identify this exact source guard without sensitive values.",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 197,
+              "endLine": 205
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional local Plan/input proposal only; no HTTP/file/provider execution here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Set originating Config.Host to intended nonempty host identity after owner validation; do not infer it from Config.Uri.",
+            "expected": "Config.Host resolver succeeds and result is truthy; token/HTTP success remains separate.",
+            "evidence": [
+              {
+                "sourceId": "rest-class",
+                "startLine": 197,
+                "endLine": 205
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical RestCondenser activity or exact message/pattern differs.",
+          "The effective Plan, credential, environment or target owner cannot be established from redacted metadata.",
+          "The proposed change would expose token/URL/payload or execute an HTTP, CLI, filesystem or provider effect."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Config.Host resolver succeeds and result is truthy; token/HTTP success remains separate.",
+          "expected": "The local guard would be false; runtime request/file success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 197,
+              "endLine": 205
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude URL/query string, host text, token, authorization/header/body/response, target path and file bytes, CLI output, full Plan/Signal and exception text; retain canonical activity, message/pattern identity and only presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no HTTP, CLI, filesystem, provider or runtime execution.",
+        "Activity names do not set Config.Method; token/header/core side effects remain separate."
+      ]
+    },
+    {
+      "id": "rest-access-tokens-graph-unavailable",
+      "status": "source-verified",
+      "adapters": [
+        "RestCondenser"
+      ],
+      "activities": [
+        "Get",
+        "Head",
+        "Post",
+        "Put",
+        "Patch",
+        "Delete",
+        "Options"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Failed to resolve or create AccessTokens graph.",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 229,
+              "endLine": 229
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Bearer lookup is enabled and neither existing nor newly created AccessTokens graph yields a truthy graph after source checks.",
+        "evidence": [
+          {
+            "sourceId": "rest-class",
+            "startLine": 207,
+            "endLine": 231
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Bearer lookup is enabled and neither existing nor newly created AccessTokens graph yields a truthy graph after source checks.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 207,
+              "endLine": 231
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect existing-graph result and create/store Signal success/HasResult flags; do not inspect graph/token values.",
+          "expected": "Redacted flags identify this exact source guard without sensitive values.",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 207,
+              "endLine": 231
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no token, HTTP, file or provider action.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted AccessTokens graph state for its owner and stop before state repair or retry.",
+            "expected": "Owner handoff recorded; guard clearance is not claimed.",
+            "evidence": [
+              {
+                "sourceId": "rest-class",
+                "startLine": 207,
+                "endLine": 231
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical RestCondenser activity or exact message/pattern differs.",
+          "The effective Plan, credential, environment or target owner cannot be established from redacted metadata.",
+          "The proposed change would expose token/URL/payload or execute an HTTP, CLI, filesystem or provider effect."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Graph owner handoff recorded; clearance remains unverified.",
+          "expected": "Handoff complete; runtime recovery remains unresolved.",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 207,
+              "endLine": 231
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude URL/query string, host text, token, authorization/header/body/response, target path and file bytes, CLI output, full Plan/Signal and exception text; retain canonical activity, message/pattern identity and only presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no HTTP, CLI, filesystem, provider or runtime execution.",
+        "Activity names do not set Config.Method; token/header/core side effects remain separate."
+      ]
+    },
+    {
+      "id": "rest-bearer-token-empty",
+      "status": "source-verified",
+      "adapters": [
+        "RestCondenser"
+      ],
+      "activities": [
+        "Get",
+        "Head",
+        "Post",
+        "Put",
+        "Patch",
+        "Delete",
+        "Options"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Resolve-BearerToken returned empty token.",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 258,
+              "endLine": 258
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Resolve-BearerToken returned a nonfailed Signal but GetResult(true) is falsey before token registration.",
+        "evidence": [
+          {
+            "sourceId": "rest-class",
+            "startLine": 252,
+            "endLine": 260
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Resolve-BearerToken returned a nonfailed Signal but GetResult(true) is falsey before token registration.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 252,
+              "endLine": 260
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect token helper Signal Failure/HasResult and token-nonempty flags; never inspect token.",
+          "expected": "Redacted flags identify this exact source guard without sensitive values.",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 252,
+              "endLine": 260
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no token, HTTP, file or provider action.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted token helper and credential-owner evidence; stop before CLI/provider retry.",
+            "expected": "Owner handoff recorded; guard clearance is not claimed.",
+            "evidence": [
+              {
+                "sourceId": "rest-class",
+                "startLine": 252,
+                "endLine": 260
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical RestCondenser activity or exact message/pattern differs.",
+          "The effective Plan, credential, environment or target owner cannot be established from redacted metadata.",
+          "The proposed change would expose token/URL/payload or execute an HTTP, CLI, filesystem or provider effect."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Credential-owner handoff recorded; token acquisition remains unresolved.",
+          "expected": "Handoff complete; runtime recovery remains unresolved.",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 252,
+              "endLine": 260
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude URL/query string, host text, token, authorization/header/body/response, target path and file bytes, CLI output, full Plan/Signal and exception text; retain canonical activity, message/pattern identity and only presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no HTTP, CLI, filesystem, provider or runtime execution.",
+        "Activity names do not set Config.Method; token/header/core side effects remain separate."
+      ]
+    },
+    {
+      "id": "rest-token-resolution-before-request",
+      "status": "source-verified",
+      "adapters": [
+        "RestCondenser"
+      ],
+      "activities": [
+        "Get",
+        "Head",
+        "Post",
+        "Put",
+        "Patch",
+        "Delete",
+        "Options"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Bearer token resolution failed before REST invocation.",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 68,
+              "endLine": 68
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "SkipBearerToken is false and bearer Signal is null, has no Result or yields blank string, while merged Signal has not already failed.",
+        "evidence": [
+          {
+            "sourceId": "rest-class",
+            "startLine": 60,
+            "endLine": 70
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "SkipBearerToken is false and bearer Signal is null, has no Result or yields blank string, while merged Signal has not already failed.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 60,
+              "endLine": 70
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect SkipBearerToken flag, bearer Signal presence/Failure/HasResult/nonblank flags and pre-HTTP boundary; never inspect token.",
+          "expected": "Redacted flags identify this exact source guard without sensitive values.",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 60,
+              "endLine": 70
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no token, HTTP, file or provider action.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted token-resolution evidence for credential owner and stop before HTTP invocation or retry.",
+            "expected": "Owner handoff recorded; guard clearance is not claimed.",
+            "evidence": [
+              {
+                "sourceId": "rest-class",
+                "startLine": 60,
+                "endLine": 70
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical RestCondenser activity or exact message/pattern differs.",
+          "The effective Plan, credential, environment or target owner cannot be established from redacted metadata.",
+          "The proposed change would expose token/URL/payload or execute an HTTP, CLI, filesystem or provider effect."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; token and request success remain unresolved.",
+          "expected": "Handoff complete; runtime recovery remains unresolved.",
+          "evidence": [
+            {
+              "sourceId": "rest-class",
+              "startLine": 60,
+              "endLine": 70
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude URL/query string, host text, token, authorization/header/body/response, target path and file bytes, CLI output, full Plan/Signal and exception text; retain canonical activity, message/pattern identity and only presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no HTTP, CLI, filesystem, provider or runtime execution.",
+        "Activity names do not set Config.Method; token/header/core side effects remain separate."
+      ]
+    },
+    {
+      "id": "rest-target-path-absolute",
+      "status": "source-verified",
+      "adapters": [
+        "RestCondenser"
+      ],
+      "activities": [
+        "Get",
+        "Head",
+        "Post",
+        "Put",
+        "Patch",
+        "Delete",
+        "Options"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Config.TargetPath must be a nonempty absolute filesystem path.",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 44,
+              "endLine": 44
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Config.TargetPath member is present but string is blank, not fully qualified or provider-style path.",
+        "evidence": [
+          {
+            "sourceId": "rest-core",
+            "startLine": 37,
+            "endLine": 45
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Config.TargetPath member is present but string is blank, not fully qualified or provider-style path.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 37,
+              "endLine": 45
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only TargetPath member presence, blank/fully-qualified/provider-style flags; redact path.",
+          "expected": "Redacted flags identify this exact source guard without sensitive values.",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 37,
+              "endLine": 45
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional local Plan/input proposal only; no HTTP/file/provider execution here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "If file output is intended, select an approved nonblank fully qualified filesystem target; otherwise omit Config.TargetPath.",
+            "expected": "Selected target passes these static path-shape guards; existence and write effects remain unverified.",
+            "evidence": [
+              {
+                "sourceId": "rest-core",
+                "startLine": 37,
+                "endLine": 45
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical RestCondenser activity or exact message/pattern differs.",
+          "The effective Plan, credential, environment or target owner cannot be established from redacted metadata.",
+          "The proposed change would expose token/URL/payload or execute an HTTP, CLI, filesystem or provider effect."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Selected target passes these static path-shape guards; existence and write effects remain unverified.",
+          "expected": "The local guard would be false; runtime request/file success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 37,
+              "endLine": 45
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude URL/query string, host text, token, authorization/header/body/response, target path and file bytes, CLI output, full Plan/Signal and exception text; retain canonical activity, message/pattern identity and only presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no HTTP, CLI, filesystem, provider or runtime execution.",
+        "Activity names do not set Config.Method; token/header/core side effects remain separate."
+      ]
+    },
+    {
+      "id": "rest-target-path-invalid",
+      "status": "source-verified",
+      "adapters": [
+        "RestCondenser"
+      ],
+      "activities": [
+        "Get",
+        "Head",
+        "Post",
+        "Put",
+        "Patch",
+        "Delete",
+        "Options"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Config.TargetPath is not a valid filesystem path: ",
+          "suffix": "",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 50,
+              "endLine": 50
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "TargetPath passed shape checks but GetFullPath threw before any HTTP request.",
+        "evidence": [
+          {
+            "sourceId": "rest-core",
+            "startLine": 46,
+            "endLine": 51
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "TargetPath passed shape checks but GetFullPath threw before any HTTP request.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 46,
+              "endLine": 51
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only GetFullPath validation outcome and target path metadata; redact exception/path text.",
+          "expected": "Redacted flags identify this exact source guard without sensitive values.",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 46,
+              "endLine": 51
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional local Plan/input proposal only; no HTTP/file/provider execution here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Replace Config.TargetPath with an approved filesystem path that GetFullPath accepts, or omit file output; do not use exception text as a path.",
+            "expected": "GetFullPath accepts the approved target statically; no file/HTTP action is performed.",
+            "evidence": [
+              {
+                "sourceId": "rest-core",
+                "startLine": 46,
+                "endLine": 51
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical RestCondenser activity or exact message/pattern differs.",
+          "The effective Plan, credential, environment or target owner cannot be established from redacted metadata.",
+          "The proposed change would expose token/URL/payload or execute an HTTP, CLI, filesystem or provider effect."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "GetFullPath accepts the approved target statically; no file/HTTP action is performed.",
+          "expected": "The local guard would be false; runtime request/file success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 46,
+              "endLine": 51
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude URL/query string, host text, token, authorization/header/body/response, target path and file bytes, CLI output, full Plan/Signal and exception text; retain canonical activity, message/pattern identity and only presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no HTTP, CLI, filesystem, provider or runtime execution.",
+        "Activity names do not set Config.Method; token/header/core side effects remain separate."
+      ]
+    },
+    {
+      "id": "rest-target-path-options",
+      "status": "source-verified",
+      "adapters": [
+        "RestCondenser"
+      ],
+      "activities": [
+        "Get",
+        "Head",
+        "Post",
+        "Put",
+        "Patch",
+        "Delete",
+        "Options"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Config.TargetPath requires a GET without status or request body options.",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 54,
+              "endLine": 54
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Config.PSObject.Properties contains TargetPath and at least one core conflict holds: [bool]ReturnHttpStatus is true, Config.Method -ine Get case-insensitively, or Config.SourcePath/Body/Form is non-null. Explicit-null members do not trigger those three null checks.",
+        "evidence": [
+          {
+            "sourceId": "rest-core",
+            "startLine": 37,
+            "endLine": 55
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Config.PSObject.Properties contains TargetPath and at least one core conflict holds: [bool]ReturnHttpStatus is true, Config.Method -ine Get case-insensitively, or Config.SourcePath/Body/Form is non-null. Explicit-null members do not trigger those three null checks.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 37,
+              "endLine": 55
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect TargetPath property-detection flag, converted ReturnHttpStatus Boolean, case-insensitive Method-is-Get flag and separate SourcePath/Body/Form non-null flags; declared activity and mere member presence do not determine this guard.",
+          "expected": "Redacted flags identify this exact source guard without sensitive values.",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 37,
+              "endLine": 55
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional local Plan/input proposal only; no HTTP/file/provider execution here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "If file GET is intended, set Config.Method to Get (case-insensitive comparison) and make ReturnHttpStatus false and SourcePath/Body/Form null; otherwise remove TargetPath property and retain intended request options.",
+            "expected": "TargetPath combination passes the exact line37/52–54 predicates; HTTP/file effects remain unverified.",
+            "evidence": [
+              {
+                "sourceId": "rest-core",
+                "startLine": 37,
+                "endLine": 55
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical RestCondenser activity or exact message/pattern differs.",
+          "The effective Plan, credential, environment or target owner cannot be established from redacted metadata.",
+          "The proposed change would expose token/URL/payload or execute an HTTP, CLI, filesystem or provider effect."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "TargetPath combination passes the exact line37/52–54 predicates; HTTP/file effects remain unverified.",
+          "expected": "The local guard would be false; runtime request/file success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 37,
+              "endLine": 55
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude URL/query string, host text, token, authorization/header/body/response, target path and file bytes, CLI output, full Plan/Signal and exception text; retain canonical activity, message/pattern identity and only presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no HTTP, CLI, filesystem, provider or runtime execution.",
+        "Activity names do not set Config.Method; token/header/core side effects remain separate."
+      ]
+    },
+    {
+      "id": "rest-token-helper-no-payload",
+      "status": "source-verified",
+      "adapters": [
+        "RestCondenser"
+      ],
+      "activities": [
+        "Get",
+        "Head",
+        "Post",
+        "Put",
+        "Patch",
+        "Delete",
+        "Options"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "❌ Resolve-BearerToken: az returned no token payload for resource '",
+          "suffix": "'.",
+          "evidence": [
+            {
+              "sourceId": "bearer-helper",
+              "startLine": 14,
+              "endLine": 14
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Direct token helper calls az account get-access-token with Address and receives falsey tokenJson.",
+        "evidence": [
+          {
+            "sourceId": "bearer-helper",
+            "startLine": 10,
+            "endLine": 16
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Direct token helper calls az account get-access-token with Address and receives falsey tokenJson.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "bearer-helper",
+              "startLine": 10,
+              "endLine": 16
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only configured Address/Host identity presence and tokenJson-nonempty flag from redacted helper status; do not inspect CLI output or token.",
+          "expected": "Redacted flags identify this exact source guard without sensitive values.",
+          "evidence": [
+            {
+              "sourceId": "bearer-helper",
+              "startLine": 10,
+              "endLine": 16
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no token, HTTP, file or provider action.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted CLI/credential-owner handoff and stop; logged resource variable is not the Address parameter and must not be used as an input field.",
+            "expected": "Owner handoff recorded; guard clearance is not claimed.",
+            "evidence": [
+              {
+                "sourceId": "bearer-helper",
+                "startLine": 10,
+                "endLine": 16
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical RestCondenser activity or exact message/pattern differs.",
+          "The effective Plan, credential, environment or target owner cannot be established from redacted metadata.",
+          "The proposed change would expose token/URL/payload or execute an HTTP, CLI, filesystem or provider effect."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Credential-owner handoff recorded; token acquisition remains unresolved.",
+          "expected": "Handoff complete; runtime recovery remains unresolved.",
+          "evidence": [
+            {
+              "sourceId": "bearer-helper",
+              "startLine": 10,
+              "endLine": 16
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude URL/query string, host text, token, authorization/header/body/response, target path and file bytes, CLI output, full Plan/Signal and exception text; retain canonical activity, message/pattern identity and only presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no HTTP, CLI, filesystem, provider or runtime execution.",
+        "Activity names do not set Config.Method; token/header/core side effects remain separate."
+      ]
+    },
+    {
+      "id": "rest-token-helper-access-token-missing",
+      "status": "source-verified",
+      "adapters": [
+        "RestCondenser"
+      ],
+      "activities": [
+        "Get",
+        "Head",
+        "Post",
+        "Put",
+        "Patch",
+        "Delete",
+        "Options"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "❌ Resolve-BearerToken: accessToken missing in az output for resource '",
+          "suffix": "'.",
+          "evidence": [
+            {
+              "sourceId": "bearer-helper",
+              "startLine": 22,
+              "endLine": 22
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Direct token helper parsed az output, but accessToken field is falsey.",
+        "evidence": [
+          {
+            "sourceId": "bearer-helper",
+            "startLine": 18,
+            "endLine": 24
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Direct token helper parsed az output, but accessToken field is falsey.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "bearer-helper",
+              "startLine": 18,
+              "endLine": 24
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only parsed object/accessToken presence/nonempty flags; do not print CLI output or token.",
+          "expected": "Redacted flags identify this exact source guard without sensitive values.",
+          "evidence": [
+            {
+              "sourceId": "bearer-helper",
+              "startLine": 18,
+              "endLine": 24
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no token, HTTP, file or provider action.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted CLI/credential-owner handoff and stop; logged resource variable is not the Address parameter.",
+            "expected": "Owner handoff recorded; guard clearance is not claimed.",
+            "evidence": [
+              {
+                "sourceId": "bearer-helper",
+                "startLine": 18,
+                "endLine": 24
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical RestCondenser activity or exact message/pattern differs.",
+          "The effective Plan, credential, environment or target owner cannot be established from redacted metadata.",
+          "The proposed change would expose token/URL/payload or execute an HTTP, CLI, filesystem or provider effect."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Credential-owner handoff recorded; token acquisition remains unresolved.",
+          "expected": "Handoff complete; runtime recovery remains unresolved.",
+          "evidence": [
+            {
+              "sourceId": "bearer-helper",
+              "startLine": 18,
+              "endLine": 24
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude URL/query string, host text, token, authorization/header/body/response, target path and file bytes, CLI output, full Plan/Signal and exception text; retain canonical activity, message/pattern identity and only presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no HTTP, CLI, filesystem, provider or runtime execution.",
+        "Activity names do not set Config.Method; token/header/core side effects remain separate."
+      ]
+    },
+    {
+      "id": "rest-auth-still-failed",
+      "status": "source-verified",
+      "adapters": [
+        "RestCondenser"
+      ],
+      "activities": [
+        "Get",
+        "Head",
+        "Post",
+        "Put",
+        "Patch",
+        "Delete",
+        "Options"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Authentication still failed after token refresh for '",
+          "suffix": "'.",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 212,
+              "endLine": 212
+            },
+            {
+              "sourceId": "rest-core",
+              "startLine": 216,
+              "endLine": 216
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "REST catch recognizes auth-related message; target-path or status mode has already refreshed once and still encounters auth failure.",
+        "evidence": [
+          {
+            "sourceId": "rest-core",
+            "startLine": 205,
+            "endLine": 219
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "REST catch recognizes auth-related message; target-path or status mode has already refreshed once and still encounters auth failure.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 205,
+              "endLine": 219
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only auth-class flag, target/status mode and refresh-count flag; redact URL, headers, credentials and response.",
+          "expected": "Redacted flags identify this exact source guard without sensitive values.",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 205,
+              "endLine": 219
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no token, HTTP, file or provider action.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted credential/HTTP-owner handoff and stop; no additional refresh or request retry is advised.",
+            "expected": "Owner handoff recorded; guard clearance is not claimed.",
+            "evidence": [
+              {
+                "sourceId": "rest-core",
+                "startLine": 205,
+                "endLine": 219
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical RestCondenser activity or exact message/pattern differs.",
+          "The effective Plan, credential, environment or target owner cannot be established from redacted metadata.",
+          "The proposed change would expose token/URL/payload or execute an HTTP, CLI, filesystem or provider effect."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; authentication remains unresolved.",
+          "expected": "Handoff complete; runtime recovery remains unresolved.",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 205,
+              "endLine": 219
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude URL/query string, host text, token, authorization/header/body/response, target path and file bytes, CLI output, full Plan/Signal and exception text; retain canonical activity, message/pattern identity and only presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no HTTP, CLI, filesystem, provider or runtime execution.",
+        "Activity names do not set Config.Method; token/header/core side effects remain separate."
+      ]
+    },
+    {
+      "id": "rest-auth-refresh-failed",
+      "status": "source-verified",
+      "adapters": [
+        "RestCondenser"
+      ],
+      "activities": [
+        "Get",
+        "Head",
+        "Post",
+        "Put",
+        "Patch",
+        "Delete",
+        "Options"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Failed to refresh bearer token. Cannot retry request to '",
+          "suffix": "'.",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 229,
+              "endLine": 229
+            },
+            {
+              "sourceId": "rest-core",
+              "startLine": 247,
+              "endLine": 247
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "REST catch enters auth or no-such-host branch and no bearer Result is available: SkipBearerToken truthy makes bearerTokenSignal null without calling the helper, or the called helper lacks Result. The log does not by itself prove attempted token acquisition.",
+        "evidence": [
+          {
+            "sourceId": "rest-core",
+            "startLine": 209,
+            "endLine": 249
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "REST catch enters auth or no-such-host branch and no bearer Result is available: SkipBearerToken truthy makes bearerTokenSignal null without calling the helper, or the called helper lacks Result. The log does not by itself prove attempted token acquisition.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 209,
+              "endLine": 249
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect branch classifier and SkipBearerToken first; if false, inspect called helper Signal presence/Failure/HasResult flags. If true, record helper-skipped branch explicitly. Redact URL/token/exception.",
+          "expected": "Redacted flags identify this exact source guard without sensitive values.",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 209,
+              "endLine": 249
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no token, HTTP, file or provider action.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted credential/network-owner handoff identifying skipped-helper versus called/no-Result branch and stop; do not advise enabling auth, retrying or changing endpoint from this wrapper alone.",
+            "expected": "Owner handoff recorded; guard clearance is not claimed.",
+            "evidence": [
+              {
+                "sourceId": "rest-core",
+                "startLine": 209,
+                "endLine": 249
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical RestCondenser activity or exact message/pattern differs.",
+          "The effective Plan, credential, environment or target owner cannot be established from redacted metadata.",
+          "The proposed change would expose token/URL/payload or execute an HTTP, CLI, filesystem or provider effect."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff records the actual skipped or called branch; refresh and HTTP success remain unresolved.",
+          "expected": "Handoff complete; runtime recovery remains unresolved.",
+          "evidence": [
+            {
+              "sourceId": "rest-core",
+              "startLine": 209,
+              "endLine": 249
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude URL/query string, host text, token, authorization/header/body/response, target path and file bytes, CLI output, full Plan/Signal and exception text; retain canonical activity, message/pattern identity and only presence/type/guard flags.",
+      "limitations": [
+        "Source-only confidence; no HTTP, CLI, filesystem, provider or runtime execution.",
+        "Activity names do not set Config.Method; token/header/core side effects remain separate."
+      ]
+    }
+  ]
+}

@@ -38,6 +38,7 @@ function Invoke-RestCondenserCore {
     $targetPath = $null
     $targetTempPath = $null
     $targetAuthRefreshes = 0
+    $redactDiagnostics = [bool]$Plan.Config.RedactDiagnostics
     if ($targetPathProvided) {
         $targetPath = [string]$Plan.Config.TargetPath
         if ([string]::IsNullOrWhiteSpace($targetPath) -or -not [System.IO.Path]::IsPathFullyQualified($targetPath) -or $targetPath -match '^[^:]+::') {
@@ -82,6 +83,7 @@ function Invoke-RestCondenserCore {
             $Form = $FormSignal.HasResult() ? $FormSignal.GetResult() : $null
             $Method = $MethodSignal.HasResult() ? $MethodSignal.GetResult() : $null
             $returnHttpStatus = [bool]$returnHttpStatusSignal.GetResult()
+            $redactDiagnostics = $returnHttpStatus -or [bool]$Plan.Config.RedactDiagnostics
             $httpStatus = $null
             $responseHeaders = $null
             $ContentType = $ContentTypeSignal.HasResult() ? $ContentTypeSignal.GetResult() : $null
@@ -137,7 +139,13 @@ function Invoke-RestCondenserCore {
                     }
                 }
 
-                $response = Invoke-RestMethod -Uri $FinalUrl -Method $Method -Headers $headers -Body $Body
+                if ($returnHttpStatus) {
+                    $response = Invoke-RestMethod -Uri $FinalUrl -Method $Method -Headers $headers -Body $Body -SkipHttpErrorCheck -StatusCodeVariable httpStatus -ResponseHeadersVariable responseHeaders
+                    if ([int]$httpStatus -eq 401) { throw '401 (Unauthorized)' }
+                }
+                else {
+                    $response = Invoke-RestMethod -Uri $FinalUrl -Method $Method -Headers $headers -Body $Body
+                }
             }
             elseif ($Form) {
                 $_form = @{}
@@ -209,11 +217,13 @@ function Invoke-RestCondenserCore {
             if ($message -like "*token is expired*" -or $message -like "*401 (Unauthorized)*" -or $message -like "*authenticate header*") {
                 if ($returnHttpStatus -or $targetPathProvided) {
                     if ($targetPathProvided -and $targetAuthRefreshes -ge 1) {
+                        if ($redactDiagnostics) { return $opSignal.LogCritical('REST authentication refresh failed.') }
                         return $opSignal.LogCritical("Authentication still failed after token refresh for '$FinalUrl'.", $null, $_)
                     }
                     if ($targetPathProvided) { $targetAuthRefreshes++ }
                     if ($statusModeAuthRefreshes -ge 1) {
-                        $opSignal.LogCritical("Authentication still failed after token refresh for '$FinalUrl'.", $null, $_)
+                        if ($redactDiagnostics) { $opSignal.LogCritical('REST authentication refresh failed.') }
+                        else { $opSignal.LogCritical("Authentication still failed after token refresh for '$FinalUrl'.", $null, $_) }
                         return $opSignal
                     }
                     $statusModeAuthRefreshes++
@@ -226,7 +236,8 @@ function Invoke-RestCondenserCore {
                     if (-not $targetPathProvided) { $attempts = 0 }
                 }
                 else {
-                    $opSignal.LogCritical("Failed to refresh bearer token. Cannot retry request to '$FinalUrl'.", $null, $_)
+                    if ($redactDiagnostics) { $opSignal.LogCritical('REST bearer token refresh failed.') }
+                    else { $opSignal.LogCritical("Failed to refresh bearer token. Cannot retry request to '$FinalUrl'.", $null, $_) }
                     return $opSignal
                 }
             }
@@ -244,7 +255,8 @@ function Invoke-RestCondenserCore {
 #                    $attempts = 0
                 }
                 else {
-                    $opSignal.LogCritical("Failed to refresh bearer token. Cannot retry request to '$FinalUrl'.", $null, $_)
+                    if ($redactDiagnostics) { $opSignal.LogCritical('REST bearer token refresh failed.') }
+                    else { $opSignal.LogCritical("Failed to refresh bearer token. Cannot retry request to '$FinalUrl'.", $null, $_) }
                     return $opSignal
                 }
             }
@@ -253,11 +265,13 @@ function Invoke-RestCondenserCore {
             }
 
             if ($attempts -gt $maxAttempts) {
-                $opSignal.LogCritical("Exception during attempt $($attempts) on call to '$FinalUrl' $message", $null, $_)
+                if ($redactDiagnostics) { $opSignal.LogCritical('REST request failed.') }
+                else { $opSignal.LogCritical("Exception during attempt $($attempts) on call to '$FinalUrl' $message", $null, $_) }
                 return $opSignal
             }
 
-            $opSignal.LogWarning("Attempt $($attempts) Error during call to '$FinalUrl' $message", @("Retry"))
+            if ($redactDiagnostics) { $opSignal.LogWarning('REST request retry.', @('Retry')) }
+            else { $opSignal.LogWarning("Attempt $($attempts) Error during call to '$FinalUrl' $message", @("Retry")) }
         }
     }
 }   

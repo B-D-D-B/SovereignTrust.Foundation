@@ -1,0 +1,623 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedDataAdapter",
+  "mappedAdapter": "MappedDataAdapter",
+  "part": "Data_AzureSql",
+  "sources": [
+    {
+      "id": "sql-orchestration",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureSql/PowerShell/Invoke-Data_AzureSql.ps1",
+      "sha256": "48DC3A8A781635866B7E59925F868CBE513F1D38B5AFB5295673E8FA381BCC90",
+      "symbol": "Invoke-Data_AzureSql"
+    }
+  ],
+  "entries": [
+    {
+      "id": "sql-write-committed-cleanup-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureSql"
+      ],
+      "activities": [
+        "Write"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "AzureSql Write committed, but cleanup failed.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 136,
+              "endLine": 136
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "After Write SQL transaction committed, cleanup failed; catch switch maps fixed terminal exception to this outcome. Data effect has already committed.",
+        "evidence": [
+          {
+            "sourceId": "sql-orchestration",
+            "startLine": 67,
+            "endLine": 141
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "After Write SQL transaction committed, cleanup failed; catch switch maps fixed terminal exception to this outcome. Data effect has already committed.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect committed/cleanup-failed flags and operation identity only; no SQL text/connection/parameters.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record committed-but-cleanup-failed outcome with SQL owner; do not replay Write or infer rollback.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sql-orchestration",
+                "startLine": 67,
+                "endLine": 141
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; cleanup unresolved and committed effect retained.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "sql-write-transaction-uncertain",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureSql"
+      ],
+      "activities": [
+        "Write"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "AzureSql Write transaction outcome is uncertain.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 137,
+              "endLine": 137
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "For Write, transaction commit was attempted but not confirmed; catch switch maps fixed uncertain-outcome exception. No rollback or safe replay is inferred.",
+        "evidence": [
+          {
+            "sourceId": "sql-orchestration",
+            "startLine": 67,
+            "endLine": 141
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "For Write, transaction commit was attempted but not confirmed; catch switch maps fixed uncertain-outcome exception. No rollback or safe replay is inferred.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect commit-attempted/committed/rollback-confirmed flags only; no SQL text/connection/parameters.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record uncertain transaction outcome with SQL owner; stop before retry, compensation or duplicate execution.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sql-orchestration",
+                "startLine": 67,
+                "endLine": 141
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; transaction outcome unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "sql-delete-committed-cleanup-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureSql"
+      ],
+      "activities": [
+        "Delete"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "AzureSql Delete committed, but cleanup failed.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 136,
+              "endLine": 136
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "After Delete SQL transaction committed, cleanup failed; catch switch maps fixed terminal exception to this outcome. Data effect has already committed.",
+        "evidence": [
+          {
+            "sourceId": "sql-orchestration",
+            "startLine": 67,
+            "endLine": 141
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "After Delete SQL transaction committed, cleanup failed; catch switch maps fixed terminal exception to this outcome. Data effect has already committed.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect committed/cleanup-failed flags and operation identity only; no SQL text/connection/parameters.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record committed-but-cleanup-failed outcome with SQL owner; do not replay Delete or infer rollback.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sql-orchestration",
+                "startLine": 67,
+                "endLine": 141
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; cleanup unresolved and committed effect retained.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "sql-delete-transaction-uncertain",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureSql"
+      ],
+      "activities": [
+        "Delete"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "AzureSql Delete transaction outcome is uncertain.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 137,
+              "endLine": 137
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "For Delete, transaction commit was attempted but not confirmed; catch switch maps fixed uncertain-outcome exception. No rollback or safe replay is inferred.",
+        "evidence": [
+          {
+            "sourceId": "sql-orchestration",
+            "startLine": 67,
+            "endLine": 141
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "For Delete, transaction commit was attempted but not confirmed; catch switch maps fixed uncertain-outcome exception. No rollback or safe replay is inferred.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect commit-attempted/committed/rollback-confirmed flags only; no SQL text/connection/parameters.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record uncertain transaction outcome with SQL owner; stop before retry, compensation or duplicate execution.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sql-orchestration",
+                "startLine": 67,
+                "endLine": 141
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; transaction outcome unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "sql-admin-committed-cleanup-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureSql"
+      ],
+      "activities": [
+        "Admin"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "AzureSql Admin committed, but cleanup failed.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 136,
+              "endLine": 136
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "After Admin SQL transaction committed, cleanup failed; catch switch maps fixed terminal exception to this outcome. Data effect has already committed.",
+        "evidence": [
+          {
+            "sourceId": "sql-orchestration",
+            "startLine": 67,
+            "endLine": 141
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "After Admin SQL transaction committed, cleanup failed; catch switch maps fixed terminal exception to this outcome. Data effect has already committed.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect committed/cleanup-failed flags and operation identity only; no SQL text/connection/parameters.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record committed-but-cleanup-failed outcome with SQL owner; do not replay Admin or infer rollback.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sql-orchestration",
+                "startLine": 67,
+                "endLine": 141
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; cleanup unresolved and committed effect retained.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "sql-admin-transaction-uncertain",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureSql"
+      ],
+      "activities": [
+        "Admin"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "AzureSql Admin transaction outcome is uncertain.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 137,
+              "endLine": 137
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "For Admin, transaction commit was attempted but not confirmed; catch switch maps fixed uncertain-outcome exception. No rollback or safe replay is inferred.",
+        "evidence": [
+          {
+            "sourceId": "sql-orchestration",
+            "startLine": 67,
+            "endLine": 141
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "For Admin, transaction commit was attempted but not confirmed; catch switch maps fixed uncertain-outcome exception. No rollback or safe replay is inferred.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect commit-attempted/committed/rollback-confirmed flags only; no SQL text/connection/parameters.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record uncertain transaction outcome with SQL owner; stop before retry, compensation or duplicate execution.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sql-orchestration",
+                "startLine": 67,
+                "endLine": 141
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; transaction outcome unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    }
+  ]
+}

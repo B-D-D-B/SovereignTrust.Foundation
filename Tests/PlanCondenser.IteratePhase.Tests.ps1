@@ -1,4 +1,4 @@
-using module ../../SignalGraph/Src/PowerShell/SignalGraph.psd1
+using module ../../SignalGraph/Src/PowerShell/SignalGraph/SignalGraph.psd1
 
 $ErrorActionPreference = 'Stop'
 
@@ -6,10 +6,13 @@ class Conductor {}
 class MappedCondenserAdapter {}
 
 $foundationRoot = Join-Path $PSScriptRoot '../Src/PowerShell'
+. "$foundationRoot/Wrappers/Adapters/Invoke-CondenserAdapter.ps1"
 . "$foundationRoot/Utilities/Adapters/Condenser/Plan/Resolve-ClonePlan.ps1"
 . "$foundationRoot/Classes/Adapters/Condenser/PlanCondenser.ps1"
 
+$script:assertions = 0
 function Assert-True([bool]$Condition, [string]$Message) {
+    $script:assertions++
     if (-not $Condition) { throw $Message }
 }
 
@@ -260,4 +263,4 @@ $singleResult = $condenser.Invoke($null, 'IteratePhase', $context.ConductionSign
 Assert-True (-not $singleResult.Failure()) 'Single-item serial fallback failed.'
 Assert-True (($script:sequentialIndices -join ',') -eq '0' -and $script:poolCalls.Count -eq 0) 'Single-item fallback did not execute exactly once.'
 
-Write-Output 'PASS: warmup, parallel dispatch, diagnostics, inline debugging, throttling, grid reuse, validation, and serial-only isolation.'
+Write-Output "PASS: $script:assertions IteratePhase assertions (warmup, parallel dispatch, diagnostics, inline debugging, throttling, grid reuse, validation, and serial-only isolation)."

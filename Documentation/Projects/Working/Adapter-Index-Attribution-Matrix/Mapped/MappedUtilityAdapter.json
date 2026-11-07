@@ -11,7 +11,7 @@
         {
           "adapter": "Utility_Media",
           "status": "reads",
-          "notes": "Mapped Resize/Overlay validation precedes provider dispatch. Both share Config.VirtualPath/Container/Resource pre-dispatch reads and Path/context clone reads. Image helpers use original Config children only when not replaced by jacket append. Null-coalescing/function-parameter fallbacks are not resolver -Default values. No image processing was executed.",
+          "notes": "Mapped Resize/Overlay validation precedes provider dispatch. Both share Config.VirtualPath/Container/Resource pre-dispatch reads and Path/context clone reads. Image helpers use original Config children only when not replaced by jacket append. Null-coalescing/function-parameter fallbacks are not resolver -Default values. Current ImageMagick migration checks executed separately; this shard records source read attribution.",
           "references": [
             {
               "sourceId": "utility-mapped",
@@ -84,7 +84,7 @@
                 {
                   "sourceId": "media-resize",
                   "lines": [
-                    190
+                    174
                   ]
                 }
               ],
@@ -125,7 +125,7 @@
                 {
                   "sourceId": "media-resize",
                   "lines": [
-                    183
+                    167
                   ]
                 }
               ],
@@ -166,7 +166,7 @@
                 {
                   "sourceId": "media-resize",
                   "lines": [
-                    184
+                    168
                   ]
                 }
               ],
@@ -207,7 +207,7 @@
                 {
                   "sourceId": "media-resize",
                   "lines": [
-                    189
+                    173
                   ]
                 }
               ],
@@ -248,7 +248,7 @@
                 {
                   "sourceId": "media-resize",
                   "lines": [
-                    188
+                    172
                   ]
                 }
               ],
@@ -289,7 +289,7 @@
                 {
                   "sourceId": "media-resize",
                   "lines": [
-                    186
+                    170
                   ]
                 }
               ],
@@ -330,7 +330,7 @@
                 {
                   "sourceId": "media-resize",
                   "lines": [
-                    187
+                    171
                   ]
                 }
               ],
@@ -371,7 +371,7 @@
                 {
                   "sourceId": "media-resize",
                   "lines": [
-                    185
+                    169
                   ]
                 }
               ],
@@ -559,7 +559,7 @@
         {
           "adapter": "Utility_Media",
           "status": "reads",
-          "notes": "Mapped Resize/Overlay validation precedes provider dispatch. Both share Config.VirtualPath/Container/Resource pre-dispatch reads and Path/context clone reads. Image helpers use original Config children only when not replaced by jacket append. Null-coalescing/function-parameter fallbacks are not resolver -Default values. No image processing was executed.",
+          "notes": "Mapped Resize/Overlay validation precedes provider dispatch. Both share Config.VirtualPath/Container/Resource pre-dispatch reads and Path/context clone reads. Image helpers use original Config children only when not replaced by jacket append. Null-coalescing/function-parameter fallbacks are not resolver -Default values. Current ImageMagick migration checks executed separately; this shard records source read attribution.",
           "references": [
             {
               "sourceId": "utility-mapped",
@@ -622,9 +622,9 @@
                 {
                   "sourceId": "media-overlay",
                   "lines": [
-                    286,
-                    307,
-                    311
+                    280,
+                    301,
+                    305
                   ]
                 }
               ],
@@ -654,9 +654,9 @@
                 {
                   "sourceId": "media-overlay",
                   "lines": [
-                    290,
-                    295,
-                    300
+                    284,
+                    289,
+                    294
                   ]
                 }
               ],
@@ -686,9 +686,9 @@
                 {
                   "sourceId": "media-overlay",
                   "lines": [
-                    290,
-                    295,
-                    299
+                    284,
+                    289,
+                    293
                   ]
                 }
               ],
@@ -719,9 +719,9 @@
                 {
                   "sourceId": "media-overlay",
                   "lines": [
-                    287,
-                    307,
-                    311
+                    281,
+                    301,
+                    305
                   ]
                 }
               ],
@@ -751,9 +751,9 @@
                 {
                   "sourceId": "media-overlay",
                   "lines": [
-                    290,
-                    295,
-                    298
+                    284,
+                    289,
+                    292
                   ]
                 }
               ],
@@ -784,9 +784,9 @@
                 {
                   "sourceId": "media-overlay",
                   "lines": [
-                    290,
-                    307,
-                    311
+                    284,
+                    301,
+                    305
                   ]
                 }
               ],
@@ -818,11 +818,11 @@
                   "lines": [
                     66,
                     87,
-                    290,
-                    291,
-                    295,
-                    307,
-                    311
+                    284,
+                    285,
+                    289,
+                    301,
+                    305
                   ]
                 }
               ],
@@ -854,11 +854,11 @@
                   "lines": [
                     66,
                     82,
-                    290,
-                    291,
-                    295,
-                    307,
-                    311
+                    284,
+                    285,
+                    289,
+                    301,
+                    305
                   ]
                 }
               ],
@@ -890,11 +890,11 @@
                   "lines": [
                     66,
                     73,
-                    290,
-                    291,
-                    295,
-                    307,
-                    311
+                    284,
+                    285,
+                    289,
+                    301,
+                    305
                   ]
                 }
               ],
@@ -926,11 +926,11 @@
                   "lines": [
                     66,
                     96,
-                    290,
-                    291,
-                    295,
-                    307,
-                    311
+                    284,
+                    285,
+                    289,
+                    301,
+                    305
                   ]
                 }
               ],
@@ -962,11 +962,11 @@
                   "lines": [
                     66,
                     97,
-                    290,
-                    291,
-                    295,
-                    307,
-                    311
+                    284,
+                    285,
+                    289,
+                    301,
+                    305
                   ]
                 }
               ],
@@ -997,9 +997,9 @@
                 {
                   "sourceId": "media-overlay",
                   "lines": [
-                    288,
-                    307,
-                    311
+                    282,
+                    301,
+                    305
                   ]
                 }
               ],
@@ -1029,9 +1029,9 @@
                 {
                   "sourceId": "media-overlay",
                   "lines": [
-                    290,
-                    295,
-                    301
+                    284,
+                    289,
+                    295
                   ]
                 }
               ],
@@ -1061,9 +1061,9 @@
                 {
                   "sourceId": "media-overlay",
                   "lines": [
-                    290,
-                    295,
-                    302
+                    284,
+                    289,
+                    296
                   ]
                 }
               ],
@@ -1240,6 +1240,18 @@
             }
           ]
         }
+      ]
+    },
+    {
+      "mappedAdapter": "MappedUtilityAdapter",
+      "condenser": null,
+      "name": "Inspect",
+      "description": "Read actual bytes and optionally bounded PNG/GIF pixels.",
+      "coverage": [{"adapter":"Utility_Media","status":"reads","notes":"Inspect reads original Plan.Config and trusted adapter limits separately; two Process calls share one deadline. Runtime checks cover actual image bytes, pixel samples and failure variants.","references":[{"sourceId":"Utility_Media","lines":[69,71]},{"sourceId":"media-inspect","lines":[28,42,46,49,93,117]}]}],
+      "properties": [
+        {"path":"Config.InputFullPath","description":"Absolute local image path.","adapters":["Utility_Media"],"evidence":[{"adapter":"Utility_Media","references":[{"sourceId":"media-inspect","lines":[42,44,56]}]}]},
+        {"path":"Config.DecodePixels","description":"Native Boolean selecting bounded PNG/GIF decode.","adapters":["Utility_Media"],"evidence":[{"adapter":"Utility_Media","references":[{"sourceId":"media-inspect","lines":[46,47,49]}]}]},
+        {"path":"Config.SamplePoints","description":"Array of in-bounds X/Y points when decoding.","adapters":["Utility_Media"],"evidence":[{"adapter":"Utility_Media","references":[{"sourceId":"media-inspect","lines":[49,53,104]}]}]}
       ]
     }
   ]
