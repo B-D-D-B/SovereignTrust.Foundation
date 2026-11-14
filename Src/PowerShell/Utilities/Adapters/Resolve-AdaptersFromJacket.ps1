@@ -26,6 +26,8 @@ function Resolve-AdapterFromJacket {
 
         # Normalize source Storage v2 before manifest defaults can add legacy fields.
         $sourceWasStorageV2 = $false
+        $sourceWasEmbeddedV2 = $false
+        $selectedEmbeddedAddresses = $null
         $storageFamily = $null
         $sourceWasRemainingV2 = $false
         $remainingFamily = $null
@@ -39,6 +41,10 @@ function Resolve-AdapterFromJacket {
                 return $opSignal.MergeSignal($storageResolution).LogCritical('Storage jacket is invalid before merge.')
             }
             if ($sourceWasStorageV2) {
+                if ($storageFamily -eq 'EmbeddedFileSystem') {
+                    $sourceWasEmbeddedV2 = $true
+                    $selectedEmbeddedAddresses = @($storageResolution.GetResult().Addresses)
+                }
                 $sourceClone = [Signal]::Start('StorageJacketSource', $Jacket) | Select-Object -Last 1
                 $sourceClone.SetResult($storageResolution.GetResult())
                 $Jacket = $sourceClone
@@ -166,12 +172,28 @@ function Resolve-AdapterFromJacket {
         $mergedSignal = $mergeService.Invoke("Merge", "Merge", $Signal, $mergePlan, $mergeItemSignalJacket) | Select-Object -Last 1 #$manifestSignal.GetResult(), $Jacket, $true) | Select-Object -Last 1
 
         if ($opSignal.MergeSignalAndVerifyFailure($mergedSignal)) {
-            if ($sourceWasRemainingV2) { return $opSignal.LogCritical('Adapter v2 jacket merge failed.') }
+            if ($sourceWasRemainingV2 -or $sourceWasEmbeddedV2) { return $opSignal.LogCritical('Adapter v2 jacket merge failed.') }
             $opSignal.LogWarning("Jacket-to-Manifest merge failed; continuing with original jacket.")
         }
         else {
             $Jacket = $mergedSignal.GetResult()
             $opSignal.LogInformation("🧬 Jacket successfully merged over Manifest.")
+        }
+        if ($sourceWasEmbeddedV2) {
+            if ($null -eq $Jacket -or $null -eq $Jacket.PSObject.Properties['Addresses']) {
+                return $opSignal.LogCritical('Embedded v2 selected roots could not be restored after merge.')
+            }
+            $Jacket.Addresses = @($selectedEmbeddedAddresses)
+            $restored = @($Jacket.Addresses)
+            if ($restored.Count -ne $selectedEmbeddedAddresses.Count) {
+                return $opSignal.LogCritical('Embedded v2 selected root count changed after merge.')
+            }
+            for ($i = 0; $i -lt $restored.Count; $i++) {
+                if ($restored[$i] -cne $selectedEmbeddedAddresses[$i]) {
+                    return $opSignal.LogCritical('Embedded v2 selected root order changed after merge.')
+                }
+            }
+            $mergedSignal.SetResult($Jacket)
         }
         if ($sourceWasRemainingV2) {
             $selected = $remainingResolution.GetResult()

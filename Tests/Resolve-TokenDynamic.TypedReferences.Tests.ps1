@@ -1,6 +1,6 @@
 using module ../../SignalGraph/Src/PowerShell/SignalGraph/SignalGraph.psd1
 
-param([switch]$IsNonBlankOnly, [switch]$FormatterGuardsOnly)
+param([switch]$IsNonBlankOnly, [switch]$FormatterGuardsOnly, [switch]$RandomCountOnly)
 
 $ErrorActionPreference = 'Stop'
 
@@ -28,6 +28,11 @@ class MappedTokenAdapter {
         $this.LastItemSignal = $ItemSignal
         $resultSignal = [Signal]::Start("Reference:$($Plan.Path)") | Select-Object -Last 1
 
+        if ($Plan.Path -eq 'Memory.Plan.Config.FailedLookup') {
+            $null = $resultSignal.LogCritical('Expected mapped lookup failure.')
+            return $resultSignal
+        }
+
         if ($this.Values.ContainsKey([string]$Plan.Path)) {
             $resultSignal.SetResult($this.Values[[string]$Plan.Path])
         }
@@ -41,6 +46,11 @@ $foundationRoot = Join-Path $PSScriptRoot '../Src/PowerShell'
 . "$foundationRoot/Utilities/Adapters/Token/Invoke-TokenDynamic.ps1"
 
 function Assert-True([bool]$Condition, [string]$Message) {
+    if ($script:randomCountActive) {
+        $script:randomCountTotal++
+        if ($Condition) { $script:randomCountPassed++ }
+        else { Write-Output "FAIL: Random/Count assertions $script:randomCountPassed/1/$script:randomCountTotal. $Message" }
+    }
     if (-not $Condition) { throw $Message }
 }
 
@@ -96,6 +106,154 @@ $adapter = [MappedTokenAdapter]::new(@{
     'Memory.Plan.Config.DateOffset' = [DateTimeOffset]::new(2024, 12, 1, 17, 30, 0, [TimeSpan]::FromMinutes(330))
     'Memory.Plan.Config.TimeZone' = 'UTC'
 })
+
+# Random/Count use the established assertion harness and native reference fixtures.
+$fixtures = @{
+    Minimum = [int]0
+    Maximum = [int]1
+    EmptyArray = [object[]]@()
+    SingletonArray = [object[]]@('only')
+    NullItems = [object[]]@($null, 'one', $null)
+    Dictionary = @{ One = 1 }
+    List = [System.Collections.Generic.List[int]]::new()
+    Matrix = [int[,]]::new(1, 2)
+    JsonArray = '[1,2]'
+    Double = [double]1
+    Decimal = [decimal]1
+    WideInteger = [long]0
+    WideOverflow = [long]2147483648
+    UnsignedEdge = [uint32]2147483647
+    UnsignedOverflow = [uint64]::MaxValue
+    SignedByte = [sbyte]0
+    UnsignedByte = [byte]0
+    Short = [int16]0
+    UnsignedShort = [uint16]0
+    UnsignedLong = [uint64]0
+}
+foreach ($key in $fixtures.Keys) { $adapter.Values["Memory.Plan.Config.$key"] = $fixtures[$key] }
+$script:randomCountActive = $true
+$script:randomCountPassed = 0
+$script:randomCountTotal = 0
+
+foreach ($case in @(
+    @{ Path = 'Random(0,1)'; Expected = 0 },
+    @{ Path = 'random(-1,0)'; Expected = -1 },
+    @{ Path = '::RANDOM(2147483646,2147483647)'; Expected = 2147483646 },
+    @{ Path = 'Random(-2147483648,-2147483647)'; Expected = [int]::MinValue },
+    @{ Path = "Random(' +0 ',""1"")"; Expected = 0 },
+    @{ Path = 'Random([Memory.Plan.Config.Minimum~],1)'; Expected = 0 },
+    @{ Path = 'Random(0,[Memory.Plan.Config.Maximum~])'; Expected = 0 },
+    @{ Path = 'Random([Memory.Plan.Config.Minimum~],[Memory.Plan.Config.Maximum~])'; Expected = 0 },
+    @{ Path = 'Random([Memory.Plan.Config.NumberText~],43)'; Expected = 42 },
+    @{ Path = 'Random(2147483646,[Memory.Plan.Config.UnsignedEdge~])'; Expected = 2147483646 }
+)) {
+    $result = Invoke-TestDynamic -Path $case.Path -MappedAdapter $adapter
+    Assert-True (-not $result.Failure() -and $result.HasResult() -and $result.GetResult() -is [int] -and $result.GetResult() -eq $case.Expected) "Random exact interval failed: $($case.Path)"
+}
+foreach ($path in @('WideInteger','SignedByte','UnsignedByte','Short','UnsignedShort','UnsignedLong')) {
+    $result = Invoke-TestDynamic -Path "Random([Memory.Plan.Config.$path~],1)" -MappedAdapter $adapter
+    Assert-True (-not $result.Failure() -and $result.HasResult() -and $result.GetResult() -is [int] -and $result.GetResult() -eq 0) "Random native integer rejected: $path"
+}
+for ($draw = 0; $draw -lt 32; $draw++) {
+    $result = Invoke-TestDynamic -Path 'Random(-7,9)' -MappedAdapter $adapter
+    Assert-True (-not $result.Failure() -and $result.HasResult() -and $result.GetResult() -is [int] -and $result.GetResult() -ge -7 -and $result.GetResult() -lt 9) "Random cross-zero draw outside bounds: $draw"
+}
+$result = Invoke-TestDynamic -Path 'Random(-2147483648,2147483647)' -MappedAdapter $adapter
+Assert-True (-not $result.Failure() -and $result.HasResult() -and $result.GetResult() -is [int] -and $result.GetResult() -ge [int]::MinValue -and $result.GetResult() -lt [int]::MaxValue) 'Random full Int32 domain failed.'
+$beforeCache = $adapter.InvocationCount
+$result = Invoke-TestDynamic -Path 'Random([Memory.Plan.Config.Minimum~],[Memory.Plan.Config.Minimum~])' -MappedAdapter $adapter
+Assert-True ($result.Failure() -and -not $result.HasResult() -and ($result.Entries.Message -join ' ') -match 'Random\(\).*less than') 'Random equal referenced bounds did not fail with range category.'
+Assert-True (($adapter.InvocationCount - $beforeCache) -eq 1) 'Random repeated reference was not cached within expression.'
+
+foreach ($expression in @(
+    'Random()', 'Random(0)', 'Random(0,1,true)', 'Random(,1)', 'Random(0,)',
+    'Random(1,1)', 'Random(2,1)', 'Random(bad,1)', 'Random(0.0,1)',
+    'Random(1e0,2)', 'Random(0x0,1)', 'Random(2147483648,2147483649)',
+    'Random(-2147483649,0)', 'Random(Memory.Plan.Config.Minimum,1)',
+    'Random(٠,1)', "Random('',1)"
+)) {
+    $result = Invoke-TestDynamic -Path $expression -MappedAdapter $adapter
+    Assert-True ($result.Failure() -and -not $result.HasResult() -and ($result.Entries.Message -join ' ') -match 'Random\(\)') "Random invalid literal/arity accepted: $expression"
+}
+foreach ($path in @('TrueValue','Double','Decimal','MyArray','MyObject','WideOverflow','UnsignedOverflow','EmptyText')) {
+    $result = Invoke-TestDynamic -Path "Random([Memory.Plan.Config.$path~],1)" -MappedAdapter $adapter
+    Assert-True ($result.Failure() -and -not $result.HasResult() -and ($result.Entries.Message -join ' ') -match 'Random\(\).*integer') "Random invalid native bound accepted: $path"
+}
+foreach ($expression in @(
+    'Random([Memory.Plan.Config.NullValue~],1)',
+    'Random([Memory.Plan.Config.Missing~],1)',
+    'Random([Memory.Plan.Config.FailedLookup~],1)',
+    'Random(prefix-[Memory.Plan.Config.Minimum~],1)',
+    'Random([Memory.Plan.Config.Minimum~],1',
+    'Random([Dynamic.Random(0,1)~],1)'
+)) {
+    $result = Invoke-TestDynamic -Path $expression -MappedAdapter $adapter
+    Assert-True ($result.Failure() -and -not $result.HasResult() -and ($result.Entries.Message -join ' ') -match 'reference|invalid dynamic expression') "Random reference failure not propagated: $expression"
+}
+$result = Invoke-TestDynamic -Path 'Random([Memory.Plan.Config.Minimum~],1)'
+Assert-True ($result.Failure() -and -not $result.HasResult() -and ($result.Entries.Message -join ' ') -match 'reference.*not provided') 'Random accepted a reference without mapped adapter.'
+
+foreach ($case in @(
+    @{ Path = 'EmptyArray'; Expected = 0 },
+    @{ Path = 'SingletonArray'; Expected = 1 },
+    @{ Path = 'MyArray'; Expected = 3 },
+    @{ Path = 'NestedArrays'; Expected = 2 },
+    @{ Path = 'NullItems'; Expected = 3 }
+)) {
+    for ($call = 0; $call -lt 2; $call++) {
+        $beforeLookup = $adapter.InvocationCount
+        $result = Invoke-TestDynamic -Path "::COUNT([Memory.Plan.Config.$($case.Path)~])" -MappedAdapter $adapter
+        Assert-True (-not $result.Failure() -and $result.HasResult() -and $result.GetResult() -is [int] -and $result.GetResult() -eq $case.Expected) "Count native outer length failed: $($case.Path)"
+        Assert-True (($adapter.InvocationCount - $beforeLookup) -eq 1) 'Count did not perform exactly one lookup per independent expression.'
+    }
+}
+foreach ($expression in @(
+    'Count()', "Count('')", 'Count(,)', 'Count([Memory.Plan.Config.MyArray~],extra)',
+    'Count(Memory.Plan.Config.MyArray)', "Count('Memory.Plan.Config.MyArray')",
+    "Count('[Memory.Plan.Config.MyArray~]')", 'Count([1,2])', 'Count(one,two)',
+    'Count({"One":1})'
+)) {
+    $result = Invoke-TestDynamic -Path $expression -MappedAdapter $adapter
+    Assert-True ($result.Failure() -and -not $result.HasResult() -and ($result.Entries.Message -join ' ') -match 'Count\(\)') "Count invalid syntax accepted: $expression"
+}
+foreach ($path in @('Integer','TrueValue','DisplayName','JsonArray','Dictionary','MyObject','List','Matrix')) {
+    $result = Invoke-TestDynamic -Path "Count([Memory.Plan.Config.$path~])" -MappedAdapter $adapter
+    Assert-True ($result.Failure() -and -not $result.HasResult() -and ($result.Entries.Message -join ' ') -match 'Count\(\).*array') "Count invalid native type accepted: $path"
+}
+foreach ($expression in @(
+    'Count([Memory.Plan.Config.NullValue~])', 'Count([Memory.Plan.Config.Missing~])',
+    'Count([Memory.Plan.Config.FailedLookup~])', 'Count(prefix-[Memory.Plan.Config.MyArray~])',
+    'Count([Dynamic.Count([Memory.Plan.Config.MyArray~])~])'
+)) {
+    $result = Invoke-TestDynamic -Path $expression -MappedAdapter $adapter
+    Assert-True ($result.Failure() -and -not $result.HasResult() -and ($result.Entries.Message -join ' ') -match 'reference') "Count reference failure not propagated: $expression"
+}
+$result = Invoke-TestDynamic -Path 'Count([Memory.Plan.Config.MyArray~])'
+Assert-True ($result.Failure() -and -not $result.HasResult() -and ($result.Entries.Message -join ' ') -match 'reference.*not provided') 'Count accepted a reference without mapped adapter.'
+
+$randomCountSignal = [Signal]::Start('RandomCountForwarded') | Select-Object -Last 1
+$randomCountItem = [Signal]::Start('RandomCountItem') | Select-Object -Last 1
+$randomCountConfig = [pscustomobject]@{ Marker = 'RandomCountConfig' }
+foreach ($case in @(
+    @{ Path = 'Dynamic.Random([Memory.Plan.Config.Minimum~],1)'; Expected = 0 },
+    @{ Path = 'Dynamic.Count([Memory.Plan.Config.EmptyArray~])'; Expected = 0 },
+    @{ Path = 'Dynamic.Count([Memory.Plan.Config.MyArray~])'; Expected = 3 }
+)) {
+    $wrapperPlan = [pscustomobject]@{ Path = $case.Path; Config = $randomCountConfig }
+    $result = Invoke-TokenDynamic -MappedAdapter $adapter -Signal $randomCountSignal -ItemSignal $randomCountItem -Plan $wrapperPlan | Select-Object -Last 1
+    Assert-True (-not $result.Failure() -and $result.HasResult() -and $result.GetResult() -is [int] -and $result.GetResult() -eq $case.Expected) "New-token wrapper result failed: $($case.Path)"
+    Assert-True ([object]::ReferenceEquals($adapter.LastSignal, $randomCountSignal)) 'New-token wrapper conduction Signal identity changed.'
+    Assert-True ([object]::ReferenceEquals($adapter.LastItemSignal, $randomCountItem)) 'New-token wrapper ItemSignal identity changed.'
+    Assert-True ([object]::ReferenceEquals($adapter.LastPlan.Config, $randomCountConfig)) 'New-token wrapper Plan.Config identity changed.'
+}
+foreach ($path in @('Missing','FailedLookup')) {
+    $wrapperPlan = [pscustomobject]@{ Path = "Dynamic.Count([Memory.Plan.Config.$path~])"; Config = $randomCountConfig }
+    $result = Invoke-TokenDynamic -MappedAdapter $adapter -Signal $randomCountSignal -ItemSignal $randomCountItem -Plan $wrapperPlan | Select-Object -Last 1
+    Assert-True ($result.Failure() -and -not $result.HasResult() -and ($result.Entries.Message -join ' ') -match 'reference') "Count wrapper failed lookup not propagated: $path"
+}
+$script:randomCountActive = $false
+Write-Output "PASS: Random/Count assertions $script:randomCountPassed/0/$script:randomCountTotal."
+if ($RandomCountOnly) { return }
 
 if ($FormatterGuardsOnly) {
     $checks = 0

@@ -744,6 +744,70 @@ function Resolve-TokenDynamic {
         $resolvedArgs = $resolvedArgumentSet.Arguments
 
         switch ($fn) {
+            'random' {
+                if ($resolvedArgs.Count -ne 2) {
+                    throw "Random() requires exactly two arguments: minimum and maximum."
+                }
+
+                $bounds = [int[]]::new(2)
+                for ($index = 0; $index -lt 2; $index++) {
+                    $value = $resolvedArgs[$index]
+                    $parsed = 0
+                    if ($value -is [string]) {
+                        $text = $value.Trim()
+                        if ($text -cnotmatch '^[+-]?[0-9]+$' -or -not [int]::TryParse(
+                            $text,
+                            [System.Globalization.NumberStyles]::AllowLeadingSign,
+                            [System.Globalization.CultureInfo]::InvariantCulture,
+                            [ref]$parsed
+                        )) {
+                            throw "Random() requires integer bounds within the Int32 range."
+                        }
+                    }
+                    elseif ($value -is [sbyte] -or $value -is [byte] -or
+                        $value -is [int16] -or $value -is [uint16] -or
+                        $value -is [int32] -or $value -is [uint32] -or
+                        $value -is [int64] -or $value -is [uint64]) {
+                        if ([decimal]$value -lt [int]::MinValue -or [decimal]$value -gt [int]::MaxValue) {
+                            throw "Random() requires integer bounds within the Int32 range."
+                        }
+                        $parsed = [int]$value
+                    }
+                    else {
+                        throw "Random() requires integer bounds within the Int32 range."
+                    }
+                    $bounds[$index] = $parsed
+                }
+
+                $minimum = $bounds[0]
+                $maximum = $bounds[1]
+                if ($minimum -ge $maximum) {
+                    throw "Random() requires minimum to be less than maximum."
+                }
+
+                $result = [int](Get-Random -Minimum ([int]$minimum) -Maximum ([int]$maximum))
+                $opSignal.SetResult($result)
+                return $opSignal
+            }
+
+            'count' {
+                if ($resolvedArgs.Count -ne 1) {
+                    throw "Count() requires exactly one array reference."
+                }
+                if (-not $resolvedArgumentSet.HasReferences -or $raw -notmatch '(?s)^\[(?<path>.+)~\]$') {
+                    throw "Count() requires an entire unquoted array reference."
+                }
+
+                $value = $resolvedArgs[0]
+                if ($null -eq $value -or $value -isnot [System.Array] -or $value.Rank -ne 1) {
+                    throw "Count() requires a one-dimensional native array."
+                }
+
+                $result = [int]$value.Length
+                $opSignal.SetResult($result)
+                return $opSignal
+            }
+
             'formatjsonastext' {
                 if ($resolvedArgs.Count -ne 1) {
                     throw "FormatJsonAsText() requires exactly one argument. ($($resolvedArgs.Count) was supplied)"

@@ -36,7 +36,10 @@ function Resolve-StorageResourceRoutesJacket {
         }
         if ($ValidateNormalizedV2) {
             $addresses = & $get $value 'Addresses'
-            if ($null -eq $addresses -or @($addresses).Count -ne 1 -or -not (& $valid @($addresses)[0])) {
+            $selectedAddresses = @($addresses)
+            $invalidAddresses = @($selectedAddresses | Where-Object { -not (& $valid $_) }).Count -gt 0
+            if ($null -eq $addresses -or $selectedAddresses.Count -lt 1 -or
+                ($Family -ne 'EmbeddedFileSystem' -and $selectedAddresses.Count -ne 1) -or $invalidAddresses) {
                 return $result.LogCritical('Storage v2 selected Address is invalid after hydration.')
             }
             if ($Family -in @('AzureStorageAccount','AzureKeyVault') -and -not (& $valid (& $get $value 'Resource'))) {
@@ -67,18 +70,27 @@ function Resolve-StorageResourceRoutesJacket {
             return $result.LogCritical('Storage v2 jacket has an invalid or mixed envelope.')
         }
         $routes = & $get $value 'Routes'
-        if ($routes -isnot [array] -or $routes.Count -ne 1) {
-            return $result.LogCritical('Storage v2 requires one primary Route.')
+        if ($routes -isnot [array] -or $routes.Count -lt 1 -or
+            ($Family -ne 'EmbeddedFileSystem' -and $routes.Count -ne 1)) {
+            return $result.LogCritical('Storage v2 Routes are invalid.')
         }
         $route = $routes[0]
-        $routeFields = if ($route -is [System.Collections.IDictionary]) { @($route.Keys) } else { @($route.PSObject.Properties.Name) }
         $allowedRouteFields = if ($Family -in @('AzureStorageAccount','AzureKeyVault')) { @('Key','Address','ResourceKey') } else { @('Key','Address') }
-        if (@($routeFields | Where-Object { $_ -cnotin $allowedRouteFields }).Count -gt 0 -or
-            @($routeFields).Count -ne $allowedRouteFields.Count) {
-            return $result.LogCritical('Storage v2 Route fields are invalid.')
-        }
-        if ((& $get $route 'Key') -cne 'primary' -or -not (& $valid (& $get $route 'Address'))) {
-            return $result.LogCritical('Storage v2 primary Route is invalid.')
+        $routeKeys = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
+        for ($index = 0; $index -lt $routes.Count; $index++) {
+            $item = $routes[$index]
+            if ($null -eq $item -or $item -is [string]) { return $result.LogCritical('Storage v2 Route fields are invalid.') }
+            $routeFields = if ($item -is [System.Collections.IDictionary]) { @($item.Keys) } else { @($item.PSObject.Properties.Name) }
+            if (@($routeFields | Where-Object { $_ -cnotin $allowedRouteFields }).Count -gt 0 -or
+                @($routeFields).Count -ne $allowedRouteFields.Count) {
+                return $result.LogCritical('Storage v2 Route fields are invalid.')
+            }
+            $key = & $get $item 'Key'
+            if ($key -isnot [string] -or [string]::IsNullOrWhiteSpace($key) -or
+                ($index -eq 0 -and $key -cne 'primary') -or
+                -not $routeKeys.Add($key) -or -not (& $valid (& $get $item 'Address'))) {
+                return $result.LogCritical('Storage v2 Route is invalid.')
+            }
         }
         if ($Family -in @('AzureStorageAccount','AzureKeyVault')) {
             $resources = & $get $value 'Resource'
@@ -125,7 +137,7 @@ function Resolve-StorageResourceRoutesJacket {
         $copy = $value | ConvertTo-Json -Depth 100 -Compress | ConvertFrom-Json -Depth 100
         $copy.PSObject.Properties.Remove('Routes')
         $copy.PSObject.Properties.Remove('SchemaVersion')
-        $copy | Add-Member -NotePropertyName Addresses -NotePropertyValue @((& $get $route 'Address'))
+        $copy | Add-Member -NotePropertyName Addresses -NotePropertyValue @($routes | ForEach-Object { & $get $_ 'Address' })
         if ($Family -in @('AzureStorageAccount','AzureKeyVault')) {
             $copy.PSObject.Properties.Remove('Resource')
             $copy | Add-Member -NotePropertyName Resource -NotePropertyValue (& $get $resources[0] $resourceField)
