@@ -1,0 +1,209 @@
+{
+  "Schema": "ST.Wave1.SourceCapability/1",
+  "FixtureId": "graph.member-pointer-self-jacket-control.cyclic",
+  "Capability": "SignalGraph.PowerShell.GraphJSON",
+  "Status": "KnownUnsupportedSource",
+  "MethodsExist": [
+    "Graph.ToJson(bool)",
+    "Graph.FromJson(string,bool)"
+  ],
+  "MissingHelpers": [
+    "Convert-GraphToJsonObject",
+    "Convert-JsonObjectToGraph"
+  ],
+  "Labels": [
+    "graph.roundtrip",
+    "graph.cycle.roundtrip"
+  ],
+  "FixtureShape": "One graph with one registered Signal; Signal.Pointer is graph; Signal.Jacket and Control are itself. Both historical labels belong to this SAME CYCLIC fixture.",
+  "SelectedSignalGraph": {
+    "Manifest": "C:\\GitHub\\SiliconDreamArtists\\SignalGraph\\Src\\PowerShell\\SignalGraph\\SignalGraph.psd1",
+    "Root": "C:\\GitHub\\SiliconDreamArtists\\SignalGraph\\Src\\PowerShell\\SignalGraph",
+    "Guid": "40b7332d-7c4e-4349-a89a-03b29b258238",
+    "Version": "1.0.11",
+    "Files": [
+      {
+        "Path": "Classes/Graph.ps1",
+        "Length": 7014,
+        "Sha256": "52518B6B590DA97C70ED0F3D24A15FD072B107140FF70A5F43CBEA2851319982"
+      },
+      {
+        "Path": "Classes/Signal.ps1",
+        "Length": 19264,
+        "Sha256": "52E38C3A5E8E7A320F1C44439405C5B2907C6F8EDA81752639EB53FE41A9251F"
+      },
+      {
+        "Path": "Classes/SignalEntry.ps1",
+        "Length": 4234,
+        "Sha256": "582B39D5E389E6AE8500BCBFE2E2B64AE043AC06150E209C2D44433841FC6148"
+      },
+      {
+        "Path": "New-ModuleManifest.ps1",
+        "Length": 836,
+        "Sha256": "F8FD8FDB28013BCF33AEA25DDF20B253990F857F643EA3CC9632E744B6E15A1E"
+      },
+      {
+        "Path": "SignalGraph.psd1",
+        "Length": 4587,
+        "Sha256": "554B8BD8CA03B42A093C9CBE5F931813EFE431AAF154E57A4746F2B5005352E9"
+      },
+      {
+        "Path": "SignalGraph.psm1",
+        "Length": 32309,
+        "Sha256": "884E3375EE18DF592ECB1311DF0E531B94CB1097CBEAD5D13C6B8A9CDBBDB6BD"
+      },
+      {
+        "Path": "Tests/Test-AddPathToDictionary.ps1",
+        "Length": 3909,
+        "Sha256": "82293268E6E5880DB363BFBCAAA9279F59C3DB6EF90A51EE40B3950DC8D25AFB"
+      },
+      {
+        "Path": "Utilities/Add-PathToDictionary.ps1",
+        "Length": 17212,
+        "Sha256": "815D5DB23E62D26BAF45BB63BB10804845475F19C5F7CAE9E8E7280738D3A841"
+      },
+      {
+        "Path": "Utilities/Convert-JsonToSignalGraph.ps1",
+        "Length": 4811,
+        "Sha256": "28AFAE6EB37F20A2FAF6D2A8AC46C7CE34A27EEB6CAA2AF438F6984314486A67"
+      },
+      {
+        "Path": "Utilities/Convert-ToDictionary.ps1",
+        "Length": 2577,
+        "Sha256": "FE11526F2B83ADEFBCAF114518829E01CDD54114BA771896E5087870A59EB09B"
+      },
+      {
+        "Path": "Utilities/Get-ResolvedValueFromPathSignal.ps1",
+        "Length": 926,
+        "Sha256": "71A53D90FBC3057AD2C8A9DE392D59BA8E1D262CDD803822CE502297CA696265"
+      },
+      {
+        "Path": "Utilities/Invoke-ParseFilterSegment.ps1",
+        "Length": 1452,
+        "Sha256": "100225416F28501C24527E4FB9A09A8233BB34A495FDB97FDC25B15373A61E8B"
+      },
+      {
+        "Path": "Utilities/Move-PathInDictionary.ps1",
+        "Length": 1618,
+        "Sha256": "0254BBCE86C76F5EE97D7C0545F63F80A609E65E84E4CA40798E36821F82CD64"
+      },
+      {
+        "Path": "Utilities/New-SignalPointerFork.ps1",
+        "Length": 3211,
+        "Sha256": "864C4E84AD11FFF989E9E605340977F7893C2F1461A1F03F8C47B9668DE4C0CC"
+      },
+      {
+        "Path": "Utilities/Remove-PathFromDictionary.ps1",
+        "Length": 3710,
+        "Sha256": "692D48E7D8F267399B6A74691582E3DD8DDEB67E1F7B47DF21C182EA2360252B"
+      },
+      {
+        "Path": "Utilities/Resolve-GraphForJsonArray.ps1",
+        "Length": 3720,
+        "Sha256": "C2A08C97545A701C774A2FEBACF3F03AAF58500DC98A5556F503F28948D9BE74"
+      },
+      {
+        "Path": "Utilities/Resolve-GraphPlanInjectionContext.ps1",
+        "Length": 4679,
+        "Sha256": "3CC8B77A999C2622E9F243523317FEF997C4C237C1B8B6394D778322E8F9B2A9"
+      },
+      {
+        "Path": "Utilities/Resolve-InnerPathFromDictionary.ps1",
+        "Length": 23257,
+        "Sha256": "3A05BB25E12A0BB864EF3F58CA2285F9EE12C70BAFDFAA92C1E6C74606DC6599"
+      },
+      {
+        "Path": "Utilities/Resolve-PathFromDictionary.ps1",
+        "Length": 4742,
+        "Sha256": "C242D931442E8536F26CC43665D17FA1C0F06C321B0336E979815319BE2A1D24"
+      },
+      {
+        "Path": "Utilities/Resolve-PathGraphForJsonArray.ps1",
+        "Length": 5848,
+        "Sha256": "ACF16ACAD21E84C9C342A77B7C4B2627C684D2BA80745A751DB5418EF518380D"
+      },
+      {
+        "Path": "Utilities/Resolve-PathHydration.ps1",
+        "Length": 1568,
+        "Sha256": "552B3815AFD69A90042A979563B480707A4093E0D1A71E2A73C436B5FE7507F8"
+      }
+    ],
+    "Directories": [
+      "Classes",
+      "Tests",
+      "Utilities"
+    ]
+  },
+  "HistoricalScript": {
+    "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/resume-preimages/Wave1.Semantics.ps1",
+    "Sha256": "65EDCFED4120D1388D397DDBED3F823524785D2DC7812A51E5684D4DFFDFB1EB",
+    "Length": 1
+  },
+  "HistoricalRuns": [
+    {
+      "Run": "source-semantic04",
+      "Files": [
+        {
+          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/source-semantic04/semantic-result.json",
+          "Sha256": "067E2BA8A407B2EF6C106F69B05A8CD735D92B5A94B5F93E31469C6E159396B7",
+          "Length": 3334
+        },
+        {
+          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/source-semantic04/assertions.json",
+          "Sha256": "3D2DEA9B9AB78638D066F74AE1884622D3802F75C51FEA02F92D5DE933E7CFBD",
+          "Length": 2854
+        },
+        {
+          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/source-semantic04/stderr.txt",
+          "Sha256": "0D4316A61D5AF8C45C5218B25F00CEBD052634FA35CE986E6548EBC7B3BB51E5",
+          "Length": 56
+        },
+        {
+          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/source-semantic04/graph-raw.json",
+          "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+          "Length": 0
+        },
+        {
+          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/source-semantic04/loader-provenance.json",
+          "Sha256": "FBB1E9AD4D36DAFAE352A0AD81B436F31F12744E5B211489E0D7F9EA79CEC506",
+          "Length": 1400
+        }
+      ]
+    },
+    {
+      "Run": "copy-semantic04",
+      "Files": [
+        {
+          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/copy-semantic04/semantic-result.json",
+          "Sha256": "4CB31E2EBBA1F8975A4C9F63FA05219A08E9C1B1E068DA9A00B6D43041AAC38A",
+          "Length": 3334
+        },
+        {
+          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/copy-semantic04/assertions.json",
+          "Sha256": "824F8FF13B6646A665546FE752FCCE59503345781BFD4888229DC665F33E149F",
+          "Length": 2854
+        },
+        {
+          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/copy-semantic04/stderr.txt",
+          "Sha256": "0D4316A61D5AF8C45C5218B25F00CEBD052634FA35CE986E6548EBC7B3BB51E5",
+          "Length": 56
+        },
+        {
+          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/copy-semantic04/graph-raw.json",
+          "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+          "Length": 0
+        },
+        {
+          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/copy-semantic04/loader-provenance.json",
+          "Sha256": "40AD4E106D305F389A83CAA3A674D7CEEDC48DD20DF60EEF080379BD6EC6F448",
+          "Length": 1414
+        }
+      ]
+    }
+  ],
+  "RequiredNativeCases": [
+    "graph.roundtrip",
+    "graph.cycle.roundtrip"
+  ],
+  "NativeContract": "Independent documented version1 native contract; already accepted native evidence remains separate from PS capability classification"
+}
