@@ -1,0 +1,118 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedTokenAdapter",
+  "mappedAdapter": "MappedTokenAdapter",
+  "part": "constructor",
+  "sources": [
+    {
+      "id": "mapped-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedTokenAdapter.ps1",
+      "sha256": "D347BC6E53C756C063FE098A63DFC94B1AEB6B9C4182E32ACE86EA6C8AAB7C2F",
+      "symbol": "MappedTokenAdapter"
+    }
+  ],
+  "entries": [
+    {
+      "id": "token-null-conductor",
+      "status": "source-verified",
+      "adapters": [
+        "MappedTokenAdapter"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Null Conductor passed to MappedTokenAdapter.Start()",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 25,
+              "endLine": 25
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "MappedTokenAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+        "evidence": [
+          {
+            "sourceId": "mapped-class",
+            "startLine": 21,
+            "endLine": 27
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "MappedTokenAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 21,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Conductor presence/truthy flag only.",
+          "expected": "Redacted flags identify this source guard without token value, graph, environment or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 21,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan or construction input proposal only; no token/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull Conductor for mapped Token construction.",
+            "expected": "Conductor present; setup separate.",
+            "evidence": [
+              {
+                "sourceId": "mapped-class",
+                "startLine": 21,
+                "endLine": 27
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, Get activity or exact message/pattern differs.",
+          "Effective path, registration, selected scope or owner cannot be established with redacted metadata.",
+          "Proposed action would reveal token value/name, graph, credentials, SDA content or execute provider/storage/enrollment effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Conductor present; setup separate.",
+          "expected": "Local guard would be false; token/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 21,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude token path/key/value, Plan/Config/Signal/graph/Jacket/Conductor, environment name/value, storage or SDA identity/content, credentials and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no token/SDA/storage/environment/provider/runtime execution.",
+        "A passed local guard, warning or Result presence does not establish token value, absence or safe retry."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedUtilityAdapter",
+  "mappedAdapter": "MappedUtilityAdapter",
+  "part": "constructor",
+  "sources": [
+    {
+      "id": "mapped-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedUtilityAdapter.ps1",
+      "sha256": "8CBF4B23C6017729CF83ECF69F220ACED508C1D5B9A424A8F1598E1DEEF6A06C",
+      "symbol": "MappedUtilityAdapter"
+    }
+  ],
+  "entries": [
+    {
+      "id": "utility-null-conductor",
+      "status": "source-verified",
+      "adapters": [
+        "MappedUtilityAdapter"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Null Conductor passed to MappedUtilityAdapter.Start()",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 27,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "MappedUtilityAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+        "evidence": [
+          {
+            "sourceId": "mapped-class",
+            "startLine": 23,
+            "endLine": 29
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "MappedUtilityAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 23,
+              "endLine": 29
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Conductor presence/truthy flag only.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 23,
+              "endLine": 29
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no file/media effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull Conductor for authorized mapped Utility construction.",
+            "expected": "Conductor present; setup separate.",
+            "evidence": [
+              {
+                "sourceId": "mapped-class",
+                "startLine": 23,
+                "endLine": 29
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Conductor present; setup separate.",
+          "expected": "Local guard proposal would satisfy stated predicate; media/result success unverified.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 23,
+              "endLine": 29
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2402 @@
+{
+  "name": "RestCondenser",
+  "repository": "SovereignTrust.Foundation",
+  "path": "Src/PowerShell/Classes/Adapters/Condenser/RestCondenser.ps1",
+  "activities": [
+    {
+      "name": "Get",
+      "whenToUse": "Choose the Get-labeled REST activity for retrieval. The core reads Plan.Config.Method for the actual verb and may use local fallbacks; set Method to Get when GET behavior is required, especially for TargetPath output.",
+      "description": "Identify a REST retrieval operation.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "whenToUse": "Supply a Config object when using request options or TargetPath; the core checks Config presence before testing TargetPath. Omit only when no Config-based option is needed.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "whenToUse": "Supply a caller bearer token when Config.SkipBearerToken is true and initial automatic lookup is bypassed. If lookup is attempted but fails or returns empty, the wrapper stops before the core; a supplied token is not its failure fallback.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "whenToUse": "Supply request body content for the body branch; truthy non-string values are serialized to JSON before the request, while false or zero bypass that conversion. Omit for bodyless requests or GET TargetPath mode.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave Body absent. The core rejects target-file mode when a request body option is present, even for a Get-labeled activity.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "whenToUse": "Set the request content type when the body or source-file handling needs it. This is a Config option read by the REST core.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "whenToUse": "Supply multipart form fields for the Form request branch; file-valued form fields are read from disk. Omit when using Body, SourcePath or target-file GET handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave Form absent. The core rejects target-file mode with any Form request option.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "whenToUse": "On an authentication or host retry, configured headers are selected instead of the current local headers fallback; they are not merged by the resolver. A bearer token can subsequently overwrite Authorization in the selected headers.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "whenToUse": "Supply initial caller headers when needed; the first core request resolves Config.Headers with an empty local header object fallback.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "whenToUse": "Supply caller headers before storage-specific headers are considered. The wrapper can generate storage headers and add them to a cloned Plan.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "whenToUse": "Supply the token-cache host and bearer-token acquisition address when automatic token resolution is used. Omit only when that path is skipped or not required.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "whenToUse": "Set the actual HTTP verb for the core request. Activity labels validate catalog choice but do not select the method; the core has branch-specific local fallbacks when Method is absent.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "When using TargetPath, set Method to Get. The core validates actual Config.Method as Get regardless of the declared activity label.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "whenToUse": "Supply a query-string suffix when it is not already present in Config.Uri. The core appends it to the resolved URI before calling the HTTP method.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "whenToUse": "Set true when the wrapper should return the complete core result, including status metadata, rather than only Response. Omit or false for Response-only return.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "whenToUse": "For a bodyless request, set true when the core HTTP call should capture status and response headers. This is conditional on the request branch.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave ReturnHttpStatus false or absent. The core rejects target-file mode when status return is requested.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "whenToUse": "On an authentication or host failure retry, set SkipBearerToken to avoid resolving a fresh token. Omit or false to allow retry token resolution.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "whenToUse": "Set SkipBearerToken true to skip initial automatic bearer-token resolution. Omit or false to permit wrapper token lookup before the core call.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "whenToUse": "Supply a local input file for the source-file request branch when uploading content. The core reads this option from Config.SourcePath.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave SourcePath absent. The core rejects target-file mode when an input file is also configured.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "whenToUse": "Supply a nonempty absolute output-file path only for an actual GET request without ReturnHttpStatus, SourcePath, Body or Form. The core writes through a temporary path before the final target.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "whenToUse": "Supply the request URI so the wrapper can determine whether storage-specific headers apply. URI handling occurs before the cloned Plan reaches the core.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "whenToUse": "Supply the request URI for the core request; Querystring may be appended if not already present. This address is used for the effectful HTTP call.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "whenToUse": "Retain an incoming parent-phase reference when Resolve-ClonePlan needs to preserve lineage before wrapper mutation; this is not a REST method selector.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "whenToUse": "Retain an incoming parent-plan reference when Resolve-ClonePlan preserves lineage before wrapper mutation; request behavior comes from Config fields.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "response body native value",
+          "description": "When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=false (Result presence conditional).",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "String",
+          "description": "local target path [computed]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; Config.TargetPath download completes.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Response",
+          "type": "provider response",
+          "description": "response body [provider-returned] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Url",
+          "type": "String",
+          "description": "final URL [computed]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Method",
+          "type": "String",
+          "description": "actual Config.Method [echoed-input]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "ResourceName",
+          "type": "String",
+          "description": "resolved resource [computed] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Success",
+          "type": "Boolean",
+          "description": "constant true after HTTP invocation [constant]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "StatusCode",
+          "type": "Int32",
+          "description": "HTTP status including non-2xx [provider-returned]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Headers",
+          "type": "object",
+          "description": "response headers [provider-returned] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "ElapsedMilliseconds",
+          "type": "Int64",
+          "description": "request stopwatch [measured]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "RestCondenser: Non-2xx can still return success Signal in status mode; check StatusCode explicitly. No live endpoint was called"
+      ]
+    },
+    {
+      "name": "Head",
+      "whenToUse": "Choose the Head-labeled REST activity for metadata requests, and set Plan.Config.Method to Head for the actual HTTP verb. The activity name is forwarded but does not itself select the core request method.",
+      "description": "Identify a REST metadata request.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "whenToUse": "Supply a Config object when using request options or TargetPath; the core checks Config presence before testing TargetPath. Omit only when no Config-based option is needed.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "whenToUse": "Supply a caller bearer token when Config.SkipBearerToken is true and initial automatic lookup is bypassed. If lookup is attempted but fails or returns empty, the wrapper stops before the core; a supplied token is not its failure fallback.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "whenToUse": "Supply request body content for the body branch; truthy non-string values are serialized to JSON before the request, while false or zero bypass that conversion. Omit for bodyless requests or GET TargetPath mode.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave Body absent. The core rejects target-file mode when a request body option is present, even for a Get-labeled activity.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "whenToUse": "Set the request content type when the body or source-file handling needs it. This is a Config option read by the REST core.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "whenToUse": "Supply multipart form fields for the Form request branch; file-valued form fields are read from disk. Omit when using Body, SourcePath or target-file GET handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave Form absent. The core rejects target-file mode with any Form request option.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "whenToUse": "On an authentication or host retry, configured headers are selected instead of the current local headers fallback; they are not merged by the resolver. A bearer token can subsequently overwrite Authorization in the selected headers.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "whenToUse": "Supply initial caller headers when needed; the first core request resolves Config.Headers with an empty local header object fallback.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "whenToUse": "Supply caller headers before storage-specific headers are considered. The wrapper can generate storage headers and add them to a cloned Plan.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "whenToUse": "Supply the token-cache host and bearer-token acquisition address when automatic token resolution is used. Omit only when that path is skipped or not required.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "whenToUse": "Set the actual HTTP verb for the core request. Activity labels validate catalog choice but do not select the method; the core has branch-specific local fallbacks when Method is absent.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "When using TargetPath, set Method to Get. The core validates actual Config.Method as Get regardless of the declared activity label.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "whenToUse": "Supply a query-string suffix when it is not already present in Config.Uri. The core appends it to the resolved URI before calling the HTTP method.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "whenToUse": "Set true when the wrapper should return the complete core result, including status metadata, rather than only Response. Omit or false for Response-only return.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "whenToUse": "For a bodyless request, set true when the core HTTP call should capture status and response headers. This is conditional on the request branch.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave ReturnHttpStatus false or absent. The core rejects target-file mode when status return is requested.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "whenToUse": "On an authentication or host failure retry, set SkipBearerToken to avoid resolving a fresh token. Omit or false to allow retry token resolution.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "whenToUse": "Set SkipBearerToken true to skip initial automatic bearer-token resolution. Omit or false to permit wrapper token lookup before the core call.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "whenToUse": "Supply a local input file for the source-file request branch when uploading content. The core reads this option from Config.SourcePath.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave SourcePath absent. The core rejects target-file mode when an input file is also configured.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "whenToUse": "Supply a nonempty absolute output-file path only for an actual GET request without ReturnHttpStatus, SourcePath, Body or Form. The core writes through a temporary path before the final target.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "whenToUse": "Supply the request URI so the wrapper can determine whether storage-specific headers apply. URI handling occurs before the cloned Plan reaches the core.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "whenToUse": "Supply the request URI for the core request; Querystring may be appended if not already present. This address is used for the effectful HTTP call.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "whenToUse": "Retain an incoming parent-phase reference when Resolve-ClonePlan needs to preserve lineage before wrapper mutation; this is not a REST method selector.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "whenToUse": "Retain an incoming parent-plan reference when Resolve-ClonePlan preserves lineage before wrapper mutation; request behavior comes from Config fields.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "response body native value",
+          "description": "When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=false (Result presence conditional).",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "String",
+          "description": "local target path [computed]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; Config.TargetPath download completes.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Response",
+          "type": "provider response",
+          "description": "response body [provider-returned] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Url",
+          "type": "String",
+          "description": "final URL [computed]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Method",
+          "type": "String",
+          "description": "actual Config.Method [echoed-input]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "ResourceName",
+          "type": "String",
+          "description": "resolved resource [computed] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Success",
+          "type": "Boolean",
+          "description": "constant true after HTTP invocation [constant]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "StatusCode",
+          "type": "Int32",
+          "description": "HTTP status including non-2xx [provider-returned]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Headers",
+          "type": "object",
+          "description": "response headers [provider-returned] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "ElapsedMilliseconds",
+          "type": "Int64",
+          "description": "request stopwatch [measured]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "RestCondenser: Non-2xx can still return success Signal in status mode; check StatusCode explicitly. No live endpoint was called"
+      ]
+    },
+    {
+      "name": "Post",
+      "whenToUse": "Choose the Post-labeled REST activity for submission, and set Plan.Config.Method to Post for the actual HTTP verb. Body and Form choose different core request branches; the label alone does not choose the method.",
+      "description": "Identify a REST creation or submission operation.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "whenToUse": "Supply a Config object when using request options or TargetPath; the core checks Config presence before testing TargetPath. Omit only when no Config-based option is needed.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "whenToUse": "Supply a caller bearer token when Config.SkipBearerToken is true and initial automatic lookup is bypassed. If lookup is attempted but fails or returns empty, the wrapper stops before the core; a supplied token is not its failure fallback.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "whenToUse": "Supply request body content for the body branch; truthy non-string values are serialized to JSON before the request, while false or zero bypass that conversion. Omit for bodyless requests or GET TargetPath mode.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave Body absent. The core rejects target-file mode when a request body option is present, even for a Get-labeled activity.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "whenToUse": "Set the request content type when the body or source-file handling needs it. This is a Config option read by the REST core.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "whenToUse": "Supply multipart form fields for the Form request branch; file-valued form fields are read from disk. Omit when using Body, SourcePath or target-file GET handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave Form absent. The core rejects target-file mode with any Form request option.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "whenToUse": "On an authentication or host retry, configured headers are selected instead of the current local headers fallback; they are not merged by the resolver. A bearer token can subsequently overwrite Authorization in the selected headers.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "whenToUse": "Supply initial caller headers when needed; the first core request resolves Config.Headers with an empty local header object fallback.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "whenToUse": "Supply caller headers before storage-specific headers are considered. The wrapper can generate storage headers and add them to a cloned Plan.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "whenToUse": "Supply the token-cache host and bearer-token acquisition address when automatic token resolution is used. Omit only when that path is skipped or not required.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "whenToUse": "Set the actual HTTP verb for the core request. Activity labels validate catalog choice but do not select the method; the core has branch-specific local fallbacks when Method is absent.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "When using TargetPath, set Method to Get. The core validates actual Config.Method as Get regardless of the declared activity label.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "whenToUse": "Supply a query-string suffix when it is not already present in Config.Uri. The core appends it to the resolved URI before calling the HTTP method.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "whenToUse": "Set true when the wrapper should return the complete core result, including status metadata, rather than only Response. Omit or false for Response-only return.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "whenToUse": "For a bodyless request, set true when the core HTTP call should capture status and response headers. This is conditional on the request branch.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave ReturnHttpStatus false or absent. The core rejects target-file mode when status return is requested.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "whenToUse": "On an authentication or host failure retry, set SkipBearerToken to avoid resolving a fresh token. Omit or false to allow retry token resolution.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "whenToUse": "Set SkipBearerToken true to skip initial automatic bearer-token resolution. Omit or false to permit wrapper token lookup before the core call.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "whenToUse": "Supply a local input file for the source-file request branch when uploading content. The core reads this option from Config.SourcePath.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave SourcePath absent. The core rejects target-file mode when an input file is also configured.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "whenToUse": "Supply a nonempty absolute output-file path only for an actual GET request without ReturnHttpStatus, SourcePath, Body or Form. The core writes through a temporary path before the final target.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "whenToUse": "Supply the request URI so the wrapper can determine whether storage-specific headers apply. URI handling occurs before the cloned Plan reaches the core.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "whenToUse": "Supply the request URI for the core request; Querystring may be appended if not already present. This address is used for the effectful HTTP call.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "whenToUse": "Retain an incoming parent-phase reference when Resolve-ClonePlan needs to preserve lineage before wrapper mutation; this is not a REST method selector.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "whenToUse": "Retain an incoming parent-plan reference when Resolve-ClonePlan preserves lineage before wrapper mutation; request behavior comes from Config fields.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "response body native value",
+          "description": "When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=false (Result presence conditional).",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "String",
+          "description": "local target path [computed]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; Config.TargetPath download completes.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Response",
+          "type": "provider response",
+          "description": "response body [provider-returned] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Url",
+          "type": "String",
+          "description": "final URL [computed]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Method",
+          "type": "String",
+          "description": "actual Config.Method [echoed-input]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "ResourceName",
+          "type": "String",
+          "description": "resolved resource [computed] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Success",
+          "type": "Boolean",
+          "description": "constant true after HTTP invocation [constant]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "StatusCode",
+          "type": "Int32",
+          "description": "HTTP status including non-2xx [provider-returned]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Headers",
+          "type": "object",
+          "description": "response headers [provider-returned] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "ElapsedMilliseconds",
+          "type": "Int64",
+          "description": "request stopwatch [measured]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "RestCondenser: Non-2xx can still return success Signal in status mode; check StatusCode explicitly. No live endpoint was called"
+      ]
+    },
+    {
+      "name": "Put",
+      "whenToUse": "Choose the Put-labeled REST activity for replacement or upload, and set Plan.Config.Method to Put for the actual HTTP verb. SourcePath uses the file request branch; the activity label alone does not choose the method.",
+      "description": "Identify a REST replacement operation.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "whenToUse": "Supply a Config object when using request options or TargetPath; the core checks Config presence before testing TargetPath. Omit only when no Config-based option is needed.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "whenToUse": "Supply a caller bearer token when Config.SkipBearerToken is true and initial automatic lookup is bypassed. If lookup is attempted but fails or returns empty, the wrapper stops before the core; a supplied token is not its failure fallback.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "whenToUse": "Supply request body content for the body branch; truthy non-string values are serialized to JSON before the request, while false or zero bypass that conversion. Omit for bodyless requests or GET TargetPath mode.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave Body absent. The core rejects target-file mode when a request body option is present, even for a Get-labeled activity.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "whenToUse": "Set the request content type when the body or source-file handling needs it. This is a Config option read by the REST core.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "whenToUse": "Supply multipart form fields for the Form request branch; file-valued form fields are read from disk. Omit when using Body, SourcePath or target-file GET handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave Form absent. The core rejects target-file mode with any Form request option.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "whenToUse": "On an authentication or host retry, configured headers are selected instead of the current local headers fallback; they are not merged by the resolver. A bearer token can subsequently overwrite Authorization in the selected headers.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "whenToUse": "Supply initial caller headers when needed; the first core request resolves Config.Headers with an empty local header object fallback.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "whenToUse": "Supply caller headers before storage-specific headers are considered. The wrapper can generate storage headers and add them to a cloned Plan.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "whenToUse": "Supply the token-cache host and bearer-token acquisition address when automatic token resolution is used. Omit only when that path is skipped or not required.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "whenToUse": "Set the actual HTTP verb for the core request. Activity labels validate catalog choice but do not select the method; the core has branch-specific local fallbacks when Method is absent.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "When using TargetPath, set Method to Get. The core validates actual Config.Method as Get regardless of the declared activity label.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "whenToUse": "Supply a query-string suffix when it is not already present in Config.Uri. The core appends it to the resolved URI before calling the HTTP method.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "whenToUse": "Set true when the wrapper should return the complete core result, including status metadata, rather than only Response. Omit or false for Response-only return.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "whenToUse": "For a bodyless request, set true when the core HTTP call should capture status and response headers. This is conditional on the request branch.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave ReturnHttpStatus false or absent. The core rejects target-file mode when status return is requested.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "whenToUse": "On an authentication or host failure retry, set SkipBearerToken to avoid resolving a fresh token. Omit or false to allow retry token resolution.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "whenToUse": "Set SkipBearerToken true to skip initial automatic bearer-token resolution. Omit or false to permit wrapper token lookup before the core call.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "whenToUse": "Supply a local input file for the source-file request branch when uploading content. The core reads this option from Config.SourcePath.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave SourcePath absent. The core rejects target-file mode when an input file is also configured.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "whenToUse": "Supply a nonempty absolute output-file path only for an actual GET request without ReturnHttpStatus, SourcePath, Body or Form. The core writes through a temporary path before the final target.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "whenToUse": "Supply the request URI so the wrapper can determine whether storage-specific headers apply. URI handling occurs before the cloned Plan reaches the core.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "whenToUse": "Supply the request URI for the core request; Querystring may be appended if not already present. This address is used for the effectful HTTP call.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "whenToUse": "Retain an incoming parent-phase reference when Resolve-ClonePlan needs to preserve lineage before wrapper mutation; this is not a REST method selector.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "whenToUse": "Retain an incoming parent-plan reference when Resolve-ClonePlan preserves lineage before wrapper mutation; request behavior comes from Config fields.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "response body native value",
+          "description": "When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=false (Result presence conditional).",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "String",
+          "description": "local target path [computed]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; Config.TargetPath download completes.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Response",
+          "type": "provider response",
+          "description": "response body [provider-returned] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Url",
+          "type": "String",
+          "description": "final URL [computed]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Method",
+          "type": "String",
+          "description": "actual Config.Method [echoed-input]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "ResourceName",
+          "type": "String",
+          "description": "resolved resource [computed] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Success",
+          "type": "Boolean",
+          "description": "constant true after HTTP invocation [constant]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "StatusCode",
+          "type": "Int32",
+          "description": "HTTP status including non-2xx [provider-returned]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Headers",
+          "type": "object",
+          "description": "response headers [provider-returned] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "ElapsedMilliseconds",
+          "type": "Int64",
+          "description": "request stopwatch [measured]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "RestCondenser: Non-2xx can still return success Signal in status mode; check StatusCode explicitly. No live endpoint was called"
+      ]
+    },
+    {
+      "name": "Patch",
+      "whenToUse": "Choose the Patch-labeled REST activity for partial update, and set Plan.Config.Method to Patch for the actual HTTP verb. The core may use body/form/file branches based on Config; the label alone does not choose the method.",
+      "description": "Identify a REST partial update operation.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "whenToUse": "Supply a Config object when using request options or TargetPath; the core checks Config presence before testing TargetPath. Omit only when no Config-based option is needed.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "whenToUse": "Supply a caller bearer token when Config.SkipBearerToken is true and initial automatic lookup is bypassed. If lookup is attempted but fails or returns empty, the wrapper stops before the core; a supplied token is not its failure fallback.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "whenToUse": "Supply request body content for the body branch; truthy non-string values are serialized to JSON before the request, while false or zero bypass that conversion. Omit for bodyless requests or GET TargetPath mode.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave Body absent. The core rejects target-file mode when a request body option is present, even for a Get-labeled activity.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "whenToUse": "Set the request content type when the body or source-file handling needs it. This is a Config option read by the REST core.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "whenToUse": "Supply multipart form fields for the Form request branch; file-valued form fields are read from disk. Omit when using Body, SourcePath or target-file GET handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave Form absent. The core rejects target-file mode with any Form request option.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "whenToUse": "On an authentication or host retry, configured headers are selected instead of the current local headers fallback; they are not merged by the resolver. A bearer token can subsequently overwrite Authorization in the selected headers.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "whenToUse": "Supply initial caller headers when needed; the first core request resolves Config.Headers with an empty local header object fallback.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "whenToUse": "Supply caller headers before storage-specific headers are considered. The wrapper can generate storage headers and add them to a cloned Plan.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "whenToUse": "Supply the token-cache host and bearer-token acquisition address when automatic token resolution is used. Omit only when that path is skipped or not required.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "whenToUse": "Set the actual HTTP verb for the core request. Activity labels validate catalog choice but do not select the method; the core has branch-specific local fallbacks when Method is absent.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "When using TargetPath, set Method to Get. The core validates actual Config.Method as Get regardless of the declared activity label.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "whenToUse": "Supply a query-string suffix when it is not already present in Config.Uri. The core appends it to the resolved URI before calling the HTTP method.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "whenToUse": "Set true when the wrapper should return the complete core result, including status metadata, rather than only Response. Omit or false for Response-only return.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "whenToUse": "For a bodyless request, set true when the core HTTP call should capture status and response headers. This is conditional on the request branch.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave ReturnHttpStatus false or absent. The core rejects target-file mode when status return is requested.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "whenToUse": "On an authentication or host failure retry, set SkipBearerToken to avoid resolving a fresh token. Omit or false to allow retry token resolution.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "whenToUse": "Set SkipBearerToken true to skip initial automatic bearer-token resolution. Omit or false to permit wrapper token lookup before the core call.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "whenToUse": "Supply a local input file for the source-file request branch when uploading content. The core reads this option from Config.SourcePath.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave SourcePath absent. The core rejects target-file mode when an input file is also configured.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "whenToUse": "Supply a nonempty absolute output-file path only for an actual GET request without ReturnHttpStatus, SourcePath, Body or Form. The core writes through a temporary path before the final target.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "whenToUse": "Supply the request URI so the wrapper can determine whether storage-specific headers apply. URI handling occurs before the cloned Plan reaches the core.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "whenToUse": "Supply the request URI for the core request; Querystring may be appended if not already present. This address is used for the effectful HTTP call.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "whenToUse": "Retain an incoming parent-phase reference when Resolve-ClonePlan needs to preserve lineage before wrapper mutation; this is not a REST method selector.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "whenToUse": "Retain an incoming parent-plan reference when Resolve-ClonePlan preserves lineage before wrapper mutation; request behavior comes from Config fields.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "response body native value",
+          "description": "When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=false (Result presence conditional).",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "String",
+          "description": "local target path [computed]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; Config.TargetPath download completes.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Response",
+          "type": "provider response",
+          "description": "response body [provider-returned] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Url",
+          "type": "String",
+          "description": "final URL [computed]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Method",
+          "type": "String",
+          "description": "actual Config.Method [echoed-input]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "ResourceName",
+          "type": "String",
+          "description": "resolved resource [computed] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Success",
+          "type": "Boolean",
+          "description": "constant true after HTTP invocation [constant]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "StatusCode",
+          "type": "Int32",
+          "description": "HTTP status including non-2xx [provider-returned]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Headers",
+          "type": "object",
+          "description": "response headers [provider-returned] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "ElapsedMilliseconds",
+          "type": "Int64",
+          "description": "request stopwatch [measured]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "RestCondenser: Non-2xx can still return success Signal in status mode; check StatusCode explicitly. No live endpoint was called"
+      ]
+    },
+    {
+      "name": "Delete",
+      "whenToUse": "Choose the Delete-labeled REST activity for deletion, and set Plan.Config.Method to Delete for the actual HTTP verb. The activity label is validation context, while the core method comes from Config or local fallback.",
+      "description": "Identify a REST deletion operation.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "whenToUse": "Supply a Config object when using request options or TargetPath; the core checks Config presence before testing TargetPath. Omit only when no Config-based option is needed.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "whenToUse": "Supply a caller bearer token when Config.SkipBearerToken is true and initial automatic lookup is bypassed. If lookup is attempted but fails or returns empty, the wrapper stops before the core; a supplied token is not its failure fallback.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "whenToUse": "Supply request body content for the body branch; truthy non-string values are serialized to JSON before the request, while false or zero bypass that conversion. Omit for bodyless requests or GET TargetPath mode.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave Body absent. The core rejects target-file mode when a request body option is present, even for a Get-labeled activity.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "whenToUse": "Set the request content type when the body or source-file handling needs it. This is a Config option read by the REST core.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "whenToUse": "Supply multipart form fields for the Form request branch; file-valued form fields are read from disk. Omit when using Body, SourcePath or target-file GET handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave Form absent. The core rejects target-file mode with any Form request option.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "whenToUse": "On an authentication or host retry, configured headers are selected instead of the current local headers fallback; they are not merged by the resolver. A bearer token can subsequently overwrite Authorization in the selected headers.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "whenToUse": "Supply initial caller headers when needed; the first core request resolves Config.Headers with an empty local header object fallback.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "whenToUse": "Supply caller headers before storage-specific headers are considered. The wrapper can generate storage headers and add them to a cloned Plan.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "whenToUse": "Supply the token-cache host and bearer-token acquisition address when automatic token resolution is used. Omit only when that path is skipped or not required.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "whenToUse": "Set the actual HTTP verb for the core request. Activity labels validate catalog choice but do not select the method; the core has branch-specific local fallbacks when Method is absent.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "When using TargetPath, set Method to Get. The core validates actual Config.Method as Get regardless of the declared activity label.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "whenToUse": "Supply a query-string suffix when it is not already present in Config.Uri. The core appends it to the resolved URI before calling the HTTP method.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "whenToUse": "Set true when the wrapper should return the complete core result, including status metadata, rather than only Response. Omit or false for Response-only return.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "whenToUse": "For a bodyless request, set true when the core HTTP call should capture status and response headers. This is conditional on the request branch.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave ReturnHttpStatus false or absent. The core rejects target-file mode when status return is requested.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "whenToUse": "On an authentication or host failure retry, set SkipBearerToken to avoid resolving a fresh token. Omit or false to allow retry token resolution.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "whenToUse": "Set SkipBearerToken true to skip initial automatic bearer-token resolution. Omit or false to permit wrapper token lookup before the core call.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "whenToUse": "Supply a local input file for the source-file request branch when uploading content. The core reads this option from Config.SourcePath.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave SourcePath absent. The core rejects target-file mode when an input file is also configured.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "whenToUse": "Supply a nonempty absolute output-file path only for an actual GET request without ReturnHttpStatus, SourcePath, Body or Form. The core writes through a temporary path before the final target.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "whenToUse": "Supply the request URI so the wrapper can determine whether storage-specific headers apply. URI handling occurs before the cloned Plan reaches the core.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "whenToUse": "Supply the request URI for the core request; Querystring may be appended if not already present. This address is used for the effectful HTTP call.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "whenToUse": "Retain an incoming parent-phase reference when Resolve-ClonePlan needs to preserve lineage before wrapper mutation; this is not a REST method selector.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "whenToUse": "Retain an incoming parent-plan reference when Resolve-ClonePlan preserves lineage before wrapper mutation; request behavior comes from Config fields.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "response body native value",
+          "description": "When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=false (Result presence conditional).",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "String",
+          "description": "local target path [computed]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; Config.TargetPath download completes.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Response",
+          "type": "provider response",
+          "description": "response body [provider-returned] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Url",
+          "type": "String",
+          "description": "final URL [computed]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Method",
+          "type": "String",
+          "description": "actual Config.Method [echoed-input]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "ResourceName",
+          "type": "String",
+          "description": "resolved resource [computed] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Success",
+          "type": "Boolean",
+          "description": "constant true after HTTP invocation [constant]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "StatusCode",
+          "type": "Int32",
+          "description": "HTTP status including non-2xx [provider-returned]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Headers",
+          "type": "object",
+          "description": "response headers [provider-returned] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "ElapsedMilliseconds",
+          "type": "Int64",
+          "description": "request stopwatch [measured]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "RestCondenser: Non-2xx can still return success Signal in status mode; check StatusCode explicitly. No live endpoint was called"
+      ]
+    },
+    {
+      "name": "Options",
+      "whenToUse": "Choose the Options-labeled REST activity for capability requests, and set Plan.Config.Method to Options for the actual HTTP verb. The core does not infer the method from this activity label.",
+      "description": "Identify a REST capability request.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether configuration exists before inspecting TargetPath presence.",
+          "whenToUse": "Supply a Config object when using request options or TargetPath; the core checks Config presence before testing TargetPath. Omit only when no Config-based option is needed.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.BearerToken",
+          "description": "Use a caller-supplied bearer token only when initial automatic token resolution was skipped.",
+          "whenToUse": "Supply a caller bearer token when Config.SkipBearerToken is true and initial automatic lookup is bypassed. If lookup is attempted but fails or returns empty, the wrapper stops before the core; a supplied token is not its failure fallback.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Supply request content, serialized to JSON when needed.",
+          "whenToUse": "Supply request body content for the body branch; truthy non-string values are serialized to JSON before the request, while false or zero bypass that conversion. Omit for bodyless requests or GET TargetPath mode.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Body",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave Body absent. The core rejects target-file mode when a request body option is present, even for a Get-labeled activity.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Supply the content type used with request body or source-file handling.",
+          "whenToUse": "Set the request content type when the body or source-file handling needs it. This is a Config option read by the REST core.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Provide multipart form fields; file-valued fields are loaded from disk.",
+          "whenToUse": "Supply multipart form fields for the Form request branch; file-valued form fields are read from disk. Omit when using Body, SourcePath or target-file GET handling.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Form",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave Form absent. The core rejects target-file mode with any Form request option.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers using the current local headers as fallback on a retry.",
+          "whenToUse": "On an authentication or host retry, configured headers are selected instead of the current local headers fallback; they are not merged by the resolver. A bearer token can subsequently overwrite Authorization in the selected headers.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {
+              "expression": "$headers",
+              "representation": "powershell-expression"
+            }
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Resolve inherited caller headers with an empty-object fallback on the first request attempt.",
+          "whenToUse": "Supply initial caller headers when needed; the first core request resolves Config.Headers with an empty local header object fallback.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": {}
+          }
+        },
+        {
+          "path": "Config.Headers",
+          "description": "Use caller-provided headers before considering generated storage headers.",
+          "whenToUse": "Supply caller headers before storage-specific headers are considered. The wrapper can generate storage headers and add them to a cloned Plan.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Host",
+          "description": "Identify the token-cache host and bearer-token acquisition address.",
+          "whenToUse": "Supply the token-cache host and bearer-token acquisition address when automatic token resolution is used. Omit only when that path is skipped or not required.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Method",
+          "description": "Choose the HTTP method; subsequent method-specific local fallbacks are not resolver defaults.",
+          "whenToUse": "Set the actual HTTP verb for the core request. Activity labels validate catalog choice but do not select the method; the core has branch-specific local fallbacks when Method is absent.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.Method",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "When using TargetPath, set Method to Get. The core validates actual Config.Method as Get regardless of the declared activity label.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Querystring",
+          "description": "Append the configured query string when not already present in the URI.",
+          "whenToUse": "Supply a query-string suffix when it is not already present in Config.Uri. The core appends it to the resolved URI before calling the HTTP method.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": ""
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Choose whether the adapter returns the complete core result or only its Response.",
+          "whenToUse": "Set true when the wrapper should return the complete core result, including status metadata, rather than only Response. Omit or false for Response-only return.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Request an HTTP status result for a bodyless request.",
+          "whenToUse": "For a bodyless request, set true when the core HTTP call should capture status and response headers. This is conditional on the request branch.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave ReturnHttpStatus false or absent. The core rejects target-file mode when status return is requested.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Decide whether to resolve a fresh token after an authentication or host failure.",
+          "whenToUse": "On an authentication or host failure retry, set SkipBearerToken to avoid resolving a fresh token. Omit or false to allow retry token resolution.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SkipBearerToken",
+          "description": "Skip initial bearer-token resolution when true.",
+          "whenToUse": "Set SkipBearerToken true to skip initial automatic bearer-token resolution. Omit or false to permit wrapper token lookup before the core call.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": false
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Provide an input file path for the request.",
+          "whenToUse": "Supply a local input file for the source-file request branch when uploading content. The core reads this option from Config.SourcePath.",
+          "adapters": [
+            "RestCondenser"
+          ],
+          "default": {
+            "RestCondenser": null
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Validate that target-file mode is a GET without status or request-body options.",
+          "whenToUse": "If TargetPath is supplied, leave SourcePath absent. The core rejects target-file mode when an input file is also configured.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Validate the optional absolute output-file path for a GET response.",
+          "whenToUse": "Supply a nonempty absolute output-file path only for an actual GET request without ReturnHttpStatus, SourcePath, Body or Form. The core writes through a temporary path before the final target.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Determine whether storage-specific headers should be generated.",
+          "whenToUse": "Supply the request URI so the wrapper can determine whether storage-specific headers apply. URI handling occurs before the cloned Plan reaches the core.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Config.Uri",
+          "description": "Supply the request URI before query-string composition.",
+          "whenToUse": "Supply the request URI for the core request; Querystring may be appended if not already present. This address is used for the effectful HTTP call.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve the parent-phase reference while cloning.",
+          "whenToUse": "Retain an incoming parent-phase reference when Resolve-ClonePlan needs to preserve lineage before wrapper mutation; this is not a REST method selector.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve the parent-plan reference while cloning.",
+          "whenToUse": "Retain an incoming parent-plan reference when Resolve-ClonePlan preserves lineage before wrapper mutation; request behavior comes from Config fields.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "response body native value",
+          "description": "When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=false (Result presence conditional).",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "String",
+          "description": "local target path [computed]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; Config.TargetPath download completes.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Response",
+          "type": "provider response",
+          "description": "response body [provider-returned] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Url",
+          "type": "String",
+          "description": "final URL [computed]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Method",
+          "type": "String",
+          "description": "actual Config.Method [echoed-input]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "ResourceName",
+          "type": "String",
+          "description": "resolved resource [computed] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Success",
+          "type": "Boolean",
+          "description": "constant true after HTTP invocation [constant]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "StatusCode",
+          "type": "Int32",
+          "description": "HTTP status including non-2xx [provider-returned]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "Headers",
+          "type": "object",
+          "description": "response headers [provider-returned] (conditional). When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        },
+        {
+          "path": "ElapsedMilliseconds",
+          "type": "Int64",
+          "description": "request stopwatch [measured]. When Config.Method selects actual HTTP method; activity name is validated but is not method selection; HTTP call returns and ReturnHttpStatus=true.",
+          "adapters": [
+            "RestCondenser"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "RestCondenser: Non-2xx can still return success Signal in status mode; check StatusCode explicitly. No live endpoint was called"
+      ]
+    }
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Condensers/RestCondenser.json","version":1}
+}

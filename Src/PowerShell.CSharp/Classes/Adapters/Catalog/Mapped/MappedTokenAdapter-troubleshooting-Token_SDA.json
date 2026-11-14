@@ -1,0 +1,331 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedTokenAdapter",
+  "mappedAdapter": "MappedTokenAdapter",
+  "part": "Token_SDA",
+  "sources": [
+    {
+      "id": "sda-module",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Token_SDA.psm1",
+      "sha256": "50E786591DAA86D543ADC4E261F2562FA2F6368382750E0F310B9D386968890E",
+      "symbol": "Token_SDA"
+    },
+    {
+      "id": "sda-helper",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Token/SDA/PowerShell/Invoke-TokenSDA.ps1",
+      "sha256": "217AF8DA9A9FE8CE1C1F4CD5176AC0912319BF8237C2F92E5E00E6C27487CE64",
+      "symbol": "Invoke-TokenSDA"
+    }
+  ],
+  "entries": [
+    {
+      "id": "token-sda-invalid-path",
+      "status": "source-verified",
+      "adapters": [
+        "Token_SDA"
+      ],
+      "activities": [
+        "Get"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Invalid SDA path: '",
+          "suffix": "'",
+          "evidence": [
+            {
+              "sourceId": "sda-helper",
+              "startLine": 21,
+              "endLine": 21
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Nonblank forwarded SDA path splits into fewer than three period segments.",
+        "evidence": [
+          {
+            "sourceId": "sda-helper",
+            "startLine": 12,
+            "endLine": 23
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Nonblank forwarded SDA path splits into fewer than three period segments.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sda-helper",
+              "startLine": 12,
+              "endLine": 23
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect segment count and canonical SDA first key; redact path.",
+          "expected": "Redacted flags identify this source guard without token value, graph, environment or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "sda-helper",
+              "startLine": 12,
+              "endLine": 23
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan or construction input proposal only; no token/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use intended SDA.<handler>.<operation> path after checking supported handler; no SDA effect.",
+            "expected": "At least three segments; handler/result separate.",
+            "evidence": [
+              {
+                "sourceId": "sda-helper",
+                "startLine": 12,
+                "endLine": 23
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, Get activity or exact message/pattern differs.",
+          "Effective path, registration, selected scope or owner cannot be established with redacted metadata.",
+          "Proposed action would reveal token value/name, graph, credentials, SDA content or execute provider/storage/enrollment effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "At least three segments; handler/result separate.",
+          "expected": "Local guard would be false; token/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "sda-helper",
+              "startLine": 12,
+              "endLine": 23
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude token path/key/value, Plan/Config/Signal/graph/Jacket/Conductor, environment name/value, storage or SDA identity/content, credentials and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no token/SDA/storage/environment/provider/runtime execution.",
+        "A passed local guard, warning or Result presence does not establish token value, absence or safe retry."
+      ]
+    },
+    {
+      "id": "token-sda-handler-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Token_SDA"
+      ],
+      "activities": [
+        "Get"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Formatter handler '",
+          "suffix": "' not found.",
+          "evidence": [
+            {
+              "sourceId": "sda-helper",
+              "startLine": 29,
+              "endLine": 29
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "SDA second segment names Invoke-SDA<key>, and Get-Command finds no such handler.",
+        "evidence": [
+          {
+            "sourceId": "sda-helper",
+            "startLine": 24,
+            "endLine": 31
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "SDA second segment names Invoke-SDA<key>, and Get-Command finds no such handler.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sda-helper",
+              "startLine": 24,
+              "endLine": 31
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect derived SDA handler command presence only; redact path/key.",
+          "expected": "Redacted flags identify this source guard without token value, graph, environment or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "sda-helper",
+              "startLine": 24,
+              "endLine": 31
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no token, Signal, graph, environment, SDA, storage or provider state change/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record SDA handler/registration owner handoff; do not invoke or enroll anything.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sda-helper",
+                "startLine": 24,
+                "endLine": 31
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, Get activity or exact message/pattern differs.",
+          "Effective path, registration, selected scope or owner cannot be established with redacted metadata.",
+          "Proposed action would reveal token value/name, graph, credentials, SDA content or execute provider/storage/enrollment effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; handler availability unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sda-helper",
+              "startLine": 24,
+              "endLine": 31
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude token path/key/value, Plan/Config/Signal/graph/Jacket/Conductor, environment name/value, storage or SDA identity/content, credentials and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no token/SDA/storage/environment/provider/runtime execution.",
+        "A passed local guard, warning or Result presence does not establish token value, absence or safe retry."
+      ]
+    },
+    {
+      "id": "token-sda-construct-null-dictionary",
+      "status": "source-verified",
+      "adapters": [
+        "Token_SDA"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot construct Token_SDA — provided dictionary is null.",
+          "evidence": [
+            {
+              "sourceId": "sda-module",
+              "startLine": 26,
+              "endLine": 26
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Token_SDA.Construct receives null dictionary before Jacket/Signal assignment.",
+        "evidence": [
+          {
+            "sourceId": "sda-module",
+            "startLine": 22,
+            "endLine": 28
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Token_SDA.Construct receives null dictionary before Jacket/Signal assignment.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sda-module",
+              "startLine": 22,
+              "endLine": 28
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Token_SDA concrete identity and construction dictionary-null flag; redact dictionary.",
+          "expected": "Redacted flags identify this source guard without token value, graph, environment or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "sda-module",
+              "startLine": 22,
+              "endLine": 28
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan or construction input proposal only; no token/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull construction dictionary through owning registration/Jacket plan.",
+            "expected": "Dictionary nonnull; concrete Get and provider effects separate.",
+            "evidence": [
+              {
+                "sourceId": "sda-module",
+                "startLine": 22,
+                "endLine": 28
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, Get activity or exact message/pattern differs.",
+          "Effective path, registration, selected scope or owner cannot be established with redacted metadata.",
+          "Proposed action would reveal token value/name, graph, credentials, SDA content or execute provider/storage/enrollment effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Dictionary nonnull; concrete Get and provider effects separate.",
+          "expected": "Local guard would be false; token/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "sda-module",
+              "startLine": 22,
+              "endLine": 28
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude token path/key/value, Plan/Config/Signal/graph/Jacket/Conductor, environment name/value, storage or SDA identity/content, credentials and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no token/SDA/storage/environment/provider/runtime execution.",
+        "A passed local guard, warning or Result presence does not establish token value, absence or safe retry."
+      ]
+    }
+  ]
+}

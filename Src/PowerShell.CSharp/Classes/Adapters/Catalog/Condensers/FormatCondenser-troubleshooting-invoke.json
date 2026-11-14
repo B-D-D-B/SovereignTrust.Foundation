@@ -1,0 +1,198 @@
+{
+  "version": 2,
+  "ownerId": "Condensers/FormatCondenser",
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "FormatCondenser",
+  "part": "invoke",
+  "sources": [
+    {
+      "id": "format",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/FormatCondenser.ps1",
+      "sha256": "2672C6E897AC29F5C6FE53A03CB0EDCF0E78F76A5930EF097A2D3F0FDCEC8376",
+      "symbol": "FormatCondenser"
+    }
+  ],
+  "entries": [
+    {
+      "id": "format-content-path-unavailable",
+      "status": "source-verified",
+      "adapters": [
+        "FormatCondenser"
+      ],
+      "activities": [
+        "Json",
+        "JsonArray",
+        "Xml",
+        "Text"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Failed to resolve content at path: ",
+          "suffix": "",
+          "evidence": [
+            {
+              "sourceId": "format",
+              "startLine": 53,
+              "endLine": 53
+            },
+            {
+              "sourceId": "format",
+              "startLine": 73,
+              "endLine": 73
+            },
+            {
+              "sourceId": "format",
+              "startLine": 93,
+              "endLine": 93
+            },
+            {
+              "sourceId": "format",
+              "startLine": 118,
+              "endLine": 118
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "One of the four declared activities fails to resolve ItemSignal content at DefaultPath, which current source sets to %.@.",
+        "evidence": [
+          {
+            "sourceId": "format",
+            "startLine": 47,
+            "endLine": 55
+          },
+          {
+            "sourceId": "format",
+            "startLine": 68,
+            "endLine": 75
+          },
+          {
+            "sourceId": "format",
+            "startLine": 88,
+            "endLine": 95
+          },
+          {
+            "sourceId": "format",
+            "startLine": 113,
+            "endLine": 120
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The selected ItemSignal does not resolve content at the current fixed %.@ default path.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "format",
+              "startLine": 47,
+              "endLine": 55
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the canonical activity and anchored log; inspect only ItemSignal %.@ presence/resolution flags, not content or the variable path text.",
+          "expected": "Source-branch and redacted type/presence/parse-status flags discriminate the documented pattern without exposing content or exception text.",
+          "evidence": [
+            {
+              "sourceId": "format",
+              "startLine": 47,
+              "endLine": 55
+            },
+            {
+              "sourceId": "format",
+              "startLine": 68,
+              "endLine": 75
+            },
+            {
+              "sourceId": "format",
+              "startLine": 88,
+              "endLine": 95
+            },
+            {
+              "sourceId": "format",
+              "startLine": 113,
+              "endLine": 120
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for the originating format input/Plan only after the cited guard is confirmed; do not execute provider/runtime work or store variable log text.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "If the intended content is absent at %.@, correct the originating ItemSignal/source mapping to provide it there; do not invent content or edit an unused Plan.Path.",
+            "expected": "The intended local input satisfies the confirmed guard; no live formatting result is claimed.",
+            "evidence": [
+              {
+                "sourceId": "format",
+                "startLine": 47,
+                "endLine": 55
+              },
+              {
+                "sourceId": "format",
+                "startLine": 68,
+                "endLine": 75
+              },
+              {
+                "sourceId": "format",
+                "startLine": 88,
+                "endLine": 95
+              },
+              {
+                "sourceId": "format",
+                "startLine": 113,
+                "endLine": 120
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The error matches only a broad wrapper without confirmed guard, source identity changed, or intended content/mode is unknown."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm the intended ItemSignal content resolves at %.@ before the activity helper runs.",
+          "expected": "The confirmed local source guard is false or parser accepts the intended content; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "format",
+              "startLine": 47,
+              "endLine": 55
+            },
+            {
+              "sourceId": "format",
+              "startLine": 68,
+              "endLine": 75
+            },
+            {
+              "sourceId": "format",
+              "startLine": 88,
+              "endLine": 95
+            },
+            {
+              "sourceId": "format",
+              "startLine": 113,
+              "endLine": 120
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full ItemSignal/Plan, JSON/XML/text content, path or file bytes, provider data, credentials and the variable middle of the error log; retain only canonical adapter/activity, pattern identity and presence/type/local parse-status flags.",
+      "limitations": [
+        "Source-only confidence; no runtime formatter/provider execution was performed.",
+        "The anchored pattern never captures or retains its variable middle segment.",
+        "Current source assigns DefaultPath=%.@; the pattern is retained for source-bound variable logging, not arbitrary path selection."
+      ]
+    }
+  ]
+}

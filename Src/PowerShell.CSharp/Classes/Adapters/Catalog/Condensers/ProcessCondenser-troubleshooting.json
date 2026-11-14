@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "ownerId": "Condensers/ProcessCondenser",
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "ProcessCondenser",
+  "sources": [
+    {"id":"process-class","repository":"SovereignTrust.Foundation","path":"Src/PowerShell/Classes/Adapters/Condenser/ProcessCondenser.ps1","sha256":"8A536819FBCB70A757527CE6834E329D58BF56B57704DAF1F8709D8B8CBD71C2","symbol":"ProcessCondenser"},
+    {"id":"process-core","repository":"SovereignTrust.Foundation","path":"Src/PowerShell/Utilities/Adapters/Condenser/Process/Invoke-ProcessCondenserCore.ps1","sha256":"EF8E19E783FAAC77F276C92842C4D4D44E4F4A5192AE6A108066E2AD3F9C5BE9","symbol":"Invoke-ProcessCondenserCore"}
+  ],
+  "entries": [],
+  "unverified": [
+    {"id":"process-wrapper-failure","reportedText":"Process invocation failed: <exception>","reason":"The class catch spans validation, start, timeout, stream limit and completed cleanup. The wrapper alone does not identify the safe recovery or child effect state.","neededEvidence":"Redacted validation/stage, child exit and cleanup state; no argument, binary or diagnostic content."},
+    {"id":"process-cleanup-uncertain","reportedText":"Process cleanup uncertain after <exception>: <exception>","reason":"A child or IO task may remain active after bounded cleanup; automatic retry or file use is unsafe.","neededEvidence":"Child/descendant liveness and owned file state, with process arguments and stream content redacted."}
+  ]
+}

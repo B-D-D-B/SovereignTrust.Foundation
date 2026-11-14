@@ -38,7 +38,14 @@ function Resolve-ModuleFromAdapter {
         }
 
         $modulePath = [string]$pathSignal.GetResult()
-        Import-Module -Name $modulePath -Force -ErrorAction Stop
+        $selection = Get-STWorkerSelection
+        if ($null -ne $selection) {
+            if ([IO.Path]::GetExtension($modulePath) -ne '.psd1') { throw 'ST_ENTRYPOINT: selected adapters require a guarded manifest.' }
+            Assert-STSelectedEntryPoint -Selection $selection -EntryPoint $modulePath
+            Assert-STFoundationSelection -Selection $selection -RequireLoaded
+            Import-Module -Name $modulePath -ErrorAction Stop
+            Assert-STFoundationSelection -Selection $selection -RequireLoaded
+        } else { Import-Module -Name $modulePath -Force -ErrorAction Stop }
 
         $opSignal.LogInformation("✅ Module imported from path: $modulePath")
         $opSignal.SetResult([pscustomobject]@{

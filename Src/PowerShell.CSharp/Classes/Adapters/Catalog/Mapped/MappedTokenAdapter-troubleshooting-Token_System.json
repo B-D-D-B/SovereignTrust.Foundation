@@ -1,0 +1,228 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedTokenAdapter",
+  "mappedAdapter": "MappedTokenAdapter",
+  "part": "Token_System",
+  "sources": [
+    {
+      "id": "system-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_System.ps1",
+      "sha256": "431B6A8E15E1AA59A86CED2F9DBFD453F3E5E42DBDC8F31F1099B8CCC2D81CCE",
+      "symbol": "Token_System"
+    },
+    {
+      "id": "system-helper",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenSystem.ps1",
+      "sha256": "44F4EBE6D3D79B930CC97113EA4CC6B89F1ACEA7B7872F1C792F49DE1914AADA",
+      "symbol": "Invoke-TokenSystem"
+    }
+  ],
+  "entries": [
+    {
+      "id": "token-system-value-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Token_System"
+      ],
+      "activities": [
+        "Get"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Environment variable not found for key: ",
+          "suffix": "",
+          "evidence": [
+            {
+              "sourceId": "system-helper",
+              "startLine": 61,
+              "endLine": 61
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "System helper actually strips Environment prefix and queries environment scopes; all selected scope lookups return null, not empty string.",
+        "evidence": [
+          {
+            "sourceId": "system-helper",
+            "startLine": 22,
+            "endLine": 62
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "System helper actually strips Environment prefix and queries environment scopes; all selected scope lookups return null, not empty string.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "system-helper",
+              "startLine": 22,
+              "endLine": 62
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect effective prefix/scope and null-versus-empty flags; redact variable name/value.",
+          "expected": "Redacted flags identify this source guard without token value, graph, environment or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "system-helper",
+              "startLine": 22,
+              "endLine": 62
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no token, Signal, graph, environment, SDA, storage or provider state change/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record helper-prefix/environment owner handoff; do not assert System path fix or write variables.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "system-helper",
+                "startLine": 22,
+                "endLine": 62
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, Get activity or exact message/pattern differs.",
+          "Effective path, registration, selected scope or owner cannot be established with redacted metadata.",
+          "Proposed action would reveal token value/name, graph, credentials, SDA content or execute provider/storage/enrollment effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; value unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "system-helper",
+              "startLine": 22,
+              "endLine": 62
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude token path/key/value, Plan/Config/Signal/graph/Jacket/Conductor, environment name/value, storage or SDA identity/content, credentials and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no token/SDA/storage/environment/provider/runtime execution.",
+        "A passed local guard, warning or Result presence does not establish token value, absence or safe retry."
+      ]
+    },
+    {
+      "id": "token-system-construct-null-dictionary",
+      "status": "source-verified",
+      "adapters": [
+        "Token_System"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot construct Token_System — provided dictionary is null.",
+          "evidence": [
+            {
+              "sourceId": "system-class",
+              "startLine": 34,
+              "endLine": 34
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Token_System.Construct receives null dictionary before Jacket/Signal assignment.",
+        "evidence": [
+          {
+            "sourceId": "system-class",
+            "startLine": 30,
+            "endLine": 36
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Token_System.Construct receives null dictionary before Jacket/Signal assignment.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "system-class",
+              "startLine": 30,
+              "endLine": 36
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Token_System concrete identity and construction dictionary-null flag; redact dictionary.",
+          "expected": "Redacted flags identify this source guard without token value, graph, environment or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "system-class",
+              "startLine": 30,
+              "endLine": 36
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan or construction input proposal only; no token/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull construction dictionary through owning registration/Jacket plan.",
+            "expected": "Dictionary nonnull; concrete Get and provider effects separate.",
+            "evidence": [
+              {
+                "sourceId": "system-class",
+                "startLine": 30,
+                "endLine": 36
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, Get activity or exact message/pattern differs.",
+          "Effective path, registration, selected scope or owner cannot be established with redacted metadata.",
+          "Proposed action would reveal token value/name, graph, credentials, SDA content or execute provider/storage/enrollment effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Dictionary nonnull; concrete Get and provider effects separate.",
+          "expected": "Local guard would be false; token/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "system-class",
+              "startLine": 30,
+              "endLine": 36
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude token path/key/value, Plan/Config/Signal/graph/Jacket/Conductor, environment name/value, storage or SDA identity/content, credentials and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no token/SDA/storage/environment/provider/runtime execution.",
+        "A passed local guard, warning or Result presence does not establish token value, absence or safe retry."
+      ]
+    }
+  ]
+}

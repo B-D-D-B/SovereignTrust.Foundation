@@ -1,0 +1,1193 @@
+{
+  "version": 1,
+  "ownerId": "Condensers/FabCondenser",
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "FabCondenser",
+  "sources": [
+    {
+      "id": "fab",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/FabCondenser.ps1",
+      "sha256": "920B307273435EB2400EA62E2676AD0B392F355B8E4B3C139B21541EF7686830",
+      "symbol": "FabCondenser"
+    },
+    {
+      "id": "register",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Register-AdapterToMappedSlot.ps1",
+      "sha256": "0E3C811A1CF710A149EF93F96D3E9657459112A85CF9A85EE3D61EE939439B67",
+      "symbol": "Register-AdapterToMappedSlot"
+    },
+    {
+      "id": "eager",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Resolve-AdaptersFromJacket.ps1",
+      "sha256": "AEAC662D1597F844786E366E6A36423C2796C76723415AC360492BE9B558DE68",
+      "symbol": "Resolve-AdapterFromJacket"
+    }
+  ],
+  "entries": [
+    {
+      "id": "invoke-source-identity-inconsistent",
+      "status": "source-verified",
+      "adapters": [
+        "FabCondenser"
+      ],
+      "activities": [
+        "Invoke"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Selected source jacket has no consistent Kind, Slot and VirtualPath.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 64,
+              "endLine": 64
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "The selected source VirtualPath lacks the required components or a nonblank Kind/Slot contradicts its encoded positions.",
+        "evidence": [
+          {
+            "sourceId": "fab",
+            "startLine": 55,
+            "endLine": 66
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The source jacket identity fields are missing or inconsistent before registration.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 55,
+              "endLine": 66
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only VirtualPath component count and nonblank/equality flags for source Kind/Slot versus encoded positions; do not print values.",
+          "expected": "Redacted identity/guard flags distinguish this source branch without dumping jacket, graph or module contents.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 55,
+              "endLine": 66
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal at the originating Fab source/Plan or its named owner only; never auto-retry registration or resolution after partial state.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Correct the originating source jacket mapping so intended Kind and Slot agree with VirtualPath; do not fabricate identifiers or register until verified.",
+            "expected": "The intended local identity/configuration satisfies the cited guard; no runtime state repair is inferred.",
+            "evidence": [
+              {
+                "sourceId": "fab",
+                "startLine": 55,
+                "endLine": 66
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Source/registration ownership or intended identity is unknown, source hash changed, or the observed message differs.",
+          "Existing partial registration/cache state is present; seek owner recovery before any retry."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm VirtualPath has required components and optional Kind/Slot match its encoded positions before Invoke registration.",
+          "expected": "The cited guard is false for the intended local metadata; adapter resolution/runtime behavior remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 55,
+              "endLine": 66
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Jacket/Plan/Signal/Graph, VirtualPath, Kind/Slot values, module path/content, credentials, exception text and all pattern middle segments; retain only canonical adapter/activity, exact/pattern identity and presence/type/equality/membership flags.",
+      "limitations": [
+        "Source-only confidence; no adapter construction, provider or runtime operation was executed.",
+        "Fab can retain partial registration or cached resolution; this documentation is not authority to retry or repair live state.",
+        "The selected source object may be nested in Signals; current source unwraps it before this guard."
+      ]
+    },
+    {
+      "id": "invoke-eager-jacket-virtualpath-unavailable",
+      "status": "source-verified",
+      "adapters": [
+        "FabCondenser"
+      ],
+      "activities": [
+        "Invoke"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Jacket is missing a valid VirtualPath.",
+          "evidence": [
+            {
+              "sourceId": "eager",
+              "startLine": 21,
+              "endLine": 21
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Eager mode calls Resolve-AdapterFromJacket and its @.VirtualPath lookup on the selected jacket fails.",
+        "evidence": [
+          {
+            "sourceId": "fab",
+            "startLine": 109,
+            "endLine": 117
+          },
+          {
+            "sourceId": "eager",
+            "startLine": 17,
+            "endLine": 23
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The eager resolver cannot access the intended VirtualPath through the passed jacket shape.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 109,
+              "endLine": 117
+            },
+            {
+              "sourceId": "eager",
+              "startLine": 17,
+              "endLine": 23
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm Eager mode and exact helper log; inspect only @.VirtualPath resolution success/presence and source-jacket identity flags.",
+          "expected": "Redacted identity/guard flags distinguish this source branch without dumping jacket, graph or module contents.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 109,
+              "endLine": 117
+            },
+            {
+              "sourceId": "eager",
+              "startLine": 17,
+              "endLine": 23
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal at the originating Fab source/Plan or its named owner only; never auto-retry registration or resolution after partial state.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Correct the source jacket shape or originating VirtualPath mapping under its owner so the eager resolver can access the intended path; do not retry a partial registration.",
+            "expected": "The intended local identity/configuration satisfies the cited guard; no runtime state repair is inferred.",
+            "evidence": [
+              {
+                "sourceId": "fab",
+                "startLine": 109,
+                "endLine": 117
+              },
+              {
+                "sourceId": "eager",
+                "startLine": 17,
+                "endLine": 23
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Source/registration ownership or intended identity is unknown, source hash changed, or the observed message differs.",
+          "Existing partial registration/cache state is present; seek owner recovery before any retry."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm the eager helper @.VirtualPath lookup succeeds with the intended source identity.",
+          "expected": "The cited guard is false for the intended local metadata; adapter resolution/runtime behavior remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 109,
+              "endLine": 117
+            },
+            {
+              "sourceId": "eager",
+              "startLine": 17,
+              "endLine": 23
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Jacket/Plan/Signal/Graph, VirtualPath, Kind/Slot values, module path/content, credentials, exception text and all pattern middle segments; retain only canonical adapter/activity, exact/pattern identity and presence/type/equality/membership flags.",
+      "limitations": [
+        "Source-only confidence; no adapter construction, provider or runtime operation was executed.",
+        "Fab can retain partial registration or cached resolution; this documentation is not authority to retry or repair live state.",
+        "A successful preliminary Fab source check does not prove the eager helper can read the Signal-wrapped jacket path."
+      ]
+    },
+    {
+      "id": "invoke-eager-class-name-missing",
+      "status": "source-verified",
+      "adapters": [
+        "FabCondenser"
+      ],
+      "activities": [
+        "Invoke"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Class name missing in manifest.",
+          "evidence": [
+            {
+              "sourceId": "eager",
+              "startLine": 37,
+              "endLine": 37
+            },
+            {
+              "sourceId": "eager",
+              "startLine": 62,
+              "endLine": 62
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Eager resolver fails to resolve the class FullType from the selected module manifest graph.",
+        "evidence": [
+          {
+            "sourceId": "fab",
+            "startLine": 109,
+            "endLine": 117
+          },
+          {
+            "sourceId": "eager",
+            "startLine": 34,
+            "endLine": 38
+          },
+          {
+            "sourceId": "eager",
+            "startLine": 61,
+            "endLine": 63
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The selected module manifest graph does not provide the expected class type at its current lookup path.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 109,
+              "endLine": 117
+            },
+            {
+              "sourceId": "eager",
+              "startLine": 34,
+              "endLine": 38
+            },
+            {
+              "sourceId": "eager",
+              "startLine": 61,
+              "endLine": 63
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm Eager mode and the exact log; inspect only FullType resolution/presence flags for the selected manifest graph, not module content.",
+          "expected": "Redacted identity/guard flags distinguish this source branch without dumping jacket, graph or module contents.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 109,
+              "endLine": 117
+            },
+            {
+              "sourceId": "eager",
+              "startLine": 34,
+              "endLine": 38
+            },
+            {
+              "sourceId": "eager",
+              "startLine": 61,
+              "endLine": 63
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal at the originating Fab source/Plan or its named owner only; never auto-retry registration or resolution after partial state.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Have the selected module owner restore the intended FullType mapping in the approved manifest; stop if module/type ownership is unclear.",
+            "expected": "The intended local identity/configuration satisfies the cited guard; no runtime state repair is inferred.",
+            "evidence": [
+              {
+                "sourceId": "fab",
+                "startLine": 109,
+                "endLine": 117
+              },
+              {
+                "sourceId": "eager",
+                "startLine": 34,
+                "endLine": 38
+              },
+              {
+                "sourceId": "eager",
+                "startLine": 61,
+                "endLine": 63
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Source/registration ownership or intended identity is unknown, source hash changed, or the observed message differs.",
+          "Existing partial registration/cache state is present; seek owner recovery before any retry."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm both current class-type lookups have a result before eager instance creation.",
+          "expected": "The cited guard is false for the intended local metadata; adapter resolution/runtime behavior remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 109,
+              "endLine": 117
+            },
+            {
+              "sourceId": "eager",
+              "startLine": 34,
+              "endLine": 38
+            },
+            {
+              "sourceId": "eager",
+              "startLine": 61,
+              "endLine": 63
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Jacket/Plan/Signal/Graph, VirtualPath, Kind/Slot values, module path/content, credentials, exception text and all pattern middle segments; retain only canonical adapter/activity, exact/pattern identity and presence/type/equality/membership flags.",
+      "limitations": [
+        "Source-only confidence; no adapter construction, provider or runtime operation was executed.",
+        "Fab can retain partial registration or cached resolution; this documentation is not authority to retry or repair live state.",
+        "This is module metadata validation; no type instantiation or provider effect was tested."
+      ]
+    },
+    {
+      "id": "invoke-kind-unresolvable",
+      "status": "source-verified",
+      "adapters": [
+        "FabCondenser"
+      ],
+      "activities": [
+        "Invoke"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Adapter does not contain a resolvable Kind or a valid VirtualPath.",
+          "evidence": [
+            {
+              "sourceId": "register",
+              "startLine": 84,
+              "endLine": 84
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Register-AdapterToMappedSlot cannot resolve Kind from the adapter/wrapped result or fallback VirtualPath.",
+        "evidence": [
+          {
+            "sourceId": "fab",
+            "startLine": 94,
+            "endLine": 130
+          },
+          {
+            "sourceId": "register",
+            "startLine": 49,
+            "endLine": 85
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The registration helper cannot find a nonblank Kind in the passed adapter metadata or encoded path.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 94,
+              "endLine": 130
+            },
+            {
+              "sourceId": "register",
+              "startLine": 49,
+              "endLine": 85
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only Kind and VirtualPath presence/shape flags across the helper candidate paths and passed Signal wrapper; do not print identifiers.",
+          "expected": "Redacted identity/guard flags distinguish this source branch without dumping jacket, graph or module contents.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 94,
+              "endLine": 130
+            },
+            {
+              "sourceId": "register",
+              "startLine": 49,
+              "endLine": 85
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal at the originating Fab source/Plan or its named owner only; never auto-retry registration or resolution after partial state.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Correct the originating adapter jacket Kind/VirtualPath mapping so the intended Kind is resolvable to the helper; do not register an invented Kind.",
+            "expected": "The intended local identity/configuration satisfies the cited guard; no runtime state repair is inferred.",
+            "evidence": [
+              {
+                "sourceId": "fab",
+                "startLine": 94,
+                "endLine": 130
+              },
+              {
+                "sourceId": "register",
+                "startLine": 49,
+                "endLine": 85
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Source/registration ownership or intended identity is unknown, source hash changed, or the observed message differs.",
+          "Existing partial registration/cache state is present; seek owner recovery before any retry."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm helper Kind resolution yields the intended nonblank value before mapped-slot registration.",
+          "expected": "The cited guard is false for the intended local metadata; adapter resolution/runtime behavior remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 94,
+              "endLine": 130
+            },
+            {
+              "sourceId": "register",
+              "startLine": 49,
+              "endLine": 85
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Jacket/Plan/Signal/Graph, VirtualPath, Kind/Slot values, module path/content, credentials, exception text and all pattern middle segments; retain only canonical adapter/activity, exact/pattern identity and presence/type/equality/membership flags.",
+      "limitations": [
+        "Source-only confidence; no adapter construction, provider or runtime operation was executed.",
+        "Fab can retain partial registration or cached resolution; this documentation is not authority to retry or repair live state.",
+        "The Fab class preliminary source check and shared helper inspect different wrappers; no runtime equivalence is assumed."
+      ]
+    },
+    {
+      "id": "invoke-slot-unresolvable",
+      "status": "source-verified",
+      "adapters": [
+        "FabCondenser"
+      ],
+      "activities": [
+        "Invoke"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Adapter does not contain a resolvable Slot or a valid VirtualPath.",
+          "evidence": [
+            {
+              "sourceId": "register",
+              "startLine": 89,
+              "endLine": 89
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Register-AdapterToMappedSlot cannot resolve Slot from the adapter/wrapped result or fallback VirtualPath.",
+        "evidence": [
+          {
+            "sourceId": "fab",
+            "startLine": 94,
+            "endLine": 130
+          },
+          {
+            "sourceId": "register",
+            "startLine": 59,
+            "endLine": 90
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The registration helper cannot find a nonblank Slot in the passed adapter metadata or encoded path.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 94,
+              "endLine": 130
+            },
+            {
+              "sourceId": "register",
+              "startLine": 59,
+              "endLine": 90
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only Slot and VirtualPath presence/shape flags across the helper candidate paths and passed Signal wrapper; do not print identifiers.",
+          "expected": "Redacted identity/guard flags distinguish this source branch without dumping jacket, graph or module contents.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 94,
+              "endLine": 130
+            },
+            {
+              "sourceId": "register",
+              "startLine": 59,
+              "endLine": 90
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal at the originating Fab source/Plan or its named owner only; never auto-retry registration or resolution after partial state.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Correct the originating adapter jacket Slot/VirtualPath mapping so the intended Slot is resolvable to the helper; do not register an invented Slot.",
+            "expected": "The intended local identity/configuration satisfies the cited guard; no runtime state repair is inferred.",
+            "evidence": [
+              {
+                "sourceId": "fab",
+                "startLine": 94,
+                "endLine": 130
+              },
+              {
+                "sourceId": "register",
+                "startLine": 59,
+                "endLine": 90
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Source/registration ownership or intended identity is unknown, source hash changed, or the observed message differs.",
+          "Existing partial registration/cache state is present; seek owner recovery before any retry."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm helper Slot resolution yields the intended nonblank value before mapped-slot registration.",
+          "expected": "The cited guard is false for the intended local metadata; adapter resolution/runtime behavior remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 94,
+              "endLine": 130
+            },
+            {
+              "sourceId": "register",
+              "startLine": 59,
+              "endLine": 90
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Jacket/Plan/Signal/Graph, VirtualPath, Kind/Slot values, module path/content, credentials, exception text and all pattern middle segments; retain only canonical adapter/activity, exact/pattern identity and presence/type/equality/membership flags.",
+      "limitations": [
+        "Source-only confidence; no adapter construction, provider or runtime operation was executed.",
+        "Fab can retain partial registration or cached resolution; this documentation is not authority to retry or repair live state.",
+        "The Fab class preliminary source check and shared helper inspect different wrappers; no runtime equivalence is assumed."
+      ]
+    },
+    {
+      "id": "observe-selectors-invalid",
+      "status": "source-verified",
+      "adapters": [
+        "FabCondenser"
+      ],
+      "activities": [
+        "ObserveMappedAdapter"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "ObserveMappedAdapter requires distinct, nonempty Kind, Slot and AbsentSlot.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 172,
+              "endLine": 172
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "ObserveMappedAdapter rejects blank, malformed or nondistinct Config.Kind, Config.Slot and Config.AbsentSlot before mapped resolution.",
+        "evidence": [
+          {
+            "sourceId": "fab",
+            "startLine": 165,
+            "endLine": 173
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "One or more observation selectors is missing, malformed or Slot equals AbsentSlot.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 165,
+              "endLine": 173
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only presence, allowed-character and Slot/AbsentSlot inequality flags; do not print selector values.",
+          "expected": "Redacted identity/guard flags distinguish this source branch without dumping jacket, graph or module contents.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 165,
+              "endLine": 173
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal at the originating Fab source/Plan or its named owner only; never auto-retry registration or resolution after partial state.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Correct the originating observation Plan to intended existing Kind/Slot and a distinct comparison AbsentSlot under their specified character rules.",
+            "expected": "The intended local identity/configuration satisfies the cited guard; no runtime state repair is inferred.",
+            "evidence": [
+              {
+                "sourceId": "fab",
+                "startLine": 165,
+                "endLine": 173
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Source/registration ownership or intended identity is unknown, source hash changed, or the observed message differs.",
+          "Existing partial registration/cache state is present; seek owner recovery before any retry."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm each selector is nonblank and valid, and Slot differs from AbsentSlot before observation.",
+          "expected": "The cited guard is false for the intended local metadata; adapter resolution/runtime behavior remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 165,
+              "endLine": 173
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Jacket/Plan/Signal/Graph, VirtualPath, Kind/Slot values, module path/content, credentials, exception text and all pattern middle segments; retain only canonical adapter/activity, exact/pattern identity and presence/type/equality/membership flags.",
+      "limitations": [
+        "Source-only confidence; no adapter construction, provider or runtime operation was executed.",
+        "Fab can retain partial registration or cached resolution; this documentation is not authority to retry or repair live state.",
+        "Observation can later resolve/cache an adapter; this guard occurs before that stage."
+      ]
+    },
+    {
+      "id": "observe-mapped-target-missing",
+      "status": "source-verified",
+      "adapters": [
+        "FabCondenser"
+      ],
+      "activities": [
+        "ObserveMappedAdapter"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Mapped",
+          "suffix": " is missing.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 178,
+              "endLine": 178
+            },
+            {
+              "sourceId": "fab",
+              "startLine": 188,
+              "endLine": 188
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Mapped kind path lookup fails or the selected mapped graph lacks Config.Slot; both source logs share this bounded suffix.",
+        "evidence": [
+          {
+            "sourceId": "fab",
+            "startLine": 176,
+            "endLine": 189
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The requested mapped kind or registered slot is absent from current Conductor graph state.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 176,
+              "endLine": 189
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the anchored log and inspect only mapped-kind path resolution and slot-membership flags in sequence, without retaining Kind/Slot text.",
+          "expected": "Redacted identity/guard flags distinguish this source branch without dumping jacket, graph or module contents.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 176,
+              "endLine": 189
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal at the originating Fab source/Plan or its named owner only; never auto-retry registration or resolution after partial state.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "If intended Kind is absent, correct Config.Kind to an existing mapped kind; if the mapped kind exists but Slot is absent, correct Config.Slot to an intended registered slot or seek its owner registration. Do not fabricate registration.",
+            "expected": "The intended local identity/configuration satisfies the cited guard; no runtime state repair is inferred.",
+            "evidence": [
+              {
+                "sourceId": "fab",
+                "startLine": 176,
+                "endLine": 189
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Source/registration ownership or intended identity is unknown, source hash changed, or the observed message differs.",
+          "Existing partial registration/cache state is present; seek owner recovery before any retry."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm mapped kind resolution and selected slot membership both succeed for intended values.",
+          "expected": "The cited guard is false for the intended local metadata; adapter resolution/runtime behavior remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 176,
+              "endLine": 189
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Jacket/Plan/Signal/Graph, VirtualPath, Kind/Slot values, module path/content, credentials, exception text and all pattern middle segments; retain only canonical adapter/activity, exact/pattern identity and presence/type/equality/membership flags.",
+      "limitations": [
+        "Source-only confidence; no adapter construction, provider or runtime operation was executed.",
+        "Fab can retain partial registration or cached resolution; this documentation is not authority to retry or repair live state.",
+        "The pattern groups two related missing-identity guards; a matched middle segment is transient and must not be interpreted as a field name."
+      ]
+    },
+    {
+      "id": "observe-mapped-graph-unavailable",
+      "status": "source-verified",
+      "adapters": [
+        "FabCondenser"
+      ],
+      "activities": [
+        "ObserveMappedAdapter"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Mapped",
+          "suffix": " graph is unavailable.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 184,
+              "endLine": 184
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "The resolved mapped container pointer is not a Graph or lacks its Grid.",
+        "evidence": [
+          {
+            "sourceId": "fab",
+            "startLine": 181,
+            "endLine": 185
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The requested mapped kind exists but its graph state is unavailable.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 181,
+              "endLine": 185
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm exact activity and anchored log; inspect only mapped pointer type and Grid-presence flags, not graph contents.",
+          "expected": "Redacted identity/guard flags distinguish this source branch without dumping jacket, graph or module contents.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 181,
+              "endLine": 185
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic handoff only for post-registration mapped state. The current source establishes the failed guard but no safe state repair or retry; stop before mutation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record only mapped pointer Graph-type and Grid-presence flags and hand the failure to the mapped-container owner; do not replace graph state or retry observation.",
+            "expected": "A redacted, source-cited owner handoff is ready; no graph/slot state change or guard clearance is claimed.",
+            "evidence": [
+              {
+                "sourceId": "fab",
+                "startLine": 181,
+                "endLine": 185
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Source/registration ownership or intended identity is unknown, source hash changed, or the observed message differs.",
+          "Existing partial registration/cache state is present; seek owner recovery before any retry."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "After separately authorized owner recovery, statically re-evaluate the cited guard; until then retain this entry as an unresolved state failure with no retry.",
+          "expected": "Current failure remains unresolved; any later guard clearance requires new owner recovery evidence and is not established here.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 181,
+              "endLine": 185
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Jacket/Plan/Signal/Graph, VirtualPath, Kind/Slot values, module path/content, credentials, exception text and all pattern middle segments; retain only canonical adapter/activity, exact/pattern identity and presence/type/equality/membership flags.",
+      "limitations": [
+        "Source-only confidence; no adapter construction, provider or runtime operation was executed.",
+        "Fab can retain partial registration or cached resolution; this documentation is not authority to retry or repair live state.",
+        "The log carries Kind text but no safe automatic graph repair follows from this source guard.",
+        "Safe mapped graph/slot recovery is not specified by the inspected source; this route is diagnostic-only."
+      ]
+    },
+    {
+      "id": "observe-slot-unregistered",
+      "status": "source-verified",
+      "adapters": [
+        "FabCondenser"
+      ],
+      "activities": [
+        "ObserveMappedAdapter"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Mapped",
+          "suffix": "' has no registration or instance.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 193,
+              "endLine": 193
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "The selected mapped graph contains Config.Slot but its signal is absent, not a Signal or has no result.",
+        "evidence": [
+          {
+            "sourceId": "fab",
+            "startLine": 187,
+            "endLine": 195
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The selected slot has no usable registration or instance result.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 187,
+              "endLine": 195
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm anchored log; inspect only slot membership, Signal type and HasResult flags, not slot contents.",
+          "expected": "Redacted identity/guard flags distinguish this source branch without dumping jacket, graph or module contents.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 187,
+              "endLine": 195
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic handoff only for post-registration mapped state. The current source establishes the failed guard but no safe state repair or retry; stop before mutation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record only selected slot membership, Signal-type and HasResult flags and hand the failure to the mapped-slot owner; do not fabricate an instance or retry observation.",
+            "expected": "A redacted, source-cited owner handoff is ready; no graph/slot state change or guard clearance is claimed.",
+            "evidence": [
+              {
+                "sourceId": "fab",
+                "startLine": 187,
+                "endLine": 195
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Source/registration ownership or intended identity is unknown, source hash changed, or the observed message differs.",
+          "Existing partial registration/cache state is present; seek owner recovery before any retry."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "After separately authorized owner recovery, statically re-evaluate the cited guard; until then retain this entry as an unresolved state failure with no retry.",
+          "expected": "Current failure remains unresolved; any later guard clearance requires new owner recovery evidence and is not established here.",
+          "evidence": [
+            {
+              "sourceId": "fab",
+              "startLine": 187,
+              "endLine": 195
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Jacket/Plan/Signal/Graph, VirtualPath, Kind/Slot values, module path/content, credentials, exception text and all pattern middle segments; retain only canonical adapter/activity, exact/pattern identity and presence/type/equality/membership flags.",
+      "limitations": [
+        "Source-only confidence; no adapter construction, provider or runtime operation was executed.",
+        "Fab can retain partial registration or cached resolution; this documentation is not authority to retry or repair live state.",
+        "The log carries Kind/Slot text but neither value is captured or retained.",
+        "Safe mapped graph/slot recovery is not specified by the inspected source; this route is diagnostic-only."
+      ]
+    }
+  ],
+  "unverified": [
+    {
+      "id": "invoke-partial-registration",
+      "reportedText": "Mapped registration has partial state; source identity attachment failed: <exception>",
+      "reason": "Fab has already attempted mapped registration; five distinct post-registration checks can throw and the wrapper interpolates exception text. Safe restoration/retry of partial graph state is not established.",
+      "neededEvidence": "Owner-approved state recovery and exact redacted guard/result evidence before any corrective route."
+    },
+    {
+      "id": "invoke-mapped-path",
+      "reportedText": "MappedAdapter path <path> not found in Conductor.",
+      "reason": "Shared registration helper interpolates a mapped path and serves more than one caller; exact selector provenance and safe graph correction need confirmation.",
+      "neededEvidence": "Redacted current Fab Invoke signal chain, mapped kind and owning Conductor graph contract."
+    },
+    {
+      "id": "invoke-mapped-container-null",
+      "reportedText": "MappedAdapter container at <path> is null.",
+      "reason": "Shared helper reports a variable mapped path and potentially inconsistent Conductor state; no safe local repair is established.",
+      "neededEvidence": "Approved mapped-container recovery contract and redacted path-membership evidence."
+    },
+    {
+      "id": "observe-source-identity",
+      "reportedText": "Mapped slot has no matching Fab source identity.",
+      "reason": "Direct source verifies the log, but correcting an already registered slot may alter shared graph state; no safe owner recovery contract is established.",
+      "neededEvidence": "Accepted source-identity repair protocol and current redacted slot/provenance equality flags."
+    },
+    {
+      "id": "observe-resolution-no-instance",
+      "reportedText": "Mapped adapter resolution returned no instance.",
+      "reason": "The child resolver and class can log this same broad outcome after different underlying failures; message alone does not support one correction.",
+      "neededEvidence": "Exact child Signal provenance and owning registration state."
+    },
+    {
+      "id": "observe-constructed-jacket",
+      "reportedText": "Resolved instance has no constructed jacket.",
+      "reason": "Post-resolution instance state is inconsistent; no safe correction or retry boundary is established.",
+      "neededEvidence": "Instance construction/jacket invariant and owner-approved recovery."
+    },
+    {
+      "id": "observe-lazy-cache-state",
+      "reportedText": "Lazy registration did not transition to the cached instance.",
+      "reason": "Cached registration state diverges after resolution; a local Plan edit alone cannot safely repair it.",
+      "neededEvidence": "Owner-approved cache/registration recovery and redacted State/reference-equality evidence."
+    },
+    {
+      "id": "observe-jacket-identity",
+      "reportedText": "Constructed jacket identity is missing or mismatched.",
+      "reason": "Post-resolution jacket identity differs from selected Kind/Slot; no safe live-state repair is established.",
+      "neededEvidence": "Source-to-instance identity correlation and owner-approved recovery."
+    },
+    {
+      "id": "observe-instance-type",
+      "reportedText": "Resolved instance type does not match the source-selected type.",
+      "reason": "Module/source type mismatch occurs after resolution; selected module ownership and safe recovery are not established.",
+      "neededEvidence": "Approved module/type mapping and redacted actual/expected type identity."
+    },
+    {
+      "id": "observe-module-root",
+      "reportedText": "Selected module manifest has no RootModule.",
+      "reason": "A selected manifest lacks RootModule after adapter resolution; correction belongs to the selected module owner and may require cache recovery.",
+      "neededEvidence": "Module owner contract, manifest identity and safe postresolution recovery."
+    },
+    {
+      "id": "observe-loaded-module",
+      "reportedText": "Loaded module identity is missing or ambiguous.",
+      "reason": "Current loaded module set/path is not a unique match after resolution; no safe module-state correction is established.",
+      "neededEvidence": "Module loader ownership, redacted path equality/count and safe cache recovery."
+    },
+    {
+      "id": "shared-helper-module-path",
+      "reportedText": "Could not resolve module path for <RelativePath> in slot <Slot>.",
+      "reason": "Shared module-root helper interpolates path/slot and serves multiple owners; no safe Fab-specific correction from the text alone.",
+      "neededEvidence": "Exact Fab observation signal-chain attribution and authorized module-root mapping."
+    },
+    {
+      "id": "eager-manifest-load",
+      "reportedText": "Failed to load manifest from WirePath: <wirePath>",
+      "reason": "Eager shared resolver logs a variable selected WirePath after a child failure; the text alone does not establish whether source mapping, module graph or loader state failed.",
+      "neededEvidence": "Redacted eager child Signal provenance and selected module-owner mapping."
+    },
+    {
+      "id": "eager-instantiation",
+      "reportedText": "Failed to instantiate type <type>: <exception>",
+      "reason": "Shared eager resolver can fail either New-Object or Resolve-type fallback with exception text; no safe type/module correction from this wrapper alone.",
+      "neededEvidence": "Exact selected type/module identity and owner-approved resolution contract."
+    },
+    {
+      "id": "eager-manifest-dictionary",
+      "reportedText": "Failed to extract Manifest dictionary from Graph.",
+      "reason": "Direct shared helper error occurs after graph loading, but the selected graph/result-shape ownership is unresolved for a local Fab correction.",
+      "neededEvidence": "Module graph/result-shape contract and redacted child Signal provenance."
+    },
+    {
+      "id": "eager-merge-service",
+      "reportedText": "MergeCondenser not available on ConductionContext.",
+      "reason": "Shared resolver cannot locate the merge service after eager type selection; graph setup belongs to another owner and safe repair is not established.",
+      "neededEvidence": "ConductionContext graph ownership and approved merge-service setup."
+    },
+    {
+      "id": "eager-merge-instance",
+      "reportedText": "MergeCondenser resolved without an invokable adapter instance.",
+      "reason": "Shared resolver finds a merge slot without an invokable instance; safe cached/graph state repair is not established.",
+      "neededEvidence": "Merge-slot instance contract and owner-approved recovery."
+    },
+    {
+      "id": "module-root-address",
+      "reportedText": "Could not resolve root address from adapter.",
+      "reason": "Shared module-root helper could not resolve storage roots and may be invoked by other owners; no safe Fab-specific correction from this message alone.",
+      "neededEvidence": "Selected ModuleRoots slot identity, storage-root owner contract and redacted child Signal provenance."
+    }
+  ]
+}

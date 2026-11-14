@@ -1,0 +1,2745 @@
+{
+  "version": 1,
+  "ownerId": "Condensers/PlanCondenser",
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "PlanCondenser",
+  "sources": [
+    {
+      "id": "plan-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/PlanCondenser.ps1",
+      "sha256": "34F0C02C6B334A93C1D63A95B8E86E8E221E7F65636F54E7461F6F2BAD5A8163",
+      "symbol": "PlanCondenser"
+    },
+    {
+      "id": "plan-iteration",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Plan/Invoke-PlanIteration.ps1",
+      "sha256": "3CF88F01B6BD75CC8D672F5B7DBA8B702C3794D83F17064AFE22AEF9BCAF716B",
+      "symbol": "Invoke-PlanIteration"
+    },
+    {
+      "id": "plan-phase",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Plan/Invoke-PlanPhase.ps1",
+      "sha256": "D45CF98C60656B8F531627264C48AA2A5EFAE462D4A51D84CF17D462FAFAF2DD",
+      "symbol": "Invoke-PlanPhase"
+    },
+    {
+      "id": "plan-complete",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Plan/Complete-PlanPhaseTask.ps1",
+      "sha256": "9CA368FB3521387D731AB657A8DB33156140AEBA219098FEADF2F2D0990E049A",
+      "symbol": "Complete-PlanPhaseTask"
+    },
+    {
+      "id": "plan-iteration-worker",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Plan/Invoke-PlanIterationWorker.ps1",
+      "sha256": "869A2E9CD9508EC05B390EAE09D04719C29F3C7D6D1442CDA9AFBA045DF709D6",
+      "symbol": "Invoke-PlanIterationWorker"
+    },
+    {
+      "id": "plan-phase-worker",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Plan/Invoke-PlanPhaseWorker.ps1",
+      "sha256": "B74B04A770A1F64FEB3C9E9E499309E361D2DDB3D2227B89FAC48138192E035C",
+      "symbol": "Invoke-PlanPhaseWorker"
+    }
+  ],
+  "entries": [
+    {
+      "id": "await-timeout-range",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "AwaitPhase",
+        "AwaitAllPhases"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Config.TimeoutMilliseconds must be a native Int32 or Int64 from 1 through 300000.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 187,
+              "endLine": 187
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "TimeoutMilliseconds is explicitly present and is not native Int32/Int64 or is outside 1..300000; absence uses zero (no timeout).",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 171,
+            "endLine": 190
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "An explicitly supplied timeout has invalid native type or range.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 171,
+              "endLine": 190
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only timeout presence, native type, integral/range flags; do not print task or Plan.",
+          "expected": "TimeoutMilliseconds is explicitly present and is not native Int32/Int64 or is outside 1..300000; absence uses zero (no timeout).",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 171,
+              "endLine": 190
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional operator proposal for the originating Plan or owning environment only; no automatic execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Set Config.TimeoutMilliseconds to a native Int32/Int64 from 1 through 300000, or omit it for the source zero default.",
+            "expected": "Confirm the effective present timeout is native and in range, or absent.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 171,
+                "endLine": 190
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the effective present timeout is native and in range, or absent.",
+          "expected": "The local source guard would be false; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 171,
+              "endLine": 190
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "iterate-filter-operator",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Plan.Config.FilterOperator must be And or Or.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 211,
+              "endLine": 211
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "IteratePhase resolver returns a FilterOperator that is not a string or whose trimmed value is neither And nor Or under case-insensitive -notin; missing uses And default.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 197,
+            "endLine": 214
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Configured FilterOperator is nonstring or unsupported after trimming.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 197,
+              "endLine": 214
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only FilterOperator resolver success, string-type and trimmed case-insensitive And/Or flags.",
+          "expected": "IteratePhase resolver returns a FilterOperator that is not a string or whose trimmed value is neither And nor Or under case-insensitive -notin; missing uses And default.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 197,
+              "endLine": 214
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional operator proposal for the originating Plan or owning environment only; no automatic execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use intended And or Or string, or omit the property for And default; case variants are accepted by this guard.",
+            "expected": "Confirm a string whose trimmed value is And/Or case-insensitively.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 197,
+                "endLine": 214
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm a string whose trimmed value is And/Or case-insensitively.",
+          "expected": "The local source guard would be false; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 197,
+              "endLine": 214
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "iterate-filter-criterion-shape",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Each Plan.Config.Filter criterion must be a Path|Default string.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 224,
+              "endLine": 224
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "A supplied Filter definition is not a string or does not contain exactly one pipe delimiter.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 215,
+            "endLine": 225
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "At least one Filter criterion fails required string/one-pipe shape.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 215,
+              "endLine": 225
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect criterion count and per-criterion string/pipe-count flags only; redact paths and defaults.",
+          "expected": "A supplied Filter definition is not a string or does not contain exactly one pipe delimiter.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 215,
+              "endLine": 225
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional operator proposal for the originating Plan or owning environment only; no automatic execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "For each intended criterion, use one Path|Default string with exactly one pipe; remove malformed criterion only if the filter semantics remain intended.",
+            "expected": "Confirm every selected criterion is string with exactly one pipe.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 215,
+                "endLine": 225
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm every selected criterion is string with exactly one pipe.",
+          "expected": "The local source guard would be false; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 215,
+              "endLine": 225
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "iterate-filter-criterion-content",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Each Plan.Config.Filter criterion needs a nonblank path and boolean default.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 231,
+              "endLine": 231
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "A shaped criterion has blank trimmed path or default text outside true/false under case-insensitive comparison.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 222,
+            "endLine": 234
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "A Filter criterion has no usable path or boolean default.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 222,
+              "endLine": 234
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only trimmed path nonblank and default-is-true/false flags for the failing criterion; redact actual path.",
+          "expected": "A shaped criterion has blank trimmed path or default text outside true/false under case-insensitive comparison.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 222,
+              "endLine": 234
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional operator proposal for the originating Plan or owning environment only; no automatic execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Provide intended nonblank path and true or false default after the single pipe; confirm intended fallback semantics.",
+            "expected": "Confirm trimmed path is nonblank and default is true/false case-insensitively.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 222,
+                "endLine": 234
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm trimmed path is nonblank and default is true/false case-insensitively.",
+          "expected": "The local source guard would be false; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 222,
+              "endLine": 234
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "iterate-threading-enabled-type",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Plan.Config.Threading.Enabled must be a boolean.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 257,
+              "endLine": 257
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Nonempty iteration array reaches native Boolean check and Config.Threading.Enabled result is not Boolean; missing uses false default.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 251,
+            "endLine": 260
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Explicit Enabled value has non-Boolean type.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 251,
+              "endLine": 260
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm iteration count positive and Enabled resolver result native-Boolean flag only.",
+          "expected": "Nonempty iteration array reaches native Boolean check and Config.Threading.Enabled result is not Boolean; missing uses false default.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 251,
+              "endLine": 260
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional operator proposal for the originating Plan or owning environment only; no automatic execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Set Config.Threading.Enabled to native Boolean or omit it for false serial default.",
+            "expected": "Confirm native Boolean result when iteration count is positive.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 251,
+                "endLine": 260
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm native Boolean result when iteration count is positive.",
+          "expected": "The local source guard would be false; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 251,
+              "endLine": 260
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "iterate-warmup-integer",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Plan.Config.Threading.Warmup must be an integer.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 275,
+              "endLine": 275
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Threading is enabled and [int] conversion of Warmup result throws; missing uses zero.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 268,
+            "endLine": 277
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Warmup cannot be converted to Int32.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 268,
+              "endLine": 277
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only Enabled flag, Warmup presence and Int32-conversion validity without retaining value.",
+          "expected": "Threading is enabled and [int] conversion of Warmup result throws; missing uses zero.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 268,
+              "endLine": 277
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional operator proposal for the originating Plan or owning environment only; no automatic execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use an intended Int32-convertible Warmup count or omit for zero; do not change parallel settings merely to suppress the error.",
+            "expected": "Confirm Warmup converts to Int32; range check remains separate.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 268,
+                "endLine": 277
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm Warmup converts to Int32; range check remains separate.",
+          "expected": "The local source guard would be false; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 268,
+              "endLine": 277
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "iterate-warmup-negative",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Plan.Config.Threading.Warmup cannot be less than 0.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 279,
+              "endLine": 279
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Threading is enabled, Warmup converts to Int32, and converted count is negative.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 268,
+            "endLine": 280
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Configured Warmup count is below zero.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 268,
+              "endLine": 280
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only Enabled, successful Int32 conversion and negative flag.",
+          "expected": "Threading is enabled, Warmup converts to Int32, and converted count is negative.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 268,
+              "endLine": 280
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional operator proposal for the originating Plan or owning environment only; no automatic execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Set intended Warmup count to zero or greater, bounded by the actual iteration count at line314.",
+            "expected": "Confirm converted Warmup is nonnegative.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 268,
+                "endLine": 280
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm converted Warmup is nonnegative.",
+          "expected": "The local source guard would be false; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 268,
+              "endLine": 280
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "iterate-threading-booleans",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "SupportParallelism, ReuseItemSignalGrid, and DebugInline must be booleans.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 295,
+              "endLine": 295
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Threading is enabled and at least one of environment SupportParallelism, Plan ReuseItemSignalGrid or Plan DebugInline results is not native Boolean.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 283,
+            "endLine": 298
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "One of three named threading setting results has non-Boolean type.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 283,
+              "endLine": 298
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect each named field source and native-Boolean type flag separately; redact environment and Plan contents.",
+          "expected": "Threading is enabled and at least one of environment SupportParallelism, Plan ReuseItemSignalGrid or Plan DebugInline results is not native Boolean.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 283,
+              "endLine": 298
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional operator proposal for the originating Plan or owning environment only; no automatic execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "For each identified invalid field, have its owning Plan/environment operator set native Boolean; do not enable parallelism solely to clear a type error.",
+            "expected": "Confirm all three named results are native Boolean.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 283,
+                "endLine": 298
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm all three named results are native Boolean.",
+          "expected": "The local source guard would be false; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 283,
+              "endLine": 298
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "iterate-thread-count-integer",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Threading MaxThreads and environment MaxParallelism must be integers.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 307,
+              "endLine": 307
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Threading is enabled and Int32 conversion of environment MaxParallelism or Plan MaxThreads throws; MaxThreads otherwise defaults from environment.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 299,
+            "endLine": 309
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "At least one of the two named thread limits cannot convert to Int32.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 299,
+              "endLine": 309
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect separate Int32-conversion flags for environment MaxParallelism and Plan MaxThreads/default provenance; redact values.",
+          "expected": "Threading is enabled and Int32 conversion of environment MaxParallelism or Plan MaxThreads throws; MaxThreads otherwise defaults from environment.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 299,
+              "endLine": 309
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional operator proposal for the originating Plan or owning environment only; no automatic execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Have the owning Plan/environment operator provide Int32-convertible intended limits; keep source Math.Max(1, MaxThreads) behavior distinct.",
+            "expected": "Confirm both limits convert to Int32; no parallel execution is implied.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 299,
+                "endLine": 309
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm both limits convert to Int32; no parallel execution is implied.",
+          "expected": "The local source guard would be false; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 299,
+              "endLine": 309
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "iterate-debug-index-integer",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Plan.Config.Threading.DebugWorkItemIndex must be an integer.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 322,
+              "endLine": 322
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Threading is enabled and Int32 conversion of DebugWorkItemIndex result throws; missing defaults to warmupCount.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 314,
+            "endLine": 323
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Explicit debug work-item index cannot convert to Int32.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 314,
+              "endLine": 323
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only field presence/default provenance and Int32-conversion flag.",
+          "expected": "Threading is enabled and Int32 conversion of DebugWorkItemIndex result throws; missing defaults to warmupCount.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 314,
+              "endLine": 323
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional operator proposal for the originating Plan or owning environment only; no automatic execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Set an intended Int32-convertible debug index, or omit it for warmupCount default; do not assume the index is in range.",
+            "expected": "Confirm Int32 conversion; actual work-item existence remains separate.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 314,
+                "endLine": 323
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm Int32 conversion; actual work-item existence remains separate.",
+          "expected": "The local source guard would be false; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 314,
+              "endLine": 323
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "iterate-parallel-environment-missing",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Parallel iteration requires Pointer.Grid.EnvironmentDetails.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 357,
+              "endLine": 357
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "After warmup/parallel decision, useParallel is true but resolved environmentDetails value is null.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 283,
+            "endLine": 358
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The parallel branch lacks a resolved EnvironmentDetails object.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 283,
+              "endLine": 358
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect useParallel decision and EnvironmentDetails resolver success/HasResult/null flags; redact environment contents.",
+          "expected": "After warmup/parallel decision, useParallel is true but resolved environmentDetails value is null.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 283,
+              "endLine": 358
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no environment/worker state repair or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted environment wiring evidence for its owner and stop; do not fabricate or mutate environment state, start a pool or retry.",
+            "expected": "Redacted handoff evidence is recorded; guard clearance is not claimed.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 283,
+                "endLine": 358
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Owner handoff is recorded; EnvironmentDetails guard clearance requires separately accepted environment evidence.",
+          "expected": "The handoff is complete; guard clearance remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 283,
+              "endLine": 358
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "async-environment-missing",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "InvokePhaseAsync"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "InvokePhaseAsync requires Pointer.Grid.EnvironmentDetails.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 464,
+              "endLine": 464
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Async branch environment resolver failed or has no Result after ResolveInsertPhaseSteps succeeded.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 456,
+            "endLine": 465
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Required Pointer.Grid.EnvironmentDetails is unavailable through the async resolver.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 456,
+              "endLine": 465
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only resolveSteps success and environment resolver Failure/HasResult flags; redact environment.",
+          "expected": "Async branch environment resolver failed or has no Result after ResolveInsertPhaseSteps succeeded.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 456,
+              "endLine": 465
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no environment/worker state repair or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted environment wiring evidence for its owner and stop before async task creation; no state repair/retry is asserted.",
+            "expected": "Redacted handoff evidence is recorded; guard clearance is not claimed.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 456,
+                "endLine": 465
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff is recorded; guard clearance requires separately accepted environment evidence.",
+          "expected": "The handoff is complete; guard clearance remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 456,
+              "endLine": 465
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "async-support-parallelism-type",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "InvokePhaseAsync"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Environment Config.SupportParallelism must be a boolean.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 470,
+              "endLine": 470
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Async environment is present but its Config.SupportParallelism result is not native Boolean; missing uses false default.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 462,
+            "endLine": 471
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Environment SupportParallelism has non-Boolean type.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 462,
+              "endLine": 471
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect environment presence and SupportParallelism native-Boolean flag, not environment content.",
+          "expected": "Async environment is present but its Config.SupportParallelism result is not native Boolean; missing uses false default.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 462,
+              "endLine": 471
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional operator proposal for the originating Plan or owning environment only; no automatic execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Have the environment owner set a native Boolean in the intended environment definition; do not turn it true solely to clear a type guard.",
+            "expected": "Confirm SupportParallelism is native Boolean; true-required guard remains separate.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 462,
+                "endLine": 471
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm SupportParallelism is native Boolean; true-required guard remains separate.",
+          "expected": "The local source guard would be false; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 462,
+              "endLine": 471
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "async-support-parallelism-required",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "InvokePhaseAsync"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "InvokePhaseAsync requires Environment Config.SupportParallelism to be true.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 474,
+              "endLine": 474
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Async environment SupportParallelism is native Boolean false (including absent default false).",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 467,
+            "endLine": 475
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Parallel phase execution is disabled in selected environment.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 467,
+              "endLine": 475
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only selected environment identity and native false/support flag; do not inspect task payload.",
+          "expected": "Async environment SupportParallelism is native Boolean false (including absent default false).",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 467,
+              "endLine": 475
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional operator proposal for the originating Plan or owning environment only; no automatic execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "If async execution is intended and the environment owner authorizes it, enable SupportParallelism in that environment; otherwise choose a serial supported activity outside this error response.",
+            "expected": "Confirm environment owner-approved native true flag before any separately authorized async execution.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 467,
+                "endLine": 475
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm environment owner-approved native true flag before any separately authorized async execution.",
+          "expected": "The local source guard would be false; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 467,
+              "endLine": 475
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "async-debug-inline-type",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "InvokePhaseAsync"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Config.DebugInline must be a boolean.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 492,
+              "endLine": 492
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Async Plan Config.DebugInline resolver result is not native Boolean; missing uses false.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 483,
+            "endLine": 493
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Explicit DebugInline value has wrong type.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 483,
+              "endLine": 493
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only DebugInline presence and native-Boolean flag.",
+          "expected": "Async Plan Config.DebugInline resolver result is not native Boolean; missing uses false.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 483,
+              "endLine": 493
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional operator proposal for the originating Plan or owning environment only; no automatic execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Set native Boolean DebugInline for intended mode or omit for false default.",
+            "expected": "Confirm native Boolean result.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 483,
+                "endLine": 493
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm native Boolean result.",
+          "expected": "The local source guard would be false; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 483,
+              "endLine": 493
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "async-max-background-integer",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "InvokePhaseAsync"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Config.MaxBackgroundPhases must be an integer.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 497,
+              "endLine": 497
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Async Plan MaxBackgroundPhases (defaulted from environment, then 4) fails Int32 conversion.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 483,
+            "endLine": 499
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Selected Plan or inherited environment max-background value cannot convert to Int32.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 483,
+              "endLine": 499
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Plan/environment default provenance and separate Int32-conversion flags; redact task/environment data.",
+          "expected": "Async Plan MaxBackgroundPhases (defaulted from environment, then 4) fails Int32 conversion.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 483,
+              "endLine": 499
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional operator proposal for the originating Plan or owning environment only; no automatic execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Have the owning Plan/environment operator supply an intended Int32-convertible MaxBackgroundPhases; keep positive check separate.",
+            "expected": "Confirm effective limit converts to Int32.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 483,
+                "endLine": 499
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm effective limit converts to Int32.",
+          "expected": "The local source guard would be false; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 483,
+              "endLine": 499
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "async-max-background-positive",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "InvokePhaseAsync"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Config.MaxBackgroundPhases must be greater than zero.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 501,
+              "endLine": 501
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Effective MaxBackgroundPhases converts to Int32 but is below one.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 483,
+            "endLine": 502
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Selected Plan or inherited environment limit is zero or negative.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 483,
+              "endLine": 502
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect default provenance and converted-positive flag only.",
+          "expected": "Effective MaxBackgroundPhases converts to Int32 but is below one.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 483,
+              "endLine": 502
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional operator proposal for the originating Plan or owning environment only; no automatic execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Set intended positive MaxBackgroundPhases in the owning Plan/environment configuration; capacity policy remains owner-controlled.",
+            "expected": "Confirm effective converted limit is at least one.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 483,
+                "endLine": 502
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm effective converted limit is at least one.",
+          "expected": "The local source guard would be false; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 483,
+              "endLine": 502
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "await-phase-task-id",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "AwaitPhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "AwaitPhase requires a task ID in Plan.Path.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 533,
+              "endLine": 533
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "AwaitPhase derives taskId from string Plan.Path or Plan.Path.TaskId, then finds it blank.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 530,
+            "endLine": 535
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The selected task ID is absent or whitespace.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 530,
+              "endLine": 535
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only Plan.Path shape and derived task ID nonblank flag, without printing ID.",
+          "expected": "AwaitPhase derives taskId from string Plan.Path or Plan.Path.TaskId, then finds it blank.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 530,
+              "endLine": 535
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional operator proposal for the originating Plan or owning environment only; no automatic execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use the intended task ID string in Plan.Path or Plan.Path.TaskId as source expects; do not guess or await a different task.",
+            "expected": "Confirm derived ID nonblank and tied to intended prior task record.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 530,
+                "endLine": 535
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm derived ID nonblank and tied to intended prior task record.",
+          "expected": "The local source guard would be false; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 530,
+              "endLine": 535
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "await-collision-action",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "AwaitPhase",
+        "AwaitAllPhases"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Config.ResultCollisionAction must be Error, PreserveParent, or OverwriteParent.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 540,
+              "endLine": 540
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 563,
+              "endLine": 563
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "AwaitPhase or AwaitAllPhases resolver result string is outside Error/PreserveParent/OverwriteParent under case-insensitive -notin; absence defaults Error.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 537,
+            "endLine": 564
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Explicit ResultCollisionAction is unsupported.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 537,
+              "endLine": 564
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect selected activity, resolver success and case-insensitive membership flag; redact task/results.",
+          "expected": "AwaitPhase or AwaitAllPhases resolver result string is outside Error/PreserveParent/OverwriteParent under case-insensitive -notin; absence defaults Error.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 537,
+              "endLine": 564
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional operator proposal for the originating Plan or owning environment only; no automatic execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Choose intended Error or PreserveParent; use OverwriteParent only with explicit parent-result owner approval, or omit for Error default.",
+            "expected": "Confirm effective action is one of three supported values case-insensitively.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 537,
+                "endLine": 564
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm effective action is one of three supported values case-insensitively.",
+          "expected": "The local source guard would be false; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 537,
+              "endLine": 564
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "insert-current-step-missing",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "InsertPhaseSteps"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Could not find the current plan step inside Phase.Steps.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 641,
+              "endLine": 641
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "ResolveInsertPhaseSteps succeeded, but no Phase.Steps item Name equals current Plan.Name in the loop.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 613,
+            "endLine": 642
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Current Plan.Name does not identify an item in resolved Phase.Steps.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 613,
+              "endLine": 642
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only current Name presence and equality-match count against Phase.Steps names; redact steps.",
+          "expected": "ResolveInsertPhaseSteps succeeded, but no Phase.Steps item Name equals current Plan.Name in the loop.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 613,
+              "endLine": 642
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional operator proposal for the originating Plan or owning environment only; no automatic execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Select the intended existing current step Name and Phase.Steps collection, or correct local naming consistency before insertion.",
+            "expected": "Confirm exactly the intended current step is found; insertion ordering remains separately checked.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 613,
+                "endLine": 642
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical PlanCondenser activity or exact message differs.",
+          "The effective input/environment owner or intended behavior cannot be confirmed from redacted metadata.",
+          "A proposed change would expose payload, mutate unrelated state, execute workers or call a provider."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm exactly the intended current step is found; insertion ordering remains separately checked.",
+          "expected": "The local source guard would be false; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 613,
+              "endLine": 642
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, task IDs, worker errors, phase content, environment payload, credentials and exception text; retain canonical activity, exact message, source identity and presence/type/range/result flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, task, runspace or provider execution.",
+        "Clearing this guard does not establish downstream worker or phase success."
+      ]
+    },
+    {
+      "id": "iterate-adapter-slot-missing",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Iteration plan Adapter '",
+          "suffix": "' does not contain a condenser slot.",
+          "evidence": [
+            {
+              "sourceId": "plan-iteration",
+              "startLine": 61,
+              "endLine": 61
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Iteration helper splits Plan.Adapter on dots and finds fewer than two parts or a blank second segment.",
+        "evidence": [
+          {
+            "sourceId": "plan-iteration",
+            "startLine": 61,
+            "endLine": 61
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Iteration helper splits Plan.Adapter on dots and finds fewer than two parts or a blank second segment.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-iteration",
+              "startLine": 61,
+              "endLine": 61
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Plan.Adapter segment count and second-segment nonblank flag only.",
+          "expected": "Redacted source guard metadata identifies this message; underlying worker/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "plan-iteration",
+              "startLine": 61,
+              "endLine": 61
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no worker/provider action, retry or state repair.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record canonical activity, redacted source guard and worker/task owner identity for the responsible owner; stop before any repair or retry.",
+            "expected": "Handoff evidence is recorded; guard clearance is not claimed.",
+            "evidence": [
+              {
+                "sourceId": "plan-iteration",
+                "startLine": 61,
+                "endLine": 61
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The selected worker/task owner or source guard cannot be identified.",
+          "A proposed fix requires runtime task, provider or source mutation without separate authority."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the owner handoff identifies this source guard without retaining variable message contents.",
+          "expected": "Handoff complete; runtime recovery remains unresolved.",
+          "evidence": [
+            {
+              "sourceId": "plan-iteration",
+              "startLine": 61,
+              "endLine": 61
+            }
+          ]
+        }
+      ],
+      "redaction": "Do not capture variable index, task ID, key, worker error, message middle, Plan, Signal graph, payload or credentials; retain only canonical selector, pattern identity and redacted guard flags.",
+      "limitations": [
+        "Source-only confidence; no runtime task/worker/provider execution.",
+        "A valid segment shape does not prove dispatch slot registration."
+      ]
+    },
+    {
+      "id": "await-completion-envelope-missing",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "AwaitPhase",
+        "AwaitAllPhases"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Background phase task '",
+          "suffix": "' did not return a completion envelope.",
+          "evidence": [
+            {
+              "sourceId": "plan-complete",
+              "startLine": 27,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Receive-STBackgroundTask succeeded with a Result but CompletionEnvelope is null.",
+        "evidence": [
+          {
+            "sourceId": "plan-complete",
+            "startLine": 27,
+            "endLine": 27
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Receive-STBackgroundTask succeeded with a Result but CompletionEnvelope is null.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-complete",
+              "startLine": 27,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect receive success/HasResult and envelope-null flags; redact task ID.",
+          "expected": "Redacted source guard metadata identifies this message; underlying worker/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "plan-complete",
+              "startLine": 27,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no worker/provider action, retry or state repair.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record canonical activity, redacted source guard and worker/task owner identity for the responsible owner; stop before any repair or retry.",
+            "expected": "Handoff evidence is recorded; guard clearance is not claimed.",
+            "evidence": [
+              {
+                "sourceId": "plan-complete",
+                "startLine": 27,
+                "endLine": 27
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The selected worker/task owner or source guard cannot be identified.",
+          "A proposed fix requires runtime task, provider or source mutation without separate authority."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the owner handoff identifies this source guard without retaining variable message contents.",
+          "expected": "Handoff complete; runtime recovery remains unresolved.",
+          "evidence": [
+            {
+              "sourceId": "plan-complete",
+              "startLine": 27,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "redaction": "Do not capture variable index, task ID, key, worker error, message middle, Plan, Signal graph, payload or credentials; retain only canonical selector, pattern identity and redacted guard flags.",
+      "limitations": [
+        "Source-only confidence; no runtime task/worker/provider execution.",
+        "Missing envelope requires background-task owner evidence."
+      ]
+    },
+    {
+      "id": "await-result-collision",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "AwaitPhase",
+        "AwaitAllPhases"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Cannot import background phase result '",
+          "suffix": "' because the parent graph already contains that key.",
+          "evidence": [
+            {
+              "sourceId": "plan-complete",
+              "startLine": 54,
+              "endLine": 54
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "CollisionAction is Error and parent graph already contains the exported key.",
+        "evidence": [
+          {
+            "sourceId": "plan-complete",
+            "startLine": 54,
+            "endLine": 54
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "CollisionAction is Error and parent graph already contains the exported key.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-complete",
+              "startLine": 54,
+              "endLine": 54
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect CollisionAction and key-exists flags only; do not retain key or result.",
+          "expected": "Redacted source guard metadata identifies this message; underlying worker/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "plan-complete",
+              "startLine": 54,
+              "endLine": 54
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no worker/provider action, retry or state repair.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record canonical activity, redacted source guard and worker/task owner identity for the responsible owner; stop before any repair or retry.",
+            "expected": "Handoff evidence is recorded; guard clearance is not claimed.",
+            "evidence": [
+              {
+                "sourceId": "plan-complete",
+                "startLine": 54,
+                "endLine": 54
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The selected worker/task owner or source guard cannot be identified.",
+          "A proposed fix requires runtime task, provider or source mutation without separate authority."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the owner handoff identifies this source guard without retaining variable message contents.",
+          "expected": "Handoff complete; runtime recovery remains unresolved.",
+          "evidence": [
+            {
+              "sourceId": "plan-complete",
+              "startLine": 54,
+              "endLine": 54
+            }
+          ]
+        }
+      ],
+      "redaction": "Do not capture variable index, task ID, key, worker error, message middle, Plan, Signal graph, payload or credentials; retain only canonical selector, pattern identity and redacted guard flags.",
+      "limitations": [
+        "Source-only confidence; no runtime task/worker/provider execution.",
+        "PreserveParent/OverwriteParent have different data semantics and require owner choice."
+      ]
+    },
+    {
+      "id": "iterate-item-graph-missing",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Iteration ItemSignal does not have a Graph pointer.",
+          "evidence": [
+            {
+              "sourceId": "plan-iteration",
+              "startLine": 50,
+              "endLine": 50
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Invoke-PlanIteration cloned plan and created iteration Signal, but ItemSignal.GetPointer() is not Graph.",
+        "evidence": [
+          {
+            "sourceId": "plan-iteration",
+            "startLine": 50,
+            "endLine": 50
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Invoke-PlanIteration cloned plan and created iteration Signal, but ItemSignal.GetPointer() is not Graph.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-iteration",
+              "startLine": 50,
+              "endLine": 50
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only ItemSignal pointer-is-Graph flag and iteration helper origin.",
+          "expected": "This exact guard is confirmed with redacted metadata.",
+          "evidence": [
+            {
+              "sourceId": "plan-iteration",
+              "startLine": 50,
+              "endLine": 50
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no graph/task repair or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted guard and source-owner evidence, then stop before state mutation.",
+            "expected": "Owner handoff recorded; guard clearance is not claimed.",
+            "evidence": [
+              {
+                "sourceId": "plan-iteration",
+                "startLine": 50,
+                "endLine": 50
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Source guard or owner cannot be verified.",
+          "A proposed graph/task change requires separate authority."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the handoff identifies this exact guard without content or IDs.",
+          "expected": "Handoff complete; runtime success remains unresolved.",
+          "evidence": [
+            {
+              "sourceId": "plan-iteration",
+              "startLine": 50,
+              "endLine": 50
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude graph, task ID, Plan/ItemSignal, payload, credentials and worker error; retain canonical selector, exact message and guard flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan/provider execution.",
+        "Graph pointer wiring needs its owner."
+      ]
+    },
+    {
+      "id": "await-item-graph-missing",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "AwaitPhase",
+        "AwaitAllPhases"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "AwaitPhase ItemSignal does not have a Graph pointer.",
+          "evidence": [
+            {
+              "sourceId": "plan-complete",
+              "startLine": 44,
+              "endLine": 44
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Completion envelope succeeded but parent ItemSignal.GetPointer() is not Graph.",
+        "evidence": [
+          {
+            "sourceId": "plan-complete",
+            "startLine": 44,
+            "endLine": 44
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Completion envelope succeeded but parent ItemSignal.GetPointer() is not Graph.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-complete",
+              "startLine": 44,
+              "endLine": 44
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only envelope success and parent pointer-is-Graph flag.",
+          "expected": "This exact guard is confirmed with redacted metadata.",
+          "evidence": [
+            {
+              "sourceId": "plan-complete",
+              "startLine": 44,
+              "endLine": 44
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no graph/task repair or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted guard and source-owner evidence, then stop before state mutation.",
+            "expected": "Owner handoff recorded; guard clearance is not claimed.",
+            "evidence": [
+              {
+                "sourceId": "plan-complete",
+                "startLine": 44,
+                "endLine": 44
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Source guard or owner cannot be verified.",
+          "A proposed graph/task change requires separate authority."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the handoff identifies this exact guard without content or IDs.",
+          "expected": "Handoff complete; runtime success remains unresolved.",
+          "evidence": [
+            {
+              "sourceId": "plan-complete",
+              "startLine": 44,
+              "endLine": 44
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude graph, task ID, Plan/ItemSignal, payload, credentials and worker error; retain canonical selector, exact message and guard flags only.",
+      "limitations": [
+        "Source-only confidence; no runtime plan/provider execution.",
+        "Graph pointer wiring needs its owner."
+      ]
+    },
+    {
+      "id": "invoke-phase-item-graph-missing",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "InvokePhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Phase execution failed: Phase ItemSignal does not have a Graph pointer.",
+          "evidence": [
+            {
+              "sourceId": "plan-phase",
+              "startLine": 26,
+              "endLine": 26
+            },
+            {
+              "sourceId": "plan-phase",
+              "startLine": 50,
+              "endLine": 50
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Invoke-PlanPhase child Generate succeeded, but ItemSignal pointer is not Graph; fixed throw is caught and logged by the same helper.",
+        "evidence": [
+          {
+            "sourceId": "plan-phase",
+            "startLine": 17,
+            "endLine": 50
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The phase ItemSignal lacks a Graph pointer after child Generate.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-phase",
+              "startLine": 26,
+              "endLine": 26
+            },
+            {
+              "sourceId": "plan-phase",
+              "startLine": 50,
+              "endLine": 50
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm exact assembled wrapper, InvokePhase context, child nonfailure and ItemSignal pointer-is-Graph flag; redact phase data.",
+          "expected": "Child Generate succeeded and Graph pointer check failed before export.",
+          "evidence": [
+            {
+              "sourceId": "plan-phase",
+              "startLine": 26,
+              "endLine": 26
+            },
+            {
+              "sourceId": "plan-phase",
+              "startLine": 50,
+              "endLine": 50
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Graph owner handoff only; no pointer mutation/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted pointer guard and graph owner identity for correction under separate authority.",
+            "expected": "Handoff recorded; pointer guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "plan-phase",
+                "startLine": 26,
+                "endLine": 26
+              },
+              {
+                "sourceId": "plan-phase",
+                "startLine": 50,
+                "endLine": 50
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Child failure or another exception produced a different wrapper.",
+          "Pointer origin cannot be attributed safely."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Verify handoff names pointer guard and no phase/payload content.",
+          "expected": "Handoff complete; phase success remains unresolved.",
+          "evidence": [
+            {
+              "sourceId": "plan-phase",
+              "startLine": 26,
+              "endLine": 26
+            },
+            {
+              "sourceId": "plan-phase",
+              "startLine": 50,
+              "endLine": 50
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Phase/ItemSignal graph, return keys, payload and exception text; retain exact assembled message and pointer flag.",
+      "limitations": [
+        "Source-only confidence; no runtime phase/provider execution.",
+        "This assembled message requires both fixed throw and catch wrapper; other catch causes are unverified."
+      ]
+    }
+  ],
+  "unverified": [
+    {
+      "id": "iterate-filter-empty-and-evaluation",
+      "reportedText": "Plan.Config.Filter must be a Path|Default string or nonempty string array.; Plan.Config.Filter evaluation failed: <exception>",
+      "reason": "The empty filter guard follows PowerShell array/null comparisons whose reachability for a zero-item value is not established from source alone; the evaluation catch spans multiple criterion resolution operations and cannot identify one safe correction.",
+      "neededEvidence": "Redacted Filter resolver HasResult/count and exact error/source site; distinguish zero-item guard from child evaluation exception without criteria/path content."
+    },
+    {
+      "id": "iterate-worker-result-messages",
+      "reportedText": "Iteration <index> did not return an initialization signal.; Iteration <index> environment initialization failed.; Iteration <index> did not return a worker signal.; Iteration <index> worker failed.; Iteration <index> runspace failed: <error>",
+      "reason": "Class worker-result guards at lines 400, 404, 410, 414 and 420 are source-specific, but four v1 prefix-suffix patterns beginning Iteration and ending fixed guard text also match source-emitted runspace or iteration-catch messages whose arbitrary Error/exception text ends with those suffixes. The runspace wrapper has two variable segments. All five remain unrouted to prevent false guard selection.",
+      "neededEvidence": "Structured worker-result source/guard and redacted index/error class; a v1-compatible discriminator proved against all source-emitted wrapper families before routing or correction."
+    },
+    {
+      "id": "plan-worker-and-phase-catches",
+      "reportedText": "Iteration <index> failed: <exception>; Phase execution failed: <other exception>; Background phase worker failed: <exception>",
+      "reason": "Broad helper/worker catches cover clone, dispatch, graph, export, logging and background operations; only the fixed assembled phase-pointer case has a source-specific route. Other wrappers alone cannot identify cause or correction.",
+      "neededEvidence": "Redacted exact exception class and source-correlated failing site/child owner; no Plan, phase or worker error text."
+    },
+    {
+      "id": "phase-return-key-missing",
+      "reportedText": "Phase execution failed: Requested phase return key '<key>' was not registered.",
+      "reason": "Invoke-PlanPhase line 31 throws this guard-specific missing-key text and line 50 assembles its wrapper. Invoke-PlanPhaseWorker lines 20–25 supplies ReturnKeys in background execution, but canonical async/Await emission and selector attribution have not been proved from static worker/envelope propagation. Direct InvokePhase calls helper without ReturnKeys. No route or corrective recipe is asserted.",
+      "neededEvidence": "Redacted exact emitted wrapper, original InvokePhaseAsync/Await activity and structured worker Signal/envelope propagation linking ReturnKeys guard to this canonical owner; no key or phase payload."
+    },
+    {
+      "id": "plan-forwarded-and-envelope-errors",
+      "reportedText": "Forwarded child/ST runspace/task failure and envelope.Error text",
+      "reason": "Class merges many child Signals and Complete-PlanPhaseTask can log arbitrary envelope.Error; these do not create a distinct Plan-owned cause-specific correction.",
+      "neededEvidence": "Canonical child/task owner, declared activity and redacted failure source/guard before proposing an owner route."
+    }
+  ]
+}

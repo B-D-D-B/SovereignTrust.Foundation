@@ -1,0 +1,118 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedNetworkAdapter",
+  "mappedAdapter": "MappedNetworkAdapter",
+  "part": "constructor",
+  "sources": [
+    {
+      "id": "mapped-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedNetworkAdapter.ps1",
+      "sha256": "BBA32609723509071469F6DD09D61B8868F957F840F29E83F67FF5A57CA3D842",
+      "symbol": "MappedNetworkAdapter"
+    }
+  ],
+  "entries": [
+    {
+      "id": "mapped-network-start-null-conductor",
+      "status": "source-verified",
+      "adapters": [
+        "MappedNetworkAdapter"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Null Conductor passed to MappedNetworkAdapter.Start()",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 28,
+              "endLine": 28
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "MappedNetworkAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+        "evidence": [
+          {
+            "sourceId": "mapped-class",
+            "startLine": 24,
+            "endLine": 30
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "MappedNetworkAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 24,
+              "endLine": 30
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect mapped Start Conductor presence/truthy flag only.",
+          "expected": "Redacted flags identify this source guard without request or credential content.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 24,
+              "endLine": 30
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional construction input proposal only; no runtime/provider action.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply the intended nonnull Conductor for authorized mapped Network construction.",
+            "expected": "Conductor is present; setup/runtime remains separate.",
+            "evidence": [
+              {
+                "sourceId": "mapped-class",
+                "startLine": 24,
+                "endLine": 30
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Conductor, Jacket, Signal or slot owner is unknown.",
+          "Proposed change would expose token, message, attachment, channel, URL or execute graph/REST/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Conductor is present; setup/runtime remains separate.",
+          "expected": "Local guard would be false; construction/runtime success unverified.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 24,
+              "endLine": 30
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, Discord token, channel ID, message/file/attachment, URL/REST response, Conductor/Jacket, slot/path and exception text; retain canonical adapter/activity, message/pattern and presence/Failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no Discord/REST/runtime/provider execution.",
+        "Mapped core or concrete child may emit other failures; this entry does not diagnose downstream REST/message effects."
+      ]
+    }
+  ]
+}

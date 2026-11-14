@@ -1,0 +1,118 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedConductionAdapter",
+  "mappedAdapter": "MappedConductionAdapter",
+  "part": "constructor",
+  "sources": [
+    {
+      "id": "mapped-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedConductionAdapter.ps1",
+      "sha256": "0EA34996E84E56C510E4719DA207174E08B6C5DC02A229683EBEC50F0DF6CB2B",
+      "symbol": "MappedConductionAdapter"
+    }
+  ],
+  "entries": [
+    {
+      "id": "mapped-start-null-conductor",
+      "status": "source-verified",
+      "adapters": [
+        "MappedConductionAdapter"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Null Conductor passed to MappedConductionAdapter.Start()",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 26,
+              "endLine": 26
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "MappedConductionAdapter.Start receives falsey Conductor before adapter/graph setup.",
+        "evidence": [
+          {
+            "sourceId": "mapped-class",
+            "startLine": 22,
+            "endLine": 28
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "MappedConductionAdapter.Start receives falsey Conductor before adapter/graph setup.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 22,
+              "endLine": 28
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only Conductor presence/truthy flag at mapped Start; no object dump.",
+          "expected": "Redacted flags identify this exact source guard; downstream cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 22,
+              "endLine": 28
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating construction input proposal only; no runtime/provider action here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Provide the intended nonnull Conductor during authorized mapped adapter construction; stop if its source is unknown.",
+            "expected": "Conductor is present for construction; registration remains separate.",
+            "evidence": [
+              {
+                "sourceId": "mapped-class",
+                "startLine": 22,
+                "endLine": 28
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Conductor, Jacket, Signal or slot owner cannot be identified from redacted metadata.",
+          "Proposed action would expose Plan/phase content or execute Conduction, provider, graph or registration effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Conductor is present for construction; registration remains separate.",
+          "expected": "Local guard would be false; construction/runtime success unverified.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 22,
+              "endLine": 28
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan, phase grid, Signal/Jacket/dictionary values, slot/path, credentials, provider responses and exception text; retain canonical adapter/activity, message/pattern and presence/Failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no ST/SDA runtime/provider execution.",
+        "Mapped core may add a generic wrapper after a concrete child failure; this entry does not diagnose downstream child causes."
+      ]
+    }
+  ]
+}

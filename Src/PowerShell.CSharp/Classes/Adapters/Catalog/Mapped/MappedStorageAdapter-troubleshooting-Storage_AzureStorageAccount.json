@@ -1,0 +1,3736 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedStorageAdapter",
+  "mappedAdapter": "MappedStorageAdapter",
+  "part": "Storage_AzureStorageAccount",
+  "sources": [
+    {
+      "id": "azure-class",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureStorageAccount/PowerShell/Storage_AzureStorageAccount.psm1",
+      "sha256": "A9ACEED3798935E3294B337ED488D45A1B7FAA5EFB70C2079CB347B1C4E1BB00",
+      "symbol": "Storage_AzureStorageAccount"
+    },
+    {
+      "id": "azure-read",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureStorageAccount/PowerShell/Invoke-AzureStorageAccount_ReadObject.ps1",
+      "sha256": "094FB05D8DA9DC57C81ED723D4BFA141E6F1FA091F3F7463EE77D93606FC91E0",
+      "symbol": "Invoke-AzureStorageAccount_ReadObject"
+    },
+    {
+      "id": "azure-write",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureStorageAccount/PowerShell/Invoke-AzureStorageAccount_WriteObject.ps1",
+      "sha256": "61DF36CB0229B06BDC924F6C306307F9EBAE1864D8408D48FC170EA808BC2FBD",
+      "symbol": "Invoke-AzureStorageAccount_WriteObject"
+    },
+    {
+      "id": "azure-list",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureStorageAccount/PowerShell/Invoke-AzureStorageAccount_ListObject.ps1",
+      "sha256": "A9366DCB494335D0F8683C80EFEA9C7208E0654CB48FF64FB005233BFE6A37D5",
+      "symbol": "Invoke-AzureStorageAccount_ListObject"
+    },
+    {
+      "id": "azure-exists",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureStorageAccount/PowerShell/Invoke-AzureStorageAccount_ExistsObject.ps1",
+      "sha256": "133BBF41D0253DF25260524C456DEE4BB840097264F950C6D685D7F87428B28C",
+      "symbol": "Invoke-AzureStorageAccount_ExistsObject"
+    },
+    {
+      "id": "azure-delete",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureStorageAccount/PowerShell/Invoke-AzureStorageAccount_DeleteObject.ps1",
+      "sha256": "01191B6851E2DD791B13A5ED53460C5C3740AA1BFAB3E323F135EE09D2EF4116",
+      "symbol": "Invoke-AzureStorageAccount_DeleteObject"
+    }
+  ],
+  "entries": [
+    {
+      "id": "azure-construct-null-dictionary",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot construct AzureStorageAccount — provided dictionary is null.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 40,
+              "endLine": 40
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "AzureStorageAccount.Construct receives null dictionary before Signal/Jacket setup.",
+        "evidence": [
+          {
+            "sourceId": "azure-class",
+            "startLine": 37,
+            "endLine": 42
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "AzureStorageAccount.Construct receives null dictionary before Signal/Jacket setup.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 37,
+              "endLine": 42
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect concrete registration identity and construction dictionary-null flag; redact content.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 37,
+              "endLine": 42
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull Azure construction dictionary through owning Jacket plan.",
+            "expected": "Construction dictionary nonnull; Invoke separate.",
+            "evidence": [
+              {
+                "sourceId": "azure-class",
+                "startLine": 37,
+                "endLine": 42
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Construction dictionary nonnull; Invoke separate.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 37,
+              "endLine": 42
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-invoke-null-conduction-signal",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "List",
+        "Read",
+        "Write",
+        "Delete",
+        "Exists"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot invoke AzureStorageAccount because ConductionSignal is null.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 87,
+              "endLine": 87
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Concrete Invoke receives null ConductionSignal before Plan/path/provider work.",
+        "evidence": [
+          {
+            "sourceId": "azure-class",
+            "startLine": 82,
+            "endLine": 89
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Concrete Invoke receives null ConductionSignal before Plan/path/provider work.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 82,
+              "endLine": 89
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect ConductionSignal null flag and canonical activity; redact Signal.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 82,
+              "endLine": 89
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record caller Signal wiring owner evidence; stop before storage request.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-class",
+                "startLine": 82,
+                "endLine": 89
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Signal wiring unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 82,
+              "endLine": 89
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-invoke-null-item-signal",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "List",
+        "Read",
+        "Write",
+        "Delete",
+        "Exists"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot invoke AzureStorageAccount because ItemSignal is null.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 93,
+              "endLine": 93
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Concrete Invoke receives nonnull ConductionSignal but null ItemSignal.",
+        "evidence": [
+          {
+            "sourceId": "azure-class",
+            "startLine": 89,
+            "endLine": 95
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Concrete Invoke receives nonnull ConductionSignal but null ItemSignal.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 89,
+              "endLine": 95
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect ItemSignal null flag after ConductionSignal passed; redact Signal.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 89,
+              "endLine": 95
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record caller ItemSignal owner evidence; stop before storage request.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-class",
+                "startLine": 89,
+                "endLine": 95
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; ItemSignal wiring unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 89,
+              "endLine": 95
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-invoke-null-plan",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "List",
+        "Read",
+        "Write",
+        "Delete",
+        "Exists"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot invoke AzureStorageAccount because Plan is null.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 99,
+              "endLine": 99
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Concrete Invoke receives nonnull Signals but null Plan before path resolution.",
+        "evidence": [
+          {
+            "sourceId": "azure-class",
+            "startLine": 95,
+            "endLine": 101
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Concrete Invoke receives nonnull Signals but null Plan before path resolution.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 95,
+              "endLine": 101
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Plan null flag and upstream mapped-call context; no Plan dump.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 95,
+              "endLine": 101
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull Plan through caller only after verifying its ownership; no provider request here.",
+            "expected": "Plan nonnull; later path/config guards separate.",
+            "evidence": [
+              {
+                "sourceId": "azure-class",
+                "startLine": 95,
+                "endLine": 101
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Plan nonnull; later path/config guards separate.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 95,
+              "endLine": 101
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-virtual-path-empty",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Read",
+        "Write",
+        "Delete",
+        "Exists"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "The resolved storage virtual path is empty.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 124,
+              "endLine": 124
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Config.VirtualPath then Plan.VirtualPath fallback both stringify blank for a non-List activity.",
+        "evidence": [
+          {
+            "sourceId": "azure-class",
+            "startLine": 103,
+            "endLine": 126
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Config.VirtualPath then Plan.VirtualPath fallback both stringify blank for a non-List activity.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 103,
+              "endLine": 126
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect both resolver HasResult/nonblank flags and selected activity; redact path.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 103,
+              "endLine": 126
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonblank Config.VirtualPath or Plan.VirtualPath from originating plan; keep List empty-prefix behavior separate.",
+            "expected": "Selected non-List path nonblank; resource/provider outcome separate.",
+            "evidence": [
+              {
+                "sourceId": "azure-class",
+                "startLine": 103,
+                "endLine": 126
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Selected non-List path nonblank; resource/provider outcome separate.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 103,
+              "endLine": 126
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-config-resolver-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "List",
+        "Read",
+        "Write",
+        "Delete",
+        "Exists"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Could not resolve Azure Storage Account configuration.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 155,
+              "endLine": 155
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Address resolver at literal $.%.@.Addresses or Config.SignalLevel resolver merges Failure before activity dispatch; Resource resolver is not in this failure array.",
+        "evidence": [
+          {
+            "sourceId": "azure-class",
+            "startLine": 128,
+            "endLine": 157
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Address resolver at literal $.%.@.Addresses or Config.SignalLevel resolver merges Failure before activity dispatch; Resource resolver is not in this failure array.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 128,
+              "endLine": 157
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect address and SignalLevel resolver Failure flags separately; redact addresses.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 128,
+              "endLine": 157
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted failing resolver/registration owner evidence; stop before provider request.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-class",
+                "startLine": 128,
+                "endLine": 157
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; config guard clearance unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 128,
+              "endLine": 157
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-addresses-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "List",
+        "Read",
+        "Write",
+        "Delete",
+        "Exists"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "No Azure Storage Account addresses were configured.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 170,
+              "endLine": 170
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Resolved Addresses array is empty or first address stringifies blank after configuration resolver passed.",
+        "evidence": [
+          {
+            "sourceId": "azure-class",
+            "startLine": 159,
+            "endLine": 172
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Resolved Addresses array is empty or first address stringifies blank after configuration resolver passed.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 159,
+              "endLine": 172
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect address count and first-nonblank flags only; redact addresses.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 159,
+              "endLine": 172
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record Azure Storage address owner evidence; do not guess endpoint or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-class",
+                "startLine": 159,
+                "endLine": 172
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; address availability unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 159,
+              "endLine": 172
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-read-detail-type",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Read"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Config.ResultDetail must be a native Boolean.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 193,
+              "endLine": 193
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Read Config has ResultDetail member and its value is not native Boolean; absence uses false.",
+        "evidence": [
+          {
+            "sourceId": "azure-class",
+            "startLine": 188,
+            "endLine": 196
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Read Config has ResultDetail member and its value is not native Boolean; absence uses false.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 188,
+              "endLine": 196
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect ResultDetail member presence and native-Boolean type flag only.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 188,
+              "endLine": 196
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use intended native Boolean ResultDetail or omit for false default.",
+            "expected": "ResultDetail absent or native Boolean; file/REST result separate.",
+            "evidence": [
+              {
+                "sourceId": "azure-class",
+                "startLine": 188,
+                "endLine": 196
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "ResultDetail absent or native Boolean; file/REST result separate.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 188,
+              "endLine": 196
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-read-detail-target-required",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Read"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Config.ResultDetail requires Config.TargetPath for Read.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 195,
+              "endLine": 195
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Read ResultDetail is native true but Config.TargetPath member is absent; presence, not target validity, is checked.",
+        "evidence": [
+          {
+            "sourceId": "azure-class",
+            "startLine": 188,
+            "endLine": 196
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Read ResultDetail is native true but Config.TargetPath member is absent; presence, not target validity, is checked.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 188,
+              "endLine": 196
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect true-detail and TargetPath member-presence flags; redact target.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 188,
+              "endLine": 196
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "If detailed file result is intended, supply approved Config.TargetPath member; otherwise disable ResultDetail. Validate target separately.",
+            "expected": "True-detail has TargetPath member or detail false; file/REST effect unverified.",
+            "evidence": [
+              {
+                "sourceId": "azure-class",
+                "startLine": 188,
+                "endLine": 196
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "True-detail has TargetPath member or detail false; file/REST effect unverified.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 188,
+              "endLine": 196
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-read-no-signal",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Read"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Azure Storage Account read did not return a signal.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 210,
+              "endLine": 210
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Direct Invoke-AzureStorageAccount_ReadObject returned null instead of Signal after call.",
+        "evidence": [
+          {
+            "sourceId": "azure-class",
+            "startLine": 197,
+            "endLine": 212
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Direct Invoke-AzureStorageAccount_ReadObject returned null instead of Signal after call.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 197,
+              "endLine": 212
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect helper return-is-Signal/null flag and source identity; no response content.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 197,
+              "endLine": 212
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted read-helper owner evidence; stop before default-content or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-class",
+                "startLine": 197,
+                "endLine": 212
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; helper return unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 197,
+              "endLine": 212
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-write-content-resolver-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Write"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Could not resolve Config.Content for Azure Storage Account write.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 327,
+              "endLine": 327
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Write Config.Content resolver merges Failure; no-Result alone does not trigger this class log.",
+        "evidence": [
+          {
+            "sourceId": "azure-class",
+            "startLine": 315,
+            "endLine": 329
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Write Config.Content resolver merges Failure; no-Result alone does not trigger this class log.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 315,
+              "endLine": 329
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Content resolver Failure/HasResult flags and origin; redact content.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 315,
+              "endLine": 329
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted Plan.Content resolver owner evidence; stop before blob write.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-class",
+                "startLine": 315,
+                "endLine": 329
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; content resolver failure unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 315,
+              "endLine": 329
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-write-no-signal",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Write"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Azure Storage Account write did not return a signal.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 346,
+              "endLine": 346
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Direct Invoke-AzureStorageAccount_WriteObject returned null instead of Signal.",
+        "evidence": [
+          {
+            "sourceId": "azure-class",
+            "startLine": 333,
+            "endLine": 348
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Direct Invoke-AzureStorageAccount_WriteObject returned null instead of Signal.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 333,
+              "endLine": 348
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect helper return-is-Signal/null flag; no body/response.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 333,
+              "endLine": 348
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted write-helper owner evidence; do not resend blob.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-class",
+                "startLine": 333,
+                "endLine": 348
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; helper return unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-class",
+              "startLine": 333,
+              "endLine": 348
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-read-target-shape",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Read"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Config.TargetPath must be a nonempty absolute filesystem path.",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 33,
+              "endLine": 33
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Read helper sees TargetPath member but value blank, not fully qualified or provider-style before REST call.",
+        "evidence": [
+          {
+            "sourceId": "azure-read",
+            "startLine": 19,
+            "endLine": 34
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Read helper sees TargetPath member but value blank, not fully qualified or provider-style before REST call.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 19,
+              "endLine": 34
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect TargetPath member/blank/fully-qualified/provider-style flags only.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 19,
+              "endLine": 34
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use approved nonblank fully qualified filesystem target or omit TargetPath for content read.",
+            "expected": "Static target shape guard false; no file/REST effect.",
+            "evidence": [
+              {
+                "sourceId": "azure-read",
+                "startLine": 19,
+                "endLine": 34
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Static target shape guard false; no file/REST effect.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 19,
+              "endLine": 34
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-read-target-status-conflict",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Read"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Config.TargetPath cannot be combined with ReturnHttpStatus.",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 36,
+              "endLine": 36
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "TargetPath member is present and [bool]Config.ReturnHttpStatus is true before REST call.",
+        "evidence": [
+          {
+            "sourceId": "azure-read",
+            "startLine": 30,
+            "endLine": 38
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "TargetPath member is present and [bool]Config.ReturnHttpStatus is true before REST call.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 30,
+              "endLine": 38
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect TargetPath member presence and converted ReturnHttpStatus Boolean; redact target.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 30,
+              "endLine": 38
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Choose file target or HTTP-status result mode for intended read; do not combine both.",
+            "expected": "Conflict flag false; read/REST effect unverified.",
+            "evidence": [
+              {
+                "sourceId": "azure-read",
+                "startLine": 30,
+                "endLine": 38
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Conflict flag false; read/REST effect unverified.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 30,
+              "endLine": 38
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-read-normalized-path-empty",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Read"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot read Azure blob because VirtualPath is empty.",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 56,
+              "endLine": 56
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Class accepted nonblank VirtualPath, but Read helper normalizes backslashes and trims leading slashes to blank. Active class call does not pass PathSuffix, so slash-only path reaches this guard.",
+        "evidence": [
+          {
+            "sourceId": "azure-read",
+            "startLine": 40,
+            "endLine": 58
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Class accepted nonblank VirtualPath, but Read helper normalizes backslashes and trims leading slashes to blank. Active class call does not pass PathSuffix, so slash-only path reaches this guard.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 40,
+              "endLine": 58
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect selected path nonblank-at-class and blank-after-slash-normalization flags; redact path.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 40,
+              "endLine": 58
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use intended nonblank blob-relative VirtualPath in originating Plan; do not infer missing blob or call REST.",
+            "expected": "Normalized blob path nonblank; REST result unverified.",
+            "evidence": [
+              {
+                "sourceId": "azure-read",
+                "startLine": 40,
+                "endLine": 58
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Normalized blob path nonblank; REST result unverified.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 40,
+              "endLine": 58
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-read-target-download-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Read"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Blob '",
+          "suffix": "' could not be downloaded to Config.TargetPath from any Azure Storage address.",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 146,
+              "endLine": 146
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "TargetPathProvided true and no configured address yielded a successful REST file download; this does not prove blob absence.",
+        "evidence": [
+          {
+            "sourceId": "azure-read",
+            "startLine": 138,
+            "endLine": 147
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "TargetPathProvided true and no configured address yielded a successful REST file download; this does not prove blob absence.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 138,
+              "endLine": 147
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect address-attempt count, child REST Failure/HasResult and TargetPathProvided flags; redact blob/URL.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 138,
+              "endLine": 147
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted REST/storage owner handoff; do not retry or change target based solely on this wrapper.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-read",
+                "startLine": 138,
+                "endLine": 147
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; download outcome unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 138,
+              "endLine": 147
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-read-target-mismatch",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Read"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "🔥 Exception during Invoke-AzureStorageAccount_ReadObject: REST read returned a different Config.TargetPath.",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 103,
+              "endLine": 103
+            },
+            {
+              "sourceId": "azure-read",
+              "startLine": 155,
+              "endLine": 155
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "ResultDetail true and successful REST Result string differs from requested TargetPath ignoring case; fixed throw at103 is caught/wrapped at155.",
+        "evidence": [
+          {
+            "sourceId": "azure-read",
+            "startLine": 92,
+            "endLine": 156
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "ResultDetail true and successful REST Result string differs from requested TargetPath ignoring case; fixed throw at103 is caught/wrapped at155.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 92,
+              "endLine": 156
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect REST returned-target-equals-requested flag only; redact paths/content.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 92,
+              "endLine": 156
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted REST/file target mismatch for owner; stop before copy or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-read",
+                "startLine": 92,
+                "endLine": 156
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; target integrity unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 92,
+              "endLine": 156
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-read-target-changed",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Read"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "🔥 Exception during Invoke-AzureStorageAccount_ReadObject: Config.TargetPath changed while computing result detail.",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 118,
+              "endLine": 118
+            },
+            {
+              "sourceId": "azure-read",
+              "startLine": 155,
+              "endLine": 155
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "ResultDetail file size/time metadata changes while digest receipt is computed; fixed throw at118 is caught/wrapped at155.",
+        "evidence": [
+          {
+            "sourceId": "azure-read",
+            "startLine": 105,
+            "endLine": 156
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "ResultDetail file size/time metadata changes while digest receipt is computed; fixed throw at118 is caught/wrapped at155.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 105,
+              "endLine": 156
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only before/after length/time equality flags and target identity hash, never file bytes.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 105,
+              "endLine": 156
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted file-integrity race for owner; do not reuse receipt or retry automatically.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-read",
+                "startLine": 105,
+                "endLine": 156
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; target stability unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-read",
+              "startLine": 105,
+              "endLine": 156
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-write-source-file-absent",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Write"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Source file does not exist: '",
+          "suffix": "'.",
+          "evidence": [
+            {
+              "sourceId": "azure-write",
+              "startLine": 181,
+              "endLine": 181
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Write chooses Config.SourcePath when its resolver HasResult, otherwise legacy Config.SourthPath; nonblank selected source resolves, then File.Exists is false (race/nonfile) before REST upload.",
+        "evidence": [
+          {
+            "sourceId": "azure-write",
+            "startLine": 49,
+            "endLine": 183
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Write chooses Config.SourcePath when its resolver HasResult, otherwise legacy Config.SourthPath; nonblank selected source resolves, then File.Exists is false (race/nonfile) before REST upload.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-write",
+              "startLine": 49,
+              "endLine": 183
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect primary HasResult, selected SourcePath-versus-legacy-SourthPath provenance, selected nonblank/resolved and File.Exists flags; redact path.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-write",
+              "startLine": 49,
+              "endLine": 183
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record selected source-file owner handoff; do not upload or infer typo from race-capable guard.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-write",
+                "startLine": 49,
+                "endLine": 183
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; selected source file state unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-write",
+              "startLine": 49,
+              "endLine": 183
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-write-input-required",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Write"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Azure blob write requires either Config.Content or Config.SourcePath.",
+          "evidence": [
+            {
+              "sourceId": "azure-write",
+              "startLine": 203,
+              "endLine": 203
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Write has null Content and selected source blank: Config.SourcePath is used whenever its resolver HasResult, otherwise legacy Config.SourthPath. A blank primary Result masks a nonblank legacy value.",
+        "evidence": [
+          {
+            "sourceId": "azure-write",
+            "startLine": 49,
+            "endLine": 205
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Write has null Content and selected source blank: Config.SourcePath is used whenever its resolver HasResult, otherwise legacy Config.SourthPath. A blank primary Result masks a nonblank legacy value.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-write",
+              "startLine": 49,
+              "endLine": 205
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Content nonnull, primary HasResult, legacy-fallback selected and selected-source nonblank flags; redact values.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-write",
+              "startLine": 49,
+              "endLine": 205
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Provide intended Content, or correct the selected Config.SourcePath; if using legacy SourthPath, omit the primary so its resolver has no Result before relying on fallback.",
+            "expected": "Nonnull Content or selected source is nonblank; upload unverified.",
+            "evidence": [
+              {
+                "sourceId": "azure-write",
+                "startLine": 49,
+                "endLine": 205
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Nonnull Content or selected source is nonblank; upload unverified.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "azure-write",
+              "startLine": 49,
+              "endLine": 205
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-write-normalized-path-empty",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Write"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot write Azure blob because VirtualPath is empty.",
+          "evidence": [
+            {
+              "sourceId": "azure-write",
+              "startLine": 102,
+              "endLine": 102
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Class accepted nonblank VirtualPath, then Write helper appended optional Config.PathSuffix only when nonblank and not already ending with it, normalized backslashes and trimmed leading slashes. Slash-only path with absent/blank suffix remains empty; an appended nonblank suffix can avoid this guard.",
+        "evidence": [
+          {
+            "sourceId": "azure-write",
+            "startLine": 80,
+            "endLine": 105
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Class accepted nonblank VirtualPath, then Write helper appended optional Config.PathSuffix only when nonblank and not already ending with it, normalized backslashes and trimmed leading slashes. Slash-only path with absent/blank suffix remains empty; an appended nonblank suffix can avoid this guard.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-write",
+              "startLine": 80,
+              "endLine": 105
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect selected path nonblank-at-class, PathSuffix selected/append flag and blob path blank-after-normalization; redact path/suffix text.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-write",
+              "startLine": 80,
+              "endLine": 105
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use intended nonblank blob-relative VirtualPath; if PathSuffix is intended, confirm the normalized combined path rather than assuming slash-only is valid.",
+            "expected": "Normalized combined blob path nonblank; no upload claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-write",
+                "startLine": 80,
+                "endLine": 105
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Normalized combined blob path nonblank; no upload claimed.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "azure-write",
+              "startLine": 80,
+              "endLine": 105
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-write-all-addresses-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Write"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Could not write Azure blob '",
+          "suffix": "' to any configured address.",
+          "evidence": [
+            {
+              "sourceId": "azure-write",
+              "startLine": 329,
+              "endLine": 329
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "No configured address returned successful REST Put after helper attempts; address or child failure cause is not identified by wrapper.",
+        "evidence": [
+          {
+            "sourceId": "azure-write",
+            "startLine": 295,
+            "endLine": 330
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "No configured address returned successful REST Put after helper attempts; address or child failure cause is not identified by wrapper.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-write",
+              "startLine": 295,
+              "endLine": 330
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect address-attempt count and child REST status/failure flags; redact blob/URLs.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-write",
+              "startLine": 295,
+              "endLine": 330
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted REST/storage owner evidence; do not resend or change address automatically.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-write",
+                "startLine": 295,
+                "endLine": 330
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; write outcome unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-write",
+              "startLine": 295,
+              "endLine": 330
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-list-options",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "List"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Invalid Azure storage List SortBy, SortDirection or Type.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 20,
+              "endLine": 20
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Defaulted List SortBy, SortDirection or Type is outside source supported values under case-insensitive -notin.",
+        "evidence": [
+          {
+            "sourceId": "azure-list",
+            "startLine": 13,
+            "endLine": 21
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Defaulted List SortBy, SortDirection or Type is outside source supported values under case-insensitive -notin.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 13,
+              "endLine": 21
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect each selected option and supported-membership flag separately; redact filter/path.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 13,
+              "endLine": 21
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use intended supported SortBy DateTime/FileName/Size, SortDirection Ascending/Descending and Type File/Directory, or omit for source defaults.",
+            "expected": "All three case-insensitive membership guards false; provider result separate.",
+            "evidence": [
+              {
+                "sourceId": "azure-list",
+                "startLine": 13,
+                "endLine": 21
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "All three case-insensitive membership guards false; provider result separate.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 13,
+              "endLine": 21
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-list-address-resource",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "List"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Azure storage List requires an address and Resource container.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 26,
+              "endLine": 26
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "First configured address or Resource container string is blank before REST paging.",
+        "evidence": [
+          {
+            "sourceId": "azure-list",
+            "startLine": 23,
+            "endLine": 27
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "First configured address or Resource container string is blank before REST paging.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 23,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect first-address and Resource-container nonblank flags; redact values.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 23,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted address/container source-owner evidence; do not guess endpoint or list.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-list",
+                "startLine": 23,
+                "endLine": 27
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; address/container availability unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 23,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-list-page-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "List"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Azure storage List page failed.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 52,
+              "endLine": 52
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "REST Get page Signal is null, failed or has no Result during List paging.",
+        "evidence": [
+          {
+            "sourceId": "azure-list",
+            "startLine": 49,
+            "endLine": 53
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "REST Get page Signal is null, failed or has no Result during List paging.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 49,
+              "endLine": 53
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect page child Signal presence/Failure/HasResult flags and page count; redact URI/XML.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 49,
+              "endLine": 53
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted REST/storage paging owner evidence; no auto-pagination retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-list",
+                "startLine": 49,
+                "endLine": 53
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; page outcome unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 49,
+              "endLine": 53
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-list-xml-shape",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "List"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Invalid Azure storage List XML.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 62,
+              "endLine": 62
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Parsed XML lacks EnumerationResults root or Blobs child after REST Result.",
+        "evidence": [
+          {
+            "sourceId": "azure-list",
+            "startLine": 54,
+            "endLine": 63
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Parsed XML lacks EnumerationResults root or Blobs child after REST Result.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 54,
+              "endLine": 63
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect root/Blobs presence flags only; no XML dump.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 54,
+              "endLine": 63
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted response-shape evidence for storage/REST owner.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-list",
+                "startLine": 54,
+                "endLine": 63
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; XML shape unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 54,
+              "endLine": 63
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-list-directory-prefix",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "List"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Invalid Azure storage directory prefix.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 69,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Directory-type BlobPrefix Name lacks trailing slash or violates requested scope prefix ordinally.",
+        "evidence": [
+          {
+            "sourceId": "azure-list",
+            "startLine": 64,
+            "endLine": 70
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Directory-type BlobPrefix Name lacks trailing slash or violates requested scope prefix ordinally.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 64,
+              "endLine": 70
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect trailing-slash and scope-prefix-match flags only; redact names.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 64,
+              "endLine": 70
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted provider prefix inconsistency for storage owner; do not synthesize directory.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-list",
+                "startLine": 64,
+                "endLine": 70
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; prefix validity unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 64,
+              "endLine": 70
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-list-blob-name",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "List"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Invalid Azure storage blob name.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 80,
+              "endLine": 80
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "File-type Blob Name is blank or violates requested scope prefix ordinally.",
+        "evidence": [
+          {
+            "sourceId": "azure-list",
+            "startLine": 75,
+            "endLine": 81
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "File-type Blob Name is blank or violates requested scope prefix ordinally.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 75,
+              "endLine": 81
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect name-nonblank and prefix-match flags; redact name.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 75,
+              "endLine": 81
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted provider blob-name inconsistency for storage owner.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-list",
+                "startLine": 75,
+                "endLine": 81
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; blob-name validity unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 75,
+              "endLine": 81
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-list-marker-repeat",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "List"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Repeated Azure storage List marker.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 96,
+              "endLine": 96
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Nonblank continuation marker repeats in seenMarkers before next page.",
+        "evidence": [
+          {
+            "sourceId": "azure-list",
+            "startLine": 94,
+            "endLine": 97
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Nonblank continuation marker repeats in seenMarkers before next page.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 94,
+              "endLine": 97
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect marker-repeat Boolean and page count; redact marker/URI.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 94,
+              "endLine": 97
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted pagination-loop evidence; stop rather than request another page.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-list",
+                "startLine": 94,
+                "endLine": 97
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; pagination unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 94,
+              "endLine": 97
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-list-negative-blob-size",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "List"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Azure storage List failed: Negative blob size.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 89,
+              "endLine": 89
+            },
+            {
+              "sourceId": "azure-list",
+              "startLine": 130,
+              "endLine": 130
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Parsed Content-Length converts to Int64 but is negative; fixed throw at89 is caught/wrapped at130.",
+        "evidence": [
+          {
+            "sourceId": "azure-list",
+            "startLine": 87,
+            "endLine": 131
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Parsed Content-Length converts to Int64 but is negative; fixed throw at89 is caught/wrapped at130.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 87,
+              "endLine": 131
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect content-length conversion-success and negative flags; redact value/XML.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 87,
+              "endLine": 131
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted provider metadata inconsistency for storage owner; do not coerce size.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-list",
+                "startLine": 87,
+                "endLine": 131
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; size validity unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-list",
+              "startLine": 87,
+              "endLine": 131
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-exists-path-resource",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Exists"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Azure blob Exists requires a path and Resource container.",
+          "evidence": [
+            {
+              "sourceId": "azure-exists",
+              "startLine": 24,
+              "endLine": 24
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Exists normalized blob path or class Jacket $.%.@.Resource container is blank before REST HEAD.",
+        "evidence": [
+          {
+            "sourceId": "azure-exists",
+            "startLine": 18,
+            "endLine": 25
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Exists normalized blob path or class Jacket $.%.@.Resource container is blank before REST HEAD.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-exists",
+              "startLine": 18,
+              "endLine": 25
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect selected VirtualPath normalized nonblank and registered Jacket Resource nonblank flags separately; redact both.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-exists",
+              "startLine": 18,
+              "endLine": 25
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record conditional originating-Plan VirtualPath correction when path is blank; for blank Resource, hand off to registered Jacket configuration owner. Stop before HEAD.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-exists",
+                "startLine": 18,
+                "endLine": 25
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Path proposal and Resource owner handoff recorded; neither guard clearance nor existence is claimed.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-exists",
+              "startLine": 18,
+              "endLine": 25
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-exists-rest-no-signal",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Exists"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Azure REST adapter returned no signal for Exists.",
+          "evidence": [
+            {
+              "sourceId": "azure-exists",
+              "startLine": 47,
+              "endLine": 47
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "REST HEAD call returned null Signal.",
+        "evidence": [
+          {
+            "sourceId": "azure-exists",
+            "startLine": 42,
+            "endLine": 48
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "REST HEAD call returned null Signal.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-exists",
+              "startLine": 42,
+              "endLine": 48
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect child return-is-Signal/null flag only; no response.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-exists",
+              "startLine": 42,
+              "endLine": 48
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted REST owner handoff; do not repeat HEAD automatically.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-exists",
+                "startLine": 42,
+                "endLine": 48
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; existence outcome unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-exists",
+              "startLine": 42,
+              "endLine": 48
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-exists-request-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Exists"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Azure blob Exists request failed for '",
+          "suffix": "'.",
+          "evidence": [
+            {
+              "sourceId": "azure-exists",
+              "startLine": 50,
+              "endLine": 50
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "REST HEAD Signal is failed OR has no Result after merge; blob path is variable and not retained.",
+        "evidence": [
+          {
+            "sourceId": "azure-exists",
+            "startLine": 47,
+            "endLine": 51
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "REST HEAD Signal is failed OR has no Result after merge; blob path is variable and not retained.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-exists",
+              "startLine": 47,
+              "endLine": 51
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Distinguish child REST Failure from nonfailed/no-Result, and inspect selected address flags; redact path/URL.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-exists",
+              "startLine": 47,
+              "endLine": 51
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record REST/storage child outcome for owner; do not infer absence from either branch.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-exists",
+                "startLine": 47,
+                "endLine": 51
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; existence unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-exists",
+              "startLine": 47,
+              "endLine": 51
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-delete-path-resource-address",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Delete"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Azure blob Delete requires a path, Resource container, and first address.",
+          "evidence": [
+            {
+              "sourceId": "azure-delete",
+              "startLine": 25,
+              "endLine": 25
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Delete normalized blob path, Resource container or first address is blank before REST DELETE.",
+        "evidence": [
+          {
+            "sourceId": "azure-delete",
+            "startLine": 18,
+            "endLine": 26
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Delete normalized blob path, Resource container or first address is blank before REST DELETE.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-delete",
+              "startLine": 18,
+              "endLine": 26
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect blob-path/container/first-address nonblank flags; redact values.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-delete",
+              "startLine": 18,
+              "endLine": 26
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted input/address owner evidence; do not delete or guess target.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-delete",
+                "startLine": 18,
+                "endLine": 26
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; delete precondition unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-delete",
+              "startLine": 18,
+              "endLine": 26
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-delete-rest-no-signal",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Delete"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Azure REST adapter returned no signal for Delete.",
+          "evidence": [
+            {
+              "sourceId": "azure-delete",
+              "startLine": 43,
+              "endLine": 43
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "REST DELETE call returned null Signal.",
+        "evidence": [
+          {
+            "sourceId": "azure-delete",
+            "startLine": 39,
+            "endLine": 44
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "REST DELETE call returned null Signal.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-delete",
+              "startLine": 39,
+              "endLine": 44
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect child return-is-Signal/null flag only; no response.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-delete",
+              "startLine": 39,
+              "endLine": 44
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted REST owner handoff; do not repeat DELETE.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-delete",
+                "startLine": 39,
+                "endLine": 44
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; delete outcome unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-delete",
+              "startLine": 39,
+              "endLine": 44
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "azure-delete-request-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_AzureStorageAccount"
+      ],
+      "activities": [
+        "Delete"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Azure blob Delete request failed for '",
+          "suffix": "'.",
+          "evidence": [
+            {
+              "sourceId": "azure-delete",
+              "startLine": 46,
+              "endLine": 46
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "REST DELETE Signal is failed OR has no Result after merge; blob path variable and not retained.",
+        "evidence": [
+          {
+            "sourceId": "azure-delete",
+            "startLine": 43,
+            "endLine": 47
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "REST DELETE Signal is failed OR has no Result after merge; blob path variable and not retained.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "azure-delete",
+              "startLine": 43,
+              "endLine": 47
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Distinguish child REST Failure from nonfailed/no-Result and inspect selected address flags; redact path/URL.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "azure-delete",
+              "startLine": 43,
+              "endLine": 47
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record REST/storage child outcome for owner; do not infer deletion or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "azure-delete",
+                "startLine": 43,
+                "endLine": 47
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; deletion unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "azure-delete",
+              "startLine": 43,
+              "endLine": 47
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    }
+  ]
+}

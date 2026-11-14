@@ -1,0 +1,116 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedIntelligenceAdapter",
+  "mappedAdapter": "MappedIntelligenceAdapter",
+  "part": "constructor",
+  "sources": [
+    {
+      "id": "mapped-intelligence",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedIntelligenceAdapter.ps1",
+      "sha256": "24AD791B06B17F991C7BBE3EEC3FF1AC0F34A624C999A4170E4A0A5DDC417B49",
+      "symbol": "MappedIntelligenceAdapter"
+    }
+  ],
+  "entries": [
+    {
+      "id": "mapped-intelligence-null-conductor",
+      "status": "source-verified",
+      "adapters": [
+        "MappedIntelligenceAdapter"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Null Conductor passed to MappedIntelligenceAdapter.Start()",
+          "evidence": [
+            {
+              "sourceId": "mapped-intelligence",
+              "startLine": 27,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "MappedIntelligenceAdapter.Start receives no Conductor and returns before graph construction.",
+        "evidence": [
+          {
+            "sourceId": "mapped-intelligence",
+            "startLine": 26,
+            "endLine": 29
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The mapped adapter start caller omitted its required Conductor.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-intelligence",
+              "startLine": 26,
+              "endLine": 29
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm this exact log and Conductor-presence flag at the mapped construction call; do not dump the conductor.",
+          "expected": "The current source guard and redacted input metadata discriminate this exact message.",
+          "evidence": [
+            {
+              "sourceId": "mapped-intelligence",
+              "startLine": 26,
+              "endLine": 29
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for the owning caller/wiring only; no runtime or provider execution here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Restore the intended Conductor wiring at the owning caller after confirming its lifecycle; stop if ownership is unclear.",
+            "expected": "The edited local input satisfies the cited guard without changing unrelated policy or source.",
+            "evidence": [
+              {
+                "sourceId": "mapped-intelligence",
+                "startLine": 26,
+                "endLine": 29
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The intended value or owner is unknown, the observed message differs, or source identity changed."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the Start call passes a non-null Conductor and the line-26 guard is false.",
+          "expected": "The edited input no longer meets this cited failure guard; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "mapped-intelligence",
+              "startLine": 26,
+              "endLine": 29
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude prompt/system/content text, media bytes/URLs, credential/header values, full Plan/Jacket and provider payload; retain only adapter/activity, exact error label and presence/type/count flags.",
+      "limitations": [
+        "Source-only confidence; no provider or runtime execution was performed.",
+        "Other exceptions and upstream/downstream failures can still occur."
+      ]
+    }
+  ]
+}

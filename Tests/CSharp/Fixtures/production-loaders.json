@@ -1,0 +1,47 @@
+[
+  {
+    "Manifest": "../../../../SDAFusion.Adapters/Src/Token/SDA/PowerShell/Token_SDA.psd1"
+  },
+  {
+    "Manifest": "../../../../SDAFusion.Adapters/Src/Utility/Media/PowerShell/Utility_Media.psd1"
+  },
+  {
+    "Manifest": "../../../../SovereignTrust.Adapters/Src/Conduction/ST/PowerShell/Conduction_ST.psd1"
+  },
+  {
+    "Manifest": "../../../../SovereignTrust.Adapters/Src/Data/AzureDataExplorer/PowerShell/Data_AzureDataExplorer.psd1"
+  },
+  {
+    "Manifest": "../../../../SovereignTrust.Adapters/Src/Data/AzureSql/PowerShell/Data_AzureSql.psd1"
+  },
+  {
+    "Manifest": "../../../../SovereignTrust.Adapters/Src/Intelligence/AzureFoundry/PowerShell/Intelligence_AzureFoundry.psd1"
+  },
+  {
+    "Manifest": "../../../../SovereignTrust.Adapters/Src/Intelligence/CodexCLI/PowerShell/Intelligence_CodexCLI.psd1"
+  },
+  {
+    "Manifest": "../../../../SovereignTrust.Adapters/Src/Intelligence/OpenAI/PowerShell/Intelligence_OpenAI.psd1"
+  },
+  {
+    "Manifest": "../../../../SovereignTrust.Adapters/Src/Network/DiscordBot/PowerShell/Network_DiscordBot.psd1"
+  },
+  {
+    "Manifest": "../../../../SovereignTrust.Adapters/Src/Queue/AzureStorageQueue/PowerShell/Queue_AzureStorageQueue.psd1"
+  },
+  {
+    "Manifest": "../../../../SovereignTrust.Adapters/Src/Satellite/AzureApplicationInsights/PowerShell/Satellite_AzureApplicationInsights.psd1"
+  },
+  {
+    "Manifest": "../../../../SovereignTrust.Adapters/Src/Session/ST/PowerShell/Session_ST.psd1"
+  },
+  {
+    "Manifest": "../../../../SovereignTrust.Adapters/Src/Storage/AzureKeyVault/PowerShell/Storage_AzureKeyVault.psd1"
+  },
+  {
+    "Manifest": "../../../../SovereignTrust.Adapters/Src/Storage/AzureStorageAccount/PowerShell/Storage_AzureStorageAccount.psd1"
+  },
+  {
+    "Manifest": "../../../../SovereignTrust.Adapters/Src/Storage/LocalFileSystem/PowerShell/SovereignTrust.Adapters.Storage.LocalFileSystem.psd1"
+  }
+]

@@ -1,0 +1,232 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedConductionAdapter",
+  "mappedAdapter": "MappedConductionAdapter",
+  "part": "invoke",
+  "sources": [
+    {
+      "id": "mapped-core",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Invoke-MappedAdapterCore.ps1",
+      "sha256": "0AB004DC55D82CDC9443E123C766262A4A75FADBDAB424E22A0EC4C971008792",
+      "symbol": "Invoke-MappedAdapterCore"
+    },
+    {
+      "id": "mapped-resolver",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Resolve-MappedAdapter.ps1",
+      "sha256": "5EAC4130E9BC50A67453B7AE525DD01AC01EA2E3AFFCD41B90ED8E90C187545E",
+      "symbol": "Resolve-MappedAdapter"
+    }
+  ],
+  "entries": [
+    {
+      "id": "mapped-adapter-path-failed",
+      "status": "source-verified",
+      "adapters": [
+        "MappedConductionAdapter"
+      ],
+      "activities": [
+        "Invoke",
+        "Run",
+        "ST"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Adapter path '",
+          "suffix": "' not found in Conductor.",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 33,
+              "endLine": 33
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Shared mapped core first resolves slot first segment at *.#.<slot>.@, falls back to %.*.#.<slot>.@ when no Result, and logs only when final adapter Signal merges as Failure. Log text alone does not prove simple absence.",
+        "evidence": [
+          {
+            "sourceId": "mapped-core",
+            "startLine": 23,
+            "endLine": 35
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Shared mapped core first resolves slot first segment at *.#.<slot>.@, falls back to %.*.#.<slot>.@ when no Result, and logs only when final adapter Signal merges as Failure. Log text alone does not prove simple absence.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 23,
+              "endLine": 35
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect canonical mapped owner, slot first-segment validity and both resolver Result/Failure flags; redact slot/path text.",
+          "expected": "Redacted flags identify this exact source guard; downstream cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 23,
+              "endLine": 35
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic mapped/phase owner handoff only; no registration/graph/provider repair or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted mapped registration/resolver evidence for its owner and stop; do not modify graph or retry from this label alone.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "mapped-core",
+                "startLine": 23,
+                "endLine": 35
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Conductor, Jacket, Signal or slot owner cannot be identified from redacted metadata.",
+          "Proposed action would expose Plan/phase content or execute Conduction, provider, graph or registration effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Owner handoff records final failure branch; registration clearance unverified.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 23,
+              "endLine": 35
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan, phase grid, Signal/Jacket/dictionary values, slot/path, credentials, provider responses and exception text; retain canonical adapter/activity, message/pattern and presence/Failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no ST/SDA runtime/provider execution.",
+        "Mapped core may add a generic wrapper after a concrete child failure; this entry does not diagnose downstream child causes."
+      ]
+    },
+    {
+      "id": "mapped-resolution-no-instance",
+      "status": "source-verified",
+      "adapters": [
+        "MappedConductionAdapter"
+      ],
+      "activities": [
+        "Invoke",
+        "Run",
+        "ST"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Mapped adapter resolution returned no instance.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 24,
+              "endLine": 24
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Shared Resolve-MappedAdapter receives a nonfailed Resolve-RegisteredAdapter Signal with no Result and logs the fixed no-instance message.",
+        "evidence": [
+          {
+            "sourceId": "mapped-resolver",
+            "startLine": 15,
+            "endLine": 27
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Shared Resolve-MappedAdapter receives a nonfailed Resolve-RegisteredAdapter Signal with no Result and logs the fixed no-instance message.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect registration identity, child resolver Failure and HasResult flags only; redact registration payload.",
+          "expected": "Redacted flags identify this exact source guard; downstream cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic mapped/phase owner handoff only; no registration/graph/provider repair or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted lazy/registration source-owner evidence and stop before registration state repair or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "mapped-resolver",
+                "startLine": 15,
+                "endLine": 27
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Conductor, Jacket, Signal or slot owner cannot be identified from redacted metadata.",
+          "Proposed action would expose Plan/phase content or execute Conduction, provider, graph or registration effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff identifies no-instance guard; concrete instance resolution remains unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan, phase grid, Signal/Jacket/dictionary values, slot/path, credentials, provider responses and exception text; retain canonical adapter/activity, message/pattern and presence/Failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no ST/SDA runtime/provider execution.",
+        "Mapped core may add a generic wrapper after a concrete child failure; this entry does not diagnose downstream child causes."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,402 @@
+{
+  "version": 1,
+  "ownerId": "Mapped/MappedCondenserAdapter",
+  "mappedAdapter": "MappedCondenserAdapter",
+  "sources": [
+    {
+      "id": "mapped",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedCondenserAdapter.ps1",
+      "sha256": "CDB170DE2EB8292E350DD924703F26EF17E4839B85120D183A138221826C939E",
+      "symbol": "MappedCondenserAdapter"
+    },
+    {
+      "id": "factory",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/New-MappedCondenserAdapterFromGraph.ps1",
+      "sha256": "F41B07DA35D1342592F4302610EBEFBB3A2CBAFCA91F68F283424666384B1A43",
+      "symbol": "New-MappedCondenserAdapterFromGraph"
+    },
+    {
+      "id": "graph",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Graph/Resolve-PathGraphCondenserAdapter.ps1",
+      "sha256": "B6EA67A2C26DD254AA5902FBE31F9ED6C6F8947451FB125255D753F8D949200B",
+      "symbol": "Resolve-PathGraphCondenserAdapter"
+    }
+  ],
+  "entries": [
+    {
+      "id": "mapped-condenser-null-conductor",
+      "status": "source-verified",
+      "adapters": [
+        "MappedCondenserAdapter"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Null Conductor passed to Start().",
+          "evidence": [
+            {
+              "sourceId": "mapped",
+              "startLine": 25,
+              "endLine": 25
+            },
+            {
+              "sourceId": "mapped",
+              "startLine": 21,
+              "endLine": 27
+            },
+            {
+              "sourceId": "factory",
+              "startLine": 9,
+              "endLine": 13
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "MappedCondenserAdapter.Start receives a false/null Conductor and returns before graph setup; the current factory calls Start with its Conductor argument.",
+        "evidence": [
+          {
+            "sourceId": "mapped",
+            "startLine": 21,
+            "endLine": 27
+          },
+          {
+            "sourceId": "factory",
+            "startLine": 9,
+            "endLine": 13
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The construction caller lacks the intended Conductor object.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped",
+              "startLine": 21,
+              "endLine": 27
+            },
+            {
+              "sourceId": "factory",
+              "startLine": 9,
+              "endLine": 13
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the mapped container identity and exact log; inspect only Conductor presence at the factory-to-Start boundary, without dumping its graph or jacket.",
+          "expected": "The cited required Conductor/graph presence flags identify this exact branch without exposing graph contents.",
+          "evidence": [
+            {
+              "sourceId": "mapped",
+              "startLine": 21,
+              "endLine": 27
+            },
+            {
+              "sourceId": "factory",
+              "startLine": 9,
+              "endLine": 13
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal at the owning Conductor construction/graph setup only; do not execute provider work or patch an unrelated leaf.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Restore the intended non-null Conductor at the owning construction caller; do not synthesize a placeholder merely to bypass the guard.",
+            "expected": "The intended Conductor/graph structure satisfies the cited guard while preserving existing leaf registration.",
+            "evidence": [
+              {
+                "sourceId": "mapped",
+                "startLine": 21,
+                "endLine": 27
+              },
+              {
+                "sourceId": "factory",
+                "startLine": 9,
+                "endLine": 13
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The owning Conductor/graph contract is unknown, current source identity changed, or the observed message differs."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the factory passes the intended non-null Conductor and the line-24/25 Start guard is false.",
+          "expected": "The cited guard is false for the intended local structure; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "mapped",
+              "startLine": 21,
+              "endLine": 27
+            },
+            {
+              "sourceId": "factory",
+              "startLine": 9,
+              "endLine": 13
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Conductor/Jacket/Graph objects, signal payloads, leaf results, credentials and provider content; retain only adapter identity, exact log text and path presence/success flags.",
+      "limitations": [
+        "Source-only confidence; no runtime/provider execution was performed.",
+        "Leaf-specific failures and other construction exceptions have distinct owners or unknown causes and are not inferred from this entry."
+      ]
+    },
+    {
+      "id": "mapped-condenser-pointer-graph-unavailable",
+      "status": "source-verified",
+      "adapters": [
+        "MappedCondenserAdapter"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Could not resolve Conductor pointer graph.",
+          "evidence": [
+            {
+              "sourceId": "factory",
+              "startLine": 23,
+              "endLine": 23
+            },
+            {
+              "sourceId": "factory",
+              "startLine": 20,
+              "endLine": 25
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Factory resolution of the Conductor pointer graph path fails before MappedCondenser registration.",
+        "evidence": [
+          {
+            "sourceId": "factory",
+            "startLine": 20,
+            "endLine": 25
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The required Conductor adapters pointer graph cannot be resolved at this stage.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "factory",
+              "startLine": 20,
+              "endLine": 25
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the exact factory log and inspect only resolution success/presence for the Conductor adapters pointer path; omit graph values.",
+          "expected": "The cited required Conductor/graph presence flags identify this exact branch without exposing graph contents.",
+          "evidence": [
+            {
+              "sourceId": "factory",
+              "startLine": 20,
+              "endLine": 25
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal at the owning Conductor construction/graph setup only; do not execute provider work or patch an unrelated leaf.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Correct the originating Conductor graph setup so the intended adapters pointer exists before building the mapped condenser; stop if graph ownership is unclear.",
+            "expected": "The intended Conductor/graph structure satisfies the cited guard while preserving existing leaf registration.",
+            "evidence": [
+              {
+                "sourceId": "factory",
+                "startLine": 20,
+                "endLine": 25
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The owning Conductor/graph contract is unknown, current source identity changed, or the observed message differs."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm the required pointer path resolves before the factory registration call.",
+          "expected": "The cited guard is false for the intended local structure; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "factory",
+              "startLine": 20,
+              "endLine": 25
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Conductor/Jacket/Graph objects, signal payloads, leaf results, credentials and provider content; retain only adapter identity, exact log text and path presence/success flags.",
+      "limitations": [
+        "Source-only confidence; no runtime/provider execution was performed.",
+        "Leaf-specific failures and other construction exceptions have distinct owners or unknown causes and are not inferred from this entry."
+      ]
+    },
+    {
+      "id": "mapped-condenser-required-context-unavailable",
+      "status": "source-verified",
+      "adapters": [
+        "MappedCondenserAdapter"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Unable to resolve required context from Conductor.",
+          "evidence": [
+            {
+              "sourceId": "graph",
+              "startLine": 16,
+              "endLine": 16
+            },
+            {
+              "sourceId": "graph",
+              "startLine": 10,
+              "endLine": 18
+            },
+            {
+              "sourceId": "factory",
+              "startLine": 34,
+              "endLine": 38
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "The graph helper cannot resolve either the Conductor adapters pointer path or the mounted MappedCondenser path and returns before building the leaf graph.",
+        "evidence": [
+          {
+            "sourceId": "graph",
+            "startLine": 10,
+            "endLine": 18
+          },
+          {
+            "sourceId": "factory",
+            "startLine": 34,
+            "endLine": 38
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "One or both required Conductor graph contexts are absent or failed resolution.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "graph",
+              "startLine": 10,
+              "endLine": 18
+            },
+            {
+              "sourceId": "factory",
+              "startLine": 34,
+              "endLine": 38
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm the helper log and inspect only success/presence flags for both required Conductor paths, without logging object contents.",
+          "expected": "The cited required Conductor/graph presence flags identify this exact branch without exposing graph contents.",
+          "evidence": [
+            {
+              "sourceId": "graph",
+              "startLine": 10,
+              "endLine": 18
+            },
+            {
+              "sourceId": "factory",
+              "startLine": 34,
+              "endLine": 38
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal at the owning Conductor construction/graph setup only; do not execute provider work or patch an unrelated leaf.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Restore the intended Conductor adapters graph and MappedCondenser mount at their owner before helper invocation; avoid changing leaf implementations or fabricating registrations.",
+            "expected": "The intended Conductor/graph structure satisfies the cited guard while preserving existing leaf registration.",
+            "evidence": [
+              {
+                "sourceId": "graph",
+                "startLine": 10,
+                "endLine": 18
+              },
+              {
+                "sourceId": "factory",
+                "startLine": 34,
+                "endLine": 38
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "The owning Conductor/graph contract is unknown, current source identity changed, or the observed message differs."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm both required paths resolve before the helper enters graph creation.",
+          "expected": "The cited guard is false for the intended local structure; runtime success remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "graph",
+              "startLine": 10,
+              "endLine": 18
+            },
+            {
+              "sourceId": "factory",
+              "startLine": 34,
+              "endLine": 38
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Conductor/Jacket/Graph objects, signal payloads, leaf results, credentials and provider content; retain only adapter identity, exact log text and path presence/success flags.",
+      "limitations": [
+        "Source-only confidence; no runtime/provider execution was performed.",
+        "Leaf-specific failures and other construction exceptions have distinct owners or unknown causes and are not inferred from this entry."
+      ]
+    }
+  ]
+}

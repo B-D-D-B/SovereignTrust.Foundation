@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "ownerId": "Mapped/MappedQuantumAdapter",
+  "mappedAdapter": "MappedQuantumAdapter",
+  "sources": [
+    {
+      "id": "mapped-quantum",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedQuantumAdapter.ps1",
+      "sha256": "ED30172207A4E2FD3015FDE39E35959D768360D8FC76DE22B2D2034A6E79D2B3",
+      "symbol": "MappedQuantumAdapter"
+    }
+  ],
+  "entries": [
+    {
+      "id": "mapped-quantum-null-conductor",
+      "status": "source-verified",
+      "adapters": [
+        "MappedQuantumAdapter"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Null Conductor passed to MappedQuantumAdapter.Start()",
+          "evidence": [
+            {
+              "sourceId": "mapped-quantum",
+              "startLine": 21,
+              "endLine": 21
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "MappedQuantumAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+        "evidence": [
+          {
+            "sourceId": "mapped-quantum",
+            "startLine": 18,
+            "endLine": 23
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The supplied Conductor argument is null/falsey at Start.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-quantum",
+              "startLine": 18,
+              "endLine": 23
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm mapped Start context and Conductor presence/truthy flag only; do not inspect Conductor content.",
+          "expected": "Conductor is falsey at line20 before setup.",
+          "evidence": [
+            {
+              "sourceId": "mapped-quantum",
+              "startLine": 18,
+              "endLine": 23
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional construction input proposal only; no graph/provider operation.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull Conductor to authorized mapped Quantum Start; stop if owning construction context is unknown.",
+            "expected": "Null-Conductor guard would be false; later setup remains separate.",
+            "evidence": [
+              {
+                "sourceId": "mapped-quantum",
+                "startLine": 18,
+                "endLine": 23
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Exact message or mapped @construct context differs.",
+          "Conductor owner cannot be identified without dumping state.",
+          "Change would require graph/provider/source mutation."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Confirm intended Conductor argument is present for Start without executing construction.",
+          "expected": "Local guard would be false; setup/runtime success unverified.",
+          "evidence": [
+            {
+              "sourceId": "mapped-quantum",
+              "startLine": 18,
+              "endLine": 23
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Conductor, Signal graph, provider registration, circuit/job parameters, key, credentials and exception text; retain mapped @construct selector, exact log and argument-presence flag.",
+      "limitations": [
+        "Source-only confidence; no construction/quantum/provider execution.",
+        "SubmitQuantumJob and registration methods have no declared activity selector."
+      ]
+    }
+  ],
+  "unverified": [
+    {
+      "id": "mapped-quantum-start-catch",
+      "reportedText": "💥 Exception in MappedQuantumAdapter.Start(): <exception>",
+      "reason": "Start catch spans Signal/Jacket/Graph setup and does not identify one safe correction.",
+      "neededEvidence": "Redacted failing setup operation/exception class and graph status without Conductor contents."
+    },
+    {
+      "id": "mapped-quantum-nonactivity-logs",
+      "reportedText": "Failed to register quantum provider at key: <key>; Provider <key> failed to submit circuit <name>; No quantum provider succeeded for circuit <name>",
+      "reason": "RegisterQuantumProvider and SubmitQuantumJob are real methods, but mapped catalog has zero activities/concrete adapters and neither method takes a declared Activity. Variable provider/circuit failures cannot be assigned a fabricated v1 selector or safe correction.",
+      "neededEvidence": "Separately authorized catalog/dispatch activity contract and structured exact emitted context/child provider origin if these methods become supported routes; no key/circuit/job values."
+    }
+  ]
+}

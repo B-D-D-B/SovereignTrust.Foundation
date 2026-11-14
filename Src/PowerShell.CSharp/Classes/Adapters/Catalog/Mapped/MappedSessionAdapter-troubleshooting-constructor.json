@@ -1,0 +1,118 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedSessionAdapter",
+  "mappedAdapter": "MappedSessionAdapter",
+  "part": "constructor",
+  "sources": [
+    {
+      "id": "mapped-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedSessionAdapter.ps1",
+      "sha256": "E56F67A2FEB4B9E2D4B7B48047F68C88F86EE558520C69B5A33FF07167D82D29",
+      "symbol": "MappedSessionAdapter"
+    }
+  ],
+  "entries": [
+    {
+      "id": "mapped-session-start-null-conductor",
+      "status": "source-verified",
+      "adapters": [
+        "MappedSessionAdapter"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Null Conductor passed to MappedSessionAdapter.Start()",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 24,
+              "endLine": 24
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "MappedSessionAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+        "evidence": [
+          {
+            "sourceId": "mapped-class",
+            "startLine": 20,
+            "endLine": 26
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "MappedSessionAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 20,
+              "endLine": 26
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect mapped Start Conductor presence/truthy flag only.",
+          "expected": "Redacted flags identify this source guard without session contents.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 20,
+              "endLine": 26
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional construction input proposal only; no runtime/provider action.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull Conductor for authorized mapped Session construction.",
+            "expected": "Conductor present; setup/runtime remains separate.",
+            "evidence": [
+              {
+                "sourceId": "mapped-class",
+                "startLine": 20,
+                "endLine": 26
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Conductor, Jacket, session or slot owner cannot be identified with redacted metadata.",
+          "Proposed action would expose session/Plan data or execute graph/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Conductor present; setup/runtime remains separate.",
+          "expected": "Local guard would be false; runtime session success unverified.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 20,
+              "endLine": 26
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal/session value, path/key, Conductor/Jacket, graph, credentials and exception text; retain canonical adapter/activity, exact message/pattern and presence/Failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no runtime session/provider execution.",
+        "Session_ST Invoke can return a Result while a merged Add-Path failure remains on its Signal; Result presence alone is not success."
+      ]
+    }
+  ]
+}

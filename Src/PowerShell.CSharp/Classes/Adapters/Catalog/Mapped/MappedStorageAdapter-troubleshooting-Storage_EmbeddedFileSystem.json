@@ -1,0 +1,1477 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedStorageAdapter",
+  "mappedAdapter": "MappedStorageAdapter",
+  "part": "Storage_EmbeddedFileSystem",
+  "sources": [
+    {
+      "id": "embedded-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Storage/Storage_EmbeddedFileSystem.ps1",
+      "sha256": "6329352FFB8C9B9722249843AF7BAFB24B3A32404880AA219634AE82414AE13B",
+      "symbol": "Storage_EmbeddedFileSystem"
+    },
+    {
+      "id": "embedded-read",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Storage/Invoke-EmbeddedFileSystem_ReadObject.ps1",
+      "sha256": "F595C1977F494F8BB5B8D633A6721662AC3DF5A1174B53AA5A5F38CD8E17BACE",
+      "symbol": "Invoke-EmbeddedFileSystem_ReadObject"
+    },
+    {
+      "id": "embedded-write",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Storage/Invoke-EmbeddedFileSystem_WriteObject.ps1",
+      "sha256": "A1DF8ED027266BE89511847FB57D1C76C1F09462A6A944DADB61DA1F83C47905",
+      "symbol": "Invoke-EmbeddedFileSystem_WriteObject"
+    },
+    {
+      "id": "embedded-exists",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Storage/Invoke-EmbeddedFileSystem_ExistsObject.ps1",
+      "sha256": "E9C431E1EF6C27A8D3B9121742A0A3D4860FA64F33F4F8A7C8BDFB16DC27AE94",
+      "symbol": "Invoke-EmbeddedFileSystem_ExistsObject"
+    },
+    {
+      "id": "embedded-delete",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Storage/Invoke-EmbeddedFileSystem_DeleteObject.ps1",
+      "sha256": "4BD6BB8E9922E4422E3BC378E59F555E703C1A5DD763998035F3B806ABCCECA8",
+      "symbol": "Invoke-EmbeddedFileSystem_DeleteObject"
+    }
+  ],
+  "entries": [
+    {
+      "id": "embedded-construct-null-dictionary",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_EmbeddedFileSystem"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot construct EmbeddedFileSystem — provided dictionary is null.",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 33,
+              "endLine": 33
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "EmbeddedFileSystem.Construct receives null dictionary before Jacket setup.",
+        "evidence": [
+          {
+            "sourceId": "embedded-class",
+            "startLine": 28,
+            "endLine": 35
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "EmbeddedFileSystem.Construct receives null dictionary before Jacket setup.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 28,
+              "endLine": 35
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect registered Embedded identity and construction dictionary-null flag; redact content.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 28,
+              "endLine": 35
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull Embedded construction dictionary via owning Jacket plan.",
+            "expected": "Construction dictionary nonnull; Invoke separate.",
+            "evidence": [
+              {
+                "sourceId": "embedded-class",
+                "startLine": 28,
+                "endLine": 35
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Construction dictionary nonnull; Invoke separate.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 28,
+              "endLine": 35
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "embedded-list-unsupported",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_EmbeddedFileSystem"
+      ],
+      "activities": [
+        "List"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Unsupported Storage_EmbeddedFileSystem activity: 'List'.",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 115,
+              "endLine": 115
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Owning mapped catalog declares List, but active Embedded five-argument Invoke accepts only Read, Write, Delete and Exists, so List enters its explicit unsupported-activity guard before path or provider work.",
+        "evidence": [
+          {
+            "sourceId": "embedded-class",
+            "startLine": 112,
+            "endLine": 117
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Owning mapped catalog declares List, but active Embedded five-argument Invoke accepts only Read, Write, Delete and Exists, so List enters its explicit unsupported-activity guard before path or provider work.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 112,
+              "endLine": 117
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm canonical mapped List and Embedded concrete selector, and source supported-activity membership; no path or file inspection.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 112,
+              "endLine": 117
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record unsupported concrete capability for mapped Storage owner; stop before List/file effect and do not substitute a different concrete automatically.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "embedded-class",
+                "startLine": 112,
+                "endLine": 117
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff records unsupported List capability; no capability change or runtime success claimed.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 112,
+              "endLine": 117
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "embedded-addresses-resolver-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_EmbeddedFileSystem"
+      ],
+      "activities": [
+        "Read",
+        "Write",
+        "Delete",
+        "Exists"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Could not resolve Jacket.Addresses path.",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 128,
+              "endLine": 128
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Embedded active Invoke resolves literal $.%.@.Addresses on this object and merges resolver Failure before activity dispatch.",
+        "evidence": [
+          {
+            "sourceId": "embedded-class",
+            "startLine": 119,
+            "endLine": 130
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Embedded active Invoke resolves literal $.%.@.Addresses on this object and merges resolver Failure before activity dispatch.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 119,
+              "endLine": 130
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect exact literal address resolver Failure/HasResult flags and Jacket shape metadata; no paths/addresses.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 119,
+              "endLine": 130
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted Jacket/Addresses source-owner evidence; stop before file effect.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "embedded-class",
+                "startLine": 119,
+                "endLine": 130
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; address guard remains unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 119,
+              "endLine": 130
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "embedded-read-detail-type",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_EmbeddedFileSystem"
+      ],
+      "activities": [
+        "Read"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Config.ResultDetail must be a native Boolean.",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 141,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Read Config has ResultDetail member and value is not native Boolean; absence uses false.",
+        "evidence": [
+          {
+            "sourceId": "embedded-class",
+            "startLine": 133,
+            "endLine": 143
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Read Config has ResultDetail member and value is not native Boolean; absence uses false.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 133,
+              "endLine": 143
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect ResultDetail member presence/native-Boolean flag only.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 133,
+              "endLine": 143
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use intended native Boolean ResultDetail or omit for false default.",
+            "expected": "ResultDetail absent or native Boolean; file result separate.",
+            "evidence": [
+              {
+                "sourceId": "embedded-class",
+                "startLine": 133,
+                "endLine": 143
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "ResultDetail absent or native Boolean; file result separate.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 133,
+              "endLine": 143
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "embedded-read-detail-target-required",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_EmbeddedFileSystem"
+      ],
+      "activities": [
+        "Read"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Config.ResultDetail requires Config.TargetPath for Read.",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 144,
+              "endLine": 144
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Read ResultDetail is native true but Config.TargetPath member is absent; member presence, not path validity, is tested.",
+        "evidence": [
+          {
+            "sourceId": "embedded-class",
+            "startLine": 133,
+            "endLine": 145
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Read ResultDetail is native true but Config.TargetPath member is absent; member presence, not path validity, is tested.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 133,
+              "endLine": 145
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect true-detail and TargetPath member-presence flags; redact target.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 133,
+              "endLine": 145
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "If detailed file result is intended, supply an approved Config.TargetPath member; otherwise disable ResultDetail. Validate target shape separately.",
+            "expected": "True-detail has TargetPath member or detail false; file effect unverified.",
+            "evidence": [
+              {
+                "sourceId": "embedded-class",
+                "startLine": 133,
+                "endLine": 145
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "True-detail has TargetPath member or detail false; file effect unverified.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "embedded-class",
+              "startLine": 133,
+              "endLine": 145
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "embedded-read-target-shape",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_EmbeddedFileSystem"
+      ],
+      "activities": [
+        "Read"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Config.TargetPath must be a nonempty absolute filesystem path.",
+          "evidence": [
+            {
+              "sourceId": "embedded-read",
+              "startLine": 18,
+              "endLine": 18
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "TargetPathProvided is true but target is blank, not fully qualified or provider-style path before read/copy.",
+        "evidence": [
+          {
+            "sourceId": "embedded-read",
+            "startLine": 14,
+            "endLine": 20
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "TargetPathProvided is true but target is blank, not fully qualified or provider-style path before read/copy.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "embedded-read",
+              "startLine": 14,
+              "endLine": 20
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect target provided/blank/fully-qualified/provider-style flags without path.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "embedded-read",
+              "startLine": 14,
+              "endLine": 20
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use approved nonblank fully qualified filesystem target or omit TargetPath for content read.",
+            "expected": "Static target shape guard false; no file effect.",
+            "evidence": [
+              {
+                "sourceId": "embedded-read",
+                "startLine": 14,
+                "endLine": 20
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Static target shape guard false; no file effect.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "embedded-read",
+              "startLine": 14,
+              "endLine": 20
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "embedded-read-source-target-same",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_EmbeddedFileSystem"
+      ],
+      "activities": [
+        "Read"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Source and Config.TargetPath must differ.",
+          "evidence": [
+            {
+              "sourceId": "embedded-read",
+              "startLine": 34,
+              "endLine": 34
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "A matching source file is found, TargetPathProvided true and canonical source/target paths compare equal ignoring case.",
+        "evidence": [
+          {
+            "sourceId": "embedded-read",
+            "startLine": 29,
+            "endLine": 36
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "A matching source file is found, TargetPathProvided true and canonical source/target paths compare equal ignoring case.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "embedded-read",
+              "startLine": 29,
+              "endLine": 36
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect canonical source-equals-target flag only; redact both paths.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "embedded-read",
+              "startLine": 29,
+              "endLine": 36
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Choose an approved distinct target path or omit TargetPath; do not overwrite source.",
+            "expected": "Canonical source/target differ; read/copy unverified.",
+            "evidence": [
+              {
+                "sourceId": "embedded-read",
+                "startLine": 29,
+                "endLine": 36
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Canonical source/target differ; read/copy unverified.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "embedded-read",
+              "startLine": 29,
+              "endLine": 36
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "embedded-read-target-changed",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_EmbeddedFileSystem"
+      ],
+      "activities": [
+        "Read"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "🔥 Exception during Invoke-ReadVirtualFileFromAddresses: Config.TargetPath changed while computing result detail.",
+          "evidence": [
+            {
+              "sourceId": "embedded-read",
+              "startLine": 57,
+              "endLine": 57
+            },
+            {
+              "sourceId": "embedded-read",
+              "startLine": 89,
+              "endLine": 89
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "ResultDetail true after a target copy, but target length or file timestamps change during receipt digest; fixed throw at57 is assembled by helper catch at89.",
+        "evidence": [
+          {
+            "sourceId": "embedded-read",
+            "startLine": 46,
+            "endLine": 90
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "ResultDetail true after a target copy, but target length or file timestamps change during receipt digest; fixed throw at57 is assembled by helper catch at89.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "embedded-read",
+              "startLine": 46,
+              "endLine": 90
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect before/after length and timestamp equality flags only; never retain file bytes, digest or path.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "embedded-read",
+              "startLine": 46,
+              "endLine": 90
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted file-integrity race for owner; do not reuse receipt or retry automatically.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "embedded-read",
+                "startLine": 46,
+                "endLine": 90
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; target stability unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "embedded-read",
+              "startLine": 46,
+              "endLine": 90
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "embedded-read-file-absent",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_EmbeddedFileSystem"
+      ],
+      "activities": [
+        "Read"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "File '",
+          "suffix": "' not found in any address.",
+          "evidence": [
+            {
+              "sourceId": "embedded-read",
+              "startLine": 84,
+              "endLine": 84
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "No configured address yielded requested file; TargetPathProvided makes this a direct Critical, while no target uses configurable SignalLevel and may be recovered by class default content.",
+        "evidence": [
+          {
+            "sourceId": "embedded-read",
+            "startLine": 76,
+            "endLine": 87
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "No configured address yielded requested file; TargetPathProvided makes this a direct Critical, while no target uses configurable SignalLevel and may be recovered by class default content.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "embedded-read",
+              "startLine": 76,
+              "endLine": 87
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect approved virtual-path identity and address match-count/target-provided/SignalLevel flags, without path text.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "embedded-read",
+              "startLine": 76,
+              "endLine": 87
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted source-address/path owner evidence; do not create, copy or retry from this message alone.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "embedded-read",
+                "startLine": 76,
+                "endLine": 87
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; file presence/recovery remains unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "embedded-read",
+              "startLine": 76,
+              "endLine": 87
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "embedded-write-source-absent",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_EmbeddedFileSystem"
+      ],
+      "activities": [
+        "Write"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Source file does not exist: '",
+          "suffix": "'.",
+          "evidence": [
+            {
+              "sourceId": "embedded-write",
+              "startLine": 46,
+              "endLine": 46
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Write selects Config.SourcePath, Resolve-Path succeeds, then File.Exists is false (including race or nonfile).",
+        "evidence": [
+          {
+            "sourceId": "embedded-write",
+            "startLine": 42,
+            "endLine": 48
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Write selects Config.SourcePath, Resolve-Path succeeds, then File.Exists is false (including race or nonfile).",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "embedded-write",
+              "startLine": 42,
+              "endLine": 48
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect source-path selected/resolved and File.Exists flag; redact path.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "embedded-write",
+              "startLine": 42,
+              "endLine": 48
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record source-file owner handoff and stop before write; do not infer simple typo from this race-capable guard.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "embedded-write",
+                "startLine": 42,
+                "endLine": 48
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; source file state unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "embedded-write",
+              "startLine": 42,
+              "endLine": 48
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "embedded-write-source-destination-same",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_EmbeddedFileSystem"
+      ],
+      "activities": [
+        "Write"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Source and destination paths must differ: '",
+          "suffix": "'.",
+          "evidence": [
+            {
+              "sourceId": "embedded-write",
+              "startLine": 50,
+              "endLine": 50
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Resolved source and canonical destination compare equal ignoring case before byte write.",
+        "evidence": [
+          {
+            "sourceId": "embedded-write",
+            "startLine": 46,
+            "endLine": 52
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Resolved source and canonical destination compare equal ignoring case before byte write.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "embedded-write",
+              "startLine": 46,
+              "endLine": 52
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect canonical source-equals-destination flag only; redact paths.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "embedded-write",
+              "startLine": 46,
+              "endLine": 52
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use approved destination distinct from source or stop; no write here.",
+            "expected": "Canonical paths differ; write result unverified.",
+            "evidence": [
+              {
+                "sourceId": "embedded-write",
+                "startLine": 46,
+                "endLine": 52
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Canonical paths differ; write result unverified.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "embedded-write",
+              "startLine": 46,
+              "endLine": 52
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "embedded-write-input-required",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_EmbeddedFileSystem"
+      ],
+      "activities": [
+        "Write"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Embedded file write requires Config.Content or Config.SourcePath.",
+          "evidence": [
+            {
+              "sourceId": "embedded-write",
+              "startLine": 60,
+              "endLine": 60
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Write has null Config.Content and blank Config.SourcePath after Plan selection.",
+        "evidence": [
+          {
+            "sourceId": "embedded-write",
+            "startLine": 20,
+            "endLine": 61
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Write has null Config.Content and blank Config.SourcePath after Plan selection.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "embedded-write",
+              "startLine": 20,
+              "endLine": 61
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Content nonnull and SourcePath nonblank flags; redact both.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "embedded-write",
+              "startLine": 20,
+              "endLine": 61
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Provide intended Content or approved nonblank SourcePath in originating Plan; choose one source deliberately.",
+            "expected": "At least one source branch is selected; write unverified.",
+            "evidence": [
+              {
+                "sourceId": "embedded-write",
+                "startLine": 20,
+                "endLine": 61
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "At least one source branch is selected; write unverified.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "embedded-write",
+              "startLine": 20,
+              "endLine": 61
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "embedded-exists-addresses-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_EmbeddedFileSystem"
+      ],
+      "activities": [
+        "Exists"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "No addresses provided to check file '",
+          "suffix": "'.",
+          "evidence": [
+            {
+              "sourceId": "embedded-exists",
+              "startLine": 28,
+              "endLine": 28
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Exists skips all configured Addresses as blank and hasAddress remains false.",
+        "evidence": [
+          {
+            "sourceId": "embedded-exists",
+            "startLine": 16,
+            "endLine": 30
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Exists skips all configured Addresses as blank and hasAddress remains false.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "embedded-exists",
+              "startLine": 16,
+              "endLine": 30
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect address count and nonblank flags only; redact paths.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "embedded-exists",
+              "startLine": 16,
+              "endLine": 30
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record Jacket/Addresses owner handoff; do not fabricate filesystem roots.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "embedded-exists",
+                "startLine": 16,
+                "endLine": 30
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; address availability unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "embedded-exists",
+              "startLine": 16,
+              "endLine": 30
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    },
+    {
+      "id": "embedded-delete-addresses-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Storage_EmbeddedFileSystem"
+      ],
+      "activities": [
+        "Delete"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "No addresses provided to delete file '",
+          "suffix": "'.",
+          "evidence": [
+            {
+              "sourceId": "embedded-delete",
+              "startLine": 19,
+              "endLine": 19
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Delete takes first configured address and it is null before filesystem delete.",
+        "evidence": [
+          {
+            "sourceId": "embedded-delete",
+            "startLine": 14,
+            "endLine": 21
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Delete takes first configured address and it is null before filesystem delete.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "embedded-delete",
+              "startLine": 14,
+              "endLine": 21
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect first-address null flag only; redact address/path.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "embedded-delete",
+              "startLine": 14,
+              "endLine": 21
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no storage, vault, filesystem, REST or provider effect/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record Jacket/Addresses owner handoff; do not delete or guess root.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "embedded-delete",
+                "startLine": 14,
+                "endLine": 21
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; delete precondition unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "embedded-delete",
+              "startLine": 14,
+              "endLine": 21
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    }
+  ]
+}

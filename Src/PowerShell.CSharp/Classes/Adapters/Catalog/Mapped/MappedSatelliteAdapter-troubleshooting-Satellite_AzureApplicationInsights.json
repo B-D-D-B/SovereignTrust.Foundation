@@ -1,0 +1,1865 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedSatelliteAdapter",
+  "mappedAdapter": "MappedSatelliteAdapter",
+  "part": "Satellite_AzureApplicationInsights",
+  "sources": [
+    {
+      "id": "sat-module",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Satellite/AzureApplicationInsights/PowerShell/Satellite_AzureApplicationInsights.psm1",
+      "sha256": "87BCB6DCC17A8D1014914D7969B9EC9E981850DF344D626D19E35648D97E3A90",
+      "symbol": "Satellite_AzureApplicationInsights"
+    }
+  ],
+  "entries": [
+    {
+      "id": "satellite-construct-null-dictionary",
+      "status": "source-verified",
+      "adapters": [
+        "Satellite_AzureApplicationInsights"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot construct Satellite_AzureApplicationInsights — provided dictionary is null.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 31,
+              "endLine": 31
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Concrete Satellite Construct receives null dictionary after optional registered Jacket hydration.",
+        "evidence": [
+          {
+            "sourceId": "sat-module",
+            "startLine": 26,
+            "endLine": 33
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Concrete Satellite Construct receives null dictionary after optional registered Jacket hydration.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 26,
+              "endLine": 33
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect concrete registration identity and hydrated dictionary-null flag; redact content.",
+          "expected": "Redacted flags identify this exact guard without telemetry payload.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 26,
+              "endLine": 33
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating construction/input proposal only; no telemetry/provider execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull Satellite construction dictionary through owning registration/jacket plan.",
+            "expected": "Construction dictionary is nonnull; Invoke remains separate.",
+            "evidence": [
+              {
+                "sourceId": "sat-module",
+                "startLine": 26,
+                "endLine": 33
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message differs.",
+          "Effective telemetry, graph, Token or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose response/entries/token or execute telemetry/REST/conduction/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Construction dictionary is nonnull; Invoke remains separate.",
+          "expected": "Local guard would be false; telemetry success unverified.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 26,
+              "endLine": 33
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, telemetry body/entries/raw response/errors, counts/keys, token, URL/REST receipt, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no telemetry/REST/conduction/runtime/provider execution.",
+        "HandleResponse can retain Result true in a failed Signal when counts match but errors are logged; do not equate Result with success."
+      ]
+    },
+    {
+      "id": "satellite-null-conduction-signal",
+      "status": "source-verified",
+      "adapters": [
+        "Satellite_AzureApplicationInsights"
+      ],
+      "activities": [
+        "EmitEntries",
+        "EmitSignal",
+        "SendMessage",
+        "HandleResponse",
+        "EmitSignalFull"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Null ConductionSignal passed to Satellite_AzureApplicationInsights.Invoke()",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 65,
+              "endLine": 65
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Concrete Satellite Invoke receives falsey ConductionSignal before Config, telemetry or REST dispatch.",
+        "evidence": [
+          {
+            "sourceId": "sat-module",
+            "startLine": 60,
+            "endLine": 67
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Concrete Satellite Invoke receives falsey ConductionSignal before Config, telemetry or REST dispatch.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 60,
+              "endLine": 67
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm canonical activity and ConductionSignal presence/truthy flag; redact Signal.",
+          "expected": "Redacted flags identify this exact guard without telemetry payload.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 60,
+              "endLine": 67
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic telemetry/graph owner handoff only; no emission, REST request or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted caller Signal wiring for owner and stop before telemetry/REST effects.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sat-module",
+                "startLine": 60,
+                "endLine": 67
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message differs.",
+          "Effective telemetry, graph, Token or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose response/entries/token or execute telemetry/REST/conduction/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Signal wiring unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 60,
+              "endLine": 67
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, telemetry body/entries/raw response/errors, counts/keys, token, URL/REST receipt, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no telemetry/REST/conduction/runtime/provider execution.",
+        "HandleResponse can retain Result true in a failed Signal when counts match but errors are logged; do not equate Result with success."
+      ]
+    },
+    {
+      "id": "satellite-emission-item-graph",
+      "status": "source-verified",
+      "adapters": [
+        "Satellite_AzureApplicationInsights"
+      ],
+      "activities": [
+        "EmitEntries",
+        "EmitSignal"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Telemetry emission requires an item graph.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 114,
+              "endLine": 114
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "EmitEntries or EmitSignal sees ItemSignal.GetPointer() null before handled-result clearing or conduction.",
+        "evidence": [
+          {
+            "sourceId": "sat-module",
+            "startLine": 110,
+            "endLine": 116
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "EmitEntries or EmitSignal sees ItemSignal.GetPointer() null before handled-result clearing or conduction.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 110,
+              "endLine": 116
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect ItemSignal pointer-present/Graph identity flag and selected emit activity; redact graph.",
+          "expected": "Redacted flags identify this exact guard without telemetry payload.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 110,
+              "endLine": 116
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic telemetry/graph owner handoff only; no emission, REST request or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted item-graph wiring for owner; do not create graph or emit telemetry here.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sat-module",
+                "startLine": 110,
+                "endLine": 116
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message differs.",
+          "Effective telemetry, graph, Token or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose response/entries/token or execute telemetry/REST/conduction/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; graph guard unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 110,
+              "endLine": 116
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, telemetry body/entries/raw response/errors, counts/keys, token, URL/REST receipt, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no telemetry/REST/conduction/runtime/provider execution.",
+        "HandleResponse can retain Result true in a failed Signal when counts match but errors are logged; do not equate Result with success."
+      ]
+    },
+    {
+      "id": "satellite-emitentries-handled-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Satellite_AzureApplicationInsights"
+      ],
+      "activities": [
+        "EmitEntries"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Missing handled telemetry result at TelemetryHandled_EmitEntries.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 112,
+              "endLine": 112
+            },
+            {
+              "sourceId": "sat-module",
+              "startLine": 146,
+              "endLine": 146
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "EmitEntries conduction child did not fail, but no handled Signal Result with native Boolean Result property was copied to opSignal under deterministic TelemetryHandled_EmitEntries key.",
+        "evidence": [
+          {
+            "sourceId": "sat-module",
+            "startLine": 111,
+            "endLine": 149
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "EmitEntries conduction child did not fail, but no handled Signal Result with native Boolean Result property was copied to opSignal under deterministic TelemetryHandled_EmitEntries key.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 111,
+              "endLine": 149
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect handled key lookup HasResult, handled.Result native-Boolean flag and conductionFailed flag; do not inspect entries.",
+          "expected": "Redacted flags identify this exact guard without telemetry payload.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 111,
+              "endLine": 149
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic telemetry/graph owner handoff only; no emission, REST request or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted handled-result producer/graph owner evidence; stop before re-emission or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sat-module",
+                "startLine": 111,
+                "endLine": 149
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message differs.",
+          "Effective telemetry, graph, Token or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose response/entries/token or execute telemetry/REST/conduction/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; handled result remains unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 111,
+              "endLine": 149
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, telemetry body/entries/raw response/errors, counts/keys, token, URL/REST receipt, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no telemetry/REST/conduction/runtime/provider execution.",
+        "HandleResponse can retain Result true in a failed Signal when counts match but errors are logged; do not equate Result with success."
+      ]
+    },
+    {
+      "id": "satellite-emitsignal-handled-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Satellite_AzureApplicationInsights"
+      ],
+      "activities": [
+        "EmitSignal"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Missing handled telemetry result at TelemetryHandled_EmitSignal.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 112,
+              "endLine": 112
+            },
+            {
+              "sourceId": "sat-module",
+              "startLine": 146,
+              "endLine": 146
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "EmitSignal conduction child did not fail, but no handled Signal Result with native Boolean Result property was copied to opSignal under deterministic TelemetryHandled_EmitSignal key.",
+        "evidence": [
+          {
+            "sourceId": "sat-module",
+            "startLine": 111,
+            "endLine": 149
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "EmitSignal conduction child did not fail, but no handled Signal Result with native Boolean Result property was copied to opSignal under deterministic TelemetryHandled_EmitSignal key.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 111,
+              "endLine": 149
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect handled key lookup HasResult, handled.Result native-Boolean flag and conductionFailed flag; do not inspect signal/entries.",
+          "expected": "Redacted flags identify this exact guard without telemetry payload.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 111,
+              "endLine": 149
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic telemetry/graph owner handoff only; no emission, REST request or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted handled-result producer/graph owner evidence; stop before re-emission or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sat-module",
+                "startLine": 111,
+                "endLine": 149
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message differs.",
+          "Effective telemetry, graph, Token or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose response/entries/token or execute telemetry/REST/conduction/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; handled result remains unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 111,
+              "endLine": 149
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, telemetry body/entries/raw response/errors, counts/keys, token, URL/REST receipt, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no telemetry/REST/conduction/runtime/provider execution.",
+        "HandleResponse can retain Result true in a failed Signal when counts match but errors are logged; do not equate Result with success."
+      ]
+    },
+    {
+      "id": "satellite-body-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Satellite_AzureApplicationInsights"
+      ],
+      "activities": [
+        "SendMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Telemetry body is missing.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 163,
+              "endLine": 163
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Token.Memory Get returns nonfailed Signal with no Result; failed child is merged and suppresses this custom log.",
+        "evidence": [
+          {
+            "sourceId": "sat-module",
+            "startLine": 153,
+            "endLine": 165
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Token.Memory Get returns nonfailed Signal with no Result; failed child is merged and suppresses this custom log.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 153,
+              "endLine": 165
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect body path resolver and Token.Memory child Failure/HasResult flags; redact body/path.",
+          "expected": "Redacted flags identify this exact guard without telemetry payload.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 153,
+              "endLine": 165
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic telemetry/graph owner handoff only; no emission, REST request or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted Token.Memory/body source-owner evidence; stop before telemetry Post or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sat-module",
+                "startLine": 153,
+                "endLine": 165
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message differs.",
+          "Effective telemetry, graph, Token or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose response/entries/token or execute telemetry/REST/conduction/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; body acquisition unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 153,
+              "endLine": 165
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, telemetry body/entries/raw response/errors, counts/keys, token, URL/REST receipt, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no telemetry/REST/conduction/runtime/provider execution.",
+        "HandleResponse can retain Result true in a failed Signal when counts match but errors are logged; do not equate Result with success."
+      ]
+    },
+    {
+      "id": "satellite-body-nonempty-json-text",
+      "status": "source-verified",
+      "adapters": [
+        "Satellite_AzureApplicationInsights"
+      ],
+      "activities": [
+        "SendMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Telemetry body must be nonempty JSON text.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 168,
+              "endLine": 168
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Token.Memory returned Result, but body is not native string or is whitespace.",
+        "evidence": [
+          {
+            "sourceId": "sat-module",
+            "startLine": 161,
+            "endLine": 170
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Token.Memory returned Result, but body is not native string or is whitespace.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 161,
+              "endLine": 170
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect body native-string and nonblank flags only; no body dump.",
+          "expected": "Redacted flags identify this exact guard without telemetry payload.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 161,
+              "endLine": 170
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating construction/input proposal only; no telemetry/provider execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonblank JSON text from originating Token.Memory source before telemetry processing; valid JSON/schema are separate.",
+            "expected": "Body is native nonblank string; parse and emission remain unverified.",
+            "evidence": [
+              {
+                "sourceId": "sat-module",
+                "startLine": 161,
+                "endLine": 170
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message differs.",
+          "Effective telemetry, graph, Token or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose response/entries/token or execute telemetry/REST/conduction/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Body is native nonblank string; parse and emission remain unverified.",
+          "expected": "Local guard would be false; telemetry success unverified.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 161,
+              "endLine": 170
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, telemetry body/entries/raw response/errors, counts/keys, token, URL/REST receipt, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no telemetry/REST/conduction/runtime/provider execution.",
+        "HandleResponse can retain Result true in a failed Signal when counts match but errors are logged; do not equate Result with success."
+      ]
+    },
+    {
+      "id": "satellite-body-array-nonobject",
+      "status": "source-verified",
+      "adapters": [
+        "Satellite_AzureApplicationInsights"
+      ],
+      "activities": [
+        "SendMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Invalid telemetry body: Telemetry array contains a nonobject item.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 180,
+              "endLine": 180
+            },
+            {
+              "sourceId": "sat-module",
+              "startLine": 187,
+              "endLine": 187
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Parsed telemetry JSON root is an array with at least one element whose ValueKind is not Object; fixed throw at180 is caught and wrapped at187 before POST.",
+        "evidence": [
+          {
+            "sourceId": "sat-module",
+            "startLine": 172,
+            "endLine": 188
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Parsed telemetry JSON root is an array with at least one element whose ValueKind is not Object; fixed throw at180 is caught and wrapped at187 before POST.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 172,
+              "endLine": 188
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only parsed root-is-array and any-element-nonobject flags; do not print body or element.",
+          "expected": "Redacted flags identify this exact guard without telemetry payload.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 172,
+              "endLine": 188
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating construction/input proposal only; no telemetry/provider execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "If array telemetry is intended, correct originating Token.Memory body so every element is an object; validate metadata locally before a separately authorized send.",
+            "expected": "Parsed array elements are all Object; POST success remains unverified.",
+            "evidence": [
+              {
+                "sourceId": "sat-module",
+                "startLine": 172,
+                "endLine": 188
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message differs.",
+          "Effective telemetry, graph, Token or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose response/entries/token or execute telemetry/REST/conduction/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Parsed array elements are all Object; POST success remains unverified.",
+          "expected": "Local guard would be false; telemetry success unverified.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 172,
+              "endLine": 188
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, telemetry body/entries/raw response/errors, counts/keys, token, URL/REST receipt, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no telemetry/REST/conduction/runtime/provider execution.",
+        "HandleResponse can retain Result true in a failed Signal when counts match but errors are logged; do not equate Result with success."
+      ]
+    },
+    {
+      "id": "satellite-body-root-shape",
+      "status": "source-verified",
+      "adapters": [
+        "Satellite_AzureApplicationInsights"
+      ],
+      "activities": [
+        "SendMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Invalid telemetry body: Telemetry body must be an object or array of objects.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 183,
+              "endLine": 183
+            },
+            {
+              "sourceId": "sat-module",
+              "startLine": 187,
+              "endLine": 187
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Parsed telemetry JSON root is neither Object nor Array; fixed throw at183 is caught and wrapped at187 before POST.",
+        "evidence": [
+          {
+            "sourceId": "sat-module",
+            "startLine": 172,
+            "endLine": 188
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Parsed telemetry JSON root is neither Object nor Array; fixed throw at183 is caught and wrapped at187 before POST.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 172,
+              "endLine": 188
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only parsed root ValueKind flag, not body.",
+          "expected": "Redacted flags identify this exact guard without telemetry payload.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 172,
+              "endLine": 188
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating construction/input proposal only; no telemetry/provider execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Correct originating Token.Memory body to intended JSON object or array of objects; validate root shape locally before separately authorized send.",
+            "expected": "Parsed root is Object or Array; later array checks and POST remain separate.",
+            "evidence": [
+              {
+                "sourceId": "sat-module",
+                "startLine": 172,
+                "endLine": 188
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message differs.",
+          "Effective telemetry, graph, Token or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose response/entries/token or execute telemetry/REST/conduction/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Parsed root is Object or Array; later array checks and POST remain separate.",
+          "expected": "Local guard would be false; telemetry success unverified.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 172,
+              "endLine": 188
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, telemetry body/entries/raw response/errors, counts/keys, token, URL/REST receipt, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no telemetry/REST/conduction/runtime/provider execution.",
+        "HandleResponse can retain Result true in a failed Signal when counts match but errors are logged; do not equate Result with success."
+      ]
+    },
+    {
+      "id": "satellite-body-empty-array",
+      "status": "source-verified",
+      "adapters": [
+        "Satellite_AzureApplicationInsights"
+      ],
+      "activities": [
+        "SendMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Invalid telemetry body: Telemetry body contains no items.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 184,
+              "endLine": 184
+            },
+            {
+              "sourceId": "sat-module",
+              "startLine": 187,
+              "endLine": 187
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Parsed telemetry JSON root is an empty Array and itemsSent<=0; fixed throw at184 is caught and wrapped at187 before POST.",
+        "evidence": [
+          {
+            "sourceId": "sat-module",
+            "startLine": 172,
+            "endLine": 188
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Parsed telemetry JSON root is an empty Array and itemsSent<=0; fixed throw at184 is caught and wrapped at187 before POST.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 172,
+              "endLine": 188
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only parsed root-is-array and item-count-positive flags; do not print body.",
+          "expected": "Redacted flags identify this exact guard without telemetry payload.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 172,
+              "endLine": 188
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating construction/input proposal only; no telemetry/provider execution.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "If telemetry should be sent, provide intended nonempty object array from originating Token.Memory source; otherwise stop without POST.",
+            "expected": "Parsed intended array has positive item count; POST remains unverified.",
+            "evidence": [
+              {
+                "sourceId": "sat-module",
+                "startLine": 172,
+                "endLine": 188
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message differs.",
+          "Effective telemetry, graph, Token or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose response/entries/token or execute telemetry/REST/conduction/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Parsed intended array has positive item count; POST remains unverified.",
+          "expected": "Local guard would be false; telemetry success unverified.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 172,
+              "endLine": 188
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, telemetry body/entries/raw response/errors, counts/keys, token, URL/REST receipt, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no telemetry/REST/conduction/runtime/provider execution.",
+        "HandleResponse can retain Result true in a failed Signal when counts match but errors are logged; do not equate Result with success."
+      ]
+    },
+    {
+      "id": "satellite-count-key-graph",
+      "status": "source-verified",
+      "adapters": [
+        "Satellite_AzureApplicationInsights"
+      ],
+      "activities": [
+        "SendMessage"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "SendMessage requires Config.CountKey and an item graph.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 192,
+              "endLine": 192
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "After body JSON/count validation, Config.CountKey resolver has no Result or blank string, or ItemSignal pointer is null.",
+        "evidence": [
+          {
+            "sourceId": "sat-module",
+            "startLine": 190,
+            "endLine": 196
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "After body JSON/count validation, Config.CountKey resolver has no Result or blank string, or ItemSignal pointer is null.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 190,
+              "endLine": 196
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect CountKey HasResult/nonblank and item pointer-present flags separately; redact key/graph.",
+          "expected": "Redacted flags identify this exact guard without telemetry payload.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 190,
+              "endLine": 196
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic telemetry/graph owner handoff only; no emission, REST request or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted CountKey/graph source-owner evidence; stop before telemetry Post, graph write or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sat-module",
+                "startLine": 190,
+                "endLine": 196
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message differs.",
+          "Effective telemetry, graph, Token or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose response/entries/token or execute telemetry/REST/conduction/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff identifies failing field/graph guard; clearance unverified.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 190,
+              "endLine": 196
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, telemetry body/entries/raw response/errors, counts/keys, token, URL/REST receipt, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no telemetry/REST/conduction/runtime/provider execution.",
+        "HandleResponse can retain Result true in a failed Signal when counts match but errors are logged; do not equate Result with success."
+      ]
+    },
+    {
+      "id": "satellite-handle-inputs",
+      "status": "source-verified",
+      "adapters": [
+        "Satellite_AzureApplicationInsights"
+      ],
+      "activities": [
+        "HandleResponse"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "HandleResponse requires raw response, sent count, result key, and item graph.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 225,
+              "endLine": 225
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "RawResponse has no Result or is null, ItemsSent has no Result, HandledResultKey has no Result or blank string, or ItemSignal pointer is null.",
+        "evidence": [
+          {
+            "sourceId": "sat-module",
+            "startLine": 218,
+            "endLine": 227
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "RawResponse has no Result or is null, ItemsSent has no Result, HandledResultKey has no Result or blank string, or ItemSignal pointer is null.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 218,
+              "endLine": 227
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect RawResponse/ItemsSent/HandledResultKey HasResult, raw-null/key-nonblank and graph-pointer flags separately; redact values.",
+          "expected": "Redacted flags identify this exact guard without telemetry payload.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 218,
+              "endLine": 227
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic telemetry/graph owner handoff only; no emission, REST request or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted missing input/graph ownership; do not invent provider receipt or write handled result.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sat-module",
+                "startLine": 218,
+                "endLine": 227
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message differs.",
+          "Effective telemetry, graph, Token or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose response/entries/token or execute telemetry/REST/conduction/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff identifies failing prerequisite; no normalization success claimed.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 218,
+              "endLine": 227
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, telemetry body/entries/raw response/errors, counts/keys, token, URL/REST receipt, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no telemetry/REST/conduction/runtime/provider execution.",
+        "HandleResponse can retain Result true in a failed Signal when counts match but errors are logged; do not equate Result with success."
+      ]
+    },
+    {
+      "id": "satellite-handle-invalid-json",
+      "status": "source-verified",
+      "adapters": [
+        "Satellite_AzureApplicationInsights"
+      ],
+      "activities": [
+        "HandleResponse"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "HandleResponse raw response is invalid JSON.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 231,
+              "endLine": 231
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "RawResponse is string and ConvertFrom-Json throws before property-bag validation.",
+        "evidence": [
+          {
+            "sourceId": "sat-module",
+            "startLine": 228,
+            "endLine": 232
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "RawResponse is string and ConvertFrom-Json throws before property-bag validation.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 228,
+              "endLine": 232
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect string type and redacted local JSON parse success/error class only; no response text.",
+          "expected": "Redacted flags identify this exact guard without telemetry payload.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 228,
+              "endLine": 232
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic telemetry/graph owner handoff only; no emission, REST request or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted provider receipt parse failure for response owner; do not alter raw receipt.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sat-module",
+                "startLine": 228,
+                "endLine": 232
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message differs.",
+          "Effective telemetry, graph, Token or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose response/entries/token or execute telemetry/REST/conduction/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; receipt validity unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 228,
+              "endLine": 232
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, telemetry body/entries/raw response/errors, counts/keys, token, URL/REST receipt, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no telemetry/REST/conduction/runtime/provider execution.",
+        "HandleResponse can retain Result true in a failed Signal when counts match but errors are logged; do not equate Result with success."
+      ]
+    },
+    {
+      "id": "satellite-handle-property-bag",
+      "status": "source-verified",
+      "adapters": [
+        "Satellite_AzureApplicationInsights"
+      ],
+      "activities": [
+        "HandleResponse"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "HandleResponse raw response must be a property bag.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 234,
+              "endLine": 234
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Parsed or native RawResponse is neither IDictionary nor PSCustomObject.",
+        "evidence": [
+          {
+            "sourceId": "sat-module",
+            "startLine": 228,
+            "endLine": 235
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Parsed or native RawResponse is neither IDictionary nor PSCustomObject.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 228,
+              "endLine": 235
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect raw response type-is-dictionary/type-is-PSCustomObject flags only.",
+          "expected": "Redacted flags identify this exact guard without telemetry payload.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 228,
+              "endLine": 235
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic telemetry/graph owner handoff only; no emission, REST request or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted provider receipt type for response owner; do not fabricate property bag.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sat-module",
+                "startLine": 228,
+                "endLine": 235
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message differs.",
+          "Effective telemetry, graph, Token or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose response/entries/token or execute telemetry/REST/conduction/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; receipt type unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 228,
+              "endLine": 235
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, telemetry body/entries/raw response/errors, counts/keys, token, URL/REST receipt, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no telemetry/REST/conduction/runtime/provider execution.",
+        "HandleResponse can retain Result true in a failed Signal when counts match but errors are logged; do not equate Result with success."
+      ]
+    },
+    {
+      "id": "satellite-handle-count-properties",
+      "status": "source-verified",
+      "adapters": [
+        "Satellite_AzureApplicationInsights"
+      ],
+      "activities": [
+        "HandleResponse"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "HandleResponse receipt lacks required counts.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Property bag lacks itemsReceived or itemsAccepted property; this checks presence before value type/range.",
+        "evidence": [
+          {
+            "sourceId": "sat-module",
+            "startLine": 237,
+            "endLine": 243
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Property bag lacks itemsReceived or itemsAccepted property; this checks presence before value type/range.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 237,
+              "endLine": 243
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect two count property-presence flags only; redact receipt.",
+          "expected": "Redacted flags identify this exact guard without telemetry payload.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 237,
+              "endLine": 243
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic telemetry/graph owner handoff only; no emission, REST request or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted missing count fields for telemetry response owner; do not infer accepted count.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sat-module",
+                "startLine": 237,
+                "endLine": 243
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message differs.",
+          "Effective telemetry, graph, Token or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose response/entries/token or execute telemetry/REST/conduction/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; count presence unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 237,
+              "endLine": 243
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, telemetry body/entries/raw response/errors, counts/keys, token, URL/REST receipt, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no telemetry/REST/conduction/runtime/provider execution.",
+        "HandleResponse can retain Result true in a failed Signal when counts match but errors are logged; do not equate Result with success."
+      ]
+    },
+    {
+      "id": "satellite-handle-count-types",
+      "status": "source-verified",
+      "adapters": [
+        "Satellite_AzureApplicationInsights"
+      ],
+      "activities": [
+        "HandleResponse"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "HandleResponse counts must be whole nonnegative integers.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 250,
+              "endLine": 250
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "ItemsSent, itemsReceived or itemsAccepted is null or not one of native Byte/SByte/Int16/UInt16/Int32/UInt32/Int64/UInt64 types; sign/range are checked later despite message wording.",
+        "evidence": [
+          {
+            "sourceId": "sat-module",
+            "startLine": 245,
+            "endLine": 253
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "ItemsSent, itemsReceived or itemsAccepted is null or not one of native Byte/SByte/Int16/UInt16/Int32/UInt32/Int64/UInt64 types; sign/range are checked later despite message wording.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 245,
+              "endLine": 253
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect native integral type flags for all three values separately; redact counts.",
+          "expected": "Redacted flags identify this exact guard without telemetry payload.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 245,
+              "endLine": 253
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic telemetry/graph owner handoff only; no emission, REST request or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted count type mismatch for telemetry input/response owner; do not coerce provider receipt or resend.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sat-module",
+                "startLine": 245,
+                "endLine": 253
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message differs.",
+          "Effective telemetry, graph, Token or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose response/entries/token or execute telemetry/REST/conduction/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; type/range validity remains unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 245,
+              "endLine": 253
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, telemetry body/entries/raw response/errors, counts/keys, token, URL/REST receipt, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no telemetry/REST/conduction/runtime/provider execution.",
+        "HandleResponse can retain Result true in a failed Signal when counts match but errors are logged; do not equate Result with success."
+      ]
+    },
+    {
+      "id": "satellite-handle-count-range",
+      "status": "source-verified",
+      "adapters": [
+        "Satellite_AzureApplicationInsights"
+      ],
+      "activities": [
+        "HandleResponse"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "HandleResponse count exceeds supported range.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 258,
+              "endLine": 258
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Native integral count type passed, but conversion of one of three values to Int64 throws.",
+        "evidence": [
+          {
+            "sourceId": "sat-module",
+            "startLine": 245,
+            "endLine": 259
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Native integral count type passed, but conversion of one of three values to Int64 throws.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 245,
+              "endLine": 259
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect which redacted count conversion overflowed Int64; do not print values.",
+          "expected": "Redacted flags identify this exact guard without telemetry payload.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 245,
+              "endLine": 259
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic telemetry/graph owner handoff only; no emission, REST request or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted overflow and source owner; do not truncate or rewrite provider counts.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sat-module",
+                "startLine": 245,
+                "endLine": 259
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message differs.",
+          "Effective telemetry, graph, Token or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose response/entries/token or execute telemetry/REST/conduction/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; supported range unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 245,
+              "endLine": 259
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, telemetry body/entries/raw response/errors, counts/keys, token, URL/REST receipt, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no telemetry/REST/conduction/runtime/provider execution.",
+        "HandleResponse can retain Result true in a failed Signal when counts match but errors are logged; do not equate Result with success."
+      ]
+    },
+    {
+      "id": "satellite-handle-count-relations",
+      "status": "source-verified",
+      "adapters": [
+        "Satellite_AzureApplicationInsights"
+      ],
+      "activities": [
+        "HandleResponse"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "HandleResponse receipt counts or errors are invalid.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 262,
+              "endLine": 262
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Converted sent<=0, received/accepted<0, accepted>received, received>sent, or nonnull errors value is not array.",
+        "evidence": [
+          {
+            "sourceId": "sat-module",
+            "startLine": 259,
+            "endLine": 264
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Converted sent<=0, received/accepted<0, accepted>received, received>sent, or nonnull errors value is not array.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 259,
+              "endLine": 264
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect only each inequality flag and errors-array-type flag; redact counts/errors.",
+          "expected": "Redacted flags identify this exact guard without telemetry payload.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 259,
+              "endLine": 264
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic telemetry/graph owner handoff only; no emission, REST request or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted invalid relation/shape for telemetry response owner; do not repair receipt or infer delivery.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sat-module",
+                "startLine": 259,
+                "endLine": 264
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message differs.",
+          "Effective telemetry, graph, Token or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose response/entries/token or execute telemetry/REST/conduction/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; receipt relations unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sat-module",
+              "startLine": 259,
+              "endLine": 264
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, telemetry body/entries/raw response/errors, counts/keys, token, URL/REST receipt, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no telemetry/REST/conduction/runtime/provider execution.",
+        "HandleResponse can retain Result true in a failed Signal when counts match but errors are logged; do not equate Result with success."
+      ]
+    }
+  ]
+}

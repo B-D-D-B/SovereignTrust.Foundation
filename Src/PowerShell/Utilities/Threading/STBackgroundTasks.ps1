@@ -52,7 +52,9 @@ function Start-STBackgroundTaskExecution {
     )
 
     $initialSessionState = [System.Management.Automation.Runspaces.InitialSessionState]::CreateDefault()
-    $initialSessionState.ImportPSModule(@([string]$Task.FoundationModulePath))
+    if ($null -ne $Task.Selection) {
+        $initialSessionState = New-STSelectedInitialSessionState -Selection $Task.Selection
+    } else { $initialSessionState.ImportPSModule(@([string]$Task.FoundationModulePath)) }
     $runspace = [System.Management.Automation.Runspaces.RunspaceFactory]::CreateRunspace(
         $Host,
         $initialSessionState
@@ -101,6 +103,7 @@ function Start-STBackgroundTaskExecution {
         $initializationSignal = $null
         $workerSignal = $null
         try {
+            if ($null -ne $STWorkerSelection) { Assert-STFoundationSelection -Selection $STWorkerSelection -RequireLoaded }
             $environment = ConvertFrom-Json -InputObject $EnvironmentJson -Depth 100 -ErrorAction Stop
             $workItem = ConvertFrom-Json -InputObject $WorkItemJson -Depth 100 -ErrorAction Stop
             $workerContext = ConvertFrom-Json -InputObject $WorkerContextJson -Depth 100 -ErrorAction Stop
@@ -123,6 +126,8 @@ function Start-STBackgroundTaskExecution {
 
             [PSCustomObject]@{
                 TaskId               = $TaskId
+                SelectionProvenance = $STWorkerProvenance
+
                 InitializationSignal = ConvertTo-WorkerSignalRecord $initializationSignal $false
                 WorkerSignal         = ConvertTo-WorkerSignalRecord $workerSignal $true
                 Failed               = $initializationSignal.Failure() -or $workerSignal.Failure()
@@ -132,6 +137,8 @@ function Start-STBackgroundTaskExecution {
         catch {
             [PSCustomObject]@{
                 TaskId               = $TaskId
+                SelectionProvenance = $STWorkerProvenance
+
                 InitializationSignal = if (Test-WorkerSignal $initializationSignal) { ConvertTo-WorkerSignalRecord $initializationSignal $false } else { $null }
                 WorkerSignal         = if (Test-WorkerSignal $workerSignal) { ConvertTo-WorkerSignalRecord $workerSignal $true } else { $null }
                 Failed               = $true
@@ -271,6 +278,8 @@ function Start-STBackgroundTask {
     $opSignal = [Signal]::Start('Start-STBackgroundTask', $Signal) | Select-Object -Last 1
     $task = $null
     try {
+        $selectedWorker = if ([Environment]::GetEnvironmentVariables('Process').Contains('ST_FOUNDATION_MANIFEST')) { Get-STWorkerSelection -FoundationModulePath $FoundationModulePath } else { $null }
+        if ($null -ne $selectedWorker) { $FoundationModulePath = $selectedWorker.Foundation.Manifest }
         if ([string]::IsNullOrWhiteSpace($FoundationModulePath)) {
             $FoundationModulePath = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..\SovereignTrust.Foundation.psd1'))
         }
@@ -290,6 +299,7 @@ function Start-STBackgroundTask {
             CompletedUtc        = $null
             MaxConcurrent       = $MaxConcurrent
             FoundationModulePath = $FoundationModulePath
+            Selection = $selectedWorker
             EnvironmentJson     = ConvertTo-Json -InputObject $EnvironmentDefinition -Depth 100 -Compress -ErrorAction Stop
             WorkItemJson        = ConvertTo-Json -InputObject $WorkItem -Depth 100 -Compress -ErrorAction Stop
             WorkerContextJson   = ConvertTo-Json -InputObject $WorkerContext -Depth 100 -Compress -ErrorAction Stop

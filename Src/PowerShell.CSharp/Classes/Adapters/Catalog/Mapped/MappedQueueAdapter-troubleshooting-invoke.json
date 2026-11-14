@@ -1,0 +1,238 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedQueueAdapter",
+  "mappedAdapter": "MappedQueueAdapter",
+  "part": "invoke",
+  "sources": [
+    {
+      "id": "mapped-core",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Invoke-MappedAdapterCore.ps1",
+      "sha256": "0AB004DC55D82CDC9443E123C766262A4A75FADBDAB424E22A0EC4C971008792",
+      "symbol": "Invoke-MappedAdapterCore"
+    },
+    {
+      "id": "mapped-resolver",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Resolve-MappedAdapter.ps1",
+      "sha256": "5EAC4130E9BC50A67453B7AE525DD01AC01EA2E3AFFCD41B90ED8E90C187545E",
+      "symbol": "Resolve-MappedAdapter"
+    }
+  ],
+  "entries": [
+    {
+      "id": "mapped-queue-adapter-path-failed",
+      "status": "source-verified",
+      "adapters": [
+        "MappedQueueAdapter"
+      ],
+      "activities": [
+        "PeekBatch",
+        "HandleMessage",
+        "ReadBatch",
+        "WriteItem",
+        "AckItem",
+        "DeferItem"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Adapter path '",
+          "suffix": "' not found in Conductor.",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 33,
+              "endLine": 33
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Shared mapped core tries *.#.<first slot>.@ then fallback %.*.#.<first slot>.@ on no Result, logging only after final resolver Signal Failure; label does not prove simple absence.",
+        "evidence": [
+          {
+            "sourceId": "mapped-core",
+            "startLine": 23,
+            "endLine": 35
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Shared mapped core tries *.#.<first slot>.@ then fallback %.*.#.<first slot>.@ on no Result, logging only after final resolver Signal Failure; label does not prove simple absence.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 23,
+              "endLine": 35
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect slot first-segment validity and both resolver Result/Failure flags; redact slot/path.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 23,
+              "endLine": 35
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted mapped registration/resolver owner handoff and stop before graph edit or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "mapped-core",
+                "startLine": 23,
+                "endLine": 35
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff identifies final failure branch; instance resolution remains unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 23,
+              "endLine": 35
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    },
+    {
+      "id": "mapped-queue-no-instance",
+      "status": "source-verified",
+      "adapters": [
+        "MappedQueueAdapter"
+      ],
+      "activities": [
+        "PeekBatch",
+        "HandleMessage",
+        "ReadBatch",
+        "WriteItem",
+        "AckItem",
+        "DeferItem"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Mapped adapter resolution returned no instance.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 24,
+              "endLine": 24
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Shared Resolve-MappedAdapter receives nonfailed registered/lazy resolver Signal without Result and logs fixed no-instance message.",
+        "evidence": [
+          {
+            "sourceId": "mapped-resolver",
+            "startLine": 15,
+            "endLine": 27
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Shared Resolve-MappedAdapter receives nonfailed registered/lazy resolver Signal without Result and logs fixed no-instance message.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect registration identity and child resolver Failure/HasResult flags; redact registration payload.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no queue/REST/session/conduction state effect or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted registration owner handoff and stop before state repair or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "mapped-resolver",
+                "startLine": 15,
+                "endLine": 27
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff identifies no-instance guard; concrete instance unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    }
+  ]
+}

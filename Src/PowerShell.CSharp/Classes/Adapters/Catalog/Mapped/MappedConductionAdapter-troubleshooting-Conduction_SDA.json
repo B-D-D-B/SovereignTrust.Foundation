@@ -1,0 +1,537 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedConductionAdapter",
+  "mappedAdapter": "MappedConductionAdapter",
+  "part": "Conduction_SDA",
+  "sources": [
+    {
+      "id": "sda-module",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Conduction/SDA/PowerShell/Conduction_SDA.psm1",
+      "sha256": "F82363A1305DA7F95020D03C98231CF27466BC83297DDC273CC20A2B8DD5A125",
+      "symbol": "Conduction_SDA"
+    },
+    {
+      "id": "sda-invoke",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Conduction/SDA/PowerShell/Invoke-Conduction_SDA.ps1",
+      "sha256": "9F3DA6202D5E235E33AE280D7F29063A55B18FDF66E779907A68FAEEA3C8C8A8",
+      "symbol": "Invoke-Conduction_SDA"
+    }
+  ],
+  "entries": [
+    {
+      "id": "sda-construct-null-dictionary",
+      "status": "source-verified",
+      "adapters": [
+        "Conduction_SDA"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot construct Conduction_SDA — provided dictionary is null.",
+          "evidence": [
+            {
+              "sourceId": "sda-module",
+              "startLine": 20,
+              "endLine": 20
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Conduction_SDA.Construct receives null dictionary after optional jacket hydration.",
+        "evidence": [
+          {
+            "sourceId": "sda-module",
+            "startLine": 15,
+            "endLine": 22
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Conduction_SDA.Construct receives null dictionary after optional jacket hydration.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sda-module",
+              "startLine": 15,
+              "endLine": 22
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect registered concrete identity and hydrated Jacket dictionary-null flag; redact dictionary.",
+          "expected": "Redacted flags identify this exact source guard; downstream cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "sda-module",
+              "startLine": 15,
+              "endLine": 22
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating construction input proposal only; no runtime/provider action here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply the intended nonnull SDA construction dictionary through the owning registration/jacket plan.",
+            "expected": "Hydrated construction dictionary is nonnull; Invoke remains separate.",
+            "evidence": [
+              {
+                "sourceId": "sda-module",
+                "startLine": 15,
+                "endLine": 22
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Conductor, Jacket, Signal or slot owner cannot be identified from redacted metadata.",
+          "Proposed action would expose Plan/phase content or execute Conduction, provider, graph or registration effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Hydrated construction dictionary is nonnull; Invoke remains separate.",
+          "expected": "Local guard would be false; construction/runtime success unverified.",
+          "evidence": [
+            {
+              "sourceId": "sda-module",
+              "startLine": 15,
+              "endLine": 22
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan, phase grid, Signal/Jacket/dictionary values, slot/path, credentials, provider responses and exception text; retain canonical adapter/activity, message/pattern and presence/Failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no ST/SDA runtime/provider execution.",
+        "Mapped core may add a generic wrapper after a concrete child failure; this entry does not diagnose downstream child causes."
+      ]
+    },
+    {
+      "id": "sda-invoke-null-conductor",
+      "status": "source-verified",
+      "adapters": [
+        "Conduction_SDA"
+      ],
+      "activities": [
+        "Invoke",
+        "Run",
+        "ST"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot invoke Conduction_SDA — provided Conductor is null.",
+          "evidence": [
+            {
+              "sourceId": "sda-invoke",
+              "startLine": 14,
+              "endLine": 14
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Concrete SDA Invoke helper receives null Conductor from module wrapper before reading ConductionSignal.",
+        "evidence": [
+          {
+            "sourceId": "sda-invoke",
+            "startLine": 8,
+            "endLine": 16
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Concrete SDA Invoke helper receives null Conductor from module wrapper before reading ConductionSignal.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sda-invoke",
+              "startLine": 8,
+              "endLine": 16
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect module wrapper Conductor jacket presence/null flag only.",
+          "expected": "Redacted flags identify this exact source guard; downstream cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "sda-invoke",
+              "startLine": 8,
+              "endLine": 16
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic mapped/phase owner handoff only; no registration/graph/provider repair or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted SDA mapped-jacket/Conductor owner evidence; stop before SDA execution or repair.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sda-invoke",
+                "startLine": 8,
+                "endLine": 16
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Conductor, Jacket, Signal or slot owner cannot be identified from redacted metadata.",
+          "Proposed action would expose Plan/phase content or execute Conduction, provider, graph or registration effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Owner handoff recorded; Conductor wiring unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sda-invoke",
+              "startLine": 8,
+              "endLine": 16
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan, phase grid, Signal/Jacket/dictionary values, slot/path, credentials, provider responses and exception text; retain canonical adapter/activity, message/pattern and presence/Failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no ST/SDA runtime/provider execution.",
+        "Mapped core may add a generic wrapper after a concrete child failure; this entry does not diagnose downstream child causes."
+      ]
+    },
+    {
+      "id": "sda-invoke-null-signal",
+      "status": "source-verified",
+      "adapters": [
+        "Conduction_SDA"
+      ],
+      "activities": [
+        "Invoke",
+        "Run",
+        "ST"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot invoke Conduction_SDA — provided ConductionSignal is null.",
+          "evidence": [
+            {
+              "sourceId": "sda-invoke",
+              "startLine": 18,
+              "endLine": 18
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Concrete SDA Invoke helper receives nonnull Conductor but null ConductionSignal.",
+        "evidence": [
+          {
+            "sourceId": "sda-invoke",
+            "startLine": 12,
+            "endLine": 20
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Concrete SDA Invoke helper receives nonnull Conductor but null ConductionSignal.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sda-invoke",
+              "startLine": 12,
+              "endLine": 20
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Conductor nonnull and ConductionSignal null flags; redact signal.",
+          "expected": "Redacted flags identify this exact source guard; downstream cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "sda-invoke",
+              "startLine": 12,
+              "endLine": 20
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic mapped/phase owner handoff only; no registration/graph/provider repair or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted SDA caller Signal wiring for its owner; stop before SDA execution or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sda-invoke",
+                "startLine": 12,
+                "endLine": 20
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Conductor, Jacket, Signal or slot owner cannot be identified from redacted metadata.",
+          "Proposed action would expose Plan/phase content or execute Conduction, provider, graph or registration effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Owner handoff recorded; Signal wiring unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sda-invoke",
+              "startLine": 12,
+              "endLine": 20
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan, phase grid, Signal/Jacket/dictionary values, slot/path, credentials, provider responses and exception text; retain canonical adapter/activity, message/pattern and presence/Failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no ST/SDA runtime/provider execution.",
+        "Mapped core may add a generic wrapper after a concrete child failure; this entry does not diagnose downstream child causes."
+      ]
+    },
+    {
+      "id": "sda-environment-resolver-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Conduction_SDA"
+      ],
+      "activities": [
+        "Invoke",
+        "Run",
+        "ST"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "❌ Failed to resolve 'Environment' from ConductionSignal.",
+          "evidence": [
+            {
+              "sourceId": "sda-invoke",
+              "startLine": 24,
+              "endLine": 24
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "SDA helper Resolve-PathFromDictionary at %.@.Environment returns a failed Signal and is merged before this log.",
+        "evidence": [
+          {
+            "sourceId": "sda-invoke",
+            "startLine": 20,
+            "endLine": 26
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "SDA helper Resolve-PathFromDictionary at %.@.Environment returns a failed Signal and is merged before this log.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sda-invoke",
+              "startLine": 20,
+              "endLine": 26
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect %.@.Environment resolver Failure/HasResult flags on ConductionSignal; no Environment content.",
+          "expected": "Redacted flags identify this exact source guard; downstream cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "sda-invoke",
+              "startLine": 20,
+              "endLine": 26
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic mapped/phase owner handoff only; no registration/graph/provider repair or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted environment resolver/source owner evidence; stop before phase execution or environment mutation.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sda-invoke",
+                "startLine": 20,
+                "endLine": 26
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Conductor, Jacket, Signal or slot owner cannot be identified from redacted metadata.",
+          "Proposed action would expose Plan/phase content or execute Conduction, provider, graph or registration effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Owner handoff identifies failed Environment resolver; clearance unverified.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sda-invoke",
+              "startLine": 20,
+              "endLine": 26
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan, phase grid, Signal/Jacket/dictionary values, slot/path, credentials, provider responses and exception text; retain canonical adapter/activity, message/pattern and presence/Failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no ST/SDA runtime/provider execution.",
+        "Mapped core may add a generic wrapper after a concrete child failure; this entry does not diagnose downstream child causes."
+      ]
+    },
+    {
+      "id": "sda-conduction-plan-resolver-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Conduction_SDA"
+      ],
+      "activities": [
+        "Invoke",
+        "Run",
+        "ST"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "❌ Failed to resolve 'Phases' from ConductionSignal.",
+          "evidence": [
+            {
+              "sourceId": "sda-invoke",
+              "startLine": 32,
+              "endLine": 32
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "SDA helper resolves actual path %.@.ConductionPlan and logs misleading Phases label when that resolver Signal fails.",
+        "evidence": [
+          {
+            "sourceId": "sda-invoke",
+            "startLine": 28,
+            "endLine": 34
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "SDA helper resolves actual path %.@.ConductionPlan and logs misleading Phases label when that resolver Signal fails.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sda-invoke",
+              "startLine": 28,
+              "endLine": 34
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect %.@.ConductionPlan resolver Failure/HasResult flags; do not diagnose a literal Phases field from the log.",
+          "expected": "Redacted flags identify this exact source guard; downstream cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "sda-invoke",
+              "startLine": 28,
+              "endLine": 34
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic mapped/phase owner handoff only; no registration/graph/provider repair or retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted ConductionPlan resolver/source owner evidence; stop before phase execution or mutation.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sda-invoke",
+                "startLine": 28,
+                "endLine": 34
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Conductor, Jacket, Signal or slot owner cannot be identified from redacted metadata.",
+          "Proposed action would expose Plan/phase content or execute Conduction, provider, graph or registration effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Owner handoff identifies actual ConductionPlan path; clearance unverified.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sda-invoke",
+              "startLine": 28,
+              "endLine": 34
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan, phase grid, Signal/Jacket/dictionary values, slot/path, credentials, provider responses and exception text; retain canonical adapter/activity, message/pattern and presence/Failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no ST/SDA runtime/provider execution.",
+        "Mapped core may add a generic wrapper after a concrete child failure; this entry does not diagnose downstream child causes."
+      ]
+    }
+  ]
+}

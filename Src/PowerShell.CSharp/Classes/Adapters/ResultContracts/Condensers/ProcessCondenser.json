@@ -1,0 +1,29 @@
+{
+  "name": "ProcessCondenser",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {"id":"process-class","repository":"SovereignTrust.Foundation","path":"Src/PowerShell/Classes/Adapters/Condenser/ProcessCondenser.ps1","sha256":"8A536819FBCB70A757527CE6834E329D58BF56B57704DAF1F8709D8B8CBD71C2"},
+    {"id":"process-core","repository":"SovereignTrust.Foundation","path":"Src/PowerShell/Utilities/Adapters/Condenser/Process/Invoke-ProcessCondenserCore.ps1","sha256":"EF8E19E783FAAC77F276C92842C4D4D44E4F4A5192AE6A108066E2AD3F9C5BE9"}
+  ],
+  "activities": [{
+    "name":"Run",
+    "resultContract": {
+      "boundary":"condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+      "variants": [{
+        "adapter":"ProcessCondenser","support":"implemented","when":"validated native process invocation",
+        "outcomes": [
+          {"condition":"child completes, including nonzero exit","signalState":"success","hasResult":true,"resultType":"PSCustomObject","shape":[
+            {"path":"$.ExitCode","type":"Int32","presence":"required","meaning":"completed child exit code","origin":"process"},
+            {"path":"$.StandardOutputBytes","type":"byte[]","presence":"required","meaning":"bounded binary stdout","origin":"process"},
+            {"path":"$.StandardErrorBytes","type":"byte[]","presence":"required","meaning":"bounded binary stderr","origin":"process"}
+          ]},
+          {"condition":"invalid request, start failure, deadline or byte cap; child cleanup confirmed","signalState":"failure","hasResult":false,"resultType":"absent"},
+          {"condition":"child or IO cleanup uncertain","signalState":"failure","hasResult":false,"resultType":"absent"}
+        ],
+        "sideEffects":["starts one native child with caller-selected application and arguments","may affect external state through the child","kills the child tree on bounded failure and waits for termination/IO"],
+        "evidence":[{"source":"process-class","symbol":"SetResult","line":23,"kind":"source-derived"},{"source":"process-core","symbol":"Kill","line":90,"kind":"source-derived"}]
+      }],
+      "common":{"mappedExposure":"MappedCondenserAdapter copies a successful Result; failed leaf Signal merges without Result."}
+    }
+  }]
+}

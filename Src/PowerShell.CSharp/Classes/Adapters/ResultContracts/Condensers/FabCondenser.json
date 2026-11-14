@@ -1,0 +1,160 @@
+{
+  "name": "FabCondenser",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/FabCondenser.ps1",
+      "sha256": "920B307273435EB2400EA62E2676AD0B392F355B8E4B3C139B21541EF7686830"
+    },
+    {
+      "id": "s2",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedCondenserAdapter.ps1",
+      "sha256": "CDB170DE2EB8292E350DD924703F26EF17E4839B85120D183A138221826C939E"
+    }
+  ],
+  "activities": [
+    {
+      "name": "Invoke",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "FabCondenser",
+            "support": "implemented",
+            "when": "valid source jacket Kind/Slot/VirtualPath and mapped registration",
+            "outcomes": [
+              {
+                "condition": "registration and identity attachment complete",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "adapter handle"
+              },
+              {
+                "condition": "jacket/resolve/registration fails; partial registration may already exist",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "registers adapter in mapped graph; can load source"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Invoke'",
+                "line": 44,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "\"Invoke\"",
+                "line": 118,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "A returned handle does not prove unrelated graph state is unchanged."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "ObserveMappedAdapter",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "FabCondenser",
+            "support": "implemented",
+            "when": "existing mapping/slot and distinct AbsentSlot supplied",
+            "outcomes": [
+              {
+                "condition": "mapped, module, class, slot and absence checks pass",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "PSCustomObject",
+                "shape": [
+                  {
+                    "path": "SourceMapping",
+                    "type": "Boolean",
+                    "presence": "required",
+                    "meaning": "source Kind/Slot/VirtualPath match constructed jacket",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "ModuleName",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "loaded module name",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ClassName",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "constructed class name",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "MappedSlot",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "selected slot",
+                    "origin": "echoed-input"
+                  },
+                  {
+                    "path": "JacketVirtualPath",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "constructed jacket path",
+                    "origin": "computed"
+                  },
+                  {
+                    "path": "MissingSlotAbsent",
+                    "type": "Boolean",
+                    "presence": "required",
+                    "meaning": "distinct absent slot was absent",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "invalid keys or mapped/graph/slot checks fail",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "reads mapped graph; lazy resolution can construct/load selected adapter"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'ObserveMappedAdapter'",
+                "line": 44,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Original result array remains unchanged."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    }
+  ]
+}

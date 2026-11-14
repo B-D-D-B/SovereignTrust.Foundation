@@ -1,4 +1,5 @@
 using module SignalGraph
+. "$PSScriptRoot/Bootstrap/STFoundationSelection.ps1"
     # Import shared functions for Map Condensers
 
     $mapSharedPath = Join-Path $PSScriptRoot "Utilities/Adapters/Condenser/Map/MapCondenser.Shared.psm1"
@@ -339,3 +340,5 @@ Export-ModuleMember -Function Start-SignalWrapper
 #Export-ModuleMember -Function Invoke-LogCritical
 Export-ModuleMember -Function Invoke-Telemetry
 
+
+Export-ModuleMember -Function Get-STFoundationSelection, Assert-STFoundationSelection, Read-STSelectionPacket, Import-STSelectedFoundation, Get-STSelectionProvenance, New-STSelectedRunspace, Get-STWorkerSelection, New-STSelectedInitialSessionState

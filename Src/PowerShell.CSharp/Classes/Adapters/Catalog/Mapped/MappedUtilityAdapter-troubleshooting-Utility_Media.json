@@ -1,0 +1,4414 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedUtilityAdapter",
+  "mappedAdapter": "MappedUtilityAdapter",
+  "part": "Utility_Media",
+  "sources": [
+    {
+      "id": "media-module",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Utility/Media/PowerShell/Utility_Media.psm1",
+      "sha256": "B7BBD7921FADF72AC0BB1F2DBD1A6F649B1626E41E2F60BBBA2C13AEF572DEFD",
+      "symbol": "Utility_Media"
+    },
+    {
+      "id": "resize-helper",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Utility/Media/PowerShell/Magik/Invoke-ResizeImage.ps1",
+      "sha256": "EBDC24512F3D996767250E358BE277D18DDBFAD9CC9E9408D7360FE35D62A58A",
+      "symbol": "Invoke-ResizeImage"
+    },
+    {
+      "id": "overlay-helper",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Utility/Media/PowerShell/Magik/Invoke-OverlayImage.ps1",
+      "sha256": "9E154584B7E9E9C9944C2AB6DC23039AE3312C51345CCDA1D69A6E242E95B84A",
+      "symbol": "Invoke-OverlayImage"
+    },
+    {
+      "id": "inspect-helper",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Utility/Media/PowerShell/Magik/Invoke-InspectImage.ps1",
+      "sha256": "9517F25628AE99B004B3ECBA09AD60E7675DBDDC30C8770454A1892638BA4D4D",
+      "symbol": "Invoke-InspectImage"
+    }
+  ],
+  "entries": [
+    {
+      "id": "utility-media-construct-null",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot construct Utility_Media — provided dictionary is null.",
+          "evidence": [
+            {
+              "sourceId": "media-module",
+              "startLine": 26,
+              "endLine": 26
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Utility_Media.Construct receives null dictionary before Signal/Jacket assignment.",
+        "evidence": [
+          {
+            "sourceId": "media-module",
+            "startLine": 22,
+            "endLine": 29
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Utility_Media.Construct receives null dictionary before Signal/Jacket assignment.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "media-module",
+              "startLine": 22,
+              "endLine": 29
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Media concrete identity and construction dictionary-null flag only.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "media-module",
+              "startLine": 22,
+              "endLine": 29
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no file/media effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull construction dictionary through owning registration/Jacket plan.",
+            "expected": "Dictionary nonnull; media Invoke separate.",
+            "evidence": [
+              {
+                "sourceId": "media-module",
+                "startLine": 22,
+                "endLine": 29
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Dictionary nonnull; media Invoke separate.",
+          "expected": "Local guard proposal would satisfy stated predicate; media/result success unverified.",
+          "evidence": [
+            {
+              "sourceId": "media-module",
+              "startLine": 22,
+              "endLine": 29
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "resize-source-file-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Resize"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Error: The specified source file '",
+          "suffix": "' does not exist.",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 35,
+              "endLine": 35
+            },
+            {
+              "sourceId": "resize-helper",
+              "startLine": 37,
+              "endLine": 37
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "ResizeImage Test-Path InputFullPath -PathType Leaf is false before directory creation or magick.",
+        "evidence": [
+          {
+            "sourceId": "resize-helper",
+            "startLine": 32,
+            "endLine": 40
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "ResizeImage Test-Path InputFullPath -PathType Leaf is false before directory creation or magick.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 32,
+              "endLine": 40
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect approved input leaf-presence flag and selected Plan.Config.InputFullPath provenance; redact path.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 32,
+              "endLine": 40
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no file/media effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use intended existing local input leaf in originating Plan only after confirming file owner; no resize execution.",
+            "expected": "Proposed source leaf precondition true; resize outcome unverified.",
+            "evidence": [
+              {
+                "sourceId": "resize-helper",
+                "startLine": 32,
+                "endLine": 40
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Proposed source leaf precondition true; resize outcome unverified.",
+          "expected": "Local guard proposal would satisfy stated predicate; media/result success unverified.",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 32,
+              "endLine": 40
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "resize-identify-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Resize"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Unable to determine source image dimensions: ",
+          "suffix": "",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 79,
+              "endLine": 79
+            },
+            {
+              "sourceId": "resize-helper",
+              "startLine": 81,
+              "endLine": 81
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "TargetLongest positive and ImageMagick identify exit code nonzero before resize.",
+        "evidence": [
+          {
+            "sourceId": "resize-helper",
+            "startLine": 68,
+            "endLine": 84
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "TargetLongest positive and ImageMagick identify exit code nonzero before resize.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 68,
+              "endLine": 84
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect TargetLongest-positive and identify exit-success flags; suppress ImageMagick output/path.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 68,
+              "endLine": 84
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record media tool/format owner handoff; no automatic resize retry or overwrite.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "resize-helper",
+                "startLine": 68,
+                "endLine": 84
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; dimensions unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 68,
+              "endLine": 84
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "resize-identify-invalid-dimensions",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Resize"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "ImageMagick returned invalid dimensions: ",
+          "suffix": "",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 90,
+              "endLine": 90
+            },
+            {
+              "sourceId": "resize-helper",
+              "startLine": 92,
+              "endLine": 92
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Identify output after success splits into fewer than two width/height tokens.",
+        "evidence": [
+          {
+            "sourceId": "resize-helper",
+            "startLine": 85,
+            "endLine": 95
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Identify output after success splits into fewer than two width/height tokens.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 85,
+              "endLine": 95
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect identify token-count flag only; suppress raw tool output.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 85,
+              "endLine": 95
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record media tool response-shape handoff; do not guess dimensions.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "resize-helper",
+                "startLine": 85,
+                "endLine": 95
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; dimensions unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 85,
+              "endLine": 95
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "resize-target-required",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Resize"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "No valid resize target was specified.",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 125,
+              "endLine": 125
+            },
+            {
+              "sourceId": "resize-helper",
+              "startLine": 127,
+              "endLine": 127
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "After optional TargetLongest handling, neither TargetWidth nor TargetHeight is positive.",
+        "evidence": [
+          {
+            "sourceId": "resize-helper",
+            "startLine": 110,
+            "endLine": 129
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "After optional TargetLongest handling, neither TargetWidth nor TargetHeight is positive.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 110,
+              "endLine": 129
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect effective positive Width/Height/Longest flags only.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 110,
+              "endLine": 129
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no file/media effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Set intended positive TargetWidth, TargetHeight or TargetLongest in originating Plan before resize; no execution here.",
+            "expected": "At least one effective resize target positive; media result unverified.",
+            "evidence": [
+              {
+                "sourceId": "resize-helper",
+                "startLine": 110,
+                "endLine": 129
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "At least one effective resize target positive; media result unverified.",
+          "expected": "Local guard proposal would satisfy stated predicate; media/result success unverified.",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 110,
+              "endLine": 129
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "resize-output-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Resize"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Resize failed. Output file was not created: ",
+          "suffix": "",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 156,
+              "endLine": 156
+            },
+            {
+              "sourceId": "resize-helper",
+              "startLine": 158,
+              "endLine": 158
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "After magick resize invocation, Test-Path OutputFullPath -PathType Leaf is false.",
+        "evidence": [
+          {
+            "sourceId": "resize-helper",
+            "startLine": 143,
+            "endLine": 161
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "After magick resize invocation, Test-Path OutputFullPath -PathType Leaf is false.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 143,
+              "endLine": 161
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect completed-invocation and output-leaf-presence flags; redact path/tool output.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 143,
+              "endLine": 161
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record media/file owner handoff; do not replay resize or infer a safe overwrite.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "resize-helper",
+                "startLine": 143,
+                "endLine": 161
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; output effect unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "resize-helper",
+              "startLine": 143,
+              "endLine": 161
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "overlay-input-required",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Overlay"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Exception during OverlayImage: InputFullPath was not provided.",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 36,
+              "endLine": 36
+            },
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 275,
+              "endLine": 275
+            },
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 277,
+              "endLine": 277
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "OverlayImage receives blank InputFullPath and fixed throw is assembled by its inner catch before file/magick work.",
+        "evidence": [
+          {
+            "sourceId": "overlay-helper",
+            "startLine": 32,
+            "endLine": 38
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "OverlayImage receives blank InputFullPath and fixed throw is assembled by its inner catch before file/magick work.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 32,
+              "endLine": 38
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect selected Plan.Config.InputFullPath nonblank flag only; redact path.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 32,
+              "endLine": 38
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no file/media effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonblank approved input path in originating Plan; existence checked separately.",
+            "expected": "Input path nonblank; overlay outcome unverified.",
+            "evidence": [
+              {
+                "sourceId": "overlay-helper",
+                "startLine": 32,
+                "endLine": 38
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Input path nonblank; overlay outcome unverified.",
+          "expected": "Local guard proposal would satisfy stated predicate; media/result success unverified.",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 32,
+              "endLine": 38
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "overlay-output-required",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Overlay"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Exception during OverlayImage: OutputFullPath was not provided.",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 40,
+              "endLine": 40
+            },
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 275,
+              "endLine": 275
+            },
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 277,
+              "endLine": 277
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "OverlayImage receives blank OutputFullPath after nonblank input and fixed throw is assembled by inner catch before file/magick work.",
+        "evidence": [
+          {
+            "sourceId": "overlay-helper",
+            "startLine": 38,
+            "endLine": 42
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "OverlayImage receives blank OutputFullPath after nonblank input and fixed throw is assembled by inner catch before file/magick work.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 38,
+              "endLine": 42
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect selected Plan.Config.OutputFullPath nonblank flag only; redact path.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 38,
+              "endLine": 42
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no file/media effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonblank approved output path in originating Plan; effect/overwrite separate.",
+            "expected": "Output path nonblank; overlay outcome unverified.",
+            "evidence": [
+              {
+                "sourceId": "overlay-helper",
+                "startLine": 38,
+                "endLine": 42
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Output path nonblank; overlay outcome unverified.",
+          "expected": "Local guard proposal would satisfy stated predicate; media/result success unverified.",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 38,
+              "endLine": 42
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "overlay-input-file-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Overlay"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "The specified input image does not exist: ",
+          "suffix": "",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 44,
+              "endLine": 44
+            },
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 46,
+              "endLine": 46
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "OverlayImage Test-Path InputFullPath -PathType Leaf is false before overlay processing.",
+        "evidence": [
+          {
+            "sourceId": "overlay-helper",
+            "startLine": 42,
+            "endLine": 51
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "OverlayImage Test-Path InputFullPath -PathType Leaf is false before overlay processing.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 42,
+              "endLine": 51
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect approved input leaf-presence flag only; redact path.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 42,
+              "endLine": 51
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no file/media effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Propose intended existing local input leaf after owner confirmation; no overlay execution.",
+            "expected": "Input leaf precondition proposed; overlay outcome unverified.",
+            "evidence": [
+              {
+                "sourceId": "overlay-helper",
+                "startLine": 42,
+                "endLine": 51
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Input leaf precondition proposed; overlay outcome unverified.",
+          "expected": "Local guard proposal would satisfy stated predicate; media/result success unverified.",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 42,
+              "endLine": 51
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "overlay-magick-exit",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Overlay"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "ImageMagick failed with exit code ",
+          "suffix": ".",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 248,
+              "endLine": 248
+            },
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 250,
+              "endLine": 250
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "After ImageMagick overlay invocation, captured process exit code is nonzero; prior file effects may have occurred.",
+        "evidence": [
+          {
+            "sourceId": "overlay-helper",
+            "startLine": 232,
+            "endLine": 252
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "After ImageMagick overlay invocation, captured process exit code is nonzero; prior file effects may have occurred.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 232,
+              "endLine": 252
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect nonzero exit-code class and effect-state flag only; suppress command/output and paths.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 232,
+              "endLine": 252
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record media/process owner handoff; do not replay or overwrite.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "overlay-helper",
+                "startLine": 232,
+                "endLine": 252
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; output/effect state unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 232,
+              "endLine": 252
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "overlay-output-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Overlay"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Overlay failed. Output file was not created: ",
+          "suffix": "",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 257,
+              "endLine": 257
+            },
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 259,
+              "endLine": 259
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "After ImageMagick overlay invocation, output file leaf check is false.",
+        "evidence": [
+          {
+            "sourceId": "overlay-helper",
+            "startLine": 250,
+            "endLine": 263
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "After ImageMagick overlay invocation, output file leaf check is false.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 250,
+              "endLine": 263
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect completed-invocation and output-leaf-presence flags only; redact path.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 250,
+              "endLine": 263
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record media/file owner handoff; do not replay overlay.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "overlay-helper",
+                "startLine": 250,
+                "endLine": 263
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; output effect unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "overlay-helper",
+              "startLine": 250,
+              "endLine": 263
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-trusted-inspectmaxinputbytes",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Trusted adapter InspectMaxInputBytes must be a bounded positive integer.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 136,
+              "endLine": 136
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Trusted AdapterConfig InspectMaxInputBytes is absent, nonnative integer or outside positive source maximum.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 135,
+            "endLine": 137
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Trusted AdapterConfig InspectMaxInputBytes is absent, nonnative integer or outside positive source maximum.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 135,
+              "endLine": 137
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect InspectMaxInputBytes member presence/native-integer/range flags without value.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 135,
+              "endLine": 137
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record trusted adapter configuration owner handoff for InspectMaxInputBytes; do not raise bound or run media.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 135,
+                "endLine": 137
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 135,
+              "endLine": 137
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-trusted-inspectmaxdecodedpixels",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Trusted adapter InspectMaxDecodedPixels must be a bounded positive integer.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 136,
+              "endLine": 136
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Trusted AdapterConfig InspectMaxDecodedPixels is absent, nonnative integer or outside positive source maximum.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 135,
+            "endLine": 137
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Trusted AdapterConfig InspectMaxDecodedPixels is absent, nonnative integer or outside positive source maximum.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 135,
+              "endLine": 137
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect InspectMaxDecodedPixels member presence/native-integer/range flags without value.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 135,
+              "endLine": 137
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record trusted adapter configuration owner handoff for InspectMaxDecodedPixels; do not raise bound or run media.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 135,
+                "endLine": 137
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 135,
+              "endLine": 137
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-trusted-inspectmaxsamples",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Trusted adapter InspectMaxSamples must be a bounded positive integer.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 136,
+              "endLine": 136
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Trusted AdapterConfig InspectMaxSamples is absent, nonnative integer or outside positive source maximum.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 135,
+            "endLine": 137
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Trusted AdapterConfig InspectMaxSamples is absent, nonnative integer or outside positive source maximum.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 135,
+              "endLine": 137
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect InspectMaxSamples member presence/native-integer/range flags without value.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 135,
+              "endLine": 137
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record trusted adapter configuration owner handoff for InspectMaxSamples; do not raise bound or run media.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 135,
+                "endLine": 137
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 135,
+              "endLine": 137
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-trusted-inspecttimeoutmilliseconds",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Trusted adapter InspectTimeoutMilliseconds must be a bounded positive integer.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 136,
+              "endLine": 136
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Trusted AdapterConfig InspectTimeoutMilliseconds is absent, nonnative integer or outside positive source maximum.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 135,
+            "endLine": 137
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Trusted AdapterConfig InspectTimeoutMilliseconds is absent, nonnative integer or outside positive source maximum.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 135,
+              "endLine": 137
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect InspectTimeoutMilliseconds member presence/native-integer/range flags without value.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 135,
+              "endLine": 137
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record trusted adapter configuration owner handoff for InspectTimeoutMilliseconds; do not raise bound or run media.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 135,
+                "endLine": 137
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 135,
+              "endLine": 137
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-config-required",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect Config is required.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 141,
+              "endLine": 141
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Plan lacks Config member before file access.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 139,
+            "endLine": 142
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Plan lacks Config member before file access.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 139,
+              "endLine": 142
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Plan.Config member-presence flag only.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 139,
+              "endLine": 142
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no file/media effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended Config object in originating Inspect Plan.",
+            "expected": "Local guard proposal satisfies the stated predicate; image/result unverified.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 139,
+                "endLine": 142
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Local guard proposal satisfies the stated predicate; image/result unverified.",
+          "expected": "Local guard proposal would satisfy stated predicate; media/result success unverified.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 139,
+              "endLine": 142
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-input-string",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect Config.InputFullPath must be a nonempty String.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 144,
+              "endLine": 144
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Config InputFullPath absent, nonstring or blank.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 142,
+            "endLine": 145
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Config InputFullPath absent, nonstring or blank.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 142,
+              "endLine": 145
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect input member/type/nonblank flags; redact path.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 142,
+              "endLine": 145
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no file/media effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonblank String local path in originating Inspect Plan.",
+            "expected": "Local guard proposal satisfies the stated predicate; image/result unverified.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 142,
+                "endLine": 145
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Local guard proposal satisfies the stated predicate; image/result unverified.",
+          "expected": "Local guard proposal would satisfy stated predicate; media/result success unverified.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 142,
+              "endLine": 145
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-decode-bool",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect Config.DecodePixels must be a native Boolean.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 147,
+              "endLine": 147
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "DecodePixels member exists and is not native Boolean; absence defaults false.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 146,
+            "endLine": 148
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "DecodePixels member exists and is not native Boolean; absence defaults false.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 146,
+              "endLine": 148
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect member-presence/native-Boolean flags only.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 146,
+              "endLine": 148
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no file/media effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use intended native Boolean DecodePixels or omit for false default.",
+            "expected": "Local guard proposal satisfies the stated predicate; image/result unverified.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 146,
+                "endLine": 148
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Local guard proposal satisfies the stated predicate; image/result unverified.",
+          "expected": "Local guard proposal would satisfy stated predicate; media/result success unverified.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 146,
+              "endLine": 148
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-points-array",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect Config.SamplePoints must be an array.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 150,
+              "endLine": 150
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "SamplePoints member exists and is not array; absence defaults empty.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 149,
+            "endLine": 151
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "SamplePoints member exists and is not array; absence defaults empty.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 149,
+              "endLine": 151
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect member-presence/array-type flags only.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 149,
+              "endLine": 151
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no file/media effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use intended array SamplePoints or omit for empty default.",
+            "expected": "Local guard proposal satisfies the stated predicate; image/result unverified.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 149,
+                "endLine": 151
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Local guard proposal satisfies the stated predicate; image/result unverified.",
+          "expected": "Local guard proposal would satisfy stated predicate; media/result success unverified.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 149,
+              "endLine": 151
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-sample-limit",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect sample count exceeds the trusted limit.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 153,
+              "endLine": 153
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "SamplePoints count exceeds trusted adapter InspectMaxSamples.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 152,
+            "endLine": 154
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "SamplePoints count exceeds trusted adapter InspectMaxSamples.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 152,
+              "endLine": 154
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect sample count-over-bound Boolean only; no coordinates.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 152,
+              "endLine": 154
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no file/media effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Propose reducing intended sample points within trusted bound; do not raise bound.",
+            "expected": "Local guard proposal satisfies the stated predicate; image/result unverified.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 152,
+                "endLine": 154
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Local guard proposal satisfies the stated predicate; image/result unverified.",
+          "expected": "Local guard proposal would satisfy stated predicate; media/result success unverified.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 152,
+              "endLine": 154
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-points-need-decode",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect SamplePoints requires DecodePixels=true.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 154,
+              "endLine": 154
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Nonempty SamplePoints with DecodePixels false/default.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 153,
+            "endLine": 155
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Nonempty SamplePoints with DecodePixels false/default.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 153,
+              "endLine": 155
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect points-nonempty and decode-true flags only.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 153,
+              "endLine": 155
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no file/media effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "If sampling is intended, set native true DecodePixels; otherwise omit points.",
+            "expected": "Local guard proposal satisfies the stated predicate; image/result unverified.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 153,
+                "endLine": 155
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Local guard proposal satisfies the stated predicate; image/result unverified.",
+          "expected": "Local guard proposal would satisfy stated predicate; media/result success unverified.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 153,
+              "endLine": 155
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-absolute-path",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect requires an absolute local file path.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 156,
+              "endLine": 156
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "InputFullPath fails Path.IsPathFullyQualified.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 155,
+            "endLine": 157
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "InputFullPath fails Path.IsPathFullyQualified.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 155,
+              "endLine": 157
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect path-fully-qualified flag only; redact path.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 155,
+              "endLine": 157
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no file/media effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Choose intended approved absolute local input path.",
+            "expected": "Local guard proposal satisfies the stated predicate; image/result unverified.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 155,
+                "endLine": 157
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Local guard proposal satisfies the stated predicate; image/result unverified.",
+          "expected": "Local guard proposal would satisfy stated predicate; media/result success unverified.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 155,
+              "endLine": 157
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-network-path",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect does not read UNC or network-drive paths.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 159,
+              "endLine": 159
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Canonical full input path is UNC or drive type Network.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 158,
+            "endLine": 160
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Canonical full input path is UNC or drive type Network.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 158,
+              "endLine": 160
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect UNC/network-drive flags only; redact path.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 158,
+              "endLine": 160
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record local-file owner handoff; do not copy network data or bypass guard.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 158,
+                "endLine": 160
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 158,
+              "endLine": 160
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-file-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect input file does not exist.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 161,
+              "endLine": 161
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Canonical local input file is absent before open.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 160,
+            "endLine": 162
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Canonical local input file is absent before open.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 160,
+              "endLine": 162
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect existing file-presence flag from approved metadata; redact path.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 160,
+              "endLine": 162
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no file/media effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Propose intended existing approved local input path after file owner confirmation.",
+            "expected": "Local guard proposal satisfies the stated predicate; image/result unverified.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 160,
+                "endLine": 162
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Local guard proposal satisfies the stated predicate; image/result unverified.",
+          "expected": "Local guard proposal would satisfy stated predicate; media/result success unverified.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 160,
+              "endLine": 162
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-input-byte-limit",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect input exceeds the trusted byte limit.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 165,
+              "endLine": 165
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Initial file length exceeds trusted InspectMaxInputBytes.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 164,
+            "endLine": 166
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Initial file length exceeds trusted InspectMaxInputBytes.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 164,
+              "endLine": 166
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect over-bound flag only; do not read bytes.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 164,
+              "endLine": 166
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record file/limit owner handoff; do not raise trusted bound.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 164,
+                "endLine": 166
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 164,
+              "endLine": 166
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-changed-before-read",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect input changed before read.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 168,
+              "endLine": 168
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Opened stream length differs from initial FileInfo length.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 167,
+            "endLine": 169
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Opened stream length differs from initial FileInfo length.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 167,
+              "endLine": 169
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect initial-versus-open length-equality flag; redact sizes/bytes.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 167,
+              "endLine": 169
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record file-integrity owner handoff; do not retry or reuse receipt.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 167,
+                "endLine": 169
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 167,
+              "endLine": 169
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-ended-during-read",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect input ended during read.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 173,
+              "endLine": 173
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Stream.Read returns zero or less before expected bytes complete.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 172,
+            "endLine": 174
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Stream.Read returns zero or less before expected bytes complete.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 172,
+              "endLine": 174
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect early-end flag only; no bytes.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 172,
+              "endLine": 174
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record file-integrity owner handoff; no automatic reread.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 172,
+                "endLine": 174
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 172,
+              "endLine": 174
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-codec-signature",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect decode supports only signature-verified PNG/GIF raster files.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 188,
+              "endLine": 188
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "DecodePixels true and extension/signature pair is neither verified PNG nor GIF.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 187,
+            "endLine": 189
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "DecodePixels true and extension/signature pair is neither verified PNG nor GIF.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 187,
+              "endLine": 189
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect extension/signature-match Boolean flags only; no bytes.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 187,
+              "endLine": 189
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Propose disabling DecodePixels if raw byte receipt is intended; otherwise hand off unsupported codec.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 187,
+                "endLine": 189
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 187,
+              "endLine": 189
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-one-frame",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect requires exactly one valid image frame.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 195,
+              "endLine": 195
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "ImageMagick identify output yields line count other than one.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 194,
+            "endLine": 196
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "ImageMagick identify output yields line count other than one.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 194,
+              "endLine": 196
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect frame-line-count-equals-one flag only; no tool output.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 194,
+              "endLine": 196
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record media format owner handoff; do not reprocess.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 194,
+                "endLine": 196
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 194,
+              "endLine": 196
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-dimensions-parse",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect requires valid image dimensions.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 197,
+              "endLine": 197
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Single identify line fails strict width,height,frame regex.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 196,
+            "endLine": 198
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Single identify line fails strict width,height,frame regex.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 196,
+              "endLine": 198
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect strict dimensions-parse-success flag only; no dimensions/output.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 196,
+              "endLine": 198
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record media response-shape handoff; do not infer size.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 196,
+                "endLine": 198
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 196,
+              "endLine": 198
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-frame-bound",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect image frame or dimensions exceed the supported bound.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 200,
+              "endLine": 200
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Frame count not one, width/height below one or decoded pixel product exceeds trusted bound.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 199,
+            "endLine": 201
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Frame count not one, width/height below one or decoded pixel product exceeds trusted bound.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 199,
+              "endLine": 201
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect frame-one, positive-dimensions and within-pixel-bound flags only.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 199,
+              "endLine": 201
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record format/bound owner handoff; do not raise bound.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 199,
+                "endLine": 201
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 199,
+              "endLine": 201
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-sample-coordinates",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect sample coordinates must be native in-bounds integers.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 209,
+              "endLine": 209
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "A requested point lacks X/Y, uses nonnative integers or is outside decoded image dimensions.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 202,
+            "endLine": 211
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "A requested point lacks X/Y, uses nonnative integers or is outside decoded image dimensions.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 202,
+              "endLine": 211
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect X/Y member/type/in-bounds flags only; no coordinates.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 202,
+              "endLine": 211
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no file/media effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Propose intended native in-bounds sample coordinates after approved image metadata review.",
+            "expected": "Local guard proposal satisfies the stated predicate; image/result unverified.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 202,
+                "endLine": 211
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Local guard proposal satisfies the stated predicate; image/result unverified.",
+          "expected": "Local guard proposal would satisfy stated predicate; media/result success unverified.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 202,
+              "endLine": 211
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-decode-deadline",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect decode deadline elapsed.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 214,
+              "endLine": 214
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Remaining trusted decode time is zero or negative before process invocation.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 213,
+            "endLine": 215
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Remaining trusted decode time is zero or negative before process invocation.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 213,
+              "endLine": 215
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect deadline-expired flag only; no timing traces.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 213,
+              "endLine": 215
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record decode/process owner handoff; do not raise timeout or retry.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 213,
+                "endLine": 215
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 213,
+              "endLine": 215
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-rgba-length",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect decoded RGBA byte count did not match dimensions.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 217,
+              "endLine": 217
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Decoded output length differs from width×height×4.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 216,
+            "endLine": 218
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Decoded output length differs from width×height×4.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 216,
+              "endLine": 218
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect expected-versus-observed-length-equality flag only; no pixels.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 216,
+              "endLine": 218
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record decoder-integrity handoff; do not use sample receipt.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 216,
+                "endLine": 218
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 216,
+              "endLine": 218
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-changed-during-decode",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect input changed during decode.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 227,
+              "endLine": 227
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Postdecode FileInfo length or write timestamp differs from initial snapshot.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 226,
+            "endLine": 228
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Postdecode FileInfo length or write timestamp differs from initial snapshot.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 226,
+              "endLine": 228
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect length/time equality flags only; no file bytes.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 226,
+              "endLine": 228
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record file-integrity owner handoff; do not retry.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 226,
+                "endLine": 228
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 226,
+              "endLine": 228
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-length-before-hash",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect input length changed before verification hash.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 230,
+              "endLine": 230
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Reopened verification stream length differs or exceeds trusted input bound.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 229,
+            "endLine": 231
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Reopened verification stream length differs or exceeds trusted input bound.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 229,
+              "endLine": 231
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect reopened-length equality/within-bound flags only.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 229,
+              "endLine": 231
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record file-integrity/bound handoff; do not use receipt.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 229,
+                "endLine": 231
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 229,
+              "endLine": 231
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-bytes-changed",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: Inspect input bytes changed during decode.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 234,
+              "endLine": 234
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Second SHA256 digest differs from initial digest after decode.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 233,
+            "endLine": 235
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Second SHA256 digest differs from initial digest after decode.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 233,
+              "endLine": 235
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect digest-equality Boolean only; never retain hashes/bytes.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 233,
+              "endLine": 235
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record file-integrity handoff; do not use receipt or retry.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 233,
+                "endLine": 235
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 233,
+              "endLine": 235
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-magick-start",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: ImageMagick did not start.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 39,
+              "endLine": 39
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "DecodePixels true after signature verification; Process.Start returned false.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 38,
+            "endLine": 40
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "DecodePixels true after signature verification; Process.Start returned false.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 38,
+              "endLine": 40
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect process-started flag only.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 38,
+              "endLine": 40
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record process/cleanup owner handoff; do not retry media, raise bound or assume effect state.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 38,
+                "endLine": 40
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 38,
+              "endLine": 40
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-magick-timeout",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: ImageMagick timed out.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 50,
+              "endLine": 50
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 57,
+              "endLine": 57
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 83,
+              "endLine": 83
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "DecodePixels true after signature verification; Process read/wait deadline elapsed; same exact throw also at lines57 and83.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 45,
+            "endLine": 85
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "DecodePixels true after signature verification; Process read/wait deadline elapsed; same exact throw also at lines57 and83.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 45,
+              "endLine": 85
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect process deadline-expired flag and stage only.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 45,
+              "endLine": 85
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record process/cleanup owner handoff; do not retry media, raise bound or assume effect state.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 45,
+                "endLine": 85
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 45,
+              "endLine": 85
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay.",
+        "Three fixed timeout sites share this exact emitted text; site-specific process recovery remains unverified and no retry or timeout increase is prescribed."
+      ]
+    },
+    {
+      "id": "inspect-magick-output-bound",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: ImageMagick output exceeded the bound.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 67,
+              "endLine": 67
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "DecodePixels true after signature verification; Stdout bytes would exceed caller MaximumOutputBytes.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 66,
+            "endLine": 68
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "DecodePixels true after signature verification; Stdout bytes would exceed caller MaximumOutputBytes.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 66,
+              "endLine": 68
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect stdout-over-bound flag only.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 66,
+              "endLine": 68
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record process/cleanup owner handoff; do not retry media, raise bound or assume effect state.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 66,
+                "endLine": 68
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 66,
+              "endLine": 68
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    },
+    {
+      "id": "inspect-magick-diagnostics-bound",
+      "status": "source-verified",
+      "adapters": [
+        "Utility_Media"
+      ],
+      "activities": [
+        "Inspect"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Inspect failed: ImageMagick diagnostics exceeded the bound.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 76,
+              "endLine": 76
+            },
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 242,
+              "endLine": 242
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "DecodePixels true after signature verification; Stderr bytes would exceed fixed 65536 limit.",
+        "evidence": [
+          {
+            "sourceId": "inspect-helper",
+            "startLine": 75,
+            "endLine": 77
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "DecodePixels true after signature verification; Stderr bytes would exceed fixed 65536 limit.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 75,
+              "endLine": 77
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect diagnostics-over-bound flag only.",
+          "expected": "Redacted flags identify this local guard without paths, file bytes, pixels, process output or effects.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 75,
+              "endLine": 77
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no file, ImageMagick, media/provider effect, retry or trusted-bound change.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record process/cleanup owner handoff; do not retry media, raise bound or assume effect state.",
+            "expected": "Owner handoff or conditional proposal recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "inspect-helper",
+                "startLine": 75,
+                "endLine": 77
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, activity or exact message/pattern differs.",
+          "Effective Plan, trusted AdapterConfig, local file/effect state or owner cannot be established with redacted flags.",
+          "Proposed action would expose paths/bytes/pixels/tool output or run/retry media, alter trusted bounds or overwrite files."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Inspect outcome unresolved.",
+          "expected": "Handoff complete; media/result state unresolved.",
+          "evidence": [
+            {
+              "sourceId": "inspect-helper",
+              "startLine": 75,
+              "endLine": 77
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/Config/Jacket/Signal/graph, local input/output/overlay paths, file bytes/hashes, pixels, command/diagnostics and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no ImageMagick, file, media, provider or runtime execution.",
+        "A local guard, return Signal or Result does not establish effect state or safe replay."
+      ]
+    }
+  ]
+}

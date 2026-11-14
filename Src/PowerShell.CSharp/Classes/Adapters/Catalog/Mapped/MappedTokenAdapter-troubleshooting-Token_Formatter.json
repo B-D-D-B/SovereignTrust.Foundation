@@ -1,0 +1,331 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedTokenAdapter",
+  "mappedAdapter": "MappedTokenAdapter",
+  "part": "Token_Formatter",
+  "sources": [
+    {
+      "id": "formatter-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Formatter.ps1",
+      "sha256": "927B92C95919BFC832052C4AC118D5254477CB53634647863DA9CC1E9C1574E0",
+      "symbol": "Token_Formatter"
+    },
+    {
+      "id": "formatter-helper",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenFormatter.ps1",
+      "sha256": "CF1CCF4D7B7D3638DDD745900F445E2B7B3F8DA418618981354DF488BF86C62A",
+      "symbol": "Invoke-TokenFormatter"
+    }
+  ],
+  "entries": [
+    {
+      "id": "token-formatter-invalid-path",
+      "status": "source-verified",
+      "adapters": [
+        "Token_Formatter"
+      ],
+      "activities": [
+        "Get"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Invalid Formatter path: '",
+          "suffix": "'",
+          "evidence": [
+            {
+              "sourceId": "formatter-helper",
+              "startLine": 25,
+              "endLine": 25
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Nonblank forwarded Formatter path splits into fewer than two period segments.",
+        "evidence": [
+          {
+            "sourceId": "formatter-helper",
+            "startLine": 16,
+            "endLine": 27
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Nonblank forwarded Formatter path splits into fewer than two period segments.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "formatter-helper",
+              "startLine": 16,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect segment count and canonical Formatter first key; redact path.",
+          "expected": "Redacted flags identify this source guard without token value, graph, environment or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "formatter-helper",
+              "startLine": 16,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan or construction input proposal only; no token/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use intended Formatter.<handler> path with second segment, subject to handler registration; no formatter execution.",
+            "expected": "Segment count at least two; handler result separate.",
+            "evidence": [
+              {
+                "sourceId": "formatter-helper",
+                "startLine": 16,
+                "endLine": 27
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, Get activity or exact message/pattern differs.",
+          "Effective path, registration, selected scope or owner cannot be established with redacted metadata.",
+          "Proposed action would reveal token value/name, graph, credentials, SDA content or execute provider/storage/enrollment effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Segment count at least two; handler result separate.",
+          "expected": "Local guard would be false; token/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "formatter-helper",
+              "startLine": 16,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude token path/key/value, Plan/Config/Signal/graph/Jacket/Conductor, environment name/value, storage or SDA identity/content, credentials and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no token/SDA/storage/environment/provider/runtime execution.",
+        "A passed local guard, warning or Result presence does not establish token value, absence or safe retry."
+      ]
+    },
+    {
+      "id": "token-formatter-handler-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Token_Formatter"
+      ],
+      "activities": [
+        "Get"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Formatter handler '",
+          "suffix": "' not found.",
+          "evidence": [
+            {
+              "sourceId": "formatter-helper",
+              "startLine": 33,
+              "endLine": 33
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Second Formatter segment names Invoke-TokenFormatter<key>, and Get-Command finds no such handler.",
+        "evidence": [
+          {
+            "sourceId": "formatter-helper",
+            "startLine": 28,
+            "endLine": 35
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Second Formatter segment names Invoke-TokenFormatter<key>, and Get-Command finds no such handler.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "formatter-helper",
+              "startLine": 28,
+              "endLine": 35
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect derived handler command presence and supported registry name only; redact path/key.",
+          "expected": "Redacted flags identify this source guard without token value, graph, environment or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "formatter-helper",
+              "startLine": 28,
+              "endLine": 35
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no token, Signal, graph, environment, SDA, storage or provider state change/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record formatter handler/registration owner handoff; do not install or invoke an unverified function.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "formatter-helper",
+                "startLine": 28,
+                "endLine": 35
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, Get activity or exact message/pattern differs.",
+          "Effective path, registration, selected scope or owner cannot be established with redacted metadata.",
+          "Proposed action would reveal token value/name, graph, credentials, SDA content or execute provider/storage/enrollment effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; handler availability unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "formatter-helper",
+              "startLine": 28,
+              "endLine": 35
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude token path/key/value, Plan/Config/Signal/graph/Jacket/Conductor, environment name/value, storage or SDA identity/content, credentials and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no token/SDA/storage/environment/provider/runtime execution.",
+        "A passed local guard, warning or Result presence does not establish token value, absence or safe retry."
+      ]
+    },
+    {
+      "id": "token-formatter-construct-null-dictionary",
+      "status": "source-verified",
+      "adapters": [
+        "Token_Formatter"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot construct EmbeddedFileSystem — provided dictionary is null.",
+          "evidence": [
+            {
+              "sourceId": "formatter-class",
+              "startLine": 34,
+              "endLine": 34
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Token_Formatter.Construct receives null dictionary before Jacket/Signal assignment.",
+        "evidence": [
+          {
+            "sourceId": "formatter-class",
+            "startLine": 30,
+            "endLine": 36
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Token_Formatter.Construct receives null dictionary before Jacket/Signal assignment.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "formatter-class",
+              "startLine": 30,
+              "endLine": 36
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Token_Formatter concrete identity and construction dictionary-null flag; redact dictionary.",
+          "expected": "Redacted flags identify this source guard without token value, graph, environment or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "formatter-class",
+              "startLine": 30,
+              "endLine": 36
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan or construction input proposal only; no token/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull construction dictionary through owning registration/Jacket plan.",
+            "expected": "Dictionary nonnull; concrete Get and provider effects separate.",
+            "evidence": [
+              {
+                "sourceId": "formatter-class",
+                "startLine": 30,
+                "endLine": 36
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, Get activity or exact message/pattern differs.",
+          "Effective path, registration, selected scope or owner cannot be established with redacted metadata.",
+          "Proposed action would reveal token value/name, graph, credentials, SDA content or execute provider/storage/enrollment effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Dictionary nonnull; concrete Get and provider effects separate.",
+          "expected": "Local guard would be false; token/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "formatter-class",
+              "startLine": 30,
+              "endLine": 36
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude token path/key/value, Plan/Config/Signal/graph/Jacket/Conductor, environment name/value, storage or SDA identity/content, credentials and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no token/SDA/storage/environment/provider/runtime execution.",
+        "A passed local guard, warning or Result presence does not establish token value, absence or safe retry."
+      ]
+    }
+  ]
+}

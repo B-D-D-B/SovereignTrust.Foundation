@@ -1,0 +1,1086 @@
+{
+  "name": "MappedStorageAdapter",
+  "activities": [
+    {
+      "name": "List",
+      "whenToUse": "Use with AzureStorageAccount or AzureKeyVault to enumerate blob files/immediate virtual directories or Key Vault secret metadata. Filter/sort/type and virtual-path inputs are provider-specific; Key Vault Directory returns an empty list. Listed LocalFileSystem has no mapped Invoke for List.",
+      "description": "Enumerate Azure Storage Account blob files or immediate virtual directories, or Azure Key Vault secret metadata. Returns a JSON-compatible PSCustomObject with Items array and Count; each item has FileName, VirtualPath, DateTime (UTC ISO-8601 or null), and Size (bytes or null). Key Vault directories are an empty list.",
+      "properties": [
+        {
+          "path": "Config.Filter",
+          "description": "Case-insensitive wildcard on FileName after enumeration; blank or absent matches all.",
+          "whenToUse": "For Azure blob or Key Vault List, set a case-insensitive FileName wildcard after enumeration. Omit or blank to keep all listed items.",
+          "adapters": ["Storage_AzureStorageAccount", "Storage_AzureKeyVault"]
+        },
+        {
+          "path": "Config.SortBy",
+          "description": "DateTime, FileName or Size.",
+          "whenToUse": "For Azure blob or Key Vault List, choose DateTime, FileName or Size when ordering results by that field matters.",
+          "adapters": ["Storage_AzureStorageAccount", "Storage_AzureKeyVault"],
+          "default": {"Storage_AzureStorageAccount": "FileName", "Storage_AzureKeyVault": "FileName"}
+        },
+        {
+          "path": "Config.SortDirection",
+          "description": "Ascending or Descending.",
+          "whenToUse": "For Azure blob or Key Vault List, choose Ascending or Descending for the selected SortBy order.",
+          "adapters": ["Storage_AzureStorageAccount", "Storage_AzureKeyVault"],
+          "default": {"Storage_AzureStorageAccount": "Descending", "Storage_AzureKeyVault": "Descending"}
+        },
+        {
+          "path": "Config.Type",
+          "description": "File or Directory. Blob Directory returns immediate virtual directories; Key Vault Directory returns an empty list.",
+          "whenToUse": "For List, choose File or Directory. Azure blob Directory lists immediate virtual directories; Key Vault Directory returns an empty list rather than secret folders.",
+          "adapters": ["Storage_AzureStorageAccount", "Storage_AzureKeyVault"],
+          "default": {"Storage_AzureStorageAccount": "File", "Storage_AzureKeyVault": "File"}
+        },
+        {
+          "path": "Config.VirtualPath",
+          "description": "Directory prefix for blobs (a trailing slash is added) or raw secret-name prefix for Key Vault.",
+          "whenToUse": "For List, set the Azure blob directory prefix or Key Vault raw secret-name prefix. Blob handling appends a trailing slash where needed.",
+          "adapters": ["Storage_AzureStorageAccount", "Storage_AzureKeyVault"]
+        },
+        {
+          "path": "VirtualPath",
+          "description": "Use the mapped path synthesized from Container and Resource when Config.VirtualPath is absent; slash-only means the provider root.",
+          "whenToUse": "For List without Config.VirtualPath, use the mapped top-level path synthesized from Container/Resource. A slash-only path addresses the provider root.",
+          "adapters": ["Storage_AzureStorageAccount", "Storage_AzureKeyVault"]
+        },
+        {
+          "path": "Resource",
+          "description": "Build the mapped path from Container and Resource when Config.VirtualPath is absent.",
+          "whenToUse": "For List without Config.VirtualPath, supply Resource with Container to form the mapped virtual path.",
+          "adapters": ["Storage_AzureStorageAccount", "Storage_AzureKeyVault"]
+        },
+        {
+          "path": "Container",
+          "description": "Build the mapped path from Container and Resource when Config.VirtualPath is absent.",
+          "whenToUse": "For List without Config.VirtualPath, supply Container with Resource to form the mapped virtual path.",
+          "adapters": ["Storage_AzureStorageAccount", "Storage_AzureKeyVault"]
+        }
+      ],
+      "result": [
+        {
+          "path": "Items",
+          "type": "Object[]",
+          "description": "filtered blob/prefix metadata [provider-returned]. When container/address and SortBy/SortDirection/Type filters valid; paged blob listing completes, including zero matches.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Count",
+          "type": "Int32",
+          "description": "Items length [computed]. When container/address and SortBy/SortDirection/Type filters valid; paged blob listing completes, including zero matches.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Items[*].FileName",
+          "type": "String",
+          "description": "blob or directory name [provider-returned] (conditional). When container/address and SortBy/SortDirection/Type filters valid; paged blob listing completes, including zero matches.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Items[*].VirtualPath",
+          "type": "String",
+          "description": "normalized listed path [computed] (conditional). When container/address and SortBy/SortDirection/Type filters valid; paged blob listing completes, including zero matches.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Items[*].DateTime",
+          "type": "UTC ISO String/null",
+          "description": "blob timestamp or null for directory [provider-returned] (conditional). When container/address and SortBy/SortDirection/Type filters valid; paged blob listing completes, including zero matches.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Items[*].Size",
+          "type": "Int64/null",
+          "description": "blob byte length or null for directory [provider-returned] (conditional). When container/address and SortBy/SortDirection/Type filters valid; paged blob listing completes, including zero matches.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Items",
+          "type": "Object[]",
+          "description": "secret metadata [provider-returned]. When vault address and list filters valid; paged secret listing completes, including zero matches.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Count",
+          "type": "Int32",
+          "description": "Items length [computed]. When vault address and list filters valid; paged secret listing completes, including zero matches.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Items[*].FileName",
+          "type": "String",
+          "description": "secret name [provider-returned] (conditional). When vault address and list filters valid; paged secret listing completes, including zero matches.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Items[*].VirtualPath",
+          "type": "String",
+          "description": "normalized secret path [computed] (conditional). When vault address and list filters valid; paged secret listing completes, including zero matches.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Items[*].DateTime",
+          "type": "UTC ISO String/null",
+          "description": "secret timestamp when available [provider-returned] (conditional). When vault address and list filters valid; paged secret listing completes, including zero matches.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Items[*].Size",
+          "type": "null",
+          "description": "not exposed by listing [constant] (conditional). When vault address and list filters valid; paged secret listing completes, including zero matches.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Storage_AzureStorageAccount: Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred",
+        "Storage_AzureKeyVault: Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred",
+        "Storage_EmbeddedFileSystem: unsupported",
+        "Storage_LocalFileSystem: unsupported"
+      ]
+    },
+    {
+      "name": "Read",
+      "whenToUse": "Use with an implementing slot to retrieve content. Embedded/Azure TargetPath mode writes a file and disables fallback Content; ResultDetail true requires that target. Key Vault implements Read/Write/Delete/Exists for validated names; file-transfer options are unsupported. Listed LocalFileSystem lacks mapped Invoke.",
+      "description": "Retrieve content from a resource.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Check whether target-path configuration is present for storage read.",
+          "whenToUse": "For Embedded/Azure Read, supply Config when selecting TargetPath or other read options. The provider checks whether target-file mode was explicitly requested.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Extract Key Vault request configuration and check whether it is present.",
+          "whenToUse": "For Key Vault Read/Write/Delete/Exists, Config.VirtualPath may hold a raw secret name; legacy Storage.Secrets.Read.name is Read-only. Otherwise use mapped /name with empty Container.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Supply fallback content when reading fails without a target path.",
+          "whenToUse": "For Embedded/Azure Read without TargetPath, supply fallback Content for a failed read when a substitute result is needed. Target-file mode disables this fallback path.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Select the Azure upload content type.",
+          "whenToUse": "For Azure upload or fallback write, set ContentType when the stored content needs an explicit media type.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Config.PathSuffix",
+          "description": "Choose an Azure upload path suffix.",
+          "whenToUse": "For Azure upload or fallback write, set PathSuffix when targeting a suffixed blob path.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Config.ReturnHttpStatus",
+          "description": "Reject HTTP-status-only output when reading to a target file.",
+          "whenToUse": "For Azure Read with TargetPath, leave ReturnHttpStatus false or absent. Status-only output is rejected for target-file transfer.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Config.SaveIfNew",
+          "description": "Persist fallback content through a cloned Write invocation.",
+          "whenToUse": "For Embedded/Azure Read fallback content, set SaveIfNew when that fallback should be persisted through a cloned Write invocation; omit/false to avoid that write.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_AzureStorageAccount"
+          ],
+          "default": {
+            "Storage_EmbeddedFileSystem": false,
+            "Storage_AzureStorageAccount": false
+          }
+        },
+        {
+          "path": "Config.SignalLevel",
+          "description": "Choose the signal severity for storage operations.",
+          "whenToUse": "For Embedded/Azure storage operations, choose SignalLevel when the emitted operation severity needs adjustment.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_AzureStorageAccount"
+          ],
+          "default": {
+            "Storage_EmbeddedFileSystem": "Critical",
+            "Storage_AzureStorageAccount": "Critical"
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Choose a source file for the storage write.",
+          "whenToUse": "For Embedded/Azure write paths, set SourcePath when content should be read from a source file rather than only supplied in Config.Content.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Config.SourthPath",
+          "description": "Use the legacy misspelled Azure source-file configuration as a fallback.",
+          "whenToUse": "For Azure write paths, use the legacy misspelled SourthPath only when the supported SourcePath is unavailable and compatibility requires that fallback.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Config.TargetPath",
+          "description": "Select an explicit destination path and disable fallback content handling when supplied.",
+          "whenToUse": "For Embedded/Azure Read, set an explicit TargetPath only when content should be transferred to a destination file. Its presence disables fallback Content handling.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Config.ResultDetail",
+          "description": "Optional native Boolean, default false. With Read and TargetPath, true returns facts measured from the completed target file; other types and true without TargetPath fail before transfer.",
+          "whenToUse": "For Embedded/Azure Read with TargetPath, set native Boolean ResultDetail true when facts measured from the completed target file are needed. Omit/false for ordinary output; true without TargetPath or a non-Boolean value fails before transfer.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_AzureStorageAccount"
+          ],
+          "default": false
+        },
+        {
+          "path": "Config.VirtualPath",
+          "description": "Check for an explicit virtual path before synthesizing the top-level storage path.",
+          "whenToUse": "Set Config.VirtualPath only for providers that read it directly. Mapped dispatch checks whether it has a Result and skips Container/Resource synthesis, but does not copy it to top-level VirtualPath. Embedded reads top-level VirtualPath, so this Config field alone does not route Embedded.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_LocalFileSystem",
+            "Storage_AzureStorageAccount",
+            "Storage_AzureKeyVault"
+          ],
+          "default": {
+            "Storage_EmbeddedFileSystem": null,
+            "Storage_LocalFileSystem": null,
+            "Storage_AzureStorageAccount": null,
+            "Storage_AzureKeyVault": null
+          }
+        },
+        {
+          "path": "Config.VirtualPath",
+          "description": "Resolve the Azure blob path, falling back to the top-level virtual path if blank.",
+          "whenToUse": "For Azure blob operations, set Config.VirtualPath for the blob path. Blank value falls back to the preserved top-level virtual path.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ],
+          "default": {
+            "Storage_AzureStorageAccount": null
+          }
+        },
+        {
+          "path": "Config.VirtualPath",
+          "description": "Select the Key Vault operation and secret from the virtual-path segments.",
+          "whenToUse": "For Key Vault, the supplied Activity selects the operation. Validate a raw secret name or the legacy Storage.Secrets.Read.name form only for Read.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Container",
+          "description": "Build the generated virtual path from the container and resource.",
+          "whenToUse": "When Config.VirtualPath is absent, supply Container with Resource so mapped dispatch synthesizes top-level VirtualPath for providers that consume it. Key Vault accepts /name only with empty Container; LocalFileSystem lacks mapped Invoke.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_LocalFileSystem",
+            "Storage_AzureStorageAccount",
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context while cloning fallback content for a storage write.",
+          "whenToUse": "For Embedded/Azure Read fallback write cloning, retain incoming Phase to preserve conduction context in the cloned plan.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Legacy Key Vault clone field; current Key Vault activity dispatch builds a bounded REST plan.",
+          "whenToUse": "Current Key Vault activity dispatch does not consume this field.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context while cloning fallback content for a storage write.",
+          "whenToUse": "For Embedded/Azure Read fallback write cloning, retain incoming Plan to preserve conduction context in the cloned plan.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Legacy Key Vault clone field; current Key Vault activity dispatch builds a bounded REST plan.",
+          "whenToUse": "Current Key Vault activity dispatch does not consume this field.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Resource",
+          "description": "Build the generated virtual path from the container and resource.",
+          "whenToUse": "When Config.VirtualPath is absent, supply Resource with Container to synthesize top-level VirtualPath for providers that consume it. Key Vault accepts a mapped /name with empty Container; LocalFileSystem lacks mapped Invoke.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_LocalFileSystem",
+            "Storage_AzureStorageAccount",
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "VirtualPath",
+          "description": "Read a caller-supplied top-level embedded storage path when mapped dispatch has not replaced it.",
+          "whenToUse": "For EmbeddedFileSystem, supply or retain top-level VirtualPath as the path it actually reads. Mapped dispatch synthesizes that field from Container/Resource only when Config.VirtualPath has no Result; it never copies Config.VirtualPath to this top-level field.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem"
+          ]
+        },
+        {
+          "path": "VirtualPath",
+          "description": "Use a preserved caller top-level path when the explicit Azure virtual path is blank.",
+          "whenToUse": "For Azure blob operations, retain a caller top-level VirtualPath when blank Config.VirtualPath should fall back to it.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ],
+          "default": {
+            "Storage_AzureStorageAccount": null
+          }
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "String",
+          "description": "raw file text [provider-returned]. When resolved local VirtualPath; optional TargetPath or Config.Content fallback; file exists; no TargetPath.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "String",
+          "description": "target path [computed]. When resolved local VirtualPath and TargetPath provided with Config.ResultDetail absent or false; copy succeeds.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem"
+          ]
+        },
+        {
+          "path": "TargetPath",
+          "type": "String",
+          "description": "Resolved completed local target path [computed]. When Config.TargetPath and native Boolean Config.ResultDetail=true on Storage_EmbeddedFileSystem.Read.",
+          "adapters": ["Storage_EmbeddedFileSystem"]
+        },
+        {
+          "path": "ByteLength",
+          "type": "Int64",
+          "description": "Byte count read from the completed local target [measured]. When Config.TargetPath and native Boolean Config.ResultDetail=true on Storage_EmbeddedFileSystem.Read.",
+          "adapters": ["Storage_EmbeddedFileSystem"]
+        },
+        {
+          "path": "Sha256",
+          "type": "String",
+          "description": "Uppercase SHA256 of actual completed local target bytes [measured]. When Config.TargetPath and native Boolean Config.ResultDetail=true on Storage_EmbeddedFileSystem.Read.",
+          "adapters": ["Storage_EmbeddedFileSystem"]
+        },
+        {
+          "path": "$",
+          "type": "String or native scalar",
+          "description": "When resolved local VirtualPath; optional TargetPath or Config.Content fallback; file missing and Config.Content supplied.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "String or native response value",
+          "description": "When blob VirtualPath and container/address; optional TargetPath or Config.Content fallback; GET succeeds without TargetPath.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "String",
+          "description": "local target path [computed]. When blob VirtualPath and container/address; GET downloads to TargetPath with Config.ResultDetail absent or false.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "TargetPath",
+          "type": "String",
+          "description": "Resolved completed download target path [computed]. When Config.TargetPath and native Boolean Config.ResultDetail=true on Storage_AzureStorageAccount.Read.",
+          "adapters": ["Storage_AzureStorageAccount"]
+        },
+        {
+          "path": "ByteLength",
+          "type": "Int64",
+          "description": "Byte count read from the completed download target [measured]. When Config.TargetPath and native Boolean Config.ResultDetail=true on Storage_AzureStorageAccount.Read.",
+          "adapters": ["Storage_AzureStorageAccount"]
+        },
+        {
+          "path": "Sha256",
+          "type": "String",
+          "description": "Uppercase SHA256 of actual completed download target bytes [measured]. When Config.TargetPath and native Boolean Config.ResultDetail=true on Storage_AzureStorageAccount.Read.",
+          "adapters": ["Storage_AzureStorageAccount"]
+        },
+        {
+          "path": "$",
+          "type": "String or native scalar",
+          "description": "When blob VirtualPath and container/address; optional TargetPath or Config.Content fallback; missing blob with Config.Content fallback.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "secret value String",
+          "description": "When Config.VirtualPath names secret; REST GET; GET response has value.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Storage_EmbeddedFileSystem: Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred",
+        "Storage_LocalFileSystem: unsupported — Helper ReadObjectAsJson/Xml methods are not mapped activity implementations",
+        "Storage_AzureStorageAccount: Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred",
+        "Storage_AzureKeyVault: Read requires HTTP 200 and a string value; missing value fails",
+        "Storage_AzureKeyVault: Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred"
+      ]
+    },
+    {
+      "name": "Write",
+      "whenToUse": "Use with EmbeddedFileSystem or AzureStorageAccount for content or source-file writes. AzureKeyVault accepts string/JSON Config.Content as a secret value and returns a versioned id; it does not support SourcePath or binary upload. LocalFileSystem lacks mapped Invoke.",
+      "description": "Store content in a resource.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract Key Vault request configuration and check whether it is present.",
+          "whenToUse": "For Key Vault Read/Write/Delete/Exists, Config.VirtualPath may hold a raw secret name; legacy Storage.Secrets.Read.name is Read-only. Otherwise use mapped /name with empty Container.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Read the content to store.",
+          "whenToUse": "For Embedded/blob Write, supply direct content or use SourcePath. For Key Vault Write, supply a string (including empty) or JSON object/array; binary and file paths are unsupported.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_AzureStorageAccount",
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Config.ContentType",
+          "description": "Select the blob media type or Key Vault secret content-type hint.",
+          "whenToUse": "For Azure blob upload or Key Vault Write, set ContentType when the stored value needs an explicit interpretation hint (Key Vault maximum 255 characters).",
+          "adapters": [
+            "Storage_AzureStorageAccount",
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Config.PathSuffix",
+          "description": "Choose an Azure upload path suffix.",
+          "whenToUse": "For Azure upload or fallback write, set PathSuffix when targeting a suffixed blob path.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Config.SignalLevel",
+          "description": "Choose the signal severity for storage operations.",
+          "whenToUse": "For Embedded/Azure storage operations, choose SignalLevel when the emitted operation severity needs adjustment.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_AzureStorageAccount"
+          ],
+          "default": {
+            "Storage_EmbeddedFileSystem": "Critical",
+            "Storage_AzureStorageAccount": "Critical"
+          }
+        },
+        {
+          "path": "Config.SourcePath",
+          "description": "Choose a source file for the storage write.",
+          "whenToUse": "For Embedded/Azure write paths, set SourcePath when content should be read from a source file rather than only supplied in Config.Content.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Config.SourthPath",
+          "description": "Use the legacy misspelled Azure source-file configuration as a fallback.",
+          "whenToUse": "For Azure write paths, use the legacy misspelled SourthPath only when the supported SourcePath is unavailable and compatibility requires that fallback.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Config.VirtualPath",
+          "description": "Check for an explicit virtual path before synthesizing the top-level storage path.",
+          "whenToUse": "Set Config.VirtualPath only for providers that read it directly. Mapped dispatch checks whether it has a Result and skips Container/Resource synthesis, but does not copy it to top-level VirtualPath. Embedded reads top-level VirtualPath, so this Config field alone does not route Embedded.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_LocalFileSystem",
+            "Storage_AzureStorageAccount",
+            "Storage_AzureKeyVault"
+          ],
+          "default": {
+            "Storage_EmbeddedFileSystem": null,
+            "Storage_LocalFileSystem": null,
+            "Storage_AzureStorageAccount": null,
+            "Storage_AzureKeyVault": null
+          }
+        },
+        {
+          "path": "Config.VirtualPath",
+          "description": "Resolve the Azure blob path, falling back to the top-level virtual path if blank.",
+          "whenToUse": "For Azure blob operations, set Config.VirtualPath for the blob path. Blank value falls back to the preserved top-level virtual path.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ],
+          "default": {
+            "Storage_AzureStorageAccount": null
+          }
+        },
+        {
+          "path": "Config.VirtualPath",
+          "description": "Select the Key Vault operation and secret from the virtual-path segments.",
+          "whenToUse": "For Key Vault, the supplied Activity selects the operation. Validate a raw secret name or the legacy Storage.Secrets.Read.name form only for Read.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Container",
+          "description": "Build the generated virtual path from the container and resource.",
+          "whenToUse": "When Config.VirtualPath is absent, supply Container with Resource so mapped dispatch synthesizes top-level VirtualPath for providers that consume it. Key Vault accepts /name only with empty Container; LocalFileSystem lacks mapped Invoke.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_LocalFileSystem",
+            "Storage_AzureStorageAccount",
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context while cloning the Azure write plan for REST dispatch.",
+          "whenToUse": "For Azure Write request cloning before REST dispatch, retain incoming Phase conduction context.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Legacy Key Vault clone field; current Key Vault activity dispatch builds a bounded REST plan.",
+          "whenToUse": "Current Key Vault activity dispatch does not consume this field.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context while cloning the Azure write plan for REST dispatch.",
+          "whenToUse": "For Azure Write request cloning before REST dispatch, retain incoming Plan conduction context.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Legacy Key Vault clone field; current Key Vault activity dispatch builds a bounded REST plan.",
+          "whenToUse": "Current Key Vault activity dispatch does not consume this field.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Resource",
+          "description": "Build the generated virtual path from the container and resource.",
+          "whenToUse": "When Config.VirtualPath is absent, supply Resource with Container to synthesize top-level VirtualPath for providers that consume it. Key Vault accepts a mapped /name with empty Container; LocalFileSystem lacks mapped Invoke.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_LocalFileSystem",
+            "Storage_AzureStorageAccount",
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "VirtualPath",
+          "description": "Read a caller-supplied top-level embedded storage path when mapped dispatch has not replaced it.",
+          "whenToUse": "For EmbeddedFileSystem, supply or retain top-level VirtualPath as the path it actually reads. Mapped dispatch synthesizes that field from Container/Resource only when Config.VirtualPath has no Result; it never copies Config.VirtualPath to this top-level field.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem"
+          ]
+        },
+        {
+          "path": "VirtualPath",
+          "description": "Use a preserved caller top-level path when the explicit Azure virtual path is blank.",
+          "whenToUse": "For Azure blob operations, retain a caller top-level VirtualPath when blank Config.VirtualPath should fall back to it.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ],
+          "default": {
+            "Storage_AzureStorageAccount": null
+          }
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "String",
+          "description": "full output path [computed]. When Config.Content or SourcePath and local VirtualPath; write/copy succeeds.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "String",
+          "description": "safe blob URI [computed]. When Config.Content/SourcePath and blob path valid; provider PUT succeeds.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "String",
+          "description": "Key Vault versioned same-vault secret URI after HTTP 200; no value returned.",
+          "adapters": ["Storage_AzureKeyVault"]
+        }
+      ],
+      "resultNotes": [
+        "Storage_EmbeddedFileSystem: Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred",
+        "Storage_LocalFileSystem: unsupported",
+        "Storage_AzureStorageAccount: URI is a returned target, not independent content proof. Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred",
+        "Storage_AzureKeyVault: Write returns a versioned id on HTTP 200; the provider does not prove independent persistence"
+      ]
+    },
+    {
+      "name": "Delete",
+      "whenToUse": "Use with an implementing Embedded/AzureStorageAccount slot to remove a resource. AzureKeyVault Delete soft-deletes the named secret and all versions without purge. LocalFileSystem lacks mapped Invoke.",
+      "description": "Remove a resource.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract Key Vault request configuration and check whether it is present.",
+          "whenToUse": "For Key Vault Read/Write/Delete/Exists, Config.VirtualPath may hold a raw secret name; legacy Storage.Secrets.Read.name is Read-only. Otherwise use mapped /name with empty Container.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Config.PathSuffix",
+          "description": "Choose the Azure blob suffix for the requested operation.",
+          "whenToUse": "For Azure Delete, set PathSuffix when the requested blob target needs a suffix.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "Config.SignalLevel",
+          "description": "Choose the signal severity for storage operations.",
+          "whenToUse": "For Embedded/Azure storage operations, choose SignalLevel when the emitted operation severity needs adjustment.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_AzureStorageAccount"
+          ],
+          "default": {
+            "Storage_EmbeddedFileSystem": "Critical",
+            "Storage_AzureStorageAccount": "Critical"
+          }
+        },
+        {
+          "path": "Config.VirtualPath",
+          "description": "Check for an explicit virtual path before synthesizing the top-level storage path.",
+          "whenToUse": "Set Config.VirtualPath only for providers that read it directly. Mapped dispatch checks whether it has a Result and skips Container/Resource synthesis, but does not copy it to top-level VirtualPath. Embedded reads top-level VirtualPath, so this Config field alone does not route Embedded.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_LocalFileSystem",
+            "Storage_AzureStorageAccount",
+            "Storage_AzureKeyVault"
+          ],
+          "default": {
+            "Storage_EmbeddedFileSystem": null,
+            "Storage_LocalFileSystem": null,
+            "Storage_AzureStorageAccount": null,
+            "Storage_AzureKeyVault": null
+          }
+        },
+        {
+          "path": "Config.VirtualPath",
+          "description": "Resolve the Azure blob path, falling back to the top-level virtual path if blank.",
+          "whenToUse": "For Azure blob operations, set Config.VirtualPath for the blob path. Blank value falls back to the preserved top-level virtual path.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ],
+          "default": {
+            "Storage_AzureStorageAccount": null
+          }
+        },
+        {
+          "path": "Config.VirtualPath",
+          "description": "Select the Key Vault operation and secret from the virtual-path segments.",
+          "whenToUse": "For Key Vault, the supplied Activity selects the operation. Validate a raw secret name or the legacy Storage.Secrets.Read.name form only for Read.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Container",
+          "description": "Build the generated virtual path from the container and resource.",
+          "whenToUse": "When Config.VirtualPath is absent, supply Container with Resource so mapped dispatch synthesizes top-level VirtualPath for providers that consume it. Key Vault accepts /name only with empty Container; LocalFileSystem lacks mapped Invoke.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_LocalFileSystem",
+            "Storage_AzureStorageAccount",
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Legacy Key Vault clone field; current Key Vault activity dispatch builds a bounded REST plan.",
+          "whenToUse": "Current Key Vault activity dispatch does not consume this field.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Legacy Key Vault clone field; current Key Vault activity dispatch builds a bounded REST plan.",
+          "whenToUse": "Current Key Vault activity dispatch does not consume this field.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Resource",
+          "description": "Build the generated virtual path from the container and resource.",
+          "whenToUse": "When Config.VirtualPath is absent, supply Resource with Container to synthesize top-level VirtualPath for providers that consume it. Key Vault accepts a mapped /name with empty Container; LocalFileSystem lacks mapped Invoke.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_LocalFileSystem",
+            "Storage_AzureStorageAccount",
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "VirtualPath",
+          "description": "Read a caller-supplied top-level embedded storage path when mapped dispatch has not replaced it.",
+          "whenToUse": "For EmbeddedFileSystem, supply or retain top-level VirtualPath as the path it actually reads. Mapped dispatch synthesizes that field from Container/Resource only when Config.VirtualPath has no Result; it never copies Config.VirtualPath to this top-level field.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem"
+          ]
+        },
+        {
+          "path": "VirtualPath",
+          "description": "Use a preserved caller top-level path when the explicit Azure virtual path is blank.",
+          "whenToUse": "For Azure blob operations, retain a caller top-level VirtualPath when blank Config.VirtualPath should fall back to it.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ],
+          "default": {
+            "Storage_AzureStorageAccount": null
+          }
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "Boolean",
+          "description": "When local VirtualPath resolves; file deleted.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Boolean",
+          "description": "When local VirtualPath resolves; file absent.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Boolean",
+          "description": "When blob path/container/address valid; DELETE succeeds.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Boolean",
+          "description": "When blob path/container/address valid; DELETE returns missing status.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Boolean",
+          "description": "Key Vault true only on accepted HTTP 200 soft-delete; missing and denied calls fail.",
+          "adapters": ["Storage_AzureKeyVault"]
+        }
+      ],
+      "resultNotes": [
+        "Storage_EmbeddedFileSystem: Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred",
+        "Storage_LocalFileSystem: unsupported",
+        "Storage_AzureStorageAccount: Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred",
+        "Storage_AzureKeyVault: Delete soft-deletes all versions and does not purge"
+      ]
+    },
+    {
+      "name": "Exists",
+      "whenToUse": "Use with an implementing Embedded/AzureStorageAccount slot to check a resource. AzureKeyVault Exists returns true on HTTP 200 and false only on exact-name 404; permission errors fail. LocalFileSystem lacks mapped Invoke.",
+      "description": "Check whether a resource is present.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract Key Vault request configuration and check whether it is present.",
+          "whenToUse": "For Key Vault Read/Write/Delete/Exists, Config.VirtualPath may hold a raw secret name; legacy Storage.Secrets.Read.name is Read-only. Otherwise use mapped /name with empty Container.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Config.PathSuffix",
+          "description": "Choose the storage path suffix for the existence check.",
+          "whenToUse": "For Azure or Embedded Exists, set PathSuffix when the existence check should include the storage path suffix.",
+          "adapters": [
+            "Storage_AzureStorageAccount",
+            "Storage_EmbeddedFileSystem"
+          ],
+          "default": {
+            "Storage_EmbeddedFileSystem": null
+          }
+        },
+        {
+          "path": "Config.SignalLevel",
+          "description": "Choose the signal severity for storage operations.",
+          "whenToUse": "For Embedded/Azure storage operations, choose SignalLevel when the emitted operation severity needs adjustment.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_AzureStorageAccount"
+          ],
+          "default": {
+            "Storage_EmbeddedFileSystem": "Critical",
+            "Storage_AzureStorageAccount": "Critical"
+          }
+        },
+        {
+          "path": "Config.VirtualPath",
+          "description": "Check for an explicit virtual path before synthesizing the top-level storage path.",
+          "whenToUse": "Set Config.VirtualPath only for providers that read it directly. Mapped dispatch checks whether it has a Result and skips Container/Resource synthesis, but does not copy it to top-level VirtualPath. Embedded reads top-level VirtualPath, so this Config field alone does not route Embedded.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_LocalFileSystem",
+            "Storage_AzureStorageAccount",
+            "Storage_AzureKeyVault"
+          ],
+          "default": {
+            "Storage_EmbeddedFileSystem": null,
+            "Storage_LocalFileSystem": null,
+            "Storage_AzureStorageAccount": null,
+            "Storage_AzureKeyVault": null
+          }
+        },
+        {
+          "path": "Config.VirtualPath",
+          "description": "Resolve the Azure blob path, falling back to the top-level virtual path if blank.",
+          "whenToUse": "For Azure blob operations, set Config.VirtualPath for the blob path. Blank value falls back to the preserved top-level virtual path.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ],
+          "default": {
+            "Storage_AzureStorageAccount": null
+          }
+        },
+        {
+          "path": "Config.VirtualPath",
+          "description": "Select the Key Vault operation and secret from the virtual-path segments.",
+          "whenToUse": "For Key Vault, the supplied Activity selects the operation. Validate a raw secret name or the legacy Storage.Secrets.Read.name form only for Read.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Container",
+          "description": "Build the generated virtual path from the container and resource.",
+          "whenToUse": "When Config.VirtualPath is absent, supply Container with Resource so mapped dispatch synthesizes top-level VirtualPath for providers that consume it. Key Vault accepts /name only with empty Container; LocalFileSystem lacks mapped Invoke.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_LocalFileSystem",
+            "Storage_AzureStorageAccount",
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Legacy Key Vault clone field; current Key Vault activity dispatch builds a bounded REST plan.",
+          "whenToUse": "Current Key Vault activity dispatch does not consume this field.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Legacy Key Vault clone field; current Key Vault activity dispatch builds a bounded REST plan.",
+          "whenToUse": "Current Key Vault activity dispatch does not consume this field.",
+          "adapters": [
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "Resource",
+          "description": "Build the generated virtual path from the container and resource.",
+          "whenToUse": "When Config.VirtualPath is absent, supply Resource with Container to synthesize top-level VirtualPath for providers that consume it. Key Vault accepts a mapped /name with empty Container; LocalFileSystem lacks mapped Invoke.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem",
+            "Storage_LocalFileSystem",
+            "Storage_AzureStorageAccount",
+            "Storage_AzureKeyVault"
+          ]
+        },
+        {
+          "path": "VirtualPath",
+          "description": "Read a caller-supplied top-level embedded storage path when mapped dispatch has not replaced it.",
+          "whenToUse": "For EmbeddedFileSystem, supply or retain top-level VirtualPath as the path it actually reads. Mapped dispatch synthesizes that field from Container/Resource only when Config.VirtualPath has no Result; it never copies Config.VirtualPath to this top-level field.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem"
+          ]
+        },
+        {
+          "path": "VirtualPath",
+          "description": "Use a preserved caller top-level path when the explicit Azure virtual path is blank.",
+          "whenToUse": "For Azure blob operations, retain a caller top-level VirtualPath when blank Config.VirtualPath should fall back to it.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ],
+          "default": {
+            "Storage_AzureStorageAccount": null
+          }
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "Boolean",
+          "description": "When local VirtualPath resolves; file is present.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Boolean",
+          "description": "When local VirtualPath resolves; file is absent.",
+          "adapters": [
+            "Storage_EmbeddedFileSystem"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Boolean",
+          "description": "When blob path/container/address valid; HEAD indicates blob exists.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Boolean",
+          "description": "When blob path/container/address valid; all addresses indicate absence.",
+          "adapters": [
+            "Storage_AzureStorageAccount"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "Boolean",
+          "description": "Key Vault true on HTTP 200 and false only on exact-name HTTP 404.",
+          "adapters": ["Storage_AzureKeyVault"]
+        }
+      ],
+      "resultNotes": [
+        "Storage_EmbeddedFileSystem: Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred",
+        "Storage_LocalFileSystem: unsupported",
+        "Storage_AzureStorageAccount: Mapped Storage wrapper drops a failed provider Result; provider effects may still have occurred",
+        "Storage_AzureKeyVault: Exists returns false only on name-scoped HTTP 404; denial is failure"
+      ]
+    }
+  ],
+  "concreteAdapters": [
+    {
+      "name": "Storage_EmbeddedFileSystem",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Storage/Storage_EmbeddedFileSystem.ps1"
+    },
+    {
+      "name": "Storage_LocalFileSystem",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/LocalFileSystem/PowerShell/Storage_LocalFileSystem.ps1"
+    },
+    {
+      "name": "Storage_AzureStorageAccount",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureStorageAccount/PowerShell/Storage_AzureStorageAccount.psm1"
+    },
+    {
+      "name": "Storage_AzureKeyVault",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Storage/AzureKeyVault/PowerShell/Storage_AzureKeyVault.psm1"
+    }
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Mapped/MappedStorageAdapter.json","version":1}
+}

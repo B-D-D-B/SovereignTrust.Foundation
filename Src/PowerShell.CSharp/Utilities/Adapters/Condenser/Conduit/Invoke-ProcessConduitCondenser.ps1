@@ -1,0 +1,243 @@
+using module SignalGraph
+# =============================================================================
+# 📍 Invoke-ConduitCondenser (Declarative Graph Builder + Injector)
+#  License: MIT License • Copyright (c) 2025 Silicon Dream Artists. Current copyright holder: BDDB LLC.
+#  Authors: Shadow PhanTom ☠️🧁👾️/🤖 • Neural Alchemist ⚗️☣️🐲 • Last Generated: 06/25/2025
+# =============================================================================
+# This function performs a single declarative execution of a graph plan over a 
+# scoped memory object, returning a wrapped Signal with a `.Pointer` to the 
+# constructed graph. It is designed for use inside a recursive formula graph 
+# condenser loop, and supports injection of the graph signal into a declared 
+# memory wire path if `TargetWirePath` is specified.
+#
+# Inputs:
+#   - ParentSignal: the governing signal scope (used for escalation and lineage)
+#   - Plan: a GraphFormulaPlan containing Source/Sources/Target fields
+#   - Item: the scoped JSON object or memory jacket to apply the plan against
+#   - PlanName: the declared name of the plan (used for logging + signal identity)
+#
+# Process:
+#   - Creates a scoped sub-signal with jacket and plan metadata
+#   - Runs Resolve-PathGraphForJsonArray to generate graph
+#   - Wraps result in a new Signal with .Pointer set
+#   - Injects signal into memory if TargetWirePath is defined
+#
+# Output:
+#   - Returns the wrapped Signal with .Pointer to the constructed graph
+#
+
+function Invoke-ProcessConduitCondenser {
+    param (
+        [Signal]$Signal,
+        [object]$Plan,
+        [Signal]$ItemSignal
+    )
+
+    $opSignal = [Signal]::Start("Invoke-ConduitCondenser:$($Plan.Name)", $Signal) | Select-Object -Last 1
+
+    $SourceData = $ItemSignal.GetResult($true)
+    $SupportParallelismSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "SupportParallelism" -Default $false | Select-Object -Last 1
+    $SupportParallelism = $SupportParallelismSignal.GetResult()
+
+    $SourceAdapterSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Adapter" | Select-Object -Last 1
+    $SourceActivitySignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Activity" -Default "Read" -SignalLevel "Warning" | Select-Object -Last 1
+
+    $SourceAdapter = $SourceAdapterSignal.GetResult()
+    $SourceActivity = $SourceActivitySignal.GetResult()
+    $detailSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path 'Config.ResultDetail' -Default $false -SignalLevel 'Warning' | Select-Object -Last 1
+    $detailValue = $detailSignal.GetResult()
+    $resultDetail = $detailValue -is [bool] -and $detailValue -eq $true
+    $attemptedCount = 0
+    $completedCount = 0
+    $completedItems = [System.Collections.Generic.List[object]]::new()
+
+    #    $mySignal = Remove-ReversePointersFromSignal -RootSignal $Signal
+    #    $Signalx = $mySignal | ConvertTo-Json -Depth 100 
+
+    Assert-STExecutionTraceSerial ($SupportParallelism -and $SourceData.Grid.Count -ne 1)
+    $stIndex=0
+    $stSetHash=$null
+    if($null -ne $script:STExecutionTraceState){
+        $stSetHash=Get-STExecutionTraceInputHash @($SourceData.Grid.Keys)
+        Write-STExecutionTraceDecision $script:STExecutionTraceState.Stack[-1].InvocationId 'ConduitItems' ($SourceData.Grid.Count -gt 0) 'Required' $null $null $SourceData.Grid.Count
+    }
+    if (-not $SupportParallelism -or $SourceData.Grid.Count -eq 1) {
+        foreach ($item in $SourceData.Grid.GetEnumerator()) {
+            if ($isFailed) {
+                break
+            }
+
+            $stIteration=$null
+            if($null -ne $script:STExecutionTraceState){
+                $stIteration=@{IterationTemplateId='Conduit/'+$Plan.Name;IterationIndex=$stIndex;IterationKey=[string]$item.Key;InputSetSha256=$stSetHash;Cardinality=$SourceData.Grid.Count}
+            }
+            $stTrace=Enter-STExecutionTrace -BoundaryKind 'Iteration' -Name 'Conduit' -Adapter $SourceAdapter -Activity $SourceActivity -Iteration $stIteration
+            $stThrew=$false;$stResult=$null
+            try {
+            $plan = ($item.Value).HasResult() ? ($item.Value).GetResult() : $Plan
+            $attemptedCount++
+            $MappingResultSignal = Invoke-MappedAdapter `
+                -Signal $Signal `
+                -Adapter $SourceAdapter `
+                -Activity $SourceActivity `
+                -Plan $plan `
+                -ItemSignal $item.Value
+            | Select-Object -Last 1
+
+            $stResult=$MappingResultSignal
+            } catch {
+                $stThrew=$true
+                return $opSignal.LogCritical("Conduit.Process child '$($item.Key)' threw: $($_.Exception.Message)", $null, $_)
+            }
+            finally { Exit-STExecutionTrace $stTrace $stResult $stThrew }
+            if ($null -eq $MappingResultSignal -or $opSignal.MergeSignalAndVerifyFailure($MappingResultSignal)) {
+                return $opSignal.LogCritical("Conduit.Process child '$($item.Key)' failed.")
+            }
+            $completedCount++
+            $completedItems.Add([pscustomobject]@{ Key = [string]$item.Key; Completed = $true })
+            $stIndex++
+            <#
+            $cloneStatus = Resolve-PathFromDictionary -Dictionary $cloneStep -Path "Status"
+            $Success = $cloneStatus -eq "Success" -or $innerStatus -eq "Skipped"
+
+            $isFailed = $isFailed -or -not ($Success)
+
+            $cloneStepErrorLog = Resolve-PathFromDictionary -Dictionary $cloneStep -Path "ErrorLog"
+            if ($cloneStepErrorLog) {
+                $ErrorLog += $cloneStepErrorLog
+            }
+#>
+            if ($repeatDelayMS -gt 0) {
+                $delay = Get-Random -Minimum ($repeatDelayMS / 2) -Maximum ($repeatDelayMS * 2)
+                Start-Sleep -Milliseconds ([int]$delay)
+            }
+        }
+
+        <#
+        $Status = $Success ? "Success" : "Failed"    
+
+        Add-PathToDictionary -Dictionary $nextStep -Path "Status" -Value $Status
+        if ($ErrorLog.Count -gt 0) {
+            Add-PathToDictionary -Dictionary $nextStep -Path "ErrorLog" -Value $ErrorLog
+        }
+            #>
+    }
+    else {
+        # Within-set parallelism; honor per-set throttle
+        #    $environment = Resolve-PathFromDictionary -Dictionary $Context -Path "Environment"
+        #  $maxParallel = if ($nextStep.MaxParallelism) { [int]$nextStep.MaxParallelism } else { $environment.DefaultMaxParallelism ?? 4 }
+        $maxParallel = 1
+        
+        $resultSignal = Invoke-ConduitPool -Signal $ConductionSignal -Plan $Plan -ItemSignal $ItemSignal
+        
+        $isFailed = $false
+        $indices = 0..($SourceData.Grid.Count - 1)
+        $values = $SourceData.Grid.Values
+        $item = $values[0]
+
+        $values = $SourceData.Grid.Keys
+        $item = $values[0]
+
+        
+        $conduitSelection = Get-STWorkerSelection
+        $conduitBootstrap = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../../../Bootstrap/STFoundationSelection.ps1'))
+        $conduitManifest = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../../../SovereignTrust.Foundation.psd1'))
+        $conduitKnownAssembly = & (Get-Module SignalGraph) { [Signal].Assembly.FullName }
+        $isSuccessArray = $indices | ForEach-Object -Parallel {
+            $global:STSelectedWorkerContext=$true
+            . $using:conduitBootstrap
+            if ($null -ne $using:conduitSelection) {
+                $pair = $using:conduitSelection
+                $verified = Read-STSelectionPacket -Path $pair.PacketPath -Sha256 $pair.PacketSha256 -KnownSignalAssembly $using:conduitKnownAssembly
+                Import-STSelectedFoundation -Selection $verified
+                $null = Get-STSelectionProvenance -Selection $verified
+            } else { Import-Module $using:conduitManifest -ErrorAction Stop }
+            if ($using:isFailed) {
+                break
+            } 
+
+            $myvalues = $using:SourceData.Grid.Values
+            $myvalues = @($using:SourceData.Grid.Values)
+            $values = $using:values
+            $item = $values[$_]
+            $isnull = ($item -eq $null)
+
+            Write-Host $using:SourceActivity
+            Write-Host $using:Signal.Name
+            Write-Host $using:Plan.Name
+            Write-Host $_
+            Write-Host ($myvalues[$_].Name) 
+            Write-Host ($myvalues.GetType())
+            Write-Host $isnull
+            Write-Host $item #-is [Signal])
+            Write-Host $using:SourceAdapter
+
+            #Write-Host $using:SourceData.Grid.Values
+
+            #$r = Resolve-PathFromDictionary -Dictionary $using:SourceData -Path "#.$($item).Name" | Select-Object -Last 1
+            #Write-Host $r.GetResult()
+            #Write-Host $r.HasResult()
+
+            <#
+#>
+            $MappingResultSignal = Invoke-MappedAdapter `
+                -Adapter $using:SourceAdapter `
+                -Activity $using:SourceActivity `
+                -Plan $using:Plan `
+                -ItemSignal $myvalues[$_]
+            | Select-Object -Last 1
+
+            Write-Host $MappingResultSignal
+
+            <#
+
+$MappingResultSignal = Invoke-MappedAdapter `
+                -Signal $using:Signal `
+                -Adapter $using:SourceAdapter `
+                -Activity $using:SourceActivity `
+                -Plan $using:Plan `
+                -ItemSignal $myvalues[$_]
+            | Select-Object -Last 1
+
+            Write-Host $MappingResultSignal
+<#
+#>
+
+            <#
+            $cloneStatus = Resolve-PathFromDictionary -Dictionary $cloneStep -Path "Status"
+            $Success = $cloneStatus -eq "Success" -or $cloneStatus -eq "Skipped"
+
+            # TODO: Fix potential multi-threaded race condition of overwriting another ErrorLog or isFailed status
+            $isFailed = $isFailed -or -not ($Success)
+
+            $cloneStepErrorLog = Resolve-PathFromDictionary -Dictionary $cloneStep -Path "ErrorLog"
+            if ($cloneStepErrorLog) {
+                $ErrorLog += $cloneStepErrorLog
+            }
+
+            if ($using:repeatDelayMS -gt 0) {
+                $delay = Get-Random -Minimum ($using:repeatDelayMS / 2) -Maximum ($using:repeatDelayMS * 2)
+                Start-Sleep -Milliseconds ([int]$delay)
+            }
+            #>
+            # TODO: change to return error log
+            return -not $using:isFailed
+        } -ThrottleLimit $maxParallel
+
+        $isFailed = $isSuccessArray -contains $false
+        $Status = $isFailed ? "Failed" : "Success"
+        Add-PathToDictionary -Dictionary $nextStep -Path "Status" -Value $Status
+    }
+                
+    # TODO: Change result to something meaningful or not at all.
+    if ($resultDetail) {
+        $opSignal.SetResult([pscustomobject]@{
+            AttemptedCount = [int]$attemptedCount
+            CompletedCount = [int]$completedCount
+            Items = @($completedItems.ToArray())
+        })
+    }
+    else { $opSignal.SetResult($ItemSignal) }
+    $opSignal.LogInformation("✅ Graph plan '$PlanName' completed successfully.")
+    return $opSignal
+}

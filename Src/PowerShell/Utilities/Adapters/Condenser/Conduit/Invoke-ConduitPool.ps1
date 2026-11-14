@@ -37,10 +37,12 @@ function Invoke-ConduitPool {
 #>
 
     $iss = [System.Management.Automation.Runspaces.InitialSessionState]::CreateDefault()
-    $iss.ImportPSModule($BootModulePath)
+    $selectedWorker = Get-STWorkerSelection
+    if ($null -ne $selectedWorker) { $iss = New-STSelectedInitialSessionState -Selection $selectedWorker }
+    else { $iss.ImportPSModule(@([IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../../../SovereignTrust.Foundation.psd1')))) }
 
     # Create and open a runspace pool (same process, no serialization barrier)
-    $pool = [runspacefactory]::CreateRunspacePool(1, $MaxThreads)
+    $pool = [runspacefactory]::CreateRunspacePool(1, $MaxThreads, $iss, $Host)
     $pool.ApartmentState = 'MTA'
     $pool.ThreadOptions = 'ReuseThread'
     $pool.Open()
@@ -69,6 +71,7 @@ function Invoke-ConduitPool {
                     #                    param($ConductionSignal, $ItemSignal, $Plan, $ItemName)
                     param($ItemSignal, $ItemName, $ScriptRoot)#, $Plan, $ConductionSignal)
 
+                    if ($null -ne $STWorkerSelection) { Assert-STFoundationSelection -Selection $STWorkerSelection -RequireLoaded }
                     #$OpSignal.LogInformation("✅ Completed work item '$ItemName'.")
                     if ($ItemSignal) {
                         $ItemSignal.LogInformation("▶️ Running work item '$ItemName'.")

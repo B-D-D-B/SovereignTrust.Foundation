@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "ownerId": "Condensers/SignalCondenser",
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "SignalCondenser",
+  "sources": [
+    {
+      "id": "signal-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/SignalCondenser.ps1",
+      "sha256": "F98C04FD890BE09A9501C11653CC0B3181B312F22C38DC9C9856B1E11F1B7088",
+      "symbol": "SignalCondenser"
+    }
+  ],
+  "entries": [],
+  "unverified": [
+    {
+      "id": "invalid-signal-configuration",
+      "reportedText": "Invalid SignalCondenser configuration or value path.",
+      "reason": "One class catch at line130 replaces many distinct throws: missing Config; invalid Log Expected/Level/origin/path/message; invalid Assert path/predicate/message/Expected. The exact wrapper cannot identify which guard or a bounded correction.",
+      "neededEvidence": "Canonical Log/Assert activity and redacted per-guard member presence/type/length/path-validity flags or source-correlated inner throw label; no message/path/expected value."
+    },
+    {
+      "id": "assert-caller-message",
+      "reportedText": "<caller Message> [Path=<ValuePath>; Predicate=<Predicate>]",
+      "reason": "Failed Assert line122 concatenates caller-controlled Message with variable path/predicate. A single v1 prefix-suffix bound cannot safely identify this cause without capturing caller content or matching arbitrary errors. The predicate failure could be missing path, nonstring, blank or unequal value.",
+      "neededEvidence": "Canonical Assert activity and structured predicate/path-validity/value-type/pass flags, plus a source-safe discriminator not based on caller message or path contents."
+    },
+    {
+      "id": "critical-log-caller-message",
+      "reportedText": "<caller Config.Message or MessagePath content>",
+      "reason": "Log at line92 emits validated caller-controlled content at selected severity; line93 Critical returns a failed Signal without Result. The message has no fixed source text or bounded v1 pattern for an error-specific recipe.",
+      "neededEvidence": "Structured canonical Log activity, validated Level=Critical and message-source identity with content redacted; an operator-owned exact message contract would need separate authority."
+    }
+  ]
+}

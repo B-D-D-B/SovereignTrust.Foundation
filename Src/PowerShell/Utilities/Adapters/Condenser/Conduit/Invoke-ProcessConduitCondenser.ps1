@@ -139,7 +139,19 @@ function Invoke-ProcessConduitCondenser {
         $item = $values[0]
 
         
+        $conduitSelection = Get-STWorkerSelection
+        $conduitBootstrap = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../../../Bootstrap/STFoundationSelection.ps1'))
+        $conduitManifest = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../../../SovereignTrust.Foundation.psd1'))
+        $conduitKnownAssembly = & (Get-Module SignalGraph) { [Signal].Assembly.FullName }
         $isSuccessArray = $indices | ForEach-Object -Parallel {
+            $global:STSelectedWorkerContext=$true
+            . $using:conduitBootstrap
+            if ($null -ne $using:conduitSelection) {
+                $pair = $using:conduitSelection
+                $verified = Read-STSelectionPacket -Path $pair.PacketPath -Sha256 $pair.PacketSha256 -KnownSignalAssembly $using:conduitKnownAssembly
+                Import-STSelectedFoundation -Selection $verified
+                $null = Get-STSelectionProvenance -Selection $verified
+            } else { Import-Module $using:conduitManifest -ErrorAction Stop }
             if ($using:isFailed) {
                 break
             } 
@@ -148,10 +160,8 @@ function Invoke-ProcessConduitCondenser {
             $myvalues = @($using:SourceData.Grid.Values)
             $values = $using:values
             $item = $values[$_]
-. "$PSScriptRoot\..\..\..\SovereignTrust.Foundation\Src\PowerShell\Classes\Adapters\Telemetry\SignalTelemeter.ps1"
-            . "$PSScriptRoot\..\..\..\SovereignTrust.Foundation\Src\PowerShell\Classes\Adapters\Telemetry\ConsoleLogger.ps1"
             $isnull = ($item -eq $null)
-            Import-Module ../SovereignTrust.Foundation/Src/PowerShell/SovereignTrust.Foundation.psd1 -Force 
+
             Write-Host $using:SourceActivity
             Write-Host $using:Signal.Name
             Write-Host $using:Plan.Name

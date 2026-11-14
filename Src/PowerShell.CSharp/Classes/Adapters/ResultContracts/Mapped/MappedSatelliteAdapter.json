@@ -1,0 +1,312 @@
+{
+  "name": "MappedSatelliteAdapter",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedSatelliteAdapter.ps1",
+      "sha256": "849D93BBFBECC5A509FF0202D529A0B282E451B772379F597E5A277A8F7DD4D7"
+    },
+    {
+      "id": "s2",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Satellite/AzureApplicationInsights/PowerShell/Satellite_AzureApplicationInsights.psm1",
+      "sha256": "87BCB6DCC17A8D1014914D7969B9EC9E981850DF344D626D19E35648D97E3A90"
+    }
+  ],
+  "activities": [
+    {
+      "name": "EmitEntries",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Satellite_AzureApplicationInsights",
+            "support": "implemented",
+            "when": "telemetry item graph and emission plan available",
+            "outcomes": [
+              {
+                "condition": "emission and handled result found",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "handled receipt",
+                "shape": [
+                  {
+                    "path": "ItemsReceived",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "provider received count",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ItemsAccepted",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "provider accepted count",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Result",
+                    "type": "Boolean",
+                    "presence": "required",
+                    "meaning": "accepted equals sent",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "plan/graph/handled key missing or child failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "posts telemetry to configured endpoint"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'EmitEntries'",
+                "line": 80,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "\"EmitEntries\"",
+                "line": 92,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Count receipt is stronger than an echoed request, but is not query/readback proof."
+          }
+        ]
+      }
+    },
+    {
+      "name": "EmitSignal",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Satellite_AzureApplicationInsights",
+            "support": "implemented",
+            "when": "telemetry item graph and emission plan available",
+            "outcomes": [
+              {
+                "condition": "emission and handled result found",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "handled receipt",
+                "shape": [
+                  {
+                    "path": "ItemsReceived",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "provider received count",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ItemsAccepted",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "provider accepted count",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Result",
+                    "type": "Boolean",
+                    "presence": "required",
+                    "meaning": "accepted equals sent",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "plan/graph/handled key missing or child failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "posts telemetry to configured endpoint"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'EmitSignal'",
+                "line": 80,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "\"EmitSignal\"",
+                "line": 93,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Count receipt is stronger than an echoed request, but is not query/readback proof."
+          }
+        ]
+      }
+    },
+    {
+      "name": "SendMessage",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Satellite_AzureApplicationInsights",
+            "support": "implemented",
+            "when": "nonempty JSON telemetry body and CountKey supplied",
+            "outcomes": [
+              {
+                "condition": "REST POST returns",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "provider response body"
+              },
+              {
+                "condition": "body/count/REST failure",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "posts telemetry"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'SendMessage'",
+                "line": 80,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "\"SendMessage\"",
+                "line": 152,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "HandleResponse",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Satellite_AzureApplicationInsights",
+            "support": "implemented",
+            "when": "raw response property bag, ItemsSent and HandledResultKey",
+            "outcomes": [
+              {
+                "condition": "counts valid and no error entries",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "PSCustomObject",
+                "shape": [
+                  {
+                    "path": "ItemsReceived",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "parsed receipt count",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "ItemsAccepted",
+                    "type": "Int64",
+                    "presence": "required",
+                    "meaning": "parsed receipt count",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "Result",
+                    "type": "Boolean",
+                    "presence": "required",
+                    "meaning": "accepted equals sent; may be false without Signal failure",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "counts valid but errors array has entries",
+                "signalState": "failure",
+                "hasResult": true,
+                "resultType": "PSCustomObject",
+                "limitations": "Result set before LogCritical; mapped Satellite wrapper retains failure Result"
+              },
+              {
+                "condition": "malformed JSON/counts/key/graph",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "registers handled receipt in item graph"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'HandleResponse'",
+                "line": 80,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "'HandleResponse'",
+                "line": 218,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "False business Result alone does not fail Signal; errors do."
+          }
+        ]
+      }
+    },
+    {
+      "name": "EmitSignalFull",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Satellite_AzureApplicationInsights",
+            "support": "reserved",
+            "when": "branch skips full emission",
+            "outcomes": [
+              {
+                "condition": "no full telemetry emission performed",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'EmitSignalFull'",
+                "line": 80,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "\"EmitSignalFull\"",
+                "line": 90,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "No completed EmitSignalFull behavior or receipt exists."
+          }
+        ]
+      }
+    }
+  ]
+}

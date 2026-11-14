@@ -1,0 +1,49 @@
+{
+  "name": "SignalCondenser",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    { "id": "s1", "repository": "SovereignTrust.Foundation", "path": "Src/PowerShell/Classes/Adapters/Condenser/SignalCondenser.ps1", "sha256": "F98C04FD890BE09A9501C11653CC0B3181B312F22C38DC9C9856B1E11F1B7088" }
+  ],
+  "activities": [
+    {
+      "name": "Log",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [{
+          "adapter": "SignalCondenser", "support": "implemented", "when": "valid Log request",
+          "outcomes": [
+            { "condition": "Information or Warning", "signalState": "success", "hasResult": true, "resultType": "PSCustomObject", "shape": [
+              { "path": "$.Activity", "type": "string", "presence": "required", "meaning": "Log", "origin": "computed" },
+              { "path": "$.Passed", "type": "Boolean", "presence": "required", "meaning": "true", "origin": "computed" },
+              { "path": "$.Level", "type": "string", "presence": "required", "meaning": "validated noncritical level", "origin": "computed" }
+            ] },
+            { "condition": "Critical or malformed request", "signalState": "failure", "hasResult": false, "resultType": "absent" }
+          ],
+          "sideEffects": ["appends one requested Signal entry when valid"],
+          "evidence": [{ "source": "s1", "symbol": "LogMessage", "line": 92, "kind": "source-derived" }]
+        }],
+        "common": { "mappedExposure": "MappedCondenserAdapter copies successful Result only when present; failed leaf Signal merges and returns without Result." }
+      }
+    },
+    {
+      "name": "Assert",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [{
+          "adapter": "SignalCondenser", "support": "implemented", "when": "native string assertion",
+          "outcomes": [
+            { "condition": "predicate passes", "signalState": "success", "hasResult": true, "resultType": "PSCustomObject", "shape": [
+              { "path": "$.Activity", "type": "string", "presence": "required", "meaning": "Assert", "origin": "computed" },
+              { "path": "$.Passed", "type": "Boolean", "presence": "required", "meaning": "true", "origin": "computed" },
+              { "path": "$.Predicate", "type": "string", "presence": "required", "meaning": "validated predicate", "origin": "computed" }
+            ] },
+            { "condition": "predicate fails, path absent or configuration invalid", "signalState": "failure", "hasResult": false, "resultType": "absent" }
+          ],
+          "sideEffects": ["appends one Information or Critical Signal entry"],
+          "evidence": [{ "source": "s1", "symbol": "SetResult", "line": 126, "kind": "source-derived" }]
+        }],
+        "common": { "mappedExposure": "MappedCondenserAdapter copies successful Result only when present; failed leaf Signal merges and returns without Result." }
+      }
+    }
+  ]
+}

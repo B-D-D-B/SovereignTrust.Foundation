@@ -1,0 +1,79 @@
+{
+  "name": "TokenCondenser",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/TokenCondenser.ps1",
+      "sha256": "11068D1BD5ABFF7F713073E9A2701229277BA645C0A32FBB80D44DFF5220ECFB"
+    },
+    {
+      "id": "s2",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedTokenAdapter.ps1",
+      "sha256": "D347BC6E53C756C063FE098A63DFC94B1AEB6B9C4182E32ACE86EA6C8AAB7C2F"
+    },
+    {
+      "id": "s3",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedCondenserAdapter.ps1",
+      "sha256": "CDB170DE2EB8292E350DD924703F26EF17E4839B85120D183A138221826C939E"
+    }
+  ],
+  "activities": [
+    {
+      "name": "Parse",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "TokenCondenser",
+            "support": "implemented",
+            "when": "ItemSignal Result/Jacket selects delegated Token.Get",
+            "outcomes": [
+              {
+                "condition": "Token.Get succeeds",
+                "signalState": "success",
+                "hasResult": "conditional",
+                "resultType": "arbitrary native token result"
+              },
+              {
+                "condition": "Token.Get fails",
+                "signalState": "conditional",
+                "hasResult": false,
+                "resultType": "absent",
+                "limitations": "delegate failure is not merged; activity may return success with no result"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Parse'",
+                "line": 45,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "Invoke",
+                "line": 8,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Private XML GetToken InnerXml return is not the public Parse result."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    }
+  ]
+}

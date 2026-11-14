@@ -1,0 +1,118 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedQueueAdapter",
+  "mappedAdapter": "MappedQueueAdapter",
+  "part": "constructor",
+  "sources": [
+    {
+      "id": "mapped-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedQueueAdapter.ps1",
+      "sha256": "CE32FEAF2D2E6345DFEA467AF7E98D3E3B71204117A24D89B79C1CA4829AA902",
+      "symbol": "MappedQueueAdapter"
+    }
+  ],
+  "entries": [
+    {
+      "id": "mapped-queue-start-null-conductor",
+      "status": "source-verified",
+      "adapters": [
+        "MappedQueueAdapter"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Null Conductor passed to MappedQueueAdapter.Start()",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 29,
+              "endLine": 29
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "MappedQueueAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+        "evidence": [
+          {
+            "sourceId": "mapped-class",
+            "startLine": 25,
+            "endLine": 31
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "MappedQueueAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 25,
+              "endLine": 31
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect mapped Start Conductor presence/truthy flag only.",
+          "expected": "Redacted flags identify this exact source guard; provider/child cause remains separate.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 25,
+              "endLine": 31
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no queue/provider execution here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull Conductor for authorized mapped Queue construction.",
+            "expected": "Conductor is present; setup/runtime remains separate.",
+            "evidence": [
+              {
+                "sourceId": "mapped-class",
+                "startLine": 25,
+                "endLine": 31
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, queue, child/session or Conductor owner cannot be identified with redacted metadata.",
+          "Proposed action would expose message/token/receipt/URL or execute queue, REST, graph, session, conduction or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Conductor is present; setup/runtime remains separate.",
+          "expected": "Local guard would be false; runtime queue success unverified.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 25,
+              "endLine": 31
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, message text, IDs, PopReceipt, token, session/plan, URL/XML/REST response, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no queue/REST/session/conduction/runtime/provider execution.",
+        "Passing this guard does not establish child effects or safe retry/acknowledgment."
+      ]
+    }
+  ]
+}

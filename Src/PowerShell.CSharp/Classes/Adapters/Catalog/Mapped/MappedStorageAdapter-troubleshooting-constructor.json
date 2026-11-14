@@ -1,0 +1,118 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedStorageAdapter",
+  "mappedAdapter": "MappedStorageAdapter",
+  "part": "constructor",
+  "sources": [
+    {
+      "id": "mapped-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedStorageAdapter.ps1",
+      "sha256": "4DBD5EF8DC1B9D141EB6FB6F7E7AB41A03DC52B7731840E6FA0DB7975C0A4AF3",
+      "symbol": "MappedStorageAdapter"
+    }
+  ],
+  "entries": [
+    {
+      "id": "mapped-storage-null-conductor",
+      "status": "source-verified",
+      "adapters": [
+        "MappedStorageAdapter"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Null Conductor passed to MappedStorageAdapter.Start()",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 27,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "MappedStorageAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+        "evidence": [
+          {
+            "sourceId": "mapped-class",
+            "startLine": 23,
+            "endLine": 29
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "MappedStorageAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 23,
+              "endLine": 29
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect mapped Start Conductor presence/truthy flag only.",
+          "expected": "Redacted flags identify this source guard without content or provider effects.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 23,
+              "endLine": 29
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no storage/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull Conductor for authorized mapped Storage construction.",
+            "expected": "Conductor is present; setup/runtime separate.",
+            "evidence": [
+              {
+                "sourceId": "mapped-class",
+                "startLine": 23,
+                "endLine": 29
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete adapter and activity or exact message/pattern differs.",
+          "Effective Plan, storage address, graph, source file or provider owner cannot be established with redacted metadata.",
+          "Proposed action would expose bytes/secret/URL or execute read, write, delete, list, vault, REST, file or provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Conductor is present; setup/runtime separate.",
+          "expected": "Local guard would be false; storage/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 23,
+              "endLine": 29
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/ItemSignal, file/blob/secret paths and bytes, vault/storage address/URL, credentials, response/XML/JSON, graph, Conductor/Jacket and exception text; retain canonical adapter/activity, exact message/pattern and presence/type/guard flags only.",
+      "limitations": [
+        "Source-only confidence; no storage/vault/REST/filesystem/runtime/provider execution.",
+        "A source guard or Result presence does not establish a remote/file effect or safe retry."
+      ]
+    }
+  ]
+}

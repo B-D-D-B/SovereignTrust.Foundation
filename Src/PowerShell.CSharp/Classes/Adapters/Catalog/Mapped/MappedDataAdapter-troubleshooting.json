@@ -1,0 +1,3523 @@
+{
+  "version": 1,
+  "ownerId": "Mapped/MappedDataAdapter",
+  "mappedAdapter": "MappedDataAdapter",
+  "sources": [
+    {
+      "id": "mapped-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedDataAdapter.ps1",
+      "sha256": "45CBA6E7D2C2955BD1820C0A81B6BA5859451990C418E0A32C63E9C1D5CB7464",
+      "symbol": "MappedDataAdapter"
+    },
+    {
+      "id": "mapped-core",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Invoke-MappedAdapterCore.ps1",
+      "sha256": "0AB004DC55D82CDC9443E123C766262A4A75FADBDAB424E22A0EC4C971008792",
+      "symbol": "Invoke-MappedAdapterCore"
+    },
+    {
+      "id": "mapped-resolver",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Resolve-MappedAdapter.ps1",
+      "sha256": "5EAC4130E9BC50A67453B7AE525DD01AC01EA2E3AFFCD41B90ED8E90C187545E",
+      "symbol": "Resolve-MappedAdapter"
+    },
+    {
+      "id": "sql-class",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureSql/PowerShell/Data_AzureSql.ps1",
+      "sha256": "DC54B58C395082C5A612701D006EA0CD625B9D4EF71794A7556B58B4CB096264",
+      "symbol": "Data_AzureSql"
+    },
+    {
+      "id": "sql-orchestration",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureSql/PowerShell/Invoke-Data_AzureSql.ps1",
+      "sha256": "48DC3A8A781635866B7E59925F868CBE513F1D38B5AFB5295673E8FA381BCC90",
+      "symbol": "Invoke-Data_AzureSql"
+    },
+    {
+      "id": "adx-module",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureDataExplorer/PowerShell/Data_AzureDataExplorer.psm1",
+      "sha256": "BD4832302292A267E5BCBA5E9605416625C373039540A0960142CF38354D3EDF",
+      "symbol": "Data_AzureDataExplorer"
+    },
+    {
+      "id": "adx-admin",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureDataExplorer/PowerShell/Invoke-AzureDataExplorerAdmin.ps1",
+      "sha256": "50366E4C5FA73C08FCD577B5A712FDE713C13B8B4B754D2D8255470059B578A6",
+      "symbol": "Invoke-AzureDataExplorerAdmin"
+    },
+    {
+      "id": "adx-data",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureDataExplorer/PowerShell/Invoke-AzureDataExplorerData.ps1",
+      "sha256": "FB47BF08EEF8B991EC1DE6C8FBC012A3F2BDA53E177584EC859072615E12F08A",
+      "symbol": "Invoke-AzureDataExplorerData"
+    }
+  ],
+  "entries": [
+    {
+      "id": "data-null-conductor",
+      "status": "source-verified",
+      "adapters": [
+        "MappedDataAdapter"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Null Conductor passed to MappedDataAdapter.Start()",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 50,
+              "endLine": 50
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "MappedDataAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+        "evidence": [
+          {
+            "sourceId": "mapped-class",
+            "startLine": 46,
+            "endLine": 52
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "MappedDataAdapter.Start receives falsey Conductor before Signal/Graph setup.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 46,
+              "endLine": 52
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Conductor presence/truthy flag only.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 46,
+              "endLine": 52
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no data/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull Conductor for mapped Data construction.",
+            "expected": "Conductor present; setup separate.",
+            "evidence": [
+              {
+                "sourceId": "mapped-class",
+                "startLine": 46,
+                "endLine": 52
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Conductor present; setup separate.",
+          "expected": "Local guard proposal would satisfy stated predicate; data/provider result unverified.",
+          "evidence": [
+            {
+              "sourceId": "mapped-class",
+              "startLine": 46,
+              "endLine": 52
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "data-mapped-path-unresolved",
+      "status": "source-verified",
+      "adapters": [
+        "MappedDataAdapter"
+      ],
+      "activities": [
+        "Write",
+        "Query",
+        "Delete",
+        "Admin",
+        "WriteItem",
+        "WriteBatch"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Adapter path '",
+          "suffix": "' not found in Conductor.",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 33,
+              "endLine": 33
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Invoke-MappedAdapterCore tries primary then fallback adapter slot path; selected lookup Signal merges Failure before concrete resolution.",
+        "evidence": [
+          {
+            "sourceId": "mapped-core",
+            "startLine": 23,
+            "endLine": 39
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Invoke-MappedAdapterCore tries primary then fallback adapter slot path; selected lookup Signal merges Failure before concrete resolution.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 23,
+              "endLine": 39
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect canonical slot registration and primary/fallback lookup Failure/HasResult flags; redact slot path.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 23,
+              "endLine": 39
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted Conductor/registration owner handoff; do not create slot state or call data provider.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "mapped-core",
+                "startLine": 23,
+                "endLine": 39
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; mapped path unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "mapped-core",
+              "startLine": 23,
+              "endLine": 39
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "data-mapped-no-instance",
+      "status": "source-verified",
+      "adapters": [
+        "MappedDataAdapter"
+      ],
+      "activities": [
+        "Write",
+        "Query",
+        "Delete",
+        "Admin",
+        "WriteItem",
+        "WriteBatch"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Mapped adapter resolution returned no instance.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 24,
+              "endLine": 24
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Mapped Data core invokes Resolve-MappedAdapter; its Resolve-RegisteredAdapter child is nonfailed but has no Result, yielding fixed no-instance before SQL/ADX Invoke. Child Failure is separately merged.",
+        "evidence": [
+          {
+            "sourceId": "mapped-resolver",
+            "startLine": 15,
+            "endLine": 27
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Mapped Data core invokes Resolve-MappedAdapter; its Resolve-RegisteredAdapter child is nonfailed but has no Result, yielding fixed no-instance before SQL/ADX Invoke. Child Failure is separately merged.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect selected registration and child Failure/HasResult flags only; redact graph/slot.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted registration owner handoff; no state repair or retry.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "mapped-resolver",
+                "startLine": 15,
+                "endLine": 27
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; concrete instance unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "mapped-resolver",
+              "startLine": 15,
+              "endLine": 27
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-construct-null",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot construct Data_AzureDataExplorer — provided dictionary is null.",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 29,
+              "endLine": 29
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "ADX Construct receives null dictionary before Signal/Jacket assignment.",
+        "evidence": [
+          {
+            "sourceId": "adx-module",
+            "startLine": 25,
+            "endLine": 31
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "ADX Construct receives null dictionary before Signal/Jacket assignment.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 25,
+              "endLine": 31
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect ADX concrete identity and construction dictionary-null flag.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 25,
+              "endLine": 31
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no data/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull construction dictionary through registered Jacket owner.",
+            "expected": "Dictionary nonnull; Invoke separate.",
+            "evidence": [
+              {
+                "sourceId": "adx-module",
+                "startLine": 25,
+                "endLine": 31
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Dictionary nonnull; Invoke separate.",
+          "expected": "Local guard proposal would satisfy stated predicate; data/provider result unverified.",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 25,
+              "endLine": 31
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-null-conduction",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "Write",
+        "Query",
+        "Delete",
+        "Admin",
+        "WriteItem",
+        "WriteBatch"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Null ConductionSignal passed to Data_AzureDataExplorer.Invoke()",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 62,
+              "endLine": 62
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "ADX concrete Invoke receives falsey ConductionSignal before activity dispatch.",
+        "evidence": [
+          {
+            "sourceId": "adx-module",
+            "startLine": 57,
+            "endLine": 64
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "ADX concrete Invoke receives falsey ConductionSignal before activity dispatch.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 57,
+              "endLine": 64
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect ConductionSignal null/truthy and canonical SQL/ADX activity flags; redact Signal.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 57,
+              "endLine": 64
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record caller Signal wiring owner handoff; no data operation.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "adx-module",
+                "startLine": 57,
+                "endLine": 64
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Signal wiring unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 57,
+              "endLine": 64
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-writeitem-config-null",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "WriteItem"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "InvalidConfig",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 113,
+              "endLine": 113
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "WriteItem reaches branch with null Plan.Config after earlier warning; no fallback is enabled.",
+        "evidence": [
+          {
+            "sourceId": "adx-module",
+            "startLine": 109,
+            "endLine": 115
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "WriteItem reaches branch with null Plan.Config after earlier warning; no fallback is enabled.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 109,
+              "endLine": 115
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Plan.Config null/presence flag only; no content.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 109,
+              "endLine": 115
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no data/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Propose intended nonnull Plan.Config from originating owner; validate ADX child fields separately before any ingest.",
+            "expected": "Config nonnull would clear this guard; ingest unverified.",
+            "evidence": [
+              {
+                "sourceId": "adx-module",
+                "startLine": 109,
+                "endLine": 115
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Config nonnull would clear this guard; ingest unverified.",
+          "expected": "Local guard proposal would satisfy stated predicate; data/provider result unverified.",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 109,
+              "endLine": 115
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-writeitem-legacy-tablename",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "WriteItem"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Legacy Config.TableName is not supported; use Config.ADX.TableName.",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 116,
+              "endLine": 116
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "WriteItem Config has legacy top-level TableName member, rejected before nested ADX field resolution/REST.",
+        "evidence": [
+          {
+            "sourceId": "adx-module",
+            "startLine": 113,
+            "endLine": 118
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "WriteItem Config has legacy top-level TableName member, rejected before nested ADX field resolution/REST.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 113,
+              "endLine": 118
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect legacy top-level TableName member-presence flag and nested ADX member-presence flag; redact values.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 113,
+              "endLine": 118
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no data/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Remove legacy top-level TableName and supply intended Config.ADX.TableName under originating Plan after owner confirmation; no ingest.",
+            "expected": "Legacy TableName member absent; nested field checked separately, ingest unverified.",
+            "evidence": [
+              {
+                "sourceId": "adx-module",
+                "startLine": 113,
+                "endLine": 118
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Legacy TableName member absent; nested field checked separately, ingest unverified.",
+          "expected": "Local guard proposal would satisfy stated predicate; data/provider result unverified.",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 113,
+              "endLine": 118
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-writeitem-legacy-mappingname",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "WriteItem"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Legacy Config.MappingName is not supported; use Config.ADX.MappingName.",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 116,
+              "endLine": 116
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "WriteItem Config has legacy top-level MappingName member, rejected before nested ADX field resolution/REST.",
+        "evidence": [
+          {
+            "sourceId": "adx-module",
+            "startLine": 113,
+            "endLine": 118
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "WriteItem Config has legacy top-level MappingName member, rejected before nested ADX field resolution/REST.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 113,
+              "endLine": 118
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect legacy top-level MappingName member-presence flag and nested ADX member-presence flag; redact values.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 113,
+              "endLine": 118
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no data/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Remove legacy top-level MappingName and supply intended Config.ADX.MappingName under originating Plan after owner confirmation; no ingest.",
+            "expected": "Legacy MappingName member absent; nested field checked separately, ingest unverified.",
+            "evidence": [
+              {
+                "sourceId": "adx-module",
+                "startLine": 113,
+                "endLine": 118
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Legacy MappingName member absent; nested field checked separately, ingest unverified.",
+          "expected": "Local guard proposal would satisfy stated predicate; data/provider result unverified.",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 113,
+              "endLine": 118
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-writeitem-legacy-contentkey",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "WriteItem"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Legacy Config.ContentKey is not supported; use Config.ADX.ContentKey.",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 116,
+              "endLine": 116
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "WriteItem Config has legacy top-level ContentKey member, rejected before nested ADX field resolution/REST.",
+        "evidence": [
+          {
+            "sourceId": "adx-module",
+            "startLine": 113,
+            "endLine": 118
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "WriteItem Config has legacy top-level ContentKey member, rejected before nested ADX field resolution/REST.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 113,
+              "endLine": 118
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect legacy top-level ContentKey member-presence flag and nested ADX member-presence flag; redact values.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 113,
+              "endLine": 118
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan/construction input proposal only; no data/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Remove legacy top-level ContentKey and supply intended Config.ADX.ContentKey under originating Plan after owner confirmation; no ingest.",
+            "expected": "Legacy ContentKey member absent; nested field checked separately, ingest unverified.",
+            "evidence": [
+              {
+                "sourceId": "adx-module",
+                "startLine": 113,
+                "endLine": 118
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Legacy ContentKey member absent; nested field checked separately, ingest unverified.",
+          "expected": "Local guard proposal would satisfy stated predicate; data/provider result unverified.",
+          "evidence": [
+            {
+              "sourceId": "adx-module",
+              "startLine": 113,
+              "endLine": 118
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "sql-write-committed-cleanup-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureSql"
+      ],
+      "activities": [
+        "Write"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "AzureSql Write committed, but cleanup failed.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 136,
+              "endLine": 136
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "After Write SQL transaction committed, cleanup failed; catch switch maps fixed terminal exception to this outcome. Data effect has already committed.",
+        "evidence": [
+          {
+            "sourceId": "sql-orchestration",
+            "startLine": 67,
+            "endLine": 141
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "After Write SQL transaction committed, cleanup failed; catch switch maps fixed terminal exception to this outcome. Data effect has already committed.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect committed/cleanup-failed flags and operation identity only; no SQL text/connection/parameters.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record committed-but-cleanup-failed outcome with SQL owner; do not replay Write or infer rollback.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sql-orchestration",
+                "startLine": 67,
+                "endLine": 141
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; cleanup unresolved and committed effect retained.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "sql-write-transaction-uncertain",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureSql"
+      ],
+      "activities": [
+        "Write"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "AzureSql Write transaction outcome is uncertain.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 137,
+              "endLine": 137
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "For Write, transaction commit was attempted but not confirmed; catch switch maps fixed uncertain-outcome exception. No rollback or safe replay is inferred.",
+        "evidence": [
+          {
+            "sourceId": "sql-orchestration",
+            "startLine": 67,
+            "endLine": 141
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "For Write, transaction commit was attempted but not confirmed; catch switch maps fixed uncertain-outcome exception. No rollback or safe replay is inferred.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect commit-attempted/committed/rollback-confirmed flags only; no SQL text/connection/parameters.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record uncertain transaction outcome with SQL owner; stop before retry, compensation or duplicate execution.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sql-orchestration",
+                "startLine": 67,
+                "endLine": 141
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; transaction outcome unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "sql-delete-committed-cleanup-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureSql"
+      ],
+      "activities": [
+        "Delete"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "AzureSql Delete committed, but cleanup failed.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 136,
+              "endLine": 136
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "After Delete SQL transaction committed, cleanup failed; catch switch maps fixed terminal exception to this outcome. Data effect has already committed.",
+        "evidence": [
+          {
+            "sourceId": "sql-orchestration",
+            "startLine": 67,
+            "endLine": 141
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "After Delete SQL transaction committed, cleanup failed; catch switch maps fixed terminal exception to this outcome. Data effect has already committed.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect committed/cleanup-failed flags and operation identity only; no SQL text/connection/parameters.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record committed-but-cleanup-failed outcome with SQL owner; do not replay Delete or infer rollback.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sql-orchestration",
+                "startLine": 67,
+                "endLine": 141
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; cleanup unresolved and committed effect retained.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "sql-delete-transaction-uncertain",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureSql"
+      ],
+      "activities": [
+        "Delete"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "AzureSql Delete transaction outcome is uncertain.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 137,
+              "endLine": 137
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "For Delete, transaction commit was attempted but not confirmed; catch switch maps fixed uncertain-outcome exception. No rollback or safe replay is inferred.",
+        "evidence": [
+          {
+            "sourceId": "sql-orchestration",
+            "startLine": 67,
+            "endLine": 141
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "For Delete, transaction commit was attempted but not confirmed; catch switch maps fixed uncertain-outcome exception. No rollback or safe replay is inferred.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect commit-attempted/committed/rollback-confirmed flags only; no SQL text/connection/parameters.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record uncertain transaction outcome with SQL owner; stop before retry, compensation or duplicate execution.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sql-orchestration",
+                "startLine": 67,
+                "endLine": 141
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; transaction outcome unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "sql-admin-committed-cleanup-failed",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureSql"
+      ],
+      "activities": [
+        "Admin"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "AzureSql Admin committed, but cleanup failed.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 136,
+              "endLine": 136
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "After Admin SQL transaction committed, cleanup failed; catch switch maps fixed terminal exception to this outcome. Data effect has already committed.",
+        "evidence": [
+          {
+            "sourceId": "sql-orchestration",
+            "startLine": 67,
+            "endLine": 141
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "After Admin SQL transaction committed, cleanup failed; catch switch maps fixed terminal exception to this outcome. Data effect has already committed.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect committed/cleanup-failed flags and operation identity only; no SQL text/connection/parameters.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record committed-but-cleanup-failed outcome with SQL owner; do not replay Admin or infer rollback.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sql-orchestration",
+                "startLine": 67,
+                "endLine": 141
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; cleanup unresolved and committed effect retained.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "sql-admin-transaction-uncertain",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureSql"
+      ],
+      "activities": [
+        "Admin"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "AzureSql Admin transaction outcome is uncertain.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 137,
+              "endLine": 137
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "For Admin, transaction commit was attempted but not confirmed; catch switch maps fixed uncertain-outcome exception. No rollback or safe replay is inferred.",
+        "evidence": [
+          {
+            "sourceId": "sql-orchestration",
+            "startLine": 67,
+            "endLine": 141
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "For Admin, transaction commit was attempted but not confirmed; catch switch maps fixed uncertain-outcome exception. No rollback or safe replay is inferred.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect commit-attempted/committed/rollback-confirmed flags only; no SQL text/connection/parameters.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record uncertain transaction outcome with SQL owner; stop before retry, compensation or duplicate execution.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "sql-orchestration",
+                "startLine": 67,
+                "endLine": 141
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; transaction outcome unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "sql-orchestration",
+              "startLine": 67,
+              "endLine": 141
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-admin-invalid-config",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "Admin"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "ADX Admin InvalidConfig.",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 30,
+              "endLine": 30
+            },
+            {
+              "sourceId": "adx-admin",
+              "startLine": 31,
+              "endLine": 31
+            },
+            {
+              "sourceId": "adx-admin",
+              "startLine": 33,
+              "endLine": 33
+            },
+            {
+              "sourceId": "adx-admin",
+              "startLine": 143,
+              "endLine": 143
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Admin Plan/Config/ADX shape is null, string or has forbidden target/legacy CommandText override.",
+        "evidence": [
+          {
+            "sourceId": "adx-admin",
+            "startLine": 30,
+            "endLine": 143
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Admin Plan/Config/ADX shape is null, string or has forbidden target/legacy CommandText override.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 30,
+              "endLine": 143
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Config/ADX presence, type and override flags separately.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 30,
+              "endLine": 143
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted ADX Admin input/target owner handoff; stop before admin command or endpoint change.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "adx-admin",
+                "startLine": 30,
+                "endLine": 143
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Admin input/target unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 30,
+              "endLine": 143
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-admin-invalid-command",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "Admin"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "ADX Admin InvalidCommand.",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 35,
+              "endLine": 35
+            },
+            {
+              "sourceId": "adx-admin",
+              "startLine": 143,
+              "endLine": 143
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Admin command is missing, nonstring or does not start with dot after trim; content is never retained.",
+        "evidence": [
+          {
+            "sourceId": "adx-admin",
+            "startLine": 35,
+            "endLine": 143
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Admin command is missing, nonstring or does not start with dot after trim; content is never retained.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 35,
+              "endLine": 143
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect command string/nonblank/dot-prefix flags only.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 35,
+              "endLine": 143
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted ADX Admin input/target owner handoff; stop before admin command or endpoint change.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "adx-admin",
+                "startLine": 35,
+                "endLine": 143
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Admin input/target unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 35,
+              "endLine": 143
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-admin-invalid-target",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "Admin"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "ADX Admin InvalidTarget.",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 37,
+              "endLine": 37
+            },
+            {
+              "sourceId": "adx-admin",
+              "startLine": 40,
+              "endLine": 40
+            },
+            {
+              "sourceId": "adx-admin",
+              "startLine": 47,
+              "endLine": 47
+            },
+            {
+              "sourceId": "adx-admin",
+              "startLine": 49,
+              "endLine": 49
+            },
+            {
+              "sourceId": "adx-admin",
+              "startLine": 143,
+              "endLine": 143
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Registered ADX Jacket target lacks valid single HTTPS cluster address or database identity.",
+        "evidence": [
+          {
+            "sourceId": "adx-admin",
+            "startLine": 37,
+            "endLine": 143
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Registered ADX Jacket target lacks valid single HTTPS cluster address or database identity.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 37,
+              "endLine": 143
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect trusted target array-count, HTTPS/ingest-host and database-shape flags; redact endpoint.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 37,
+              "endLine": 143
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record redacted ADX Admin input/target owner handoff; stop before admin command or endpoint change.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "adx-admin",
+                "startLine": 37,
+                "endLine": 143
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Admin input/target unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 37,
+              "endLine": 143
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-query-token-unavailable",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "Query"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "ADX Query TokenUnavailable; correlation ",
+          "suffix": ".",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 62,
+              "endLine": 62
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Query: Token acquisition failed before HTTP request; no request effect is claimed.",
+        "evidence": [
+          {
+            "sourceId": "adx-data",
+            "startLine": 59,
+            "endLine": 69
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Query: Token acquisition failed before HTTP request; no request effect is claimed.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect token-child Success/HasResult and stage flags, not credential/token.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record auth owner handoff; do not enable/change credentials or retry automatically.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "adx-data",
+                "startLine": 59,
+                "endLine": 69
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; data outcome remains unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-query-outcome-unknown",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "Query"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "ADX Query OutcomeUnknown; correlation ",
+          "suffix": ".",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 64,
+              "endLine": 64
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Query: HTTP send threw and request outcome is unknown; effect may have occurred.",
+        "evidence": [
+          {
+            "sourceId": "adx-data",
+            "startLine": 59,
+            "endLine": 69
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Query: HTTP send threw and request outcome is unknown; effect may have occurred.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect send-threw/response-present flags and redacted correlation presence only.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record unknown outcome for data owner; do not replay or compensate automatically.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "adx-data",
+                "startLine": 59,
+                "endLine": 69
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; data outcome remains unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-query-http-failure",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "Query"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "ADX Query HttpFailure; correlation ",
+          "suffix": ".",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 66,
+              "endLine": 66
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Query: HTTP response status is outside 2xx after send; response effect remains unverified.",
+        "evidence": [
+          {
+            "sourceId": "adx-data",
+            "startLine": 59,
+            "endLine": 69
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Query: HTTP response status is outside 2xx after send; response effect remains unverified.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect non2xx status class only; suppress response body/URI.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record HTTP/data owner handoff; do not retry or infer rollback.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "adx-data",
+                "startLine": 59,
+                "endLine": 69
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; data outcome remains unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-query-response-failure",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "Query"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "ADX Query ResponseFailure; correlation ",
+          "suffix": ".",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 69,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Query: Response conversion threw after successful HTTP status; effect may have occurred.",
+        "evidence": [
+          {
+            "sourceId": "adx-data",
+            "startLine": 59,
+            "endLine": 69
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Query: Response conversion threw after successful HTTP status; effect may have occurred.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect conversion-failed/HTTP-success flags only; suppress response.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record response/data owner handoff; no replay or data rewrite.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "adx-data",
+                "startLine": 59,
+                "endLine": 69
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; data outcome remains unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-write-token-unavailable",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "Write"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "ADX Write TokenUnavailable; correlation ",
+          "suffix": ".",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 62,
+              "endLine": 62
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Write: Token acquisition failed before HTTP request; no request effect is claimed.",
+        "evidence": [
+          {
+            "sourceId": "adx-data",
+            "startLine": 59,
+            "endLine": 69
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Write: Token acquisition failed before HTTP request; no request effect is claimed.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect token-child Success/HasResult and stage flags, not credential/token.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record auth owner handoff; do not enable/change credentials or retry automatically.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "adx-data",
+                "startLine": 59,
+                "endLine": 69
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; data outcome remains unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-write-outcome-unknown",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "Write"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "ADX Write OutcomeUnknown; correlation ",
+          "suffix": ".",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 64,
+              "endLine": 64
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Write: HTTP send threw and request outcome is unknown; effect may have occurred.",
+        "evidence": [
+          {
+            "sourceId": "adx-data",
+            "startLine": 59,
+            "endLine": 69
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Write: HTTP send threw and request outcome is unknown; effect may have occurred.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect send-threw/response-present flags and redacted correlation presence only.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record unknown outcome for data owner; do not replay or compensate automatically.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "adx-data",
+                "startLine": 59,
+                "endLine": 69
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; data outcome remains unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-write-http-failure",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "Write"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "ADX Write HttpFailure; correlation ",
+          "suffix": ".",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 66,
+              "endLine": 66
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Write: HTTP response status is outside 2xx after send; response effect remains unverified.",
+        "evidence": [
+          {
+            "sourceId": "adx-data",
+            "startLine": 59,
+            "endLine": 69
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Write: HTTP response status is outside 2xx after send; response effect remains unverified.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect non2xx status class only; suppress response body/URI.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record HTTP/data owner handoff; do not retry or infer rollback.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "adx-data",
+                "startLine": 59,
+                "endLine": 69
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; data outcome remains unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-write-response-failure",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "Write"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "ADX Write ResponseFailure; correlation ",
+          "suffix": ".",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 69,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Write: Response conversion threw after successful HTTP status; effect may have occurred.",
+        "evidence": [
+          {
+            "sourceId": "adx-data",
+            "startLine": 59,
+            "endLine": 69
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Write: Response conversion threw after successful HTTP status; effect may have occurred.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect conversion-failed/HTTP-success flags only; suppress response.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record response/data owner handoff; no replay or data rewrite.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "adx-data",
+                "startLine": 59,
+                "endLine": 69
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; data outcome remains unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-delete-token-unavailable",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "Delete"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "ADX Delete TokenUnavailable; correlation ",
+          "suffix": ".",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 62,
+              "endLine": 62
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Delete: Token acquisition failed before HTTP request; no request effect is claimed.",
+        "evidence": [
+          {
+            "sourceId": "adx-data",
+            "startLine": 59,
+            "endLine": 69
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Delete: Token acquisition failed before HTTP request; no request effect is claimed.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect token-child Success/HasResult and stage flags, not credential/token.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record auth owner handoff; do not enable/change credentials or retry automatically.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "adx-data",
+                "startLine": 59,
+                "endLine": 69
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; data outcome remains unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-delete-outcome-unknown",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "Delete"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "ADX Delete OutcomeUnknown; correlation ",
+          "suffix": ".",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 64,
+              "endLine": 64
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Delete: HTTP send threw and request outcome is unknown; effect may have occurred.",
+        "evidence": [
+          {
+            "sourceId": "adx-data",
+            "startLine": 59,
+            "endLine": 69
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Delete: HTTP send threw and request outcome is unknown; effect may have occurred.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect send-threw/response-present flags and redacted correlation presence only.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record unknown outcome for data owner; do not replay or compensate automatically.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "adx-data",
+                "startLine": 59,
+                "endLine": 69
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; data outcome remains unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-delete-http-failure",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "Delete"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "ADX Delete HttpFailure; correlation ",
+          "suffix": ".",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 66,
+              "endLine": 66
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Delete: HTTP response status is outside 2xx after send; response effect remains unverified.",
+        "evidence": [
+          {
+            "sourceId": "adx-data",
+            "startLine": 59,
+            "endLine": 69
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Delete: HTTP response status is outside 2xx after send; response effect remains unverified.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect non2xx status class only; suppress response body/URI.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record HTTP/data owner handoff; do not retry or infer rollback.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "adx-data",
+                "startLine": 59,
+                "endLine": 69
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; data outcome remains unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-delete-response-failure",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "Delete"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "ADX Delete ResponseFailure; correlation ",
+          "suffix": ".",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 69,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Delete: Response conversion threw after successful HTTP status; effect may have occurred.",
+        "evidence": [
+          {
+            "sourceId": "adx-data",
+            "startLine": 59,
+            "endLine": 69
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Delete: Response conversion threw after successful HTTP status; effect may have occurred.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect conversion-failed/HTTP-success flags only; suppress response.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record response/data owner handoff; no replay or data rewrite.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "adx-data",
+                "startLine": 59,
+                "endLine": 69
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; data outcome remains unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "adx-data",
+              "startLine": 59,
+              "endLine": 69
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-admin-token-unavailable",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "Admin"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "ADX Admin TokenUnavailable; correlation ",
+          "suffix": ".",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 146,
+              "endLine": 146
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Admin token acquisition failed before HTTP send.",
+        "evidence": [
+          {
+            "sourceId": "adx-admin",
+            "startLine": 143,
+            "endLine": 154
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Admin token acquisition failed before HTTP send.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 143,
+              "endLine": 154
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect token-child Success/HasResult flags only.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 143,
+              "endLine": 154
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record Admin auth owner handoff; do not change credentials or retry automatically.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "adx-admin",
+                "startLine": 143,
+                "endLine": 154
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Admin outcome remains unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 143,
+              "endLine": 154
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-admin-outcome-unknown",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "Admin"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "ADX Admin OutcomeUnknown; correlation ",
+          "suffix": ".",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 148,
+              "endLine": 148
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Admin HTTP send threw, so command outcome is unknown.",
+        "evidence": [
+          {
+            "sourceId": "adx-admin",
+            "startLine": 143,
+            "endLine": 154
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Admin HTTP send threw, so command outcome is unknown.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 143,
+              "endLine": 154
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect send-threw/response-present flags and correlation presence only.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 143,
+              "endLine": 154
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record Admin unknown outcome; no replay, compensation or new command.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "adx-admin",
+                "startLine": 143,
+                "endLine": 154
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Admin outcome remains unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 143,
+              "endLine": 154
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    },
+    {
+      "id": "adx-admin-response-failure",
+      "status": "source-verified",
+      "adapters": [
+        "Data_AzureDataExplorer"
+      ],
+      "activities": [
+        "Admin"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "ADX Admin ResponseFailure; correlation ",
+          "suffix": ".",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 154,
+              "endLine": 154
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Admin response conversion threw after a successful HTTP response; command effect may have occurred.",
+        "evidence": [
+          {
+            "sourceId": "adx-admin",
+            "startLine": 143,
+            "endLine": 154
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Admin response conversion threw after a successful HTTP response; command effect may have occurred.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 143,
+              "endLine": 154
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect response-conversion failure flag only; suppress body.",
+          "expected": "Redacted guard/outcome flags identify source stage without SQL text, token, response or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 143,
+              "endLine": 154
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic owner handoff only; no SQL/ADX/provider effect, auth change, retry or compensation.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record Admin response owner handoff; no replay or result fabrication.",
+            "expected": "Owner handoff recorded; outcome/guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "adx-admin",
+                "startLine": 143,
+                "endLine": 154
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete SQL/ADX identity, activity or exact message/pattern differs.",
+          "Effective Plan, registration, transaction/HTTP state or owner cannot be established with redacted flags.",
+          "Proposed action would reveal SQL/ADX payload, token, endpoint, response or execute/replay/compensate data/provider effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; Admin outcome remains unresolved.",
+          "expected": "Handoff complete; data outcome unresolved.",
+          "evidence": [
+            {
+              "sourceId": "adx-admin",
+              "startLine": 143,
+              "endLine": 154
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude SQL/ADX command/parameter/payload, target/connection/URI, token/credential, response, ItemSignal/Jacket/Plan/graph and exception text; retain canonical adapter/activity, exact message/pattern, correlation-presence and nonsecret guard/outcome flags only.",
+      "limitations": [
+        "Source-only confidence; no SQL/ADX/runtime/provider execution.",
+        "A local guard, HTTP response or Signal Result does not establish committed effect, rollback or safe retry."
+      ]
+    }
+  ],
+  "unverified": [
+    {
+      "id": "data-mapped-broad-and-excluded",
+      "reportedText": "MappedDataAdapter Start exception, core failed path/exception, unsupported activity",
+      "reason": "Start/core catches and core failed-path wrapper span registration/concrete child failures and two variable segments; unsupported activity is outside the owning catalog. SQL/ADX route selectors only use six non-ArtifactProcess activities.",
+      "neededEvidence": "Redacted exact source stage, canonical SQL/ADX activity and child guard; no ArtifactProcess implementation/error review."
+    },
+    {
+      "id": "data-sql-construction-and-generic",
+      "reportedText": "Could not construct AzureSql adapter.; AzureSql <Activity> failed. Check adapter configuration and operation inputs.",
+      "reason": "Construct catch masks null dictionary and arbitrary Signal/Jacket exceptions. Invoke catch maps many SQL/provider/config/parameter throws to generic failure, so it cannot identify the underlying guard; direct committed/uncertain terminal outcomes are separately routed.",
+      "neededEvidence": "Structured failing SQL stage, redacted local guard and transaction/rollback state, no command/parameter/connection text."
+    },
+    {
+      "id": "data-sql-helpers-and-query-cleanup",
+      "reportedText": "SQL parameter, write input, connection, provider, JSON result and Query cleanup throws",
+      "reason": "SQL helper throws are caught by Invoke-Data_AzureSql and collapsed to generic failure except terminal transaction outcomes. Query does not begin a transaction, so committed/uncertain terminal statuses are not supported for Query.",
+      "neededEvidence": "Redacted helper source line and outcome state before proposing a specific SQL correction; no provider runtime."
+    },
+    {
+      "id": "data-adx-class-legacy-branches",
+      "reportedText": "Data AzureDataExplorer Query/Delete is not implemented.; ADX completed without a result; StorageQueue warning",
+      "reason": "Current Admin/Query/Write/Delete return from the early helper branch, making later Query/Delete not-implemented branches unreachable. Helpers set Result on nonfailed success, so no-Result branch lacks proven canonical emission. StorageQueue warning is stale/indiscriminate and WriteBatch retains queue-like code.",
+      "neededEvidence": "Versioned branch/return provenance or a nonfailed/no-Result helper path and canonical activity before routing."
+    },
+    {
+      "id": "data-adx-input-and-httperror",
+      "reportedText": "ADX <Activity> InvalidInput.; ADX Admin HttpFailure with response error fields",
+      "reason": "Data InvalidInput wraps multiple configuration/command/target throws and is not a unique diagnosis. Admin HttpFailure contains correlation plus message/code/activity/status variable fields beyond one v1 prefix-suffix; response can be sensitive. Admin fixed input classes and stage-specific bounded messages are separate routes.",
+      "neededEvidence": "Structured redacted validation guard or HTTP status class and response owner, without command, endpoint or response body."
+    },
+    {
+      "id": "data-adx-writeitem-and-writebatch",
+      "reportedText": "ADX WriteItem/WriteBatch downstream REST, clone, output, catch failures",
+      "reason": "Both branches contain child REST and legacy queue-like operations; their broad catch and forwarded failures cannot establish successful ingest/delete or safe retry. Direct WriteItem null/legacy config guards are separately routed.",
+      "neededEvidence": "Redacted active branch, child operation stage and effect-state attribution before any recovery."
+    }
+  ]
+}

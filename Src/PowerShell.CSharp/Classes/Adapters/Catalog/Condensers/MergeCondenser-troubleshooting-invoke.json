@@ -1,0 +1,220 @@
+{
+  "version": 2,
+  "ownerId": "Condensers/MergeCondenser",
+  "mappedAdapter": "MappedCondenserAdapter",
+  "condenser": "MergeCondenser",
+  "part": "invoke",
+  "sources": [
+    {
+      "id": "merge-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/MergeCondenser.ps1",
+      "sha256": "A44DCE5EC9EE65810B0FD4F96C260C9FC16B689622E324AAE9178258B5AA1613",
+      "symbol": "MergeCondenser"
+    }
+  ],
+  "entries": [
+    {
+      "id": "merge-base-missing",
+      "status": "source-verified",
+      "adapters": [
+        "MergeCondenser"
+      ],
+      "activities": [
+        "Merge"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Missing required merge input: Base",
+          "evidence": [
+            {
+              "sourceId": "merge-class",
+              "startLine": 83,
+              "endLine": 83
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Merge Base resolver has not returned failure, but its Signal has no Result at line 82; a failed resolver returns earlier and does not emit this message.",
+        "evidence": [
+          {
+            "sourceId": "merge-class",
+            "startLine": 80,
+            "endLine": 83
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The resolved ItemSignal %.@.Base lookup has no Result.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "merge-class",
+              "startLine": 80,
+              "endLine": 83
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm exact Merge log, Base resolver nonfailure and HasResult false using redacted flags only; do not inspect Base content.",
+          "expected": "Resolver is nonfailed and %.@.Base HasResult is false at this specific guard.",
+          "evidence": [
+            {
+              "sourceId": "merge-class",
+              "startLine": 80,
+              "endLine": 83
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for originating Merge ItemSignal only; no merge/provider execution or source edit.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply the intended Base value with a Result at ItemSignal %.@.Base, preserving the selected jacket/result shape; if resolver failure occurred, stop and diagnose that separate error.",
+            "expected": "%.@.Base resolves with a Result; later merge/helper success remains conditional.",
+            "evidence": [
+              {
+                "sourceId": "merge-class",
+                "startLine": 80,
+                "endLine": 83
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical Merge selector or exact message differs.",
+          "Resolver failed before the no-Result guard or the intended source value is unknown.",
+          "The proposed change would expose payload, mutate another owner or require provider execution."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm Base lookup has a Result and resolver has not failed; no merge execution is implied.",
+          "expected": "The local no-Result guard would be false; runtime merge result remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "merge-class",
+              "startLine": 80,
+              "endLine": 83
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, Base/Overlay values or JSON, credentials and exception text; retain canonical Merge selector, exact message and resolver failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no runtime merge/provider execution.",
+        "A successful required-input lookup does not prove Invoke-MergeJson parsing or merge success."
+      ]
+    },
+    {
+      "id": "merge-overlay-missing",
+      "status": "source-verified",
+      "adapters": [
+        "MergeCondenser"
+      ],
+      "activities": [
+        "Merge"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Missing required merge input: Overlay",
+          "evidence": [
+            {
+              "sourceId": "merge-class",
+              "startLine": 91,
+              "endLine": 91
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Merge Overlay resolver has not returned failure, but its Signal has no Result at line 90; Base already passed its guard.",
+        "evidence": [
+          {
+            "sourceId": "merge-class",
+            "startLine": 88,
+            "endLine": 91
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "The resolved ItemSignal %.@.Overlay lookup has no Result.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "merge-class",
+              "startLine": 88,
+              "endLine": 91
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm exact Merge log, Overlay resolver nonfailure and HasResult false, with Base guard already passed; use redacted flags only.",
+          "expected": "Resolver is nonfailed and %.@.Overlay HasResult is false at this specific guard.",
+          "evidence": [
+            {
+              "sourceId": "merge-class",
+              "startLine": 88,
+              "endLine": 91
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Operator proposal for originating Merge ItemSignal only; no merge/provider execution or source edit.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply the intended Overlay value with a Result at ItemSignal %.@.Overlay, preserving the selected jacket/result shape; if resolver failure occurred, stop and diagnose that separate error.",
+            "expected": "%.@.Overlay resolves with a Result; later merge/helper success remains conditional.",
+            "evidence": [
+              {
+                "sourceId": "merge-class",
+                "startLine": 88,
+                "endLine": 91
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical Merge selector or exact message differs.",
+          "Resolver failed before the no-Result guard or the intended source value is unknown.",
+          "The proposed change would expose payload, mutate another owner or require provider execution."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Statically confirm Overlay lookup has a Result and resolver has not failed after Base passed; no merge execution is implied.",
+          "expected": "The local no-Result guard would be false; runtime merge result remains unverified.",
+          "evidence": [
+            {
+              "sourceId": "merge-class",
+              "startLine": 88,
+              "endLine": 91
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude full Plan/ItemSignal, Base/Overlay values or JSON, credentials and exception text; retain canonical Merge selector, exact message and resolver failure/HasResult flags.",
+      "limitations": [
+        "Source-only confidence; no runtime merge/provider execution.",
+        "A successful required-input lookup does not prove Invoke-MergeJson parsing or merge success."
+      ]
+    }
+  ]
+}

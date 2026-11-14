@@ -1,0 +1,228 @@
+{
+  "version": 2,
+  "ownerId": "Mapped/MappedTokenAdapter",
+  "mappedAdapter": "MappedTokenAdapter",
+  "part": "Token_Memory",
+  "sources": [
+    {
+      "id": "memory-class",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Token/Token_Memory.ps1",
+      "sha256": "19364F0AF05E64FFA6A2190CAF33F72ECEF7F497FCD66329ECE6F1918C1E2C9C",
+      "symbol": "Token_Memory"
+    },
+    {
+      "id": "memory-helper",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Token/Invoke-TokenMemory.ps1",
+      "sha256": "7972409BA55CEB2DB691792C05D00C5770174097426CD554BA66826CF6798A7C",
+      "symbol": "Invoke-TokenMemory"
+    }
+  ],
+  "entries": [
+    {
+      "id": "token-memory-dictionary-missing",
+      "status": "source-verified",
+      "adapters": [
+        "Token_Memory"
+      ],
+      "activities": [
+        "Get"
+      ],
+      "emittedMessages": [],
+      "patterns": [
+        {
+          "kind": "prefix-suffix",
+          "prefix": "Memory variable not found for key: ",
+          "suffix": "",
+          "evidence": [
+            {
+              "sourceId": "memory-helper",
+              "startLine": 181,
+              "endLine": 181
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Selected Memory scope yields null dictionary before inner path resolution; not the nonnull-dictionary/no-Result branch.",
+        "evidence": [
+          {
+            "sourceId": "memory-helper",
+            "startLine": 21,
+            "endLine": 182
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Selected Memory scope yields null dictionary before inner path resolution; not the nonnull-dictionary/no-Result branch.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "memory-helper",
+              "startLine": 21,
+              "endLine": 182
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect selected scope and dictionary-null flag, no dictionary/token value.",
+          "expected": "Redacted flags identify this source guard without token value, graph, environment or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "memory-helper",
+              "startLine": 21,
+              "endLine": 182
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Diagnostic source-owner handoff only; no token, Signal, graph, environment, SDA, storage or provider state change/retry.",
+        "steps": [
+          {
+            "mode": "static-read",
+            "action": "Record Memory scope/Signal owner handoff; do not populate cache or retry.",
+            "expected": "Owner handoff recorded; guard clearance not claimed.",
+            "evidence": [
+              {
+                "sourceId": "memory-helper",
+                "startLine": 21,
+                "endLine": 182
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, Get activity or exact message/pattern differs.",
+          "Effective path, registration, selected scope or owner cannot be established with redacted metadata.",
+          "Proposed action would reveal token value/name, graph, credentials, SDA content or execute provider/storage/enrollment effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Handoff recorded; dictionary unresolved.",
+          "expected": "Handoff complete; runtime recovery unresolved.",
+          "evidence": [
+            {
+              "sourceId": "memory-helper",
+              "startLine": 21,
+              "endLine": 182
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude token path/key/value, Plan/Config/Signal/graph/Jacket/Conductor, environment name/value, storage or SDA identity/content, credentials and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no token/SDA/storage/environment/provider/runtime execution.",
+        "A passed local guard, warning or Result presence does not establish token value, absence or safe retry."
+      ]
+    },
+    {
+      "id": "token-memory-construct-null-dictionary",
+      "status": "source-verified",
+      "adapters": [
+        "Token_Memory"
+      ],
+      "activities": [
+        "@construct"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Cannot construct Token_Memory — provided dictionary is null.",
+          "evidence": [
+            {
+              "sourceId": "memory-class",
+              "startLine": 34,
+              "endLine": 34
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "Token_Memory.Construct receives null dictionary before Jacket/Signal assignment.",
+        "evidence": [
+          {
+            "sourceId": "memory-class",
+            "startLine": 30,
+            "endLine": 36
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Token_Memory.Construct receives null dictionary before Jacket/Signal assignment.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "memory-class",
+              "startLine": 30,
+              "endLine": 36
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Inspect Token_Memory concrete identity and construction dictionary-null flag; redact dictionary.",
+          "expected": "Redacted flags identify this source guard without token value, graph, environment or provider effect.",
+          "evidence": [
+            {
+              "sourceId": "memory-class",
+              "startLine": 30,
+              "endLine": 36
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional originating Plan or construction input proposal only; no token/provider effect here.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Supply intended nonnull construction dictionary through owning registration/Jacket plan.",
+            "expected": "Dictionary nonnull; concrete Get and provider effects separate.",
+            "evidence": [
+              {
+                "sourceId": "memory-class",
+                "startLine": 30,
+                "endLine": 36
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical mapped/concrete identity, Get activity or exact message/pattern differs.",
+          "Effective path, registration, selected scope or owner cannot be established with redacted metadata.",
+          "Proposed action would reveal token value/name, graph, credentials, SDA content or execute provider/storage/enrollment effects."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Dictionary nonnull; concrete Get and provider effects separate.",
+          "expected": "Local guard would be false; token/provider success unverified.",
+          "evidence": [
+            {
+              "sourceId": "memory-class",
+              "startLine": 30,
+              "endLine": 36
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude token path/key/value, Plan/Config/Signal/graph/Jacket/Conductor, environment name/value, storage or SDA identity/content, credentials and exception text; retain canonical adapter/activity, exact message/pattern and nonsecret guard flags only.",
+      "limitations": [
+        "Source-only confidence; no token/SDA/storage/environment/provider/runtime execution.",
+        "A passed local guard, warning or Result presence does not establish token value, absence or safe retry."
+      ]
+    }
+  ]
+}

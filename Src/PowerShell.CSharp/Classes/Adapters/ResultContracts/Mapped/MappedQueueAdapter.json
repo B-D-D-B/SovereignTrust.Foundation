@@ -1,0 +1,370 @@
+{
+  "name": "MappedQueueAdapter",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedQueueAdapter.ps1",
+      "sha256": "CE32FEAF2D2E6345DFEA467AF7E98D3E3B71204117A24D89B79C1CA4829AA902"
+    },
+    {
+      "id": "s2",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Queue/AzureStorageQueue/PowerShell/Queue_AzureStorageQueue.psm1",
+      "sha256": "F2FEB89CD1FF64248C703E72A1747A97A1E928518EC780DD042F24F1D6D11E36"
+    }
+  ],
+  "activities": [
+    {
+      "name": "PeekBatch",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Queue_AzureStorageQueue",
+            "support": "implemented",
+            "when": "recursively delegates ReadBatch, including its visibility timeout",
+            "outcomes": [
+              {
+                "condition": "queue XML parsed to message objects",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Object[]",
+                "shape": [
+                  {
+                    "path": "$[*].MessageId",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "provider message identity",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "$[*].PopReceipt",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "provider receipt",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "invalid depth/timeout, XML or incomplete message identity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "reads queue and may alter visibility"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'PeekBatch'",
+                "line": 81,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "\"PeekBatch\"",
+                "line": 287,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Name PeekBatch does not imply nondestructive peek; source calls ReadBatch."
+          }
+        ]
+      }
+    },
+    {
+      "name": "HandleMessage",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Queue_AzureStorageQueue",
+            "support": "implemented",
+            "when": "message text decoded; absent/false Config.ResultDetail preserves decoded-message success, true is path-only after checked downstream stages",
+            "outcomes": [
+              {
+                "condition": "Config.ResultDetail absent/false and decoded message succeeds, including default non-path branches",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "message object",
+                "limitations": "decoded message is not proof of downstream plan effect"
+              },
+              {
+                "condition": "Config.ResultDetail=true, decoded path route, matching usable session, keyed usable Plan and nonfailed Conduction invocation",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "PSCustomObject",
+                "shape": [
+                  { "path": "$.Route", "type": "String", "presence": "required", "meaning": "normalized selected path route, correlation only", "origin": "copied-input" },
+                  { "path": "$.SessionResolved", "type": "Boolean", "presence": "required", "meaning": "true after nonfailed Session Signal and matching unwrapped ID", "origin": "computed" },
+                  { "path": "$.PlanLoaded", "type": "Boolean", "presence": "required", "meaning": "true after nonfailed Memory.Generate and usable keyed Name/Phases Plan", "origin": "computed" },
+                  { "path": "$.ConductionCompleted", "type": "Boolean", "presence": "required", "meaning": "true after returned nonfailed Conduction Signal; HasResult not required", "origin": "computed" }
+                ]
+              },
+              {
+                "condition": "missing text, invalid ResultDetail or unsupported detail route, decode failure, or failed/unusable path session/plan/conduction",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "may register session, load plan and invoke conduction"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'HandleMessage'",
+                "line": 81,
+                "kind": "source-derived"
+              },
+          {
+            "source": "s2",
+            "symbol": "\"HandleMessage\"",
+            "line": 292,
+            "kind": "source-derived"
+          },
+          {
+            "source": "s2",
+            "symbol": "session identity did not match",
+            "line": 419,
+            "kind": "source-derived"
+          },
+          {
+            "source": "s2",
+            "symbol": "path plan load failed",
+            "line": 480,
+            "kind": "source-derived"
+          },
+          {
+            "source": "s2",
+            "symbol": "ConductionCompleted",
+            "line": 504,
+            "kind": "source-derived"
+              }
+            ],
+            "limitations": "Default decoded-message return is not completion proof. Opt-in Booleans describe checked child Signals, not a domain marker; normal mapped Queue failure exposes no Result, and default path child failure now intentionally propagates."
+          }
+        ]
+      }
+    },
+    {
+      "name": "ReadBatch",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Queue_AzureStorageQueue",
+            "support": "implemented",
+            "when": "positive depth and visibility timeout; REST response XML is QueueMessagesList",
+            "outcomes": [
+              {
+                "condition": "valid batch, including zero messages",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Object[]",
+                "shape": [
+                  {
+                    "path": "$[*].MessageId",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "provider message ID",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "$[*].PopReceipt",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "provider pop receipt",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "$[*].MessageText",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "provider payload; can be empty",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "request failure, malformed XML or incomplete identity",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "reads queue with configured visibility"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'ReadBatch'",
+                "line": 81,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "\"ReadBatch\"",
+                "line": 288,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "WriteItem",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Queue_AzureStorageQueue",
+            "support": "implemented",
+            "when": "MessageText present; REST POST returns QueueMessagesList XML",
+            "outcomes": [
+              {
+                "condition": "response contains nonempty identity",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "PSCustomObject",
+                "shape": [
+                  {
+                    "path": "MessageId",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "created provider ID",
+                    "origin": "provider-returned"
+                  },
+                  {
+                    "path": "PopReceipt",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "provider receipt",
+                    "origin": "provider-returned"
+                  }
+                ]
+              },
+              {
+                "condition": "missing payload, REST failure or invalid response",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "enqueues message"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'WriteItem'",
+                "line": 81,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "\"WriteItem\"",
+                "line": 562,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "AckItem",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Queue_AzureStorageQueue",
+            "support": "implemented",
+            "when": "MessageId and PopReceipt supplied",
+            "outcomes": [
+              {
+                "condition": "DELETE delegate succeeds",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Boolean",
+                "example": {
+                  "kind": "illustrative",
+                  "value": true
+                }
+              },
+              {
+                "condition": "missing identity or delete request fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "deletes queue message"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'AckItem'",
+                "line": 81,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "\"AckItem\"",
+                "line": 499,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "True is a successful request receipt; later absence needs separate visibility-aware observation."
+          }
+        ]
+      }
+    },
+    {
+      "name": "DeferItem",
+      "resultContract": {
+        "boundary": "mapped activity Signal.Result",
+        "variants": [
+          {
+            "adapter": "Queue_AzureStorageQueue",
+            "support": "reserved",
+            "when": "placeholder regardless of valid MessageId/PopReceipt",
+            "outcomes": [
+              {
+                "condition": "source emits warning and unresolved Signal; no visibility update",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'DeferItem'",
+                "line": 81,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "\"DeferItem\"",
+                "line": 663,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "No provider UpdateVisibility invocation is implemented."
+          }
+        ]
+      }
+    }
+  ]
+}

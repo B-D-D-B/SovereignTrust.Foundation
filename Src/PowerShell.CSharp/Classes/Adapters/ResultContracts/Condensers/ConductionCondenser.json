@@ -1,0 +1,143 @@
+{
+  "name": "ConductionCondenser",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/ConductionCondenser.ps1",
+      "sha256": "F160AA2C14FF3B577FFF7C32342815BB120198848D2606BE5D575419BA910B1D"
+    },
+    {
+      "id": "s2",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedCondenserAdapter.ps1",
+      "sha256": "CDB170DE2EB8292E350DD924703F26EF17E4839B85120D183A138221826C939E"
+    },
+    {
+      "id": "s3",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedConductionAdapter.ps1",
+      "sha256": "0EA34996E84E56C510E4719DA207174E08B6C5DC02A229683EBEC50F0DF6CB2B"
+    }
+  ],
+  "activities": [
+    {
+      "name": "ST",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "ConductionCondenser",
+            "support": "implemented",
+            "when": "delegates Conduction.ST with supplied Plan",
+            "outcomes": [
+              {
+                "condition": "delegate succeeds; mapped Conduction wrapper dropped its success Result",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "delegate fails; source invokes mapped delegate again before critical return",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "executes nested conduction; failure branch may execute it twice"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'ST'",
+                "line": 51,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "'ST'",
+                "line": 77,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Failure result is not copied after MergeSignalAndVerifyFailure. Duplicate invocation is a source defect, not an expected retry contract."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "Sleep",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "ConductionCondenser",
+            "support": "implemented",
+            "when": "Plan.Config.Duration is a finite nonnegative numeric seconds value",
+            "outcomes": [
+              {
+                "condition": "Start-Sleep completes",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "PSCustomObject",
+                "shape": [
+                  {
+                    "path": "ActualDuration",
+                    "type": "Double",
+                    "presence": "required",
+                    "meaning": "elapsed stopwatch seconds",
+                    "origin": "measured"
+                  },
+                  {
+                    "path": "Matched",
+                    "type": "Boolean",
+                    "presence": "required",
+                    "meaning": "absolute elapsed/requested difference <= 0.1 seconds",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "missing, nonnumeric, negative, NaN or infinite Duration; Start-Sleep throws",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [
+              "pauses current invocation; no provider mutation"
+            ],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Sleep'",
+                "line": 56,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    }
+  ]
+}

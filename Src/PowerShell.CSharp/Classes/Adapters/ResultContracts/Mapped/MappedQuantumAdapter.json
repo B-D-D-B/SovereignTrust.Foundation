@@ -1,0 +1,9 @@
+{
+  "name": "MappedQuantumAdapter",
+  "resultContractVersion": 1,
+  "resultInventoryDisposition": {
+    "status": "no-declared-activities",
+    "detail": "No activity result contract is declared in this catalog."
+  },
+  "activities": []
+}

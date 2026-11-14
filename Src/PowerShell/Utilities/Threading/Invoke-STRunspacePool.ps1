@@ -159,6 +159,8 @@ function Invoke-STRunspacePool {
     }
 
     try {
+        $selectedWorker = if ([Environment]::GetEnvironmentVariables('Process').Contains('ST_FOUNDATION_MANIFEST')) { Get-STWorkerSelection -FoundationModulePath $FoundationModulePath } else { $null }
+        if ($null -ne $selectedWorker) { $FoundationModulePath = $selectedWorker.Foundation.Manifest }
         if ([string]::IsNullOrWhiteSpace($FoundationModulePath)) {
             $FoundationModulePath = [System.IO.Path]::GetFullPath(
                 (Join-Path $PSScriptRoot '..\..\SovereignTrust.Foundation.psd1')
@@ -229,6 +231,7 @@ function Invoke-STRunspacePool {
             $workerSignal = $null
 
             try {
+                if ($null -ne $STWorkerSelection) { Assert-STFoundationSelection -Selection $STWorkerSelection -RequireLoaded }
                 $environment = ConvertFrom-Json -InputObject $EnvironmentJson -Depth 100 -ErrorAction Stop
                 $initializationSignal = Initialize-STEnvironment -Environment $environment | Select-Object -Last 1
 
@@ -251,6 +254,8 @@ function Invoke-STRunspacePool {
 
                 [PSCustomObject]@{
                     Index                = [int]$WorkItem.Index
+                    SelectionProvenance = $STWorkerProvenance
+
                     InitializationSignal = ConvertTo-RunspaceSignalRecord -InputSignal $initializationSignal -IncludeResult $false
                     InitializationFailed = $initializationSignal.Failure() -or -not $initializationSignal.HasResult()
                     WorkerSignal         = ConvertTo-RunspaceSignalRecord -InputSignal $workerSignal -IncludeResult $true
@@ -277,6 +282,8 @@ function Invoke-STRunspacePool {
 
                 [PSCustomObject]@{
                     Index                = [int]$WorkItem.Index
+                    SelectionProvenance = $STWorkerProvenance
+
                     InitializationSignal = $initializationRecord
                     InitializationFailed = -not $initializationIsSignal -or $initializationSignal.Failure() -or -not $initializationSignal.HasResult()
                     WorkerSignal         = $workerRecord
@@ -317,7 +324,9 @@ function Invoke-STRunspacePool {
         }
 
         $initialSessionState = [System.Management.Automation.Runspaces.InitialSessionState]::CreateDefault()
-        $initialSessionState.ImportPSModule(@($FoundationModulePath))
+        if ($null -ne $selectedWorker) {
+            $initialSessionState = New-STSelectedInitialSessionState -Selection $selectedWorker
+        } else { $initialSessionState.ImportPSModule(@($FoundationModulePath)) }
 
         $pool = [System.Management.Automation.Runspaces.RunspaceFactory]::CreateRunspacePool(
             1,

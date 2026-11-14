@@ -1,0 +1,666 @@
+{
+  "name": "MappedConductionAdapter",
+  "activities": [
+    {
+      "name": "Invoke",
+      "whenToUse": "Use to route an Invoke-labeled conduction request to the selected mapped slot. Conduction_ST reads the full Plan and its Phases; Conduction_SDA's five-argument source invokes its own conductor without reading the forwarded Plan. This label alone does not guarantee a value Result.",
+      "description": "Execute a conduction plan.",
+      "properties": [
+        {
+          "path": "Description",
+          "description": "Describe the full plan when a phase is invoked.",
+          "whenToUse": "For Conduction_ST, supply a full-plan Description when phase invocation telemetry should carry that text; omit when no description is needed. This catalog property is not attributed to Conduction_SDA.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "ExcludeFromTelemetry",
+          "description": "Control conduction and phase telemetry emission.",
+          "whenToUse": "For Conduction_ST, set true to suppress conduction and phase telemetry emission; omit or false to leave those traces enabled. This property is not attributed to Conduction_SDA.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "default": {
+            "Conduction_ST": false
+          }
+        },
+        {
+          "path": "Id",
+          "description": "Attach the original plan identifier to telemetry.",
+          "whenToUse": "For Conduction_ST, supply the original Plan Id when telemetry should retain its identifier. This property is not attributed to Conduction_SDA.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Name the conduction operation and its telemetry.",
+          "whenToUse": "For Conduction_ST, name the conduction operation for plan identity and telemetry. This property is not attributed to Conduction_SDA.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases",
+          "description": "Select and order phases for conduction.",
+          "whenToUse": "For Conduction_ST, supply Phases to order and execute. The ST conductor builds a phase grid and selects phase sets from this collection; Conduction_SDA applicability is not declared here.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].DependsOn",
+          "description": "Read direct phase DependsOn for dependency ordering.",
+          "whenToUse": "For a direct Conduction_ST phase, set DependsOn to match a current predecessor name or wildcard *. Root selection also matches empty DependsOn or *; this is not an all-predecessors-completed barrier.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Id",
+          "description": "Attach the phase identifier to telemetry.",
+          "whenToUse": "For a Conduction_ST phase, supply Id when phase telemetry should retain that identifier.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings",
+          "description": "Read phase Mappings for subsequent processing.",
+          "whenToUse": "For a Conduction_ST phase, supply Mappings when its mapping steps should be processed. This is distinct from PostMappings.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].%.@.VirtualPath",
+          "description": "Attempt the mapping-relative jacket/result virtual-path lookup.",
+          "whenToUse": "For a Conduction_ST phase mapping, provide a jacket/result VirtualPath only where the mapping-relative lookup is intended; source attempts this lookup and may have no result.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Action",
+          "description": "Read mapping Action to order or dispatch the step.",
+          "whenToUse": "For a Conduction_ST mapping step, set Action when the phase processor should use it for ordering or dispatch.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Activity",
+          "description": "Read mapping Activity to order or dispatch the step.",
+          "whenToUse": "For a Conduction_ST mapping step, set Activity for the selected downstream operation when phase processing reaches dispatch.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Adapter",
+          "description": "Read mapping Adapter to order or dispatch the step.",
+          "whenToUse": "For a Conduction_ST mapping step, set Adapter to identify the mapped adapter for downstream dispatch.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Name",
+          "description": "Read mapping Name to order or dispatch the step.",
+          "whenToUse": "For a Conduction_ST mapping step, set Name to identify the step in ordering and trace context.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Order",
+          "description": "Read mapping Order to order or dispatch the step.",
+          "whenToUse": "For a Conduction_ST mapping step, set Order when explicit mapping order is needed.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Name",
+          "description": "Read direct phase Name for dependency ordering.",
+          "whenToUse": "For a direct Conduction_ST phase, set Name for dependency ordering and phase identification.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Order",
+          "description": "Read direct phase Order for dependency ordering.",
+          "whenToUse": "For a direct Conduction_ST phase, set Order when explicit phase ordering is needed.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].PostMappings",
+          "description": "Read PostMappings into a follow-up Mappings plan; current Memory.Generate consumes Steps, so this does not establish execution.",
+          "whenToUse": "For a Conduction_ST phase, PostMappings is read and forwarded as Mappings in a follow-up Memory.Generate plan. Current Memory.Generate consumes Steps instead, so this forwarding does not establish execution of those post mappings.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].RepeatCount",
+          "description": "Control phase repetition using RepeatCount.",
+          "whenToUse": "For a Conduction_ST phase, set RepeatCount when phase execution should repeat; omission uses the source default zero.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "default": {
+            "Conduction_ST": 0
+          }
+        },
+        {
+          "path": "Phases[*].RepeatDelayMS",
+          "description": "Control phase repetition using RepeatDelayMS.",
+          "whenToUse": "For a Conduction_ST phase, set RepeatDelayMS when repeated phases need a delay; omission uses the source default zero milliseconds.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "default": {
+            "Conduction_ST": 0
+          }
+        },
+        {
+          "path": "Phases[*][$onlyKey]",
+          "description": "Unwrap a single-key phase dictionary.",
+          "whenToUse": "For a single-key wrapped Conduction_ST phase dictionary, supply the only child phase object to unwrap before dependency selection. This is a dynamic key context, not a fixed property name.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$phaseItem[$onlyKey]"
+        },
+        {
+          "path": "Phases[*][$onlyKey].DependsOn",
+          "description": "Read wrapped phase DependsOn for dependency ordering.",
+          "whenToUse": "Within a single-key wrapped Conduction_ST phase, set DependsOn to match the current predecessor name or wildcard *. Root selection also matches empty DependsOn or *; it does not verify all listed predecessors completed.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $phase -Path \"DependsOn\" -SignalLevel \"Warning\" | Select-Object -Last 1"
+        },
+        {
+          "path": "Phases[*][$onlyKey].Name",
+          "description": "Read wrapped phase Name for dependency ordering.",
+          "whenToUse": "Within a single-key wrapped Conduction_ST phase, set Name for dependency ordering and phase identification.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $phase -Path \"Name\" -SignalLevel \"Warning\" | Select-Object -Last 1"
+        },
+        {
+          "path": "Phases[*][$onlyKey].Order",
+          "description": "Read wrapped phase Order for dependency ordering.",
+          "whenToUse": "Within a single-key wrapped Conduction_ST phase, set Order when explicit phase ordering is needed.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $phase -Path \"Order\" -SignalLevel \"Warning\" | Select-Object -Last 1"
+        }
+      ],
+      "result": [],
+      "resultNotes": [
+        "No stable public Result field is available for this activity; inspect the Signal/effect at its actual boundary.",
+        "Conduction_ST: success can have no Result (underlying conductor completes; mapped wrapper calls GetResult(value) rather than SetResult)",
+        "Conduction_ST: Concrete class may yield ItemSignal, but public mapped boundary loses it",
+        "Conduction_SDA: success can have no Result (SDA conductor completes; mapped wrapper drops returned result)",
+        "Conduction_SDA: Catalog property adapters name only Conduction_ST although Conduction_SDA is mapped; source applicability differs from declaration"
+      ]
+    },
+    {
+      "name": "Run",
+      "whenToUse": "Use to route a Run-labeled conduction request to the selected mapped slot. The mapped wrapper forwards Activity and Plan unchanged; the ST-specific plan contexts below apply when the selected concrete adapter is Conduction_ST, not automatically to Conduction_SDA.",
+      "description": "Run a conduction plan.",
+      "properties": [
+        {
+          "path": "Description",
+          "description": "Describe the full plan when a phase is invoked.",
+          "whenToUse": "For Conduction_ST, supply a full-plan Description when phase invocation telemetry should carry that text; omit when no description is needed. This catalog property is not attributed to Conduction_SDA.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "ExcludeFromTelemetry",
+          "description": "Control conduction and phase telemetry emission.",
+          "whenToUse": "For Conduction_ST, set true to suppress conduction and phase telemetry emission; omit or false to leave those traces enabled. This property is not attributed to Conduction_SDA.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "default": {
+            "Conduction_ST": false
+          }
+        },
+        {
+          "path": "Id",
+          "description": "Attach the original plan identifier to telemetry.",
+          "whenToUse": "For Conduction_ST, supply the original Plan Id when telemetry should retain its identifier. This property is not attributed to Conduction_SDA.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Name the conduction operation and its telemetry.",
+          "whenToUse": "For Conduction_ST, name the conduction operation for plan identity and telemetry. This property is not attributed to Conduction_SDA.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases",
+          "description": "Select and order phases for conduction.",
+          "whenToUse": "For Conduction_ST, supply Phases to order and execute. The ST conductor builds a phase grid and selects phase sets from this collection; Conduction_SDA applicability is not declared here.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].DependsOn",
+          "description": "Read direct phase DependsOn for dependency ordering.",
+          "whenToUse": "For a direct Conduction_ST phase, set DependsOn to match a current predecessor name or wildcard *. Root selection also matches empty DependsOn or *; this is not an all-predecessors-completed barrier.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Id",
+          "description": "Attach the phase identifier to telemetry.",
+          "whenToUse": "For a Conduction_ST phase, supply Id when phase telemetry should retain that identifier.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings",
+          "description": "Read phase Mappings for subsequent processing.",
+          "whenToUse": "For a Conduction_ST phase, supply Mappings when its mapping steps should be processed. This is distinct from PostMappings.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].%.@.VirtualPath",
+          "description": "Attempt the mapping-relative jacket/result virtual-path lookup.",
+          "whenToUse": "For a Conduction_ST phase mapping, provide a jacket/result VirtualPath only where the mapping-relative lookup is intended; source attempts this lookup and may have no result.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Action",
+          "description": "Read mapping Action to order or dispatch the step.",
+          "whenToUse": "For a Conduction_ST mapping step, set Action when the phase processor should use it for ordering or dispatch.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Activity",
+          "description": "Read mapping Activity to order or dispatch the step.",
+          "whenToUse": "For a Conduction_ST mapping step, set Activity for the selected downstream operation when phase processing reaches dispatch.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Adapter",
+          "description": "Read mapping Adapter to order or dispatch the step.",
+          "whenToUse": "For a Conduction_ST mapping step, set Adapter to identify the mapped adapter for downstream dispatch.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Name",
+          "description": "Read mapping Name to order or dispatch the step.",
+          "whenToUse": "For a Conduction_ST mapping step, set Name to identify the step in ordering and trace context.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Order",
+          "description": "Read mapping Order to order or dispatch the step.",
+          "whenToUse": "For a Conduction_ST mapping step, set Order when explicit mapping order is needed.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Name",
+          "description": "Read direct phase Name for dependency ordering.",
+          "whenToUse": "For a direct Conduction_ST phase, set Name for dependency ordering and phase identification.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Order",
+          "description": "Read direct phase Order for dependency ordering.",
+          "whenToUse": "For a direct Conduction_ST phase, set Order when explicit phase ordering is needed.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].PostMappings",
+          "description": "Read PostMappings into a follow-up Mappings plan; current Memory.Generate consumes Steps, so this does not establish execution.",
+          "whenToUse": "For a Conduction_ST phase, PostMappings is read and forwarded as Mappings in a follow-up Memory.Generate plan. Current Memory.Generate consumes Steps instead, so this forwarding does not establish execution of those post mappings.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].RepeatCount",
+          "description": "Control phase repetition using RepeatCount.",
+          "whenToUse": "For a Conduction_ST phase, set RepeatCount when phase execution should repeat; omission uses the source default zero.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "default": {
+            "Conduction_ST": 0
+          }
+        },
+        {
+          "path": "Phases[*].RepeatDelayMS",
+          "description": "Control phase repetition using RepeatDelayMS.",
+          "whenToUse": "For a Conduction_ST phase, set RepeatDelayMS when repeated phases need a delay; omission uses the source default zero milliseconds.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "default": {
+            "Conduction_ST": 0
+          }
+        },
+        {
+          "path": "Phases[*][$onlyKey]",
+          "description": "Unwrap a single-key phase dictionary.",
+          "whenToUse": "For a single-key wrapped Conduction_ST phase dictionary, supply the only child phase object to unwrap before dependency selection. This is a dynamic key context, not a fixed property name.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$phaseItem[$onlyKey]"
+        },
+        {
+          "path": "Phases[*][$onlyKey].DependsOn",
+          "description": "Read wrapped phase DependsOn for dependency ordering.",
+          "whenToUse": "Within a single-key wrapped Conduction_ST phase, set DependsOn to match the current predecessor name or wildcard *. Root selection also matches empty DependsOn or *; it does not verify all listed predecessors completed.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $phase -Path \"DependsOn\" -SignalLevel \"Warning\" | Select-Object -Last 1"
+        },
+        {
+          "path": "Phases[*][$onlyKey].Name",
+          "description": "Read wrapped phase Name for dependency ordering.",
+          "whenToUse": "Within a single-key wrapped Conduction_ST phase, set Name for dependency ordering and phase identification.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $phase -Path \"Name\" -SignalLevel \"Warning\" | Select-Object -Last 1"
+        },
+        {
+          "path": "Phases[*][$onlyKey].Order",
+          "description": "Read wrapped phase Order for dependency ordering.",
+          "whenToUse": "Within a single-key wrapped Conduction_ST phase, set Order when explicit phase ordering is needed.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $phase -Path \"Order\" -SignalLevel \"Warning\" | Select-Object -Last 1"
+        }
+      ],
+      "result": [],
+      "resultNotes": [
+        "No stable public Result field is available for this activity; inspect the Signal/effect at its actual boundary.",
+        "Conduction_ST: success can have no Result (underlying conductor completes; mapped wrapper calls GetResult(value) rather than SetResult)",
+        "Conduction_ST: Concrete class may yield ItemSignal, but public mapped boundary loses it",
+        "Conduction_SDA: success can have no Result (SDA conductor completes; mapped wrapper drops returned result)",
+        "Conduction_SDA: Catalog property adapters name only Conduction_ST although Conduction_SDA is mapped; source applicability differs from declaration"
+      ]
+    },
+    {
+      "name": "ST",
+      "whenToUse": "Use to route an ST-labeled conduction request to the selected mapped slot. The mapped wrapper forwards the label; Conduction_ST processes its Plan phases, while Conduction_SDA's current five-argument path does not read that Plan. Inspect the selected concrete slot before relying on an effect or Result.",
+      "description": "Execute a SovereignTrust conduction plan.",
+      "properties": [
+        {
+          "path": "Description",
+          "description": "Describe the full plan when a phase is invoked.",
+          "whenToUse": "For Conduction_ST, supply a full-plan Description when phase invocation telemetry should carry that text; omit when no description is needed. This catalog property is not attributed to Conduction_SDA.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "ExcludeFromTelemetry",
+          "description": "Control conduction and phase telemetry emission.",
+          "whenToUse": "For Conduction_ST, set true to suppress conduction and phase telemetry emission; omit or false to leave those traces enabled. This property is not attributed to Conduction_SDA.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "default": {
+            "Conduction_ST": false
+          }
+        },
+        {
+          "path": "Id",
+          "description": "Attach the original plan identifier to telemetry.",
+          "whenToUse": "For Conduction_ST, supply the original Plan Id when telemetry should retain its identifier. This property is not attributed to Conduction_SDA.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Name",
+          "description": "Name the conduction operation and its telemetry.",
+          "whenToUse": "For Conduction_ST, name the conduction operation for plan identity and telemetry. This property is not attributed to Conduction_SDA.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases",
+          "description": "Select and order phases for conduction.",
+          "whenToUse": "For Conduction_ST, supply Phases to order and execute. The ST conductor builds a phase grid and selects phase sets from this collection; Conduction_SDA applicability is not declared here.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].DependsOn",
+          "description": "Read direct phase DependsOn for dependency ordering.",
+          "whenToUse": "For a direct Conduction_ST phase, set DependsOn to match a current predecessor name or wildcard *. Root selection also matches empty DependsOn or *; this is not an all-predecessors-completed barrier.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Id",
+          "description": "Attach the phase identifier to telemetry.",
+          "whenToUse": "For a Conduction_ST phase, supply Id when phase telemetry should retain that identifier.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings",
+          "description": "Read phase Mappings for subsequent processing.",
+          "whenToUse": "For a Conduction_ST phase, supply Mappings when its mapping steps should be processed. This is distinct from PostMappings.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].%.@.VirtualPath",
+          "description": "Attempt the mapping-relative jacket/result virtual-path lookup.",
+          "whenToUse": "For a Conduction_ST phase mapping, provide a jacket/result VirtualPath only where the mapping-relative lookup is intended; source attempts this lookup and may have no result.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Action",
+          "description": "Read mapping Action to order or dispatch the step.",
+          "whenToUse": "For a Conduction_ST mapping step, set Action when the phase processor should use it for ordering or dispatch.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Activity",
+          "description": "Read mapping Activity to order or dispatch the step.",
+          "whenToUse": "For a Conduction_ST mapping step, set Activity for the selected downstream operation when phase processing reaches dispatch.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Adapter",
+          "description": "Read mapping Adapter to order or dispatch the step.",
+          "whenToUse": "For a Conduction_ST mapping step, set Adapter to identify the mapped adapter for downstream dispatch.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Name",
+          "description": "Read mapping Name to order or dispatch the step.",
+          "whenToUse": "For a Conduction_ST mapping step, set Name to identify the step in ordering and trace context.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Mappings[*].Order",
+          "description": "Read mapping Order to order or dispatch the step.",
+          "whenToUse": "For a Conduction_ST mapping step, set Order when explicit mapping order is needed.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Name",
+          "description": "Read direct phase Name for dependency ordering.",
+          "whenToUse": "For a direct Conduction_ST phase, set Name for dependency ordering and phase identification.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].Order",
+          "description": "Read direct phase Order for dependency ordering.",
+          "whenToUse": "For a direct Conduction_ST phase, set Order when explicit phase ordering is needed.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].PostMappings",
+          "description": "Read PostMappings into a follow-up Mappings plan; current Memory.Generate consumes Steps, so this does not establish execution.",
+          "whenToUse": "For a Conduction_ST phase, PostMappings is read and forwarded as Mappings in a follow-up Memory.Generate plan. Current Memory.Generate consumes Steps instead, so this forwarding does not establish execution of those post mappings.",
+          "adapters": [
+            "Conduction_ST"
+          ]
+        },
+        {
+          "path": "Phases[*].RepeatCount",
+          "description": "Control phase repetition using RepeatCount.",
+          "whenToUse": "For a Conduction_ST phase, set RepeatCount when phase execution should repeat; omission uses the source default zero.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "default": {
+            "Conduction_ST": 0
+          }
+        },
+        {
+          "path": "Phases[*].RepeatDelayMS",
+          "description": "Control phase repetition using RepeatDelayMS.",
+          "whenToUse": "For a Conduction_ST phase, set RepeatDelayMS when repeated phases need a delay; omission uses the source default zero milliseconds.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "default": {
+            "Conduction_ST": 0
+          }
+        },
+        {
+          "path": "Phases[*][$onlyKey]",
+          "description": "Unwrap a single-key phase dictionary.",
+          "whenToUse": "For a single-key wrapped Conduction_ST phase dictionary, supply the only child phase object to unwrap before dependency selection. This is a dynamic key context, not a fixed property name.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$phaseItem[$onlyKey]"
+        },
+        {
+          "path": "Phases[*][$onlyKey].DependsOn",
+          "description": "Read wrapped phase DependsOn for dependency ordering.",
+          "whenToUse": "Within a single-key wrapped Conduction_ST phase, set DependsOn to match the current predecessor name or wildcard *. Root selection also matches empty DependsOn or *; it does not verify all listed predecessors completed.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $phase -Path \"DependsOn\" -SignalLevel \"Warning\" | Select-Object -Last 1"
+        },
+        {
+          "path": "Phases[*][$onlyKey].Name",
+          "description": "Read wrapped phase Name for dependency ordering.",
+          "whenToUse": "Within a single-key wrapped Conduction_ST phase, set Name for dependency ordering and phase identification.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $phase -Path \"Name\" -SignalLevel \"Warning\" | Select-Object -Last 1"
+        },
+        {
+          "path": "Phases[*][$onlyKey].Order",
+          "description": "Read wrapped phase Order for dependency ordering.",
+          "whenToUse": "Within a single-key wrapped Conduction_ST phase, set Order when explicit phase ordering is needed.",
+          "adapters": [
+            "Conduction_ST"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "Resolve-PathFromDictionary -Dictionary $phase -Path \"Order\" -SignalLevel \"Warning\" | Select-Object -Last 1"
+        }
+      ],
+      "result": [],
+      "resultNotes": [
+        "No stable public Result field is available for this activity; inspect the Signal/effect at its actual boundary.",
+        "Conduction_ST: success can have no Result (underlying conductor completes; mapped wrapper calls GetResult(value) rather than SetResult)",
+        "Conduction_ST: Concrete class may yield ItemSignal, but public mapped boundary loses it",
+        "Conduction_SDA: success can have no Result (SDA conductor completes; mapped wrapper drops returned result)",
+        "Conduction_SDA: Catalog property adapters name only Conduction_ST although Conduction_SDA is mapped; source applicability differs from declaration"
+      ]
+    }
+  ],
+  "concreteAdapters": [
+    {
+      "name": "Conduction_ST",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Conduction/ST/PowerShell/Conduction_ST.psm1"
+    },
+    {
+      "name": "Conduction_SDA",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Conduction/SDA/PowerShell/Conduction_SDA.psm1"
+    }
+  ],
+  "resultContractRef": {"file":"../../ResultContracts/Mapped/MappedConductionAdapter.json","version":1}
+}

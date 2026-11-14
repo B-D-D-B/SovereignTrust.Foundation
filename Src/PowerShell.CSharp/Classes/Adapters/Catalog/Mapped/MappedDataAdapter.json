@@ -1,0 +1,3578 @@
+{
+  "name": "MappedDataAdapter",
+  "activities": [
+    {
+      "name": "Write",
+      "whenToUse": "Choose Write for Azure SQL or Data Explorer data writes. SQL requires Procedure plus exactly one Content or ContentPath under Config.Sql.",
+      "description": "Run a data write operation.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract the operation configuration after adapter and activity validation.",
+          "whenToUse": "Supply the provider-qualified Config.Sql branch for Azure SQL or Config.ADX for Data Explorer. Legacy top-level SQL fields and target overrides are rejected.",
+          "adapters": [
+            "Data_AzureDataExplorer",
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Sql.ColumnSchema",
+          "description": "Select SQL write ColumnSchema input.",
+          "whenToUse": "Supply the SQL column schema when Write uses Records mode and field conversion needs declared column types; omit for Document mode.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.ColumnSchema[*].Name",
+          "description": "Read column descriptor Name.",
+          "whenToUse": "Supply the SQL column schema when Write uses Records mode and field conversion needs declared column types; omit for Document mode.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.ColumnSchema[*].Type",
+          "description": "Read column descriptor Type.",
+          "whenToUse": "Supply the SQL column schema when Write uses Records mode and field conversion needs declared column types; omit for Document mode.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.ColumnSchema[$name]",
+          "description": "Read a named column type from a dictionary schema.",
+          "whenToUse": "Supply the SQL column schema when Write uses Records mode and field conversion needs declared column types; omit for Document mode.",
+          "adapters": [
+            "Data_AzureSql"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$Schema[$name]"
+        },
+        {
+          "path": "Config.ADX.CommandText",
+          "description": "Read and validate the Data Explorer command.",
+          "whenToUse": "Supply a .ingest inline into table NAME <| command line followed by one nonempty payload line; same-line payloads and other write commands are rejected.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config.Sql.CommandTimeoutSeconds",
+          "description": "Choose a caller-specified SQL command timeout.",
+          "whenToUse": "Set a command timeout only when the adapter default is unsuitable for this SQL operation.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Sql.Content",
+          "description": "Select SQL write Content input.",
+          "whenToUse": "Supply inline SQL Write content only when not using Config.Sql.ContentPath; exactly one of these inputs is required.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Sql.Content[*][$key]",
+          "description": "Read native incoming record fields before SQL payload serialization.",
+          "whenToUse": "Supply native record fields when Write uses inline Records content; SQL normalizes these against ColumnSchema before binding.",
+          "adapters": [
+            "Data_AzureSql"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$row[$key]"
+        },
+        {
+          "path": "Config.Sql.Content[$key]",
+          "description": "Read native incoming record fields before SQL payload serialization.",
+          "whenToUse": "Supply native record fields when Write uses inline Records content; SQL normalizes these against ColumnSchema before binding.",
+          "adapters": [
+            "Data_AzureSql"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$row[$key]"
+        },
+        {
+          "path": "Config.Sql.ContentPath",
+          "description": "Select SQL write ContentPath input.",
+          "whenToUse": "Supply a nonblank ItemSignal path to SQL Write content only when inline Config.Sql.Content is omitted; the resolved signal must have a result.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Sql.Delimiter",
+          "description": "Select SQL write Delimiter input.",
+          "whenToUse": "Set a single-character delimiter when parsing Csv Write content with a separator other than the default comma.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.InputFormat",
+          "description": "Select SQL write InputFormat input.",
+          "whenToUse": "Set Object, Json or Csv only when the default Object interpretation does not match the supplied Write content; Csv requires Records mode.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters",
+          "description": "Read SQL parameters for command binding.",
+          "whenToUse": "Supply SQL parameters only when the command needs bound values or output descriptors; omit for commands with no parameters.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Direction",
+          "description": "Read SQL parameter descriptor Direction.",
+          "whenToUse": "Set Input, Output, InputOutput or ReturnValue when the default Input direction does not fit this SQL parameter.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Name",
+          "description": "Read SQL parameter descriptor Name.",
+          "whenToUse": "Supply an @-prefixed SQL parameter name in the descriptor; names must match the supported identifier pattern.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Precision",
+          "description": "Read SQL parameter descriptor Precision.",
+          "whenToUse": "Set Precision only when the SQL parameter type needs that metadata; the binder validates it before execution.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Scale",
+          "description": "Read SQL parameter descriptor Scale.",
+          "whenToUse": "Set Scale only when the SQL parameter type needs that metadata; the binder validates it before execution.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Size",
+          "description": "Read SQL parameter descriptor Size.",
+          "whenToUse": "Set Size for string or binary SQL parameters with any non-Input direction; omit it for ordinary Input parameters unless explicit size metadata is needed.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.SqlDbType",
+          "description": "Read SQL parameter descriptor SqlDbType.",
+          "whenToUse": "Supply a supported SqlDbType in each SQL parameter descriptor so values can be converted and bound.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Value",
+          "description": "Read SQL parameter descriptor Value.",
+          "whenToUse": "Supply Value for Input or InputOutput descriptors; Output and ReturnValue may omit it. Null is converted to SQL DBNull for an explicitly typed descriptor.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Direction",
+          "description": "Read SQL parameter descriptor Direction.",
+          "whenToUse": "Set Input, Output, InputOutput or ReturnValue when the default Input direction does not fit this SQL parameter.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Name",
+          "description": "Read SQL parameter descriptor Name.",
+          "whenToUse": "Supply an @-prefixed SQL parameter name in the descriptor; names must match the supported identifier pattern.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Precision",
+          "description": "Read SQL parameter descriptor Precision.",
+          "whenToUse": "Set Precision only when the SQL parameter type needs that metadata; the binder validates it before execution.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Scale",
+          "description": "Read SQL parameter descriptor Scale.",
+          "whenToUse": "Set Scale only when the SQL parameter type needs that metadata; the binder validates it before execution.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Size",
+          "description": "Read SQL parameter descriptor Size.",
+          "whenToUse": "Set Size for string or binary SQL parameters with any non-Input direction; omit it for ordinary Input parameters unless explicit size metadata is needed.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].SqlDbType",
+          "description": "Read SQL parameter descriptor SqlDbType.",
+          "whenToUse": "Supply a supported SqlDbType in each SQL parameter descriptor so values can be converted and bound.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Value",
+          "description": "Read SQL parameter descriptor Value.",
+          "whenToUse": "Supply Value for Input or InputOutput descriptors; Output and ReturnValue may omit it. Null is converted to SQL DBNull for an explicitly typed descriptor.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[$key]",
+          "description": "Bind a scalar dictionary parameter by its literal key.",
+          "whenToUse": "Use the literal @-prefixed dictionary key for a supported nonnull scalar SQL parameter value when type inference is enough; use a descriptor instead for null, output direction or explicit type metadata.",
+          "adapters": [
+            "Data_AzureSql"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$Parameters[$key]"
+        },
+        {
+          "path": "Config.Sql.PayloadMode",
+          "description": "Select SQL write PayloadMode input.",
+          "whenToUse": "Set Records or Document only when the default Records normalization is unsuitable; Document cannot be paired with Csv.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.PayloadParameter",
+          "description": "Select SQL write PayloadParameter.",
+          "whenToUse": "Set the SQL payload parameter name only when the stored procedure expects a name other than the default @Payload.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Procedure",
+          "description": "Select SQL write Procedure.",
+          "whenToUse": "Supply the stored procedure name for SQL Write; this is required before payload normalization.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.TransactionMode",
+          "description": "Choose and validate SQL transaction behavior.",
+          "whenToUse": "Use Required for a transaction or None only when this SQL Write/Admin operation is intentionally nontransactional; other values are rejected.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When valid Config and SQL destination; stored procedure selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.Operation",
+          "type": "String",
+          "description": "selected verb [constant]. When valid Config and SQL destination; stored procedure selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.ResultSets",
+          "type": "array",
+          "description": "reader sets; Admin has empty array [provider-returned]. When valid Config and SQL destination; stored procedure selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.ResultSets[*].Name",
+          "type": "String",
+          "description": "result-set name [provider-returned] (conditional). When valid Config and SQL destination; stored procedure selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.ResultSets[*].Columns",
+          "type": "array",
+          "description": "column descriptors [provider-returned] (conditional). When valid Config and SQL destination; stored procedure selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.ResultSets[*].Rows",
+          "type": "array",
+          "description": "result rows; can be empty [provider-returned] (conditional). When valid Config and SQL destination; stored procedure selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.RowsAffected",
+          "type": "Int32/null",
+          "description": "provider affected count or unavailable [provider-returned]. When valid Config and SQL destination; stored procedure selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.OutputParameters",
+          "type": "object",
+          "description": "SQL output parameters [provider-returned]. When valid Config and SQL destination; stored procedure selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When ADX target, validated command and token; ADX response validated.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "decoded.Operation",
+          "type": "String",
+          "description": "Write [constant]. When ADX target, validated command and token; ADX response validated.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "decoded.Tables",
+          "type": "array",
+          "description": "validated ADX tables [provider-returned]. When ADX target, validated command and token; ADX response validated.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_AzureSql: failed Signal can retain JSON string Result (Write transaction rolls back with normalized input); inspect detailed contract and mapped exposure before use.",
+        "Data_AzureSql: Decimal/large integer values may be strings, byte arrays base64, dates UTC strings. Data mapped wrapper retains failure Result when supplied",
+        "Data_AzureDataExplorer: No live ADX response was observed",
+        "Data_ArtifactProcess: unsupported — Catalog properties include Data_ArtifactProcess for this verb but checked-in host does not implement it"
+      ]
+    },
+    {
+      "name": "Query",
+      "whenToUse": "Choose Query for Azure SQL or Data Explorer reads. SQL rejects TransactionMode; Data Explorer dispatches before its legacy switch.",
+      "description": "Read data.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract the operation configuration after adapter and activity validation.",
+          "whenToUse": "Supply the provider-qualified Config.Sql branch for Azure SQL or Config.ADX for Data Explorer. Legacy top-level SQL fields and target overrides are rejected.",
+          "adapters": [
+            "Data_AzureDataExplorer",
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Sql.CommandText",
+          "description": "Read and validate the operation command text.",
+          "whenToUse": "Supply nonblank SQL command text for Query; this route requires it under Config.Sql, not legacy Config.CommandText.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.ADX.CommandText",
+          "description": "Read and validate the operation command text.",
+          "whenToUse": "Supply a read query without a leading control dot or semicolon; Data Explorer routes it to /v1/rest/query.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config.Sql.CommandTimeoutSeconds",
+          "description": "Choose a caller-specified SQL command timeout.",
+          "whenToUse": "Set a command timeout only when the adapter default is unsuitable for this SQL operation.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters",
+          "description": "Read SQL parameters for command binding.",
+          "whenToUse": "Supply SQL parameters only when the command needs bound values or output descriptors; omit for commands with no parameters.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Direction",
+          "description": "Read SQL parameter descriptor Direction.",
+          "whenToUse": "Set Input, Output, InputOutput or ReturnValue when the default Input direction does not fit this SQL parameter.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Name",
+          "description": "Read SQL parameter descriptor Name.",
+          "whenToUse": "Supply an @-prefixed SQL parameter name in the descriptor; names must match the supported identifier pattern.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Precision",
+          "description": "Read SQL parameter descriptor Precision.",
+          "whenToUse": "Set Precision only when the SQL parameter type needs that metadata; the binder validates it before execution.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Scale",
+          "description": "Read SQL parameter descriptor Scale.",
+          "whenToUse": "Set Scale only when the SQL parameter type needs that metadata; the binder validates it before execution.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Size",
+          "description": "Read SQL parameter descriptor Size.",
+          "whenToUse": "Set Size for string or binary SQL parameters with any non-Input direction; omit it for ordinary Input parameters unless explicit size metadata is needed.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.SqlDbType",
+          "description": "Read SQL parameter descriptor SqlDbType.",
+          "whenToUse": "Supply a supported SqlDbType in each SQL parameter descriptor so values can be converted and bound.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Value",
+          "description": "Read SQL parameter descriptor Value.",
+          "whenToUse": "Supply Value for Input or InputOutput descriptors; Output and ReturnValue may omit it. Null is converted to SQL DBNull for an explicitly typed descriptor.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Direction",
+          "description": "Read SQL parameter descriptor Direction.",
+          "whenToUse": "Set Input, Output, InputOutput or ReturnValue when the default Input direction does not fit this SQL parameter.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Name",
+          "description": "Read SQL parameter descriptor Name.",
+          "whenToUse": "Supply an @-prefixed SQL parameter name in the descriptor; names must match the supported identifier pattern.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Precision",
+          "description": "Read SQL parameter descriptor Precision.",
+          "whenToUse": "Set Precision only when the SQL parameter type needs that metadata; the binder validates it before execution.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Scale",
+          "description": "Read SQL parameter descriptor Scale.",
+          "whenToUse": "Set Scale only when the SQL parameter type needs that metadata; the binder validates it before execution.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Size",
+          "description": "Read SQL parameter descriptor Size.",
+          "whenToUse": "Set Size for string or binary SQL parameters with any non-Input direction; omit it for ordinary Input parameters unless explicit size metadata is needed.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].SqlDbType",
+          "description": "Read SQL parameter descriptor SqlDbType.",
+          "whenToUse": "Supply a supported SqlDbType in each SQL parameter descriptor so values can be converted and bound.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Value",
+          "description": "Read SQL parameter descriptor Value.",
+          "whenToUse": "Supply Value for Input or InputOutput descriptors; Output and ReturnValue may omit it. Null is converted to SQL DBNull for an explicitly typed descriptor.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[$key]",
+          "description": "Bind a scalar dictionary parameter by its literal key.",
+          "whenToUse": "Use the literal @-prefixed dictionary key for a supported nonnull scalar SQL parameter value when type inference is enough; use a descriptor instead for null, output direction or explicit type metadata.",
+          "adapters": [
+            "Data_AzureSql"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$Parameters[$key]"
+        },
+        {
+          "path": "Config.Sql.TransactionMode",
+          "description": "Choose and validate SQL transaction behavior.",
+          "whenToUse": "Omit TransactionMode for SQL Query; the current execution boundary rejects this property for Query.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.Operation",
+          "type": "String",
+          "description": "selected verb [constant]. When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.ResultSets",
+          "type": "array",
+          "description": "reader sets; Admin has empty array [provider-returned]. When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.ResultSets[*].Name",
+          "type": "String",
+          "description": "result-set name [provider-returned] (conditional). When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.ResultSets[*].Columns",
+          "type": "array",
+          "description": "column descriptors [provider-returned] (conditional). When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.ResultSets[*].Rows",
+          "type": "array",
+          "description": "result rows; can be empty [provider-returned] (conditional). When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.RowsAffected",
+          "type": "Int32/null",
+          "description": "provider affected count or unavailable [provider-returned]. When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.OutputParameters",
+          "type": "object",
+          "description": "SQL output parameters [provider-returned]. When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When ADX target, validated command and token; ADX response validated.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "decoded.Operation",
+          "type": "String",
+          "description": "Query [constant]. When ADX target, validated command and token; ADX response validated.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "decoded.ResultSets",
+          "type": "array",
+          "description": "tables excluding QueryStatus, with Rows [provider-returned]. When ADX target, validated command and token; ADX response validated.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_AzureSql: Decimal/large integer values may be strings, byte arrays base64, dates UTC strings. Data mapped wrapper retains failure Result when supplied",
+        "Data_AzureDataExplorer: No live ADX response was observed",
+        "Data_ArtifactProcess: unsupported — Catalog properties include Data_ArtifactProcess for this verb but checked-in host does not implement it"
+      ]
+    },
+    {
+      "name": "Delete",
+      "whenToUse": "Choose Delete for an Azure SQL or Data Explorer delete. SQL uses its provider-qualified command and Required transaction mode.",
+      "description": "Remove data.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract the operation configuration after adapter and activity validation.",
+          "whenToUse": "Supply the provider-qualified Config.Sql branch for Azure SQL or Config.ADX for Data Explorer. Legacy top-level SQL fields and target overrides are rejected.",
+          "adapters": [
+            "Data_AzureDataExplorer",
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Sql.CommandText",
+          "description": "Read and validate the operation command text.",
+          "whenToUse": "Supply nonblank SQL command text for Delete; this route requires it under Config.Sql, not legacy Config.CommandText.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.ADX.CommandText",
+          "description": "Read and validate the operation command text.",
+          "whenToUse": "Supply the restricted .delete table ... records <| ... | where key == \"value\" form; other delete commands are rejected.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config.Sql.CommandTimeoutSeconds",
+          "description": "Choose a caller-specified SQL command timeout.",
+          "whenToUse": "Set a command timeout only when the adapter default is unsuitable for this SQL operation.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Sql.ExpectResultSets",
+          "description": "Choose whether SQL delete returns result sets.",
+          "whenToUse": "Set only when SQL Delete should return result sets; omit when no result-set payload is needed.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters",
+          "description": "Read SQL parameters for command binding.",
+          "whenToUse": "Supply SQL parameters only when the command needs bound values or output descriptors; omit for commands with no parameters.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Direction",
+          "description": "Read SQL parameter descriptor Direction.",
+          "whenToUse": "Set Input, Output, InputOutput or ReturnValue when the default Input direction does not fit this SQL parameter.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Name",
+          "description": "Read SQL parameter descriptor Name.",
+          "whenToUse": "Supply an @-prefixed SQL parameter name in the descriptor; names must match the supported identifier pattern.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Precision",
+          "description": "Read SQL parameter descriptor Precision.",
+          "whenToUse": "Set Precision only when the SQL parameter type needs that metadata; the binder validates it before execution.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Scale",
+          "description": "Read SQL parameter descriptor Scale.",
+          "whenToUse": "Set Scale only when the SQL parameter type needs that metadata; the binder validates it before execution.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Size",
+          "description": "Read SQL parameter descriptor Size.",
+          "whenToUse": "Set Size for string or binary SQL parameters with any non-Input direction; omit it for ordinary Input parameters unless explicit size metadata is needed.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.SqlDbType",
+          "description": "Read SQL parameter descriptor SqlDbType.",
+          "whenToUse": "Supply a supported SqlDbType in each SQL parameter descriptor so values can be converted and bound.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Value",
+          "description": "Read SQL parameter descriptor Value.",
+          "whenToUse": "Supply Value for Input or InputOutput descriptors; Output and ReturnValue may omit it. Null is converted to SQL DBNull for an explicitly typed descriptor.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Direction",
+          "description": "Read SQL parameter descriptor Direction.",
+          "whenToUse": "Set Input, Output, InputOutput or ReturnValue when the default Input direction does not fit this SQL parameter.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Name",
+          "description": "Read SQL parameter descriptor Name.",
+          "whenToUse": "Supply an @-prefixed SQL parameter name in the descriptor; names must match the supported identifier pattern.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Precision",
+          "description": "Read SQL parameter descriptor Precision.",
+          "whenToUse": "Set Precision only when the SQL parameter type needs that metadata; the binder validates it before execution.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Scale",
+          "description": "Read SQL parameter descriptor Scale.",
+          "whenToUse": "Set Scale only when the SQL parameter type needs that metadata; the binder validates it before execution.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Size",
+          "description": "Read SQL parameter descriptor Size.",
+          "whenToUse": "Set Size for string or binary SQL parameters with any non-Input direction; omit it for ordinary Input parameters unless explicit size metadata is needed.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].SqlDbType",
+          "description": "Read SQL parameter descriptor SqlDbType.",
+          "whenToUse": "Supply a supported SqlDbType in each SQL parameter descriptor so values can be converted and bound.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Value",
+          "description": "Read SQL parameter descriptor Value.",
+          "whenToUse": "Supply Value for Input or InputOutput descriptors; Output and ReturnValue may omit it. Null is converted to SQL DBNull for an explicitly typed descriptor.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[$key]",
+          "description": "Bind a scalar dictionary parameter by its literal key.",
+          "whenToUse": "Use the literal @-prefixed dictionary key for a supported nonnull scalar SQL parameter value when type inference is enough; use a descriptor instead for null, output direction or explicit type metadata.",
+          "adapters": [
+            "Data_AzureSql"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$Parameters[$key]"
+        },
+        {
+          "path": "Config.Sql.TransactionMode",
+          "description": "Choose and validate SQL transaction behavior.",
+          "whenToUse": "Use Required for SQL Delete; None and other values are rejected by the execution boundary.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.Operation",
+          "type": "String",
+          "description": "selected verb [constant]. When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.ResultSets",
+          "type": "array",
+          "description": "reader sets; Admin has empty array [provider-returned]. When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.ResultSets[*].Name",
+          "type": "String",
+          "description": "result-set name [provider-returned] (conditional). When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.ResultSets[*].Columns",
+          "type": "array",
+          "description": "column descriptors [provider-returned] (conditional). When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.ResultSets[*].Rows",
+          "type": "array",
+          "description": "result rows; can be empty [provider-returned] (conditional). When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.RowsAffected",
+          "type": "Int32/null",
+          "description": "provider affected count or unavailable [provider-returned]. When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.OutputParameters",
+          "type": "object",
+          "description": "SQL output parameters [provider-returned]. When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When ADX target, validated command and token; ADX response validated.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "decoded.Operation",
+          "type": "String",
+          "description": "Delete [constant]. When ADX target, validated command and token; ADX response validated.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "decoded.Tables",
+          "type": "array",
+          "description": "validated ADX tables [provider-returned]. When ADX target, validated command and token; ADX response validated.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_AzureSql: Decimal/large integer values may be strings, byte arrays base64, dates UTC strings. Data mapped wrapper retains failure Result when supplied",
+        "Data_AzureDataExplorer: No live ADX response was observed",
+        "Data_ArtifactProcess: unsupported — Catalog properties include Data_ArtifactProcess for this verb but checked-in host does not implement it"
+      ]
+    },
+    {
+      "name": "Admin",
+      "whenToUse": "Choose Admin for an Azure SQL or Data Explorer administration command. SQL can use Required or None transaction mode.",
+      "description": "Run an administration command.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract the operation configuration after adapter and activity validation.",
+          "whenToUse": "Supply the provider-qualified Config.Sql branch for Azure SQL or Config.ADX for Data Explorer. Legacy top-level SQL fields and target overrides are rejected.",
+          "adapters": [
+            "Data_AzureDataExplorer",
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Sql.CommandText",
+          "description": "Read and validate the operation command text.",
+          "whenToUse": "Supply nonblank SQL command text for Admin; this route requires it under Config.Sql, not legacy Config.CommandText.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.ADX.CommandText",
+          "description": "Read and validate the operation command text.",
+          "whenToUse": "Supply a nonblank control command beginning with a dot for the Data Explorer management endpoint.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config.Sql.CommandTimeoutSeconds",
+          "description": "Choose a caller-specified SQL command timeout.",
+          "whenToUse": "Set a command timeout only when the adapter default is unsuitable for this SQL operation.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters",
+          "description": "Read SQL parameters for command binding.",
+          "whenToUse": "Supply SQL parameters only when the command needs bound values or output descriptors; omit for commands with no parameters.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Direction",
+          "description": "Read SQL parameter descriptor Direction.",
+          "whenToUse": "Set Input, Output, InputOutput or ReturnValue when the default Input direction does not fit this SQL parameter.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Name",
+          "description": "Read SQL parameter descriptor Name.",
+          "whenToUse": "Supply an @-prefixed SQL parameter name in the descriptor; names must match the supported identifier pattern.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Precision",
+          "description": "Read SQL parameter descriptor Precision.",
+          "whenToUse": "Set Precision only when the SQL parameter type needs that metadata; the binder validates it before execution.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Scale",
+          "description": "Read SQL parameter descriptor Scale.",
+          "whenToUse": "Set Scale only when the SQL parameter type needs that metadata; the binder validates it before execution.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Size",
+          "description": "Read SQL parameter descriptor Size.",
+          "whenToUse": "Set Size for string or binary SQL parameters with any non-Input direction; omit it for ordinary Input parameters unless explicit size metadata is needed.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.SqlDbType",
+          "description": "Read SQL parameter descriptor SqlDbType.",
+          "whenToUse": "Supply a supported SqlDbType in each SQL parameter descriptor so values can be converted and bound.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters.Value",
+          "description": "Read SQL parameter descriptor Value.",
+          "whenToUse": "Supply Value for Input or InputOutput descriptors; Output and ReturnValue may omit it. Null is converted to SQL DBNull for an explicitly typed descriptor.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Direction",
+          "description": "Read SQL parameter descriptor Direction.",
+          "whenToUse": "Set Input, Output, InputOutput or ReturnValue when the default Input direction does not fit this SQL parameter.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Name",
+          "description": "Read SQL parameter descriptor Name.",
+          "whenToUse": "Supply an @-prefixed SQL parameter name in the descriptor; names must match the supported identifier pattern.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Precision",
+          "description": "Read SQL parameter descriptor Precision.",
+          "whenToUse": "Set Precision only when the SQL parameter type needs that metadata; the binder validates it before execution.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Scale",
+          "description": "Read SQL parameter descriptor Scale.",
+          "whenToUse": "Set Scale only when the SQL parameter type needs that metadata; the binder validates it before execution.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Size",
+          "description": "Read SQL parameter descriptor Size.",
+          "whenToUse": "Set Size for string or binary SQL parameters with any non-Input direction; omit it for ordinary Input parameters unless explicit size metadata is needed.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].SqlDbType",
+          "description": "Read SQL parameter descriptor SqlDbType.",
+          "whenToUse": "Supply a supported SqlDbType in each SQL parameter descriptor so values can be converted and bound.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[*].Value",
+          "description": "Read SQL parameter descriptor Value.",
+          "whenToUse": "Supply Value for Input or InputOutput descriptors; Output and ReturnValue may omit it. Null is converted to SQL DBNull for an explicitly typed descriptor.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "Config.Sql.Parameters[$key]",
+          "description": "Bind a scalar dictionary parameter by its literal key.",
+          "whenToUse": "Use the literal @-prefixed dictionary key for a supported nonnull scalar SQL parameter value when type inference is enough; use a descriptor instead for null, output direction or explicit type metadata.",
+          "adapters": [
+            "Data_AzureSql"
+          ],
+          "pathKind": "dynamic",
+          "pathExpression": "$Parameters[$key]"
+        },
+        {
+          "path": "Config.Sql.TransactionMode",
+          "description": "Choose and validate SQL transaction behavior.",
+          "whenToUse": "Use Required for a transaction or None only when this SQL Write/Admin operation is intentionally nontransactional; other values are rejected.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.Operation",
+          "type": "String",
+          "description": "selected verb [constant]. When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.ResultSets",
+          "type": "array",
+          "description": "reader sets; Admin has empty array [provider-returned]. When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.ResultSets[*].Name",
+          "type": "String",
+          "description": "result-set name [provider-returned] (conditional). When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.ResultSets[*].Columns",
+          "type": "array",
+          "description": "column descriptors [provider-returned] (conditional). When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.ResultSets[*].Rows",
+          "type": "array",
+          "description": "result rows; can be empty [provider-returned] (conditional). When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.RowsAffected",
+          "type": "Int32/null",
+          "description": "provider affected count or unavailable [provider-returned]. When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "decoded.OutputParameters",
+          "type": "object",
+          "description": "SQL output parameters [provider-returned]. When valid Config and SQL destination; CommandText selected; SQL execution returns validated envelope.",
+          "adapters": [
+            "Data_AzureSql"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When ADX target, validated command and token; ADX response validated.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "decoded.Operation",
+          "type": "String",
+          "description": "Admin [constant]. When ADX target, validated command and token; ADX response validated.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "decoded.Tables",
+          "type": "array",
+          "description": "validated ADX tables [provider-returned]. When ADX target, validated command and token; ADX response validated.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_AzureSql: Decimal/large integer values may be strings, byte arrays base64, dates UTC strings. Data mapped wrapper retains failure Result when supplied",
+        "Data_AzureDataExplorer: No live ADX response was observed",
+        "Data_ArtifactProcess: unsupported — Catalog properties include Data_ArtifactProcess for this verb but checked-in host does not implement it"
+      ]
+    },
+    {
+      "name": "WriteItem",
+      "whenToUse": "Choose WriteItem for Data Explorer single-item ingestion with table and mapping fields.",
+      "description": "Write one data item.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "whenToUse": "Supply Config.ADX with TableName and MappingName for WriteItem ingestion; the branch rejects legacy top-level TableName, MappingName and ContentKey fields.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ADX.ContentKey",
+          "description": "Select Data Explorer ingestion ContentKey.",
+          "whenToUse": "Set the item content key only when the default Content field does not identify WriteItem rows.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ],
+          "default": {
+            "Data_AzureDataExplorer": "Content"
+          }
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ADX.MappingName",
+          "description": "Select Data Explorer ingestion MappingName.",
+          "whenToUse": "Supply the Data Explorer ingestion mapping for WriteItem; it is required in the ingest request.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config.ADX.TableName",
+          "description": "Select Data Explorer ingestion TableName.",
+          "whenToUse": "Supply the target Data Explorer table for WriteItem ingestion; it is required before building the ingest URL.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context references while cloning the legacy Data Explorer request.",
+          "whenToUse": "Preserve the incoming conduction context when the legacy Data Explorer request is cloned; this is context metadata, not a provider command input.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context references while cloning the legacy Data Explorer request.",
+          "whenToUse": "Preserve the incoming conduction context when the legacy Data Explorer request is cloned; this is context metadata, not a provider command input.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        }
+      ],
+      "result": [],
+      "resultNotes": [
+        "No stable public Result field is available for this activity; inspect the Signal/effect at its actual boundary.",
+        "Data_AzureDataExplorer: success can have no Result (REST ingest call succeeds, but source never assigns resultSignal)",
+        "Data_AzureDataExplorer: Neither branch exposes a factual ingestion/ack receipt; WriteBatch source appears copied from queue logic",
+        "Data_ArtifactProcess: unsupported",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "WriteBatch",
+      "whenToUse": "Do not choose WriteBatch for Data Explorer batch ingestion: its current legacy branch reads queue MessageId/PopReceipt, invokes a REST Delete and returns an unresolved signal.",
+      "description": "Write a batch of data items.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "whenToUse": "Do not supply Config.ADX expecting batch ingestion: this legacy WriteBatch branch instead follows queue-style acknowledgement and has no batch-data input.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Phase",
+          "description": "Preserve conduction context references while cloning the legacy Data Explorer request.",
+          "whenToUse": "Preserve the incoming conduction context when the legacy Data Explorer request is cloned; this is context metadata, not a provider command input.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Plan",
+          "description": "Preserve conduction context references while cloning the legacy Data Explorer request.",
+          "whenToUse": "Preserve the incoming conduction context when the legacy Data Explorer request is cloned; this is context metadata, not a provider command input.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        }
+      ],
+      "result": [],
+      "resultNotes": [
+        "No stable public Result field is available for this activity; inspect the Signal/effect at its actual boundary.",
+        "Data_AzureDataExplorer: success can have no Result (REST delete call succeeds, but unresolved resultSignal has no Result)",
+        "Data_AzureDataExplorer: Neither branch exposes a factual ingestion/ack receipt; WriteBatch source appears copied from queue logic",
+        "Data_ArtifactProcess: unsupported",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "OpenCanonical",
+      "description": "Open a canonical artifact record.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultText",
+          "description": "Supply artifact-process DefaultText for OpenCanonical.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Resource",
+          "description": "Supply artifact-process Resource for OpenCanonical.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; existing canonical file is read or validated default is published.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. Read-looking verb can mutate canonical file",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "CaptureWriter",
+      "description": "Capture a writer's artifact baseline.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultText",
+          "description": "Supply artifact-process DefaultText for CaptureWriter.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Group",
+          "description": "Supply artifact-process Group for CaptureWriter.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Resource",
+          "description": "Supply artifact-process Resource for CaptureWriter.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Writer",
+          "description": "Supply artifact-process Writer for CaptureWriter.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; writer capture succeeds.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.OperationId",
+          "type": "Guid string",
+          "description": "new capture ID [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; writer capture succeeds.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.ArtifactName",
+          "type": "String",
+          "description": "validated artifact name [echoed-input]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; writer capture succeeds.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Container",
+          "type": "String",
+          "description": "validated container [echoed-input]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; writer capture succeeds.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Resource",
+          "type": "String",
+          "description": "validated resource [echoed-input]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; writer capture succeeds.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.SourceText",
+          "type": "String",
+          "description": "existing or default baseline text [provider-returned]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; writer capture succeeds.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.GenerationToken",
+          "type": "Guid string/null",
+          "description": "curation generation if started [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; writer capture succeeds.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "ReadCaptured",
+      "description": "Read a captured baseline.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.OperationId",
+          "description": "Supply artifact-process OperationId for ReadCaptured.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; known capture operation ID.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. Unknown capture fails; this is not a fresh file read",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "PublishWriter",
+      "description": "Publish a writer's candidate.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.CandidateText",
+          "description": "Supply artifact-process CandidateText for PublishWriter.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.GenerationToken",
+          "description": "Supply artifact-process GenerationToken for PublishWriter.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.OperationId",
+          "description": "Supply artifact-process OperationId for PublishWriter.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; publication status Published or Superseded.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Status",
+          "type": "String",
+          "description": "Published or Superseded [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; publication status Published or Superseded.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.IngestionEligible",
+          "type": "Boolean",
+          "description": "writer is not Draft [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; publication status Published or Superseded.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.AuxiliaryRepair",
+          "type": "String",
+          "description": "repair instruction [constant]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; publication status Published or Superseded.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. Nonpublished host status is discarded by bridge and absent from public Result",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "CreateEntry",
+      "description": "Create an entry from a draft capture.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.CandidateText",
+          "description": "Supply artifact-process CandidateText for CreateEntry.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DraftContainer",
+          "description": "Supply artifact-process DraftContainer for CreateEntry.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DraftName",
+          "description": "Supply artifact-process DraftName for CreateEntry.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DraftOperationId",
+          "description": "Supply artifact-process DraftOperationId for CreateEntry.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.OperationId",
+          "description": "Supply artifact-process OperationId for CreateEntry.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; entry status Published or Superseded.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Status",
+          "type": "String",
+          "description": "publication status [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; entry status Published or Superseded.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.IngestionEligible",
+          "type": "Boolean",
+          "description": "true [constant]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; entry status Published or Superseded.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "OpenArtifactProcess",
+      "description": "Open an artifact process report.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; process report opens.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Process.Parts",
+          "type": "object",
+          "description": "declared parts; ingestion VerificationStatus Unknown [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; process report opens.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. This is report construction, not SQL verification",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "InspectArtifactParts",
+      "description": "Inspect artifact parts.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; content/part report generated.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Process.Parts.*.Content.Status",
+          "type": "String",
+          "description": "Present/Missing/Invalid from observed content [measured]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; content/part report generated.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Process.Parts.*.Ingestion.VerificationStatus",
+          "type": "String",
+          "description": "SQL verification or Unknown [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; content/part report generated.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. SQL query exceptions are caught and reported as Unknown while Signal can remain success",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "StartArtifactGeneration",
+      "description": "Start generation of an artifact part.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.PartName",
+          "description": "Supply artifact-process PartName for StartArtifactGeneration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; generation starts.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.OperationId",
+          "type": "Guid string",
+          "description": "generation ID [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; generation starts.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "PublishArtifactCandidate",
+      "description": "Publish a generated artifact candidate.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.CandidateText",
+          "description": "Supply artifact-process CandidateText for PublishArtifactCandidate.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.OperationId",
+          "description": "Supply artifact-process OperationId for PublishArtifactCandidate.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.PartName",
+          "description": "Supply artifact-process PartName for PublishArtifactCandidate.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; status Published or Superseded.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Status",
+          "type": "String",
+          "description": "publication state [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; status Published or Superseded.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. Bridge discards nonpublished status before SetResult",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "FailArtifactGeneration",
+      "description": "Mark artifact generation as failed.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.OperationId",
+          "description": "Supply artifact-process OperationId for FailArtifactGeneration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.PartName",
+          "description": "Supply artifact-process PartName for FailArtifactGeneration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Artifact",
+          "type": "String",
+          "description": "coordinator artifact identity [echoed-input]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Revision",
+          "type": "Int64",
+          "description": "journal revision [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Generations",
+          "type": "object",
+          "description": "generation lifecycle [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Deliveries",
+          "type": "object",
+          "description": "delivery lifecycle [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.SyncCheckpoint",
+          "type": "object/null",
+          "description": "last sync checkpoint [computed] (conditional). When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. State includes Owner, Completed, Rejections, Snapshots, WorkerEpoch and PublicationUnknown beyond abbreviated shape",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "CompleteArtifactGeneration",
+      "description": "Complete published artifact generation.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.OperationId",
+          "description": "Supply artifact-process OperationId for CompleteArtifactGeneration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.PartName",
+          "description": "Supply artifact-process PartName for CompleteArtifactGeneration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Artifact",
+          "type": "String",
+          "description": "coordinator artifact identity [echoed-input]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Revision",
+          "type": "Int64",
+          "description": "journal revision [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Generations",
+          "type": "object",
+          "description": "generation lifecycle [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Deliveries",
+          "type": "object",
+          "description": "delivery lifecycle [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.SyncCheckpoint",
+          "type": "object/null",
+          "description": "last sync checkpoint [computed] (conditional). When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. State includes Owner, Completed, Rejections, Snapshots, WorkerEpoch and PublicationUnknown beyond abbreviated shape",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "RetryRejectedPart",
+      "description": "Retry a rejected artifact part.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.EventReference",
+          "description": "Supply artifact-process EventReference for RetryRejectedPart.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.PartName",
+          "description": "Supply artifact-process PartName for RetryRejectedPart.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; freshness not NotIngested or Changed.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Status",
+          "type": "String",
+          "description": "freshness disposition [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; freshness not NotIngested or Changed.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; delivery enqueued/adopted/submitted.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Artifact",
+          "type": "String",
+          "description": "coordinator artifact identity [echoed-input]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; delivery enqueued/adopted/submitted.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Revision",
+          "type": "Int64",
+          "description": "journal revision [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; delivery enqueued/adopted/submitted.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Generations",
+          "type": "object",
+          "description": "generation lifecycle [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; delivery enqueued/adopted/submitted.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Deliveries",
+          "type": "object",
+          "description": "delivery lifecycle [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; delivery enqueued/adopted/submitted.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.SyncCheckpoint",
+          "type": "object/null",
+          "description": "last sync checkpoint [computed] (conditional). When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; delivery enqueued/adopted/submitted.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. Early freshness branch is a status-only object, not full coordinator State",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "IngestArtifactPart",
+      "description": "Ingest an artifact part.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.PartName",
+          "description": "Supply artifact-process PartName for IngestArtifactPart.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; freshness not NotIngested or Changed.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Status",
+          "type": "String",
+          "description": "freshness disposition [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; freshness not NotIngested or Changed.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; delivery enqueued/adopted/submitted.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Artifact",
+          "type": "String",
+          "description": "coordinator artifact identity [echoed-input]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; delivery enqueued/adopted/submitted.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Revision",
+          "type": "Int64",
+          "description": "journal revision [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; delivery enqueued/adopted/submitted.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Generations",
+          "type": "object",
+          "description": "generation lifecycle [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; delivery enqueued/adopted/submitted.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Deliveries",
+          "type": "object",
+          "description": "delivery lifecycle [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; delivery enqueued/adopted/submitted.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.SyncCheckpoint",
+          "type": "object/null",
+          "description": "last sync checkpoint [computed] (conditional). When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; delivery enqueued/adopted/submitted.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. Early freshness branch is a status-only object, not full coordinator State",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "ReconcileDelivery",
+      "description": "Reconcile delivery state.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.PartName",
+          "description": "Supply artifact-process PartName for ReconcileDelivery.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; reconciliation evaluates scoped SQL result.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Resolved",
+          "type": "Boolean",
+          "description": "whether uncertain delivery resolved [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; reconciliation evaluates scoped SQL result.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. Resolved=false can be a successful Signal",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "ResumeDelivery",
+      "description": "Resume a pending delivery.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.EventReference",
+          "description": "Supply artifact-process EventReference for ResumeDelivery.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.PartName",
+          "description": "Supply artifact-process PartName for ResumeDelivery.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Artifact",
+          "type": "String",
+          "description": "coordinator artifact identity [echoed-input]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Revision",
+          "type": "Int64",
+          "description": "journal revision [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Generations",
+          "type": "object",
+          "description": "generation lifecycle [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Deliveries",
+          "type": "object",
+          "description": "delivery lifecycle [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.SyncCheckpoint",
+          "type": "object/null",
+          "description": "last sync checkpoint [computed] (conditional). When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. State includes Owner, Completed, Rejections, Snapshots, WorkerEpoch and PublicationUnknown beyond abbreviated shape",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "RetireDelivery",
+      "description": "Retire a verified delivery.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.EventReference",
+          "description": "Supply artifact-process EventReference for RetireDelivery.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.PartName",
+          "description": "Supply artifact-process PartName for RetireDelivery.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Artifact",
+          "type": "String",
+          "description": "coordinator artifact identity [echoed-input]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Revision",
+          "type": "Int64",
+          "description": "journal revision [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Generations",
+          "type": "object",
+          "description": "generation lifecycle [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Deliveries",
+          "type": "object",
+          "description": "delivery lifecycle [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.SyncCheckpoint",
+          "type": "object/null",
+          "description": "last sync checkpoint [computed] (conditional). When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. State includes Owner, Completed, Rejections, Snapshots, WorkerEpoch and PublicationUnknown beyond abbreviated shape",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "RepairUnpublished",
+      "description": "Repair an unpublished artifact.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.EventReference",
+          "description": "Supply artifact-process EventReference for RepairUnpublished.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Artifact",
+          "type": "String",
+          "description": "coordinator artifact identity [echoed-input]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Revision",
+          "type": "Int64",
+          "description": "journal revision [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Generations",
+          "type": "object",
+          "description": "generation lifecycle [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Deliveries",
+          "type": "object",
+          "description": "delivery lifecycle [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.SyncCheckpoint",
+          "type": "object/null",
+          "description": "last sync checkpoint [computed] (conditional). When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. State includes Owner, Completed, Rejections, Snapshots, WorkerEpoch and PublicationUnknown beyond abbreviated shape",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "SaveArtifactProcess",
+      "description": "Save an artifact process snapshot.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; snapshot saved or existing pending snapshot retried.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Version",
+          "type": "Int64",
+          "description": "document revision [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; snapshot saved or existing pending snapshot retried.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Status",
+          "type": "String",
+          "description": "publication outcome [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; snapshot saved or existing pending snapshot retried.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "SyncArtifactProcess",
+      "description": "Synchronize an artifact process.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; sync preparation/submission completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.OperationId",
+          "type": "Guid string",
+          "description": "sync operation [computed] (conditional). When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; sync preparation/submission completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Version",
+          "type": "Int64",
+          "description": "checkpoint version [computed] (conditional). When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; sync preparation/submission completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Hash",
+          "type": "String",
+          "description": "snapshot hash [computed] (conditional). When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; sync preparation/submission completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. No-op sync can retain prior checkpoint; do not infer new SQL effect from Result alone",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    },
+    {
+      "name": "ReconcileArtifactProcess",
+      "description": "Reconcile an artifact process.",
+      "properties": [
+        {
+          "path": "Config",
+          "description": "Extract and validate Data Explorer operation configuration.",
+          "adapters": [
+            "Data_AzureDataExplorer"
+          ]
+        },
+        {
+          "path": "Config",
+          "description": "Serialize the artifact-process request configuration.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.ArtifactName",
+          "description": "Identify the artifact-process ArtifactName.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Container",
+          "description": "Identify the artifact-process Container.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.Content",
+          "description": "Serialize Content into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "Config.DefaultContent",
+          "description": "Serialize DefaultContent into generated artifact text.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "path": "$",
+          "type": "JSON string",
+          "description": "Outer JSON text. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Artifact",
+          "type": "String",
+          "description": "coordinator artifact identity [echoed-input]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Revision",
+          "type": "Int64",
+          "description": "journal revision [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Generations",
+          "type": "object",
+          "description": "generation lifecycle [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.Deliveries",
+          "type": "object",
+          "description": "delivery lifecycle [computed]. When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        },
+        {
+          "path": "decoded.SyncCheckpoint",
+          "type": "object/null",
+          "description": "last sync checkpoint [computed] (conditional). When jacket-owned isolated/single-publisher runtime; Plan.Config carries domain request only; coordinator transition completes.",
+          "adapters": [
+            "Data_ArtifactProcess"
+          ]
+        }
+      ],
+      "resultNotes": [
+        "decoded.* is a documentation selector after parsing the outer JSON string, not a property of the returned string.",
+        "Data_ArtifactProcess: Result is an outer JSON string; decode with Format.Json. Checked-in Host.cs is source evidence, not proof a matching binary was loaded. State includes Owner, Completed, Rejections, Snapshots, WorkerEpoch and PublicationUnknown beyond abbreviated shape",
+        "Data_AzureDataExplorer: unsupported — Catalog property applicability overstates ADX support for this ArtifactProcess verb",
+        "Data_AzureSql: unsupported"
+      ]
+    }
+  ],
+  "concreteAdapters": [
+    {
+      "name": "Data_AzureSql",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureSql/PowerShell/Data_AzureSql.ps1"
+    },
+    {
+      "name": "Data_AzureDataExplorer",
+      "repository": "SovereignTrust.Adapters",
+      "path": "Src/Data/AzureDataExplorer/PowerShell/Data_AzureDataExplorer.psm1"
+    },
+    {
+      "name": "Data_ArtifactProcess",
+      "repository": "SDAFusion.Adapters",
+      "path": "Src/Data/ArtifactProcess/PowerShell/Data_ArtifactProcess.psm1"
+    }
+  ],
+  "resultContractRef": {
+    "file": "../../ResultContracts/Mapped/MappedDataAdapter.json",
+    "version": 1
+  }
+}

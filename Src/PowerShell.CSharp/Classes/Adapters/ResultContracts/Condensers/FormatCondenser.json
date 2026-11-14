@@ -1,0 +1,296 @@
+{
+  "name": "FormatCondenser",
+  "resultContractVersion": 1,
+  "resultEvidence": [
+    {
+      "id": "s1",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/Condenser/FormatCondenser.ps1",
+      "sha256": "2672C6E897AC29F5C6FE53A03CB0EDCF0E78F76A5930EF097A2D3F0FDCEC8376"
+    },
+    {
+      "id": "s2",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Classes/Adapters/MappedCondenserAdapter.ps1",
+      "sha256": "CDB170DE2EB8292E350DD924703F26EF17E4839B85120D183A138221826C939E"
+    },
+    {
+      "id": "s3",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Format/Invoke-FormatXml.ps1",
+      "sha256": "D350AC7D46D3AB734A4DF0C7467EF0EE9B64893CACF1AAF05FD65D4987797D89"
+    },
+    {
+      "id": "s4",
+      "repository": "SovereignTrust.Foundation",
+      "path": "Src/PowerShell/Utilities/Adapters/Condenser/Format/Invoke-FormatJson.ps1",
+      "sha256": "C84115E824F0C0BD69A97C0F35D86157F6557BFF84E466581F3072C1FBA7D7FB"
+    }
+  ],
+  "activities": [
+    {
+      "name": "Json",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "FormatCondenser",
+            "support": "implemented",
+            "when": "both verbs call Invoke-FormatJson; Plan.Format selects actual JSON mode",
+            "outcomes": [
+              {
+                "condition": "Json or JsonArray parse returns nonnull value",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "native decoded scalar/object/array",
+                "limitations": "JsonArray mode iterates and appends parsed elements; singleton cardinality depends on PowerShell pipeline"
+              },
+              {
+                "condition": "Plan.Format=JsonArray with zero inputs or parsed null elements",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Object[]",
+                "example": {
+                  "kind": "illustrative",
+                  "value": []
+                }
+              },
+              {
+                "condition": "Plan.Format=Json parses JSON null, or unsupported Plan.Format has no SetResult",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "content absent or JSON parse fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Json'",
+                "line": 42,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "\"Json\"",
+                "line": 11,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Json/JsonArray share helper and Plan.Format selection; JsonArray aggregate remains present even when empty."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "JsonArray",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "FormatCondenser",
+            "support": "implemented",
+            "when": "both verbs call Invoke-FormatJson; Plan.Format selects actual JSON mode",
+            "outcomes": [
+              {
+                "condition": "Json or JsonArray parse returns nonnull value",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "native decoded scalar/object/array",
+                "limitations": "JsonArray mode iterates and appends parsed elements; singleton cardinality depends on PowerShell pipeline"
+              },
+              {
+                "condition": "Plan.Format=JsonArray with zero inputs or parsed null elements",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "Object[]",
+                "example": {
+                  "kind": "illustrative",
+                  "value": []
+                }
+              },
+              {
+                "condition": "Plan.Format=Json parses JSON null, or unsupported Plan.Format has no SetResult",
+                "signalState": "success",
+                "hasResult": false,
+                "resultType": "absent"
+              },
+              {
+                "condition": "content absent or JSON parse fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'JsonArray'",
+                "line": 42,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s4",
+                "symbol": "\"JsonArray\"",
+                "line": 20,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ],
+            "limitations": "Json/JsonArray share helper and Plan.Format selection; JsonArray aggregate remains present even when empty."
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "Xml",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "FormatCondenser",
+            "support": "implemented",
+            "when": "resolved content is XMLDocument or text/object parseable by Invoke-FormatXml",
+            "outcomes": [
+              {
+                "condition": "XMLDocument input is passed through or helper parses XML",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "XmlDocument"
+              },
+              {
+                "condition": "content absent or XML parse fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Xml'",
+                "line": 42,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s3",
+                "symbol": "Invoke",
+                "line": 1,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    },
+    {
+      "name": "Text",
+      "resultContract": {
+        "boundary": "condenser leaf Signal.Result and normal MappedCondenserAdapter exposure",
+        "variants": [
+          {
+            "adapter": "FormatCondenser",
+            "support": "implemented",
+            "when": "resolved content type controls serialization",
+            "outcomes": [
+              {
+                "condition": "XMLDocument input",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "OuterXml",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "PSCustomObject input",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "String",
+                "shape": [
+                  {
+                    "path": "$",
+                    "type": "String",
+                    "presence": "required",
+                    "meaning": "compressed JSON",
+                    "origin": "computed"
+                  }
+                ]
+              },
+              {
+                "condition": "other native input",
+                "signalState": "success",
+                "hasResult": true,
+                "resultType": "native input type"
+              },
+              {
+                "condition": "content resolution fails",
+                "signalState": "failure",
+                "hasResult": false,
+                "resultType": "absent"
+              }
+            ],
+            "sideEffects": [],
+            "evidence": [
+              {
+                "source": "s1",
+                "symbol": "'Text'",
+                "line": 42,
+                "kind": "source-derived"
+              },
+              {
+                "source": "s2",
+                "symbol": "MergeSignalAndVerifyFailure",
+                "line": 75,
+                "kind": "source-derived"
+              }
+            ]
+          }
+        ],
+        "common": {
+          "mappedExposure": "Normal MappedCondenserAdapter copies a successful leaf Result only when HasResult; on leaf failure it merges and returns before copying Result, so any leaf failure Result is absent at the mapped Signal/Key."
+        }
+      }
+    }
+  ]
+}
