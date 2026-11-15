@@ -8,14 +8,14 @@ Activities: None; SubmitQuantumJob takes a circuit and job parameters.
 #>
 
 class MappedQuantumAdapter {
-    [Signal]$Signal
+    [SignalGraph.Signal]$Signal
 
     MappedQuantumAdapter() {
         # Use static Start() instead
     }
 
-    static [Signal] Start([object]$Conductor) {
-        $opSignal = [Signal]::Start("MappedQuantumAdapter.Start") | Select-Object -Last 1
+    static [SignalGraph.Signal] Start([object]$Conductor) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedQuantumAdapter.Start") | Select-Object -Last 1
 
         if (-not $Conductor) {
             $opSignal.LogCritical("Null Conductor passed to MappedQuantumAdapter.Start()")
@@ -23,27 +23,27 @@ class MappedQuantumAdapter {
         }
 
         try {
-            $adapter = [MappedQuantumAdapter]::new()
-            $adapter.Signal = [Signal]::Start("MappedQuantumAdapter") | Select-Object -Last 1
+            $adapter = [SovereignTrust.Foundation.Classes.Adapters.MappedQuantumAdapter]::new()
+            $adapter.Signal = [SignalGraph.Signal]::Start("MappedQuantumAdapter") | Select-Object -Last 1
             $adapter.Signal.SetJacket($Conductor)
             $adapter.Signal.SetReversePointer($Conductor)
 
-            $graphSignal = [Graph]::Start("MappedQuantumAdapter", $adapter, $false)
+            $graphSignal = [SignalGraph.Graph]::Start("MappedQuantumAdapter", $adapter, $false)
             $adapter.Signal.SetResult($graphSignal.GetResult())
 
             $opSignal.SetResult($adapter)
             $opSignal.LogInformation("✅ MappedQuantumAdapter initialized.")
         }
         catch {
-            $opSignal.LogCritical("💥 Exception in MappedQuantumAdapter.Start(): $_", $null, $_)
+            $opSignal.LogCritical("💥 Exception in MappedQuantumAdapter.Start(): $_", $null, $_.Exception)
         }
 
         return $opSignal
     }
 
-    [Signal] RegisterQuantumProvider([object]$QuantumProvider, [string]$Key = "QuantumService") {
-        $opSignal = [Signal]::Start("RegisterQuantumAdapter:$Key") | Select-Object -Last 1
-        $providerSignal = [Signal]::Start("QuantumAdapter:$Key") | Select-Object -Last 1
+    [SignalGraph.Signal] RegisterQuantumProvider([object]$QuantumProvider, [string]$Key = "QuantumService") {
+        $opSignal = [SignalGraph.Signal]::Start("RegisterQuantumAdapter:$Key") | Select-Object -Last 1
+        $providerSignal = [SignalGraph.Signal]::Start("QuantumAdapter:$Key") | Select-Object -Last 1
         $providerSignal.SetResult($QuantumProvider)
 
         $graph = $this.Signal.GetResult()
@@ -60,8 +60,8 @@ class MappedQuantumAdapter {
         return $opSignal
     }
 
-    [Signal] SubmitQuantumJob([string]$CircuitName, [object]$QuantumJobParameters) {
-        $opSignal = [Signal]::Start("MappedQuantumAdapter.Submit:$CircuitName") | Select-Object -Last 1
+    [SignalGraph.Signal] SubmitQuantumJob([string]$CircuitName, [object]$QuantumJobParameters) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedQuantumAdapter.Submit:$CircuitName") | Select-Object -Last 1
         $graph = $this.Signal.GetResult()
 
         foreach ($key in $graph.Grid.Keys) {

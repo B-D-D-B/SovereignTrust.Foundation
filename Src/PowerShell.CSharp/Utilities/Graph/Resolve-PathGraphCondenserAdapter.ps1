@@ -6,7 +6,7 @@ function Resolve-PathGraphCondenserAdapter {
         [object]$Conductor
     )
 
-    $opSignal = [Signal]::Start("Resolve-PathGraph:CondenserAdapter") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Resolve-PathGraph:CondenserAdapter") | Select-Object -Last 1
 
     # ░▒▓█ RESOLVE REQUIRED CONTEXT █▓▒░
     $pointerSignal = Resolve-PathFromDictionary -Dictionary $Conductor -Path "$.*.#.Adapters.*" | Select-Object -Last 1
@@ -18,14 +18,14 @@ function Resolve-PathGraphCondenserAdapter {
     }
 
     $mappedAdapter = $adapterSignal.GetResult() | Select-Object -Last 1
-    if ($mappedAdapter -is [Signal]) {
+    if ($mappedAdapter -is [SignalGraph.Signal]) {
         $mappedAdapter = $mappedAdapter.GetResult() | Select-Object -Last 1
     }
 
     #$graphSignalx = Add-PathToDictionary -Dictionary $mappedAdapter -Path "*.#.MappedCondenserAdapter" -Value $graphSignal | Select-Object -Last 1
     try {
         # ░▒▓█ BUILD AND POPULATE CONDENSER GRAPH █▓▒░
-        $graphSignal = [Graph]::Start("MappedCondenserAdapter.Graph", $Conductor, $false) | Select-Object -Last 1
+        $graphSignal = [SignalGraph.Graph]::Start("MappedCondenserAdapter.Graph", $Conductor, $false) | Select-Object -Last 1
         $graph = $graphSignal.GetResult() | Select-Object -Last 1
 
         $graph.RegisterResultAsSignal("FabCondenser",       [FabCondenser]::Start($mappedAdapter, $Conductor))       | Out-Null
@@ -46,12 +46,12 @@ function Resolve-PathGraphCondenserAdapter {
         $graph.RegisterResultAsSignal("GraphCondenser", [GraphCondenser]::Start($mappedAdapter, $Conductor)) | Out-Null
         $graph.RegisterResultAsSignal("ConductionCondenser", [ConductionCondenser]::Start($mappedAdapter, $Conductor)) | Out-Null
 
-        $graph.Finalize()
+        $graph.Complete()
         $opSignal.SetResult($graph)
         $opSignal.LogInformation("✅ Condenser formula graph created and populated with condenser adapters.")
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception while building condenser graph: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("🔥 Exception while building condenser graph: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $opSignal

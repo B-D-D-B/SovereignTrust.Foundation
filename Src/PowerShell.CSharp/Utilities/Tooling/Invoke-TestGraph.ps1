@@ -5,7 +5,7 @@ function Invoke-TestGraph {
     )
 
     # ░▒▓█ INITIALIZE GRAPH █▓▒░
-    $graphSignal = [Graph]::Start("Invoke-TestGraph", $opSignal, $true) | Select-Object -Last 1
+    $graphSignal = [SignalGraph.Graph]::Start("Invoke-TestGraph", $opSignal, $true) | Select-Object -Last 1
 
     $graph = $graphSignal.GetResult()
     $graph.Start()
@@ -23,7 +23,7 @@ function Invoke-TestGraph {
     }
 
     # ░▒▓█ CREATE SIGNAL █▓▒░
-    $depSignal = [Signal]::Start("Dependencies") | Select-Object -Last 1
+    $depSignal = [SignalGraph.Signal]::Start("Dependencies") | Select-Object -Last 1
     $depSignal.SetPointer($pointerJacket)
 
     # ░▒▓█ LOAD JSON MEMORY INTO SIGNAL █▓▒░
@@ -38,7 +38,7 @@ function Invoke-TestGraph {
     # ░▒▓█ REGISTER INTO GRAPH █▓▒░
     $graph.RegisterSignal("Dependencies", $depSignal)
     $graph.GraphSignal.LogInformation("✅ Dependencies signal registered into graph.")
-    $graph.Finalize()
+    $graph.Complete()
 
     return $graph
 }

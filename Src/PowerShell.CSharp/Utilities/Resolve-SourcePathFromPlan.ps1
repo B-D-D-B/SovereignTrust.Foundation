@@ -5,7 +5,7 @@ function Resolve-SourcePathFromPlan {
         $plan
     )
 
-    $opSignal = [Signal]::Start("Resolve-SourcePathFromPlan") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Resolve-SourcePathFromPlan") | Select-Object -Last 1
 
     try {
         # Pull plan fields

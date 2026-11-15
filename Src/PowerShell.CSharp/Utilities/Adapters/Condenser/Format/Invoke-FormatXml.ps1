@@ -4,7 +4,7 @@ function Invoke-FormatXml {
         [object]$Plan
     )
 
-    $opSignal = [Signal]::Start("Invoke-TokenFormatterJson") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-TokenFormatterJson") | Select-Object -Last 1
 
     function ConvertFrom-Xml {
         param (
@@ -51,7 +51,7 @@ function Invoke-FormatXml {
         $opSignal.LogInformation("✅ Xml Document Created from Path")
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception in Invoke-FormatXml: $_", $null, $_)
+        $opSignal.LogCritical("🔥 Exception in Invoke-FormatXml: $_", $null, $_.Exception)
     }
 
     return $opSignal

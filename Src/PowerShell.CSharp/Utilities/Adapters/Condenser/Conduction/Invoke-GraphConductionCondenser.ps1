@@ -31,16 +31,16 @@
 
 function Invoke-GraphConductionCondenser {
     param (
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
         [object]$Plan,
         [object]$ItemSignal,
         [string]$PlanWirePathPrefix = "%.%.%.@"  # <- new param with default
     )
 
-    $opSignal = [Signal]::Start("Invoke-GraphConductionCondenser:$Plan.Name", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-GraphConductionCondenser:$Plan.Name", $Signal) | Select-Object -Last 1
 
     $PlanName = $Plan.Name
-    $subSignal = [Signal]::Start("GraphPlan:$PlanName", $Signal) | Select-Object -Last 1
+    $subSignal = [SignalGraph.Signal]::Start("GraphPlan:$PlanName", $Signal) | Select-Object -Last 1
     $subSignal.SetJacket($ItemSignal) | Out-Null
 
 
@@ -54,7 +54,7 @@ function Invoke-GraphConductionCondenser {
 
     #    $ResolveAdapterSignal = Resolve-AdapterFromJacket -ConductionContext $Signal -Signal $Signal -Jacket $JacketSignal | Select-Object -Last 1
 
-    $wrappedGraphSignal = [Signal]::Start("Graph:$PlanName", $Signal) | Select-Object -Last 1
+    $wrappedGraphSignal = [SignalGraph.Signal]::Start("Graph:$PlanName", $Signal) | Select-Object -Last 1
 
     $sourcePathSignal = Resolve-SourcePathFromPlan -plan $Plan | Select-Object -Last 1
 
@@ -88,11 +88,11 @@ function Invoke-GraphConductionCondenser {
 
     $Adapter = $AdapterSignal.GetResult() | Select-Object -Last 1
 
-    while ($Adapter -is [Signal]) {
+    while ($Adapter -is [SignalGraph.Signal]) {
         $Adapter = $Adapter.GetResult()
     }
 
-    $conductionSignal = [Signal]::Start("Conduction:Signal", $Signal) | Select-Object -Last 1
+    $conductionSignal = [SignalGraph.Signal]::Start("Conduction:Signal", $Signal) | Select-Object -Last 1
     $conductionSignal.SetPointer($gridConductionPlan.GetResult()) | Out-Null
     $conductionSignal.SetJacket($ItemSignal.GetJacket()) | Out-Null
  
@@ -134,7 +134,7 @@ function Invoke-GraphConductionCondenser {
 
     $graphResult = $graphSignal.GetResult()
 
-    $wrappedGraphSignal = [Signal]::Start("Graph:$PlanName", $Signal) | Select-Object -Last 1
+    $wrappedGraphSignal = [SignalGraph.Signal]::Start("Graph:$PlanName", $Signal) | Select-Object -Last 1
     $wrappedGraphSignal.SetPointer($graphResult) | Out-Null
 
     if ($Plan.TargetWirePath) {

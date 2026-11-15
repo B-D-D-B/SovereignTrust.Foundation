@@ -4,7 +4,7 @@ function Wait-ForFileUnlock {
         [int]$TimeoutSeconds = 10
     )
 
-    $signal = [Signal]::Start("Wait-ForFileUnlock") | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Wait-ForFileUnlock") | Select-Object -Last 1
 
     if (-not (Test-Path $FilePath)) {
         $signal.LogCritical("❌ File not found: $FilePath")

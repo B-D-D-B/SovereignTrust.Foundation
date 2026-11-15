@@ -10,24 +10,24 @@ UnsupportedActivity: FailedSignal
 ActivityComparison: CaseInsensitive
 #>
 class Token_Generator {
-    [Signal]$Signal
-    [Conductor]$Conductor
-    [MappedTokenAdapter]$MappedAdapter
+    [SignalGraph.Signal]$Signal
+    [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor
+    [SovereignTrust.Foundation.Classes.Adapters.MappedTokenAdapter]$MappedAdapter
     [object]$Jacket
 
     Token_Generator() {
     }
 
-    static [Token_Generator] Start([MappedTokenAdapter]$mappedAdapter, [Conductor]$conductor) {
+    static [Token_Generator] Start([SovereignTrust.Foundation.Classes.Adapters.MappedTokenAdapter]$mappedAdapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
         $instance = [Token_Generator]::new()
         $instance.MappedAdapter = $mappedAdapter
         $instance.Conductor = $conductor
-        $instance.Signal = [Signal]::Start("GraphCondenser")
+        $instance.Signal = [SignalGraph.Signal]::Start("GraphCondenser")
         return $instance
     }
 
-    [Signal] Construct([object]$dictionary) {
-        $opSignal = [Signal]::Start("Construct-EmbeddedFileSystem") | Select-Object -Last 1
+    [SignalGraph.Signal] Construct([object]$dictionary) {
+        $opSignal = [SignalGraph.Signal]::Start("Construct-EmbeddedFileSystem") | Select-Object -Last 1
 
         try {
             if ($null -eq $dictionary) {
@@ -44,8 +44,8 @@ class Token_Generator {
         return $opSignal
     }
 
-    [Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
-        $opSignal = [Signal]::Start("Token_Generator.Invoke") | Select-Object -Last 1
+    [SignalGraph.Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
+        $opSignal = [SignalGraph.Signal]::Start("Token_Generator.Invoke") | Select-Object -Last 1
 
         if ($Activity -notin @('Get')) {
             $opSignal.LogCritical("Unsupported Token_Generator activity: '$Activity'.")
@@ -66,7 +66,7 @@ class Token_Generator {
             }
         }
         catch {
-            $opSignal.LogCritical("🔥 Exception in Token_Generator.Invoke: $($_.Exception.Message)", $null, $_)
+            $opSignal.LogCritical("🔥 Exception in Token_Generator.Invoke: $($_.Exception.Message)", $null, $_.Exception)
         }
 
         return $opSignal

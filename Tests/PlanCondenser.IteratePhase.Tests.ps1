@@ -263,4 +263,143 @@ $singleResult = $condenser.Invoke($null, 'IteratePhase', $context.ConductionSign
 Assert-True (-not $singleResult.Failure()) 'Single-item serial fallback failed.'
 Assert-True (($script:sequentialIndices -join ',') -eq '0' -and $script:poolCalls.Count -eq 0) 'Single-item fallback did not execute exactly once.'
 
-Write-Output "PASS: $script:assertions IteratePhase assertions (warmup, parallel dispatch, diagnostics, inline debugging, throttling, grid reuse, validation, and serial-only isolation)."
+# Selection spies retain actual values/context and call the real clone helper.
+$script:selectedCalls = [System.Collections.Generic.List[object]]::new()
+$script:cloneCount = 0
+$script:realClone = ${function:Resolve-ClonePlan}
+function Resolve-ClonePlan { param($Plan) $script:cloneCount++; & $script:realClone -Plan $Plan }
+function Invoke-PlanIteration {
+    param($ConductionSignal, $ItemSignal, $Plan, $Iteration, [int]$IterationIndex, $IterationName, $IterationArray)
+    $script:sequentialIndices.Add($IterationIndex)
+    $script:selectedCalls.Add([pscustomobject]@{ Value=$Iteration; Index=$IterationIndex; Name=$IterationName; Array=$IterationArray })
+    $null = Resolve-ClonePlan -Plan $Plan
+    [Signal]::Start("Selected:$IterationIndex") | Select-Object -Last 1
+}
+function Invoke-SelectionCase($Items, [hashtable]$Settings, [object]$Threading = $null, $TestContext = $context) {
+    $script:sequentialIndices.Clear(); $script:poolCalls.Clear(); $script:selectedCalls.Clear(); $script:cloneCount=0
+    $testPlan=New-TestPlan -Threading $Threading
+    $testPlan.Config.IterationArray=$Items
+    foreach($setting in $Settings.Keys) { $testPlan.Config | Add-Member -NotePropertyName $setting -NotePropertyValue $Settings[$setting] }
+    return $condenser.Invoke($null,'IteratePhase',$TestContext.ConductionSignal,$testPlan,$TestContext.ItemSignal)
+}
+function Assert-SelectionFailure($Items, [hashtable]$Settings) {
+    $failed=Invoke-SelectionCase $Items $Settings @{Enabled=$true; Warmup=0}
+    Assert-True ($failed.Failure()) "Invalid selection accepted: $($Settings | ConvertTo-Json -Compress)"
+    Assert-True ($failed.Level -eq 'Critical') 'Selection failure lost Critical status.'
+    Assert-True ($script:cloneCount -eq 0 -and $script:selectedCalls.Count -eq 0 -and $script:poolCalls.Count -eq 0) 'Invalid selection cloned or dispatched records.'
+}
+$records=@(
+    [pscustomobject]@{Id='C';Meta=[pscustomobject]@{Rank=3};Keep=$true},
+    [pscustomobject]@{Id='A';Meta=[pscustomobject]@{Rank=1};Keep=$false},
+    [pscustomobject]@{Id='B';Meta=[pscustomobject]@{Rank=2};Keep=$true},
+    [pscustomobject]@{Id='B2';Meta=[pscustomobject]@{Rank=2};Keep=$true}
+)
+foreach($case in @(
+    @{S=@{}; E='C,A,B,B2'}, @{S=@{OrderDirection=' desc '};E='C,A,B,B2'},
+    @{S=@{OrderBy=' Meta.Rank '};E='C,B,B2,A'}, @{S=@{OrderBy='Meta.Rank';OrderDirection=$null};E='C,B,B2,A'},
+    @{S=@{OrderBy='Meta.Rank';OrderDirection='ASC'};E='A,B,B2,C'}, @{S=@{OrderBy='Meta.Rank';OrderDirection='desc'};E='C,B,B2,A'},
+    @{S=@{OrderBy='Meta.Rank';OrderDirection='ASC';Limit=2};E='A,B'}, @{S=@{OrderBy='Meta.Rank';OrderDirection='DESC';Limit=2};E='C,B'},
+    @{S=@{Limit=2};E='C,A'}, @{S=@{Limit=0};E=''}, @{S=@{Limit=1};E='C'},
+    @{S=@{Limit=4};E='C,A,B,B2'}, @{S=@{Limit=5};E='C,A,B,B2'}, @{S=@{Limit=[long]::MaxValue};E='C,A,B,B2'},
+    @{S=@{OrderBy=$null;OrderDirection=$null;Limit=$null};E='C,A,B,B2'}
+)) {
+    $outcome=Invoke-SelectionCase $records $case.S
+    Assert-True (-not $outcome.Failure()) 'Valid order/limit case failed.'
+    Assert-True (($script:selectedCalls.Value.Id -join ',') -ceq $case.E) "Wrong selection, expected $($case.E)."
+    Assert-True ($script:cloneCount -eq $script:selectedCalls.Count) 'Selection clone count differs.'
+    for($i=0;$i -lt $script:selectedCalls.Count;$i++) {
+        $call=$script:selectedCalls[$i]
+        Assert-True ($call.Index -eq $i -and $call.Name -eq 'CurrentItem' -and ($call.Array.Id -join ',') -ceq $case.E) 'Serial selected context differs.'
+    }
+}
+Assert-True (($records.Id -join ',') -ceq 'C,A,B,B2' -and (($records | ForEach-Object { $_.Meta.Rank }) -join ',') -eq '3,1,2,2') 'Caller input mutated.'
+$nullRecords=@([pscustomobject]@{Id='N';Meta=$null},$records[0],[pscustomobject]@{Id='M'},$records[2],$records[3])
+foreach($direction in @('ASC','DESC')) {
+    $r=Invoke-SelectionCase $nullRecords @{OrderBy='Meta.Rank';OrderDirection=$direction}
+    $expected=if($direction -eq 'ASC'){'B,B2,C,N,M'}else{'C,B,B2,N,M'}
+    Assert-True (-not $r.Failure() -and ($script:selectedCalls.Value.Id -join ',') -ceq $expected) 'Null bucket or stable ties differ.'
+    $r=Invoke-SelectionCase @([pscustomobject]@{Id='N';Rank=$null},[pscustomobject]@{Id='M'}) @{OrderBy='Rank';OrderDirection=$direction}
+    Assert-True (-not $r.Failure() -and ($script:selectedCalls.Value.Id -join ',') -eq 'N,M') 'All-null order differs.'
+}
+$invalidFiltered=[pscustomobject]@{Id='X';Meta=[pscustomobject]@{Rank=[double]1};Keep=$false}
+$r=Invoke-SelectionCase @($records+$invalidFiltered) @{Filter='Keep|false';OrderBy='Meta.Rank';OrderDirection='ASC';Limit=2}
+Assert-True (-not $r.Failure() -and ($script:selectedCalls.Value.Id -join ',') -eq 'B,B2') 'Filter did not precede ordering/limit.'
+foreach($items in @(@(),@($records[0]))) {
+    $r=Invoke-SelectionCase $items @{OrderBy='Meta.Rank';Limit=1}
+    Assert-True (-not $r.Failure() -and $script:selectedCalls.Count -eq $items.Count) 'Empty/singleton selection differs.'
+}
+$nested=@(@{Id='D';meta=[ordered]@{RANK=2}},[pscustomobject]@{Id='P';Meta=[pscustomobject]@{Rank=1}})
+$r=Invoke-SelectionCase $nested @{OrderBy='META.rank';OrderDirection='ASC'}
+Assert-True (-not $r.Failure() -and ($script:selectedCalls.Value.Id -join ',') -eq 'P,D') 'Dictionary/NoteProperty case matching differs.'
+foreach($case in @(@{Items=@('b','A','a');Expected='A,a,b'},@{Items=@($true,$false,$false);Expected='False,False,True'})) {
+    $valueRecords=@($case.Items | ForEach-Object { [pscustomobject]@{Value=$_} })
+    $r=Invoke-SelectionCase $valueRecords @{OrderBy='Value';OrderDirection='ASC'}
+    Assert-True (-not $r.Failure() -and ($script:selectedCalls.Value.Value -join ',') -ceq $case.Expected) 'Resolved key category comparison differs.'
+}
+$tiny=[decimal]::Parse('0.0000000000000000000000000001',[cultureinfo]::InvariantCulture)
+$numeric=@([decimal]::MaxValue,[uint64]::MaxValue,[int64]::MinValue,[decimal]::MinValue,$tiny,[decimal]::Zero)
+$numericAsc=@([decimal]::MinValue,[int64]::MinValue,[decimal]::Zero,$tiny,[uint64]::MaxValue,[decimal]::MaxValue)
+foreach($direction in @('ASC','DESC')) {
+    $expected=@($numericAsc); if($direction -eq 'DESC'){[array]::Reverse($expected)}
+    foreach($limit in @(1,6)) {
+        $r=Invoke-SelectionCase @($numeric | ForEach-Object { [pscustomobject]@{Value=$_} }) @{OrderBy='Value';OrderDirection=$direction;Limit=$limit}
+        Assert-True (-not $r.Failure() -and $script:selectedCalls.Count -eq $limit) 'Exact numeric boundary selection failed.'
+        for($i=0;$i -lt $limit;$i++){Assert-True ([decimal]$script:selectedCalls[$i].Value.Value -eq [decimal]$expected[$i]) 'Numeric precision/order lost.'}
+    }
+}
+$ties=@([pscustomobject]@{Id='I';Rank=[int]1},[pscustomobject]@{Id='D';Rank=[decimal]1},[pscustomobject]@{Id='U';Rank=[uint64]1})
+$r=Invoke-SelectionCase $ties @{OrderBy='Rank';OrderDirection='DESC'}
+Assert-True (-not $r.Failure() -and ($script:selectedCalls.Value.Id -join ',') -eq 'I,D,U') 'Exact numeric ties unstable.'
+foreach($floating in @(@([double]1.0000000000000002,[double]1),@([double]1e-29,[double]0),@([single]1),@([double]::NaN),@([double]::PositiveInfinity),@([double]::NegativeInfinity))) {
+    foreach($direction in @('ASC','DESC')) { foreach($limit in @(0,1)) { Assert-SelectionFailure @($floating | ForEach-Object { [pscustomobject]@{Value=$_} }) @{OrderBy='Value';OrderDirection=$direction;Limit=$limit} } }
+}
+foreach($settings in @(@{OrderBy='@'},@{OrderBy=1},@{OrderBy=''},@{OrderBy=' '},@{OrderBy='Rank..Child'},@{OrderBy='Rank[0]'},@{OrderBy='Rank |false'},@{OrderBy='*.Rank'},@{OrderBy='Rank,Id'},@{OrderBy='Rank .Child'},@{OrderBy='$(throw 1)'},@{OrderDirection='sideways'},@{OrderDirection=1},@{Limit=-1},@{Limit=$true},@{Limit='2'},@{Limit=[double]2},@{Limit=@(1)},@{Limit=@{n=1}})) {
+    Assert-SelectionFailure $records $settings
+    Assert-SelectionFailure @() $settings
+}
+$script:getterCalls=0
+$getter=[pscustomobject]@{}
+$getter | Add-Member ScriptProperty Rank { $script:getterCalls++; throw 'Shared getter observation' }
+Add-Type -TypeDefinition 'public class OrderingGetterProbe { public static int Calls; public int Rank { get { Calls++; throw new System.Exception("Shared getter observation"); } } } public class OrderingMethodProbe { public static int Calls; public int GetRank() { Calls++; return 2; } } public class OrderingConfigProbe { public object[] IterationArray { get; set; } public string IterationName { get { return "CurrentItem"; } } public string OrderBy { get { throw new System.Exception("Config getter observation"); } } }'
+$clr=[OrderingGetterProbe]::new()
+$ambiguous=[hashtable]::new([StringComparer]::Ordinal);$ambiguous.Add('Rank',1);$ambiguous.Add('rank',2)
+foreach($case in @(@{Item=$clr;Path='Rank'},@{Item=[pscustomobject]@{Meta=$clr};Path='Meta.Rank'},@{Item=[pscustomobject]@{Rank=@{a=1}};Path='Rank'},@{Item=[System.Collections.Generic.Dictionary[string,object]]::new();Path='Rank'})) {
+    foreach($limit in @(0,1)) { Assert-SelectionFailure @($case.Item) @{OrderBy=$case.Path;Limit=$limit} }
+}
+Assert-True ([OrderingGetterProbe]::Calls -eq 4) 'Shared resolver did not execute root/nested CLR getters.'
+$r=Invoke-SelectionCase @($getter) @{OrderBy='Rank';Limit=0}
+Assert-True (-not $r.Failure() -and $script:getterCalls -eq 1 -and $script:cloneCount -eq 0 -and $script:poolCalls.Count -eq 0) 'Shared ScriptProperty no-result/null semantics differ.'
+Assert-True (@($r.Entries | Where-Object { $null -ne $_.Exception }).Count -eq 0) 'ScriptProperty probe unexpectedly exposed a structured exception.'
+foreach($case in @(@{Item=[pscustomobject]@{Rank=1};Path='Rank.Child'},@{Item=$ambiguous;Path='Rank'},@{Item=$null;Path='Rank'})) {
+    $r=Invoke-SelectionCase @($case.Item) @{OrderBy=$case.Path;Limit=0}
+    Assert-True (-not $r.Failure() -and $script:cloneCount -eq 0) 'Unreported shared traversal result did not remain nullable.'
+}
+$method=[OrderingMethodProbe]::new()
+$r=Invoke-SelectionCase @($method,[pscustomobject]@{Rank=1}) @{OrderBy='Rank';OrderDirection='ASC'}
+Assert-True (-not $r.Failure() -and [OrderingMethodProbe]::Calls -eq 1 -and [object]::ReferenceEquals($script:selectedCalls[1].Value,$method)) 'Method-backed shared key was not used for ordering.'
+$badPlan=New-TestPlan -Threading $null
+$badPlan.Config=[OrderingConfigProbe]::new();$badPlan.Config.IterationArray=$records
+$script:cloneCount=0;$script:selectedCalls.Clear();$script:poolCalls.Clear()
+$r=$condenser.Invoke($null,'IteratePhase',$context.ConductionSignal,$badPlan,$context.ItemSignal)
+Assert-True ($r.Failure() -and @($r.Entries|Where-Object {$null -ne $_.Exception}).Count -gt 0 -and $script:cloneCount -eq 0 -and $script:selectedCalls.Count -eq 0 -and $script:poolCalls.Count -eq 0) 'Configuration structured exception escaped pre-dispatch failure.'
+foreach($items in @(@(1,'1'),@($false,1),@([pscustomobject]@{a=1}))) { Assert-SelectionFailure @($items | ForEach-Object { [pscustomobject]@{Value=$_} }) @{OrderBy='Value';Limit=0} }
+$r=Invoke-SelectionCase @([pscustomobject]@{Rank=@{Nested=1}},[double]1,[DayOfWeek]::Monday) @{Limit=2}
+Assert-True (-not $r.Failure() -and $script:selectedCalls.Count -eq 2) 'Omitted ordering imposed key restrictions.'
+# Final selected array is shared by warmup, worker context and contiguous work indexes.
+foreach($mode in @(@{Enabled=$true;Warmup=1;MaxThreads=3},@{Enabled=$true;Warmup=1;MaxThreads=1;DebugInline=$true})) {
+    $r=Invoke-SelectionCase $records @{OrderBy='Meta.Rank';OrderDirection='ASC';Limit=3} $mode
+    Assert-True (-not $r.Failure() -and ($script:selectedCalls.Value.Id -join ',') -eq 'A') 'Selected warmup differs.'
+    $pool=$script:poolCalls[0]
+    Assert-True (($pool.WorkItems.Value.Id -join ',') -eq 'B,B2' -and ($pool.WorkItems.Index -join ',') -eq '1,2') 'Pool selected values/indexes differ.'
+    Assert-True (($pool.WorkerContext.IterationArray.Id -join ',') -eq 'A,B,B2' -and $pool.WorkerContext.IterationName -eq 'CurrentItem' -and ($script:selectedCalls[0].Array.Id -join ',') -eq 'A,B,B2') 'Warmup/pool context differs.'
+    Assert-True ($script:cloneCount -eq 3) 'Excluded records were cloned.'
+}
+foreach($limit in @(0,1)) {
+    $r=Invoke-SelectionCase $records @{OrderBy='Meta.Rank';OrderDirection='ASC';Limit=$limit} @{Enabled=$true;Warmup=5;MaxThreads=3}
+    Assert-True (-not $r.Failure() -and $script:poolCalls.Count -eq 0 -and $script:cloneCount -eq $limit) 'Limit below warmup cloned/dispatched excluded records.'
+}
+foreach($testContext in @($context,$disabledContext)) {
+    $r=Invoke-SelectionCase $records @{OrderBy='Meta.Rank';OrderDirection='ASC';Limit=1} @{Enabled=$true;Warmup=0;MaxThreads=3} $testContext
+    Assert-True (-not $r.Failure() -and $script:poolCalls.Count -eq 0 -and $script:selectedCalls[0].Value.Id -eq 'A') 'Selected singleton/global fallback differs.'
+}
+Write-Output "PASS: $script:assertions IteratePhase assertions (existing regressions; shared key resolution, Desc default, exact numerics, clone/dispatch boundaries and context)."

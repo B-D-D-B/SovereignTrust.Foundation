@@ -11,7 +11,7 @@ function Realize-ConductionPhase {
         [Parameter(Mandatory)][hashtable]$PhaseDictionary
     )
 
-    $signal = [Signal]::Start([IConductionPhase]) | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start([IConductionPhase]) | Select-Object -Last 1
     try {
         $typeName = $PhaseSettings.PhaseType
         if (-not $TypeDictionary.ContainsKey($typeName)) {
@@ -36,7 +36,7 @@ function Get-NextConductionPhase {
         [Parameter(Mandatory)][hashtable]$PhaseDictionary
     )
 
-    $signal = [Signal]::Start([IConductionPhase]) | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start([IConductionPhase]) | Select-Object -Last 1
     $phases = $PhaseDictionary.Values
 
     if (-not $CurrentPhase) {
@@ -45,7 +45,7 @@ function Get-NextConductionPhase {
             $signal.Result = $phases | Where-Object { -not $_.PhaseSettings.IsFailurePhase } | Select-Object -First 1
         }
     } else {
-        if ($CurrentPhase.ConductionSignalFeedback.Failure) {
+        if ($CurrentPhase.ConductionSignalFeedback.Failure()) {
             $signal.Result = $phases | Where-Object { $_.PhaseSettings.Name -eq $CurrentPhase.PhaseSettings.OnFailPhase } |
                              Select-Object -First 1
             if (-not $signal.Result) {

@@ -4,7 +4,7 @@ function Convert-VirtualPathToWirePath {
         [string]$Path = "VirtualPath"
     )
 
-    $signal = [Signal]::Start("Convert-VirtualPathToWirePath") | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Convert-VirtualPathToWirePath") | Select-Object -Last 1
 
     try {
         # ░▒▓█ RESOLVE PATH FROM DICTIONARY █▓▒░

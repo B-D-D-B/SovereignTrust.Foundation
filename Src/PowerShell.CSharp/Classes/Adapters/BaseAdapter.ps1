@@ -12,7 +12,7 @@ class BaseAdapter {
         $this.Name = $name
     }
 
-    [void] Start([Conduit]$conduit) {
+    [void] Start([SovereignTrust.Foundation.Classes.Conduction.Conduit]$conduit) {
         throw "Start() must be implemented by Adapter subclass."
     }
 

@@ -4,11 +4,11 @@ function New-MappedCondenserAdapterFromGraph {
         [object]$Conductor
     )
 
-    $opSignal = [Signal]::Start("New-MappedCondenserAdapterFromGraph") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("New-MappedCondenserAdapterFromGraph") | Select-Object -Last 1
 
     try {
         # ░▒▓█ INIT EMPTY MAPPED CONDENSER █▓▒░
-        $mappedAdapterSignal = [MappedCondenserAdapter]::Start($Conductor) | Select-Object -Last 1
+        $mappedAdapterSignal = [SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]::Start($Conductor) | Select-Object -Last 1
         if ($opSignal.MergeSignalAndVerifyFailure($mappedAdapterSignal)) {
             $opSignal.LogCritical("Failed to initialize empty MappedCondenserAdapter.")
             return $opSignal
@@ -63,7 +63,7 @@ function New-MappedCondenserAdapterFromGraph {
         $opSignal.LogInformation("🧪 MappedCondenserAdapter fully initialized and mounted.")
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception during MappedCondenserAdapter construction: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("🔥 Exception during MappedCondenserAdapter construction: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $opSignal

@@ -10,24 +10,24 @@ UnsupportedActivity: FailedSignal
 ActivityComparison: CaseInsensitive
 #>
 class Token_Environment {
-    [Signal]$Signal
-    [Conductor]$Conductor
-    [MappedTokenAdapter]$MappedAdapter
+    [SignalGraph.Signal]$Signal
+    [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor
+    [SovereignTrust.Foundation.Classes.Adapters.MappedTokenAdapter]$MappedAdapter
     [object]$Jacket
 
     Token_Environment() {
     }
 
-    static [Token_Environment] Start([MappedTokenAdapter]$mappedAdapter, [Conductor]$conductor) {
+    static [Token_Environment] Start([SovereignTrust.Foundation.Classes.Adapters.MappedTokenAdapter]$mappedAdapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
         $instance = [Token_Environment]::new()
         $instance.MappedAdapter = $mappedAdapter
         $instance.Conductor = $conductor
-        $instance.Signal = [Signal]::Start("TokenEnvironment")
+        $instance.Signal = [SignalGraph.Signal]::Start("TokenEnvironment")
         return $instance
     }
 
-    [Signal] Construct([object]$dictionary) {
-        $opSignal = [Signal]::Start("Construct-TokenEnvironment") | Select-Object -Last 1
+    [SignalGraph.Signal] Construct([object]$dictionary) {
+        $opSignal = [SignalGraph.Signal]::Start("Construct-TokenEnvironment") | Select-Object -Last 1
 
         try {
             if ($null -eq $dictionary) {
@@ -44,8 +44,8 @@ class Token_Environment {
         return $opSignal
     }
 
-    [Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
-        $opSignal = [Signal]::Start("Token_Environment.Invoke") | Select-Object -Last 1
+    [SignalGraph.Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
+        $opSignal = [SignalGraph.Signal]::Start("Token_Environment.Invoke") | Select-Object -Last 1
 
         if ($Activity -notin @('Get')) {
             $opSignal.LogCritical("Unsupported Token_Environment activity: '$Activity'.")
@@ -65,7 +65,7 @@ class Token_Environment {
         }
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception in Token_Environment.Invoke: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("🔥 Exception in Token_Environment.Invoke: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $opSignal

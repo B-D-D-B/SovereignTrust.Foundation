@@ -18,15 +18,15 @@ UnsupportedActivity: FailedSignal
 ActivityComparison: CaseInsensitive
 #>
 class MemoryCondenser {
-    [Signal]$Signal
+    [SignalGraph.Signal]$Signal
 
     MemoryCondenser() {}
 
-    static [Signal] Start([MappedCondenserAdapter]$adapter, [Conductor]$conductor) {
-        $opSignal = [Signal]::Start("MemoryCondenser.Start") | Select-Object -Last 1
+    static [SignalGraph.Signal] Start([SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$adapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
+        $opSignal = [SignalGraph.Signal]::Start("MemoryCondenser.Start") | Select-Object -Last 1
 
         $instance = [MemoryCondenser]::new()
-        $instance.Signal = [Signal]::Start("MemoryCondenser", $adapter) | Select-Object -Last 1
+        $instance.Signal = [SignalGraph.Signal]::Start("MemoryCondenser", $adapter) | Select-Object -Last 1
         $instance.Signal.SetJacket($conductor) | Out-Null
 
         $opSignal.SetResult($instance)
@@ -34,11 +34,11 @@ class MemoryCondenser {
         return $opSignal
     }
 
-    [Signal]Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
+    [SignalGraph.Signal]Invoke([string]$Slot, [string]$Activity, [SignalGraph.Signal]$ConductionSignal, [object]$Plan, [SignalGraph.Signal]$ItemSignal) {
 
         # Here $Plan is a full phase containing Steps; other adapters ordinarily receive one phase step as $Plan unless their contract specifies otherwise.
 
-        $opSignal = [Signal]::Start("MemoryCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start("MemoryCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
 
         if ($Activity -notin @('Persist', 'Generate')) {
             $opSignal.LogCritical("Unsupported MemoryCondenser activity: '$Activity'.")
@@ -79,7 +79,7 @@ class MemoryCondenser {
                         # The Deferred Hydration Plan is used to hydrate the step, usually because a previous set puts content in memory or cache.
                         $DeferredHydrationPlanSignal = Resolve-PathFromDictionary -Dictionary $step -Path "DeferredHydrationPlan" -Default $null | Select-Object -Last 1
                         if ($DeferredHydrationPlanSignal.HasResult()) {
-                            $HydrationSignal = [Signal]::Start("MemoryCondenser.Invoke.DeferredHydrate", $step) | Select-Object -Last 1
+                            $HydrationSignal = [SignalGraph.Signal]::Start("MemoryCondenser.Invoke.DeferredHydrate", $step) | Select-Object -Last 1
                             $HydrationSignal.SetJacket($StepResultSignal)
 
                             # Set the Step as   the result content of the jacket which is what is going to be hydrated.
@@ -160,7 +160,7 @@ class MemoryCondenser {
                             $this.RegisterSignal($ItemSignal, $Key, $StepResultSignal)
                         }
                         else {
-                            $StepResultSignal = [Signal]::Start("MemoryCondenser.EmptyStepResult") | Select-Object -Last 1
+                            $StepResultSignal = [SignalGraph.Signal]::Start("MemoryCondenser.EmptyStepResult") | Select-Object -Last 1
                         }
 
                         if (-not $StepResultSignal.HasResult() -and $ExitAfterAdapterNoResult.GetResult() ) {
@@ -173,7 +173,7 @@ class MemoryCondenser {
 
                             # Perform Document formatting, xml, json or leave txt
                             if ($Format) {
-                                $FormatSignal = [Signal]::Start("MemoryCondenser.Invoke.Format", $ItemSignal) | Select-Object -Last 1
+                                $FormatSignal = [SignalGraph.Signal]::Start("MemoryCondenser.Invoke.Format", $ItemSignal) | Select-Object -Last 1
                                 $FormatSignal.SetJacket($StepResultSignal)
                                 $FormatSignal.SetPointer($ItemSignal.GetPointer())
 
@@ -185,7 +185,7 @@ class MemoryCondenser {
                             # Optional Condenser-Based Transform Step
                             # Currently uses a CondenserAdapter and then uses the SourceType in the mapping to determine which one to use and SourceMode to determine which activity to run.
                             if ($Path) {
-                                $TransformSignal = [Signal]::Start("MemoryCondenser.Invoke.Transform", $ItemSignal) | Select-Object -Last 1
+                                $TransformSignal = [SignalGraph.Signal]::Start("MemoryCondenser.Invoke.Transform", $ItemSignal) | Select-Object -Last 1
                                 $TransformSignal.SetJacket($StepResultSignal)
                                 $TransformSignal.SetPointer($ItemSignal.GetPointer())
 
@@ -200,7 +200,7 @@ class MemoryCondenser {
 
                             # Optional Hydration Condenser Step
                             if ($HydrationPlanSignal.HasResult()) {
-                                $HydrationSignal = [Signal]::Start("MemoryCondenser.Invoke.Hydrate", $ItemSignal) | Select-Object -Last 1
+                                $HydrationSignal = [SignalGraph.Signal]::Start("MemoryCondenser.Invoke.Hydrate", $ItemSignal) | Select-Object -Last 1
                                 $HydrationSignal.SetJacket($StepResultSignal)
                                 $HydrationSignal.SetPointer($ItemSignal.GetPointer())
 
@@ -217,7 +217,7 @@ class MemoryCondenser {
                             }
                 
                             if ($ContentFormat) {
-                                $ContentFormatSignal = [Signal]::Start("MemoryCondenser.Invoke.ContentFormat", $ItemSignal) | Select-Object -Last 1
+                                $ContentFormatSignal = [SignalGraph.Signal]::Start("MemoryCondenser.Invoke.ContentFormat", $ItemSignal) | Select-Object -Last 1
                                 $ContentFormatSignal.SetJacket($StepResultSignal)
                                 $ContentFormatSignal.SetPointer($ItemSignal.GetPointer())
 
@@ -274,8 +274,8 @@ class MemoryCondenser {
     [object] GetNextStep(
         [object]$currentStep,
         [object]$phase,
-        [Signal]$ItemSignal,
-        [Signal]$ConductionSignal
+        [SignalGraph.Signal]$ItemSignal,
+        [SignalGraph.Signal]$ConductionSignal
     ) {
         $step = $null
         
@@ -356,10 +356,10 @@ class MemoryCondenser {
         return $step
     }
 
-    [Signal] RegisterSignal(
-        [Signal]$itemSignal,
+    [SignalGraph.Signal] RegisterSignal(
+        [SignalGraph.Signal]$itemSignal,
         [string]$Key,
-        [Signal]$registerSignal) {
+        [SignalGraph.Signal]$registerSignal) {
         if ($null -ne $Key -and $Key -ne "") {
             $itemSignal.Pointer.RegisterSignal($Key, $registerSignal)
         }

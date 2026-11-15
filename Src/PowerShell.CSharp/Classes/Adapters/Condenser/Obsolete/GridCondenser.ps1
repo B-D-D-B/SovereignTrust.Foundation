@@ -50,24 +50,24 @@ UnsupportedActivity: FailedSignal
 ActivityComparison: CaseInsensitive
 #>
 class GridCondenser {
-    [Conductor]$Conductor
-    [MappedCondenserAdapter]$MappedCondenserAdapter
-    [Signal]$Signal  # Sovereign control signal
+    [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor
+    [SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$MappedCondenserAdapter
+    [SignalGraph.Signal]$Signal  # Sovereign control signal
 
     GridCondenser() {
         # Empty constructor, to enforce use of .Start()472
     }
 
-    static [GridCondenser] Start([MappedCondenserAdapter]$mappedAdapter, [Conductor]$conductor) {
+    static [GridCondenser] Start([SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$mappedAdapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
         $instance = [GridCondenser]::new()
         $instance.MappedCondenserAdapter = $mappedAdapter
         $instance.Conductor = $conductor
-        $instance.Signal = [Signal]::Start("GridCondenser")
+        $instance.Signal = [SignalGraph.Signal]::Start("GridCondenser")
         return $instance
     }
     
-    [Signal]Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
-        $opSignal = [Signal]::Start("TransformCondenser.Invoke") | Select-Object -Last 1
+    [SignalGraph.Signal]Invoke([string]$Slot, [string]$Activity, [SignalGraph.Signal]$ConductionSignal, [object]$Plan, [SignalGraph.Signal]$ItemSignal) {
+        $opSignal = [SignalGraph.Signal]::Start("TransformCondenser.Invoke") | Select-Object -Last 1
 
         if ($Activity -notin @('Process', 'Graph')) {
             $opSignal.LogCritical("Unsupported GridCondenser activity: '$Activity'.")
@@ -79,7 +79,7 @@ class GridCondenser {
 
                 # Process a Signal Graph's Grid 
                 "Process" {
-                    $opSignal = [Signal]::Start("GraphLauncher.Invoke", $this.Signal) | Select-Object -Last 1
+                    $opSignal = [SignalGraph.Signal]::Start("GraphLauncher.Invoke", $this.Signal) | Select-Object -Last 1
                     $SourcePathSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "ForEachPath" | Select-Object -Last 1
                     
                     if ($opSignal.MergeSignalAndVerifyFailure($SourcePathSignal)) {
@@ -113,7 +113,7 @@ class GridCondenser {
                 # Converts a named object Array into a graph, or takes a graph and extends it with an array.  (Move to Graph Condenser and join with GridCondenser functionality like navigate grid?)
                 "Graph" {
                     # Taken from Invoke-GridCondenser
-                    $opSignal = [Signal]::Start("Invoke-GridCondenser", $ConductionSignal) | Select-Object -Last 1
+                    $opSignal = [SignalGraph.Signal]::Start("Invoke-GridCondenser", $ConductionSignal) | Select-Object -Last 1
                     $PlanName = $Plan.Name
 
                     if ($PlanName -eq "ConductionGraphPerRole") {
@@ -127,7 +127,7 @@ class GridCondenser {
                     $selectResult = Resolve-PathFromDictionary -Dictionary $ItemSignal -Path $Path | Select-Object -Last 1
                     $graphName = $segments | Select-Object -Last 1
 
-                    $subSignal = [Signal]::Start("GraphPlan:$PlanName", $ConductionSignal) | Select-Object -Last 1
+                    $subSignal = [SignalGraph.Signal]::Start("GraphPlan:$PlanName", $ConductionSignal) | Select-Object -Last 1
                     $subSignal.SetJacket($selectResult) | Out-Null
 
                     $graphSignal = Resolve-GraphForJsonArray -ConductionSignal $ConductionSignal -Plan $Plan  -GraphName $graphName -ItemSignal $subSignal | Select-Object -Last 1
@@ -154,8 +154,8 @@ class GridCondenser {
     }
 
 
-    [Signal] Invoke([string]$Path, [object]$Plan) {
-        $opSignal = [Signal]::Start("GraphLauncher.Invoke", $this.
+    [SignalGraph.Signal] Invoke([string]$Path, [object]$Plan) {
+        $opSignal = [SignalGraph.Signal]::Start("GraphLauncher.Invoke", $this.
             Signal) | Select-Object -Last 1
 
         $sourceSignal = Resolve-PathFromDictionary -Dictionary $this.Conductor -Path "%.FlatFormulaSource" | Select-Object -Last 1
@@ -169,7 +169,7 @@ class GridCondenser {
         $sourceData = $sourceSignal.GetResult()
 
         # Construct signal to feed into the GraphCondenser
-        $feedSignal = [Signal]::Start("GridCondenser.Feed", $opSignal, $null, $sourceData) | Select-Object -Last 1
+        $feedSignal = [SignalGraph.Signal]::Start("GridCondenser.Feed", $opSignal, $null, $sourceData) | Select-Object -Last 1
         Add-PathToDictionary -Dictionary $feedSignal -Path "$.%.GraphPlans" -Value $sourceData.GraphPlans | Out-Null
 
         # Call our declarative plan processor
@@ -180,8 +180,8 @@ class GridCondenser {
         return $opSignal
     }
 
-    [Signal] InvokeFromPlanPath([string]$PlanWirePath, [object]$jacketObject) {
-        $opSignal = [Signal]::Start("GridCondenser.InvokeFromPlanPath") | Select-Object -Last 1
+    [SignalGraph.Signal] InvokeFromPlanPath([string]$PlanWirePath, [object]$jacketObject) {
+        $opSignal = [SignalGraph.Signal]::Start("GridCondenser.InvokeFromPlanPath") | Select-Object -Last 1
 
         # Determine base memory to evolve (from existing Result or jacket)
         $initialMemory = if ($this.Signal -and $this.Signal.HasResult()) {
@@ -192,7 +192,7 @@ class GridCondenser {
         }
 
         # Start a new signal for Condenser with memory + jacket
-        $condenserSignal = [Signal]::Start("GridCondenser", $jacketObject) | Select-Object -Last 1
+        $condenserSignal = [SignalGraph.Signal]::Start("GridCondenser", $jacketObject) | Select-Object -Last 1
         $condenserSignal.SetJacket($jacketObject) | Out-Null
 
         # Extract graph plans using WirePath

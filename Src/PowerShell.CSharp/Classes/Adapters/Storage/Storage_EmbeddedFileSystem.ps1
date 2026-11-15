@@ -14,19 +14,19 @@ UnsupportedActivity: FailedSignal
 ActivityComparison: CaseInsensitive
 #>
 class Storage_EmbeddedFileSystem {
-    [MappedStorageAdapter]$MappedAdapter
-    [Signal]$Signal
+    [SovereignTrust.Foundation.Classes.Adapters.MappedStorageAdapter]$MappedAdapter
+    [SignalGraph.Signal]$Signal
     #[object]$Jacket
 
     Storage_EmbeddedFileSystem() {
     }
 
-    Storage_EmbeddedFileSystem([MappedStorageAdapter]$mappedAdapter) {
+    Storage_EmbeddedFileSystem([SovereignTrust.Foundation.Classes.Adapters.MappedStorageAdapter]$mappedAdapter) {
         $this.MappedAdapter = $mappedAdapter
     }
 
-    [Signal] Construct([object]$dictionary) {
-        $opSignal = [Signal]::Start("Construct-EmbeddedFileSystem") | Select-Object -Last 1
+    [SignalGraph.Signal] Construct([object]$dictionary) {
+        $opSignal = [SignalGraph.Signal]::Start("Construct-EmbeddedFileSystem") | Select-Object -Last 1
 
         try {
             if ($null -eq $dictionary) {
@@ -39,9 +39,9 @@ class Storage_EmbeddedFileSystem {
             }
             $dictionary = $storageJacket.GetResult()
 
-            $this.Signal = [Signal]::Start("Construct-EmbeddedFileSystem") | Select-Object -Last 1
+            $this.Signal = [SignalGraph.Signal]::Start("Construct-EmbeddedFileSystem") | Select-Object -Last 1
 
-            $jacket = [Signal]::Start("Construct-EmbeddedFileSystem") | Select-Object -Last 1 
+            $jacket = [SignalGraph.Signal]::Start("Construct-EmbeddedFileSystem") | Select-Object -Last 1 
             
             $this.Signal.SetJacket($jacket)
             $jacket.SetResult($dictionary)
@@ -54,8 +54,8 @@ class Storage_EmbeddedFileSystem {
         return $opSignal
     }
 
-    [Signal] ReadObjectAsJsonDEAD([string]$virtualPath) {
-        $opSignal = [Signal]::Start("EmbeddedFileSystem.ReadObjectAsJson") | Select-Object -Last 1
+    [SignalGraph.Signal] ReadObjectAsJsonDEAD([string]$virtualPath) {
+        $opSignal = [SignalGraph.Signal]::Start("EmbeddedFileSystem.ReadObjectAsJson") | Select-Object -Last 1
 
         try {
             # 🧠 Ensure the virtual path ends with '.json'
@@ -75,7 +75,7 @@ class Storage_EmbeddedFileSystem {
                     $parsed = $jsonText | ConvertFrom-Json -Depth 20
                 }
                 catch {
-                    return $opSignal.LogCritical("Failed to parse JSON content: $($_.Exception.Message)", $null, $_)
+                    return $opSignal.LogCritical("Failed to parse JSON content: $($_.Exception.Message)", $null, $_.Exception)
                 }
 
                 $opSignal.SetResult($parsed)
@@ -86,14 +86,14 @@ class Storage_EmbeddedFileSystem {
             }
         }
         catch {
-            $opSignal.LogCritical("Exception in EmbeddedFileSystem.ReadObjectAsJson: $($_.Exception.Message)", $null, $_)
+            $opSignal.LogCritical("Exception in EmbeddedFileSystem.ReadObjectAsJson: $($_.Exception.Message)", $null, $_.Exception)
         }
 
         return $opSignal
     }
 
-    [Signal] ReadObjectDEAD([string]$virtualPath) {
-        $opSignal = [Signal]::Start("EmbeddedFileSystem.ReadObject:$virtualPath") | Select-Object -Last 1
+    [SignalGraph.Signal] ReadObjectDEAD([string]$virtualPath) {
+        $opSignal = [SignalGraph.Signal]::Start("EmbeddedFileSystem.ReadObject:$virtualPath") | Select-Object -Last 1
 
         try {
             # ░▒▓█ RESOLVE ADDRESSES FROM %.@.Addresses █▓▒░
@@ -109,22 +109,22 @@ class Storage_EmbeddedFileSystem {
             }
         }
         catch {
-            $opSignal.LogCritical("Exception in EmbeddedFileSystem.ReadObject: $($_.Exception.Message)", $null, $_)
+            $opSignal.LogCritical("Exception in EmbeddedFileSystem.ReadObject: $($_.Exception.Message)", $null, $_.Exception)
         }
 
         return $opSignal
     }
 
-    [Signal]Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
+    [SignalGraph.Signal]Invoke([string]$Slot, [string]$Activity, [SignalGraph.Signal]$ConductionSignal, [object]$Plan, [SignalGraph.Signal]$ItemSignal) {
         if ($Activity -notin @('Read', 'Write', 'Delete', 'Exists')) {
-            $invalidActivitySignal = [Signal]::Start("EmbeddedFileSystem.$Slot.$Activity") | Select-Object -Last 1
+            $invalidActivitySignal = [SignalGraph.Signal]::Start("EmbeddedFileSystem.$Slot.$Activity") | Select-Object -Last 1
             $invalidActivitySignal.LogCritical("Unsupported Storage_EmbeddedFileSystem activity: '$Activity'.")
             return $invalidActivitySignal
         }
 
         $virtualPathSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "VirtualPath" | Select-Object -Last 1
         $virtualPath = $virtualPathSignal.GetResult()
-        $opSignal = [Signal]::Start("EmbeddedFileSystem.$slot.$activity.$virtualPath") | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start("EmbeddedFileSystem.$slot.$activity.$virtualPath") | Select-Object -Last 1
 
         try {
             # ░▒▓█ RESOLVE ADDRESSES FROM %.@.Addresses █▓▒░
@@ -234,14 +234,14 @@ class Storage_EmbeddedFileSystem {
             }
         }
         catch {
-            $opSignal.LogCritical("Exception in EmbeddedFileSystem.Invoke: $($_.Exception.Message)", $null, $_)
+            $opSignal.LogCritical("Exception in EmbeddedFileSystem.Invoke: $($_.Exception.Message)", $null, $_.Exception)
         }
 
         return $opSignal
     }
 
-    [Signal] InvokeDEAD([string]$virtualPath, [object]$Plan) {
-        $opSignal = [Signal]::Start("EmbeddedFileSystem.ReadObject:$virtualPath") | Select-Object -Last 1
+    [SignalGraph.Signal] InvokeDEAD([string]$virtualPath, [object]$Plan) {
+        $opSignal = [SignalGraph.Signal]::Start("EmbeddedFileSystem.ReadObject:$virtualPath") | Select-Object -Last 1
 
         try {
             # ░▒▓█ RESOLVE ADDRESSES FROM %.@.Addresses █▓▒░
@@ -257,7 +257,7 @@ class Storage_EmbeddedFileSystem {
             }
         }
         catch {
-            $opSignal.LogCritical("Exception in EmbeddedFileSystem.ReadObject: $($_.Exception.Message)", $null, $_)
+            $opSignal.LogCritical("Exception in EmbeddedFileSystem.ReadObject: $($_.Exception.Message)", $null, $_.Exception)
         }
 
         return $opSignal

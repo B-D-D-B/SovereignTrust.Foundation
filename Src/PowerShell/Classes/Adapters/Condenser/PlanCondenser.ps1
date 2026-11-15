@@ -65,6 +65,37 @@ class PlanCondenser {
         return $filterSignal
     }
 
+    static [object] ResolveIterationKey($KeyValue) {
+        $value = $KeyValue
+        $category = $null
+        if ($null -ne $value) {
+            $valueType = $value.GetType()
+            if ($valueType -eq [string]) { $category = 'String' }
+            elseif ($valueType -eq [bool]) { $category = 'Boolean' }
+            elseif ($valueType -in @([sbyte], [byte], [int16], [uint16], [int32], [uint32], [int64], [uint64], [double], [decimal])) {
+                $category = 'Numeric'
+                $value = [double]$value
+            }
+            else { throw 'Ordering key must be String, Boolean or an integral/Decimal number.' }
+        }
+        return [pscustomobject]@{ Value = $value; Category = $category }
+    }
+
+    static [int] CompareIterationKeys($Left, $Right, [bool]$Descending) {
+        if ($null -eq $Left.Key -and $null -eq $Right.Key) { return $Left.Position.CompareTo($Right.Position) }
+        if ($null -eq $Left.Key) { return 1 }
+        if ($null -eq $Right.Key) { return -1 }
+        $comparison = switch ($Left.Category) {
+            'String' { [StringComparer]::OrdinalIgnoreCase.Compare($Left.Key, $Right.Key) }
+            'Boolean' { $Left.Key.CompareTo($Right.Key) }
+            'Numeric' { [double]::Compare($Left.Key, $Right.Key) }
+            default { throw 'Unsupported ordering category.' }
+        }
+        if ($Descending) { $comparison = -$comparison }
+        if ($comparison -eq 0) { return $Left.Position.CompareTo($Right.Position) }
+        return $comparison
+    }
+
     [Signal] ResolveInsertPhaseSteps(
         [Signal]$ParentSignal,
         $ConductionSignal,
@@ -246,6 +277,67 @@ class PlanCondenser {
                             }
                         }
                         $iterationArray = $retained.ToArray()
+                    }
+                    try {
+                        $orderBySignal = Resolve-PathFromDictionary -Dictionary $Plan -Path 'Config.OrderBy' -Default $null -SignalLevel 'Information' | Select-Object -Last 1
+                        $directionSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path 'Config.OrderDirection' -Default "Desc" -SignalLevel 'Information' | Select-Object -Last 1
+                        $limitSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path 'Config.Limit' -Default $null -SignalLevel 'Information' | Select-Object -Last 1
+                        foreach ($settingSignal in @($orderBySignal, $directionSignal, $limitSignal)) {
+                            $null = $opSignal.MergeSignal(@($settingSignal))
+                            if ($settingSignal.Failure() -or @($settingSignal.Entries | Where-Object { $null -ne $_.Exception }).Count -gt 0) {
+                                throw 'Plan.Config ordering/limit lookup failed.'
+                            }
+                        }
+                        $orderBy = $orderBySignal.HasResult() ? $orderBySignal.GetResult() : $null
+                        $direction = $directionSignal.HasResult() ? $directionSignal.GetResult() : 'Desc'
+                        $limit = $limitSignal.HasResult() ? $limitSignal.GetResult() : $null
+                        if ($null -ne $orderBy) {
+                            if ($orderBy -isnot [string] -or $orderBy.Trim() -cnotmatch '^[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*$') {
+                                throw 'Plan.Config.OrderBy must be a dotted item-relative identifier path.'
+                            }
+                            $orderBy = $orderBy.Trim()
+                        }
+                        if ($null -ne $direction -and ($direction -isnot [string] -or $direction.Trim() -notin @('ASC', 'DESC'))) {
+                            throw 'Plan.Config.OrderDirection must be ASC or DESC.'
+                        }
+                        if ($null -ne $limit -and (($limit -isnot [int32] -and $limit -isnot [int64]) -or $limit -lt 0)) {
+                            throw 'Plan.Config.Limit must be a nonnegative native Int32 or Int64.'
+                        }
+                        if ($null -ne $orderBy) {
+                            $ordered = [System.Collections.Generic.List[object]]::new()
+                            $category = $null
+                            for ($position = 0; $position -lt $iterationArray.Count; $position++) {
+                                $keyValue = $null
+                                if ($null -ne $iterationArray[$position]) {
+                                    $keySignal = Resolve-PathFromDictionary -Dictionary $iterationArray[$position] -Path $orderBy -Default $null -SignalLevel 'Information' | Select-Object -Last 1
+                                    $null = $opSignal.MergeSignal(@($keySignal))
+                                    if ($keySignal.Failure() -or @($keySignal.Entries | Where-Object { $null -ne $_.Exception }).Count -gt 0) {
+                                        throw 'Plan.Config.OrderBy path resolution failed.'
+                                    }
+                                    if ($keySignal.HasResult()) { $keyValue = $keySignal.GetResult() }
+                                }
+                                $key = [PlanCondenser]::ResolveIterationKey($keyValue)
+                                if ($null -ne $key.Category) {
+                                    if ($null -ne $category -and $category -ne $key.Category) { throw 'Ordering keys must share one category.' }
+                                    $category = $key.Category
+                                }
+                                $ordered.Add([pscustomobject]@{ Value = $iterationArray[$position]; Key = $key.Value; Category = $key.Category; Position = $position })
+                            }
+                            $descending = $null -ne $direction -and $direction.Trim() -ieq 'DESC'
+                            $ordered.Sort([System.Comparison[object]]{ param($left, $right) return [PlanCondenser]::CompareIterationKeys($left, $right, $descending) })
+                            $selected = [System.Collections.Generic.List[object]]::new()
+                            foreach ($entry in $ordered) { $selected.Add($entry.Value) }
+                            $iterationArray = $selected.ToArray()
+                        }
+                        if ($null -ne $limit -and $limit -lt $iterationArray.Count) {
+                            $selected = [System.Collections.Generic.List[object]]::new()
+                            for ($position = 0; $position -lt [int]$limit; $position++) { $selected.Add($iterationArray[$position]) }
+                            $iterationArray = $selected.ToArray()
+                        }
+                    }
+                    catch {
+                        $null = $opSignal.LogCritical("Plan.Config ordering/limit validation failed: $($_.Exception.Message)", $null, $_)
+                        return $opSignal
                     }
                     $iterationName = [string]$iterationNameSignal.GetResult()
                     Write-STExecutionTraceDecision $stPlanTrace 'IterationArray' ($iterationArray.Count -gt 0) 'Required' $null $null $iterationArray.Count

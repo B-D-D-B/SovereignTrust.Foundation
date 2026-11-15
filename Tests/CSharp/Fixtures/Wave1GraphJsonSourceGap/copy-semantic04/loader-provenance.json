@@ -1,0 +1,23 @@
+{
+  "Root": {
+    "ProcessId": 70520,
+    "FoundationPath": "C:\\GitHub\\SiliconDreamArtists\\SovereignTrust.Foundation\\Src\\PowerShell.CSharp\\SovereignTrust.Foundation.psm1",
+    "SignalGraphPath": "C:\\GitHub\\SiliconDreamArtists\\SignalGraph\\Src\\PowerShell\\SignalGraph\\SignalGraph.psm1",
+    "SignalType": "Signal, PowerShell Class Assembly, Version=1.0.0.1, Culture=neutral, PublicKeyToken=null",
+    "SignalModule": "<In Memory Module>",
+    "SignalSource": "C:\\GitHub\\SiliconDreamArtists\\SignalGraph\\Src\\PowerShell\\SignalGraph\\SignalGraph.psd1",
+    "PacketSha256": "6C5FE60DC9AFCC80F311C8610EE86A5106DEBF08777B563E1A0CE652449AD2B6"
+  },
+  "Worker": {
+    "ProcessId": 70520,
+    "FoundationPath": "C:\\GitHub\\SiliconDreamArtists\\SovereignTrust.Foundation\\Src\\PowerShell.CSharp\\SovereignTrust.Foundation.psm1",
+    "SignalGraphPath": "C:\\GitHub\\SiliconDreamArtists\\SignalGraph\\Src\\PowerShell\\SignalGraph\\SignalGraph.psm1",
+    "SignalType": "Signal, PowerShell Class Assembly, Version=1.0.0.1, Culture=neutral, PublicKeyToken=null",
+    "SignalModule": "<In Memory Module>",
+    "SignalSource": "C:\\GitHub\\SiliconDreamArtists\\SignalGraph\\Src\\PowerShell\\SignalGraph\\SignalGraph.psd1",
+    "PacketSha256": "6C5FE60DC9AFCC80F311C8610EE86A5106DEBF08777B563E1A0CE652449AD2B6"
+  },
+  "WorkerDisposed": true,
+  "PowerShell": "7.6.10",
+  "Runtime": "10.0.15"
+}

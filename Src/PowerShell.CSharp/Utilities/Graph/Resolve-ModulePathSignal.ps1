@@ -18,7 +18,7 @@ A dot-delimited identifier string indicating the desired module location and ide
 Required format: `Project.Collection.Kind.Type[.Slot][.Key]`
 
 .RETURNS
-[Signal] A `Signal` object containing jacket metadata about the module path.
+[SignalGraph.Signal] A `Signal` object containing jacket metadata about the module path.
 
 .EXAMPLE
 $signal = Resolve-ModulePathSignal -WirePath "Core.SDK.Adapter.LocalFileSystem"
@@ -38,7 +38,7 @@ function Resolve-ModulePathSignal {
         [Parameter(Mandatory)][string]$WirePath
     )
 
-    $opSignal = [Signal]::Start("Resolve-PathGraphForModule:$WirePath") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Resolve-PathGraphForModule:$WirePath") | Select-Object -Last 1
 
     try {
         # ░▒▓█ VERIFY WIREPATH FORMAT █▓▒░
@@ -58,18 +58,24 @@ function Resolve-ModulePathSignal {
 
         $moduleStem = "$kind`_$type"
         $moduleName = "$moduleStem.psd1"
+        $selection=Get-STWorkerSelection
+        if($type -ne 'EmbeddedFileSystem'){
+            $entry=Get-STNativeAdapterEntry -Selection $selection -WirePath $WirePath
+            if($entry.EntryPoints.Count -ne 1){throw 'Selected adapter has no unique development manifest.'}
+            $moduleName=$entry.EntryPoints[0]
+        }
 
-        $folderSegments = @("$project.$collection", 'Src', $kind, $type, 'PowerShell')
+        $folderSegments = @("$project.$collection", 'Src', $kind, $type, 'PowerShell.CSharp')
 #        $relativeFolderPath = [System.IO.Path]::Combine($folderSegments)
         $relativeFolderPath = ($folderSegments -join '\')
 
         $relativeFilePath = Join-Path $relativeFolderPath $moduleName
 
         # ░▒▓█ BUILD MODULE SIGNAL █▓▒░
-        $moduleSignal = [Signal]::Start("Module:$WirePath") | Select-Object -Last 1
+        $moduleSignal = [SignalGraph.Signal]::Start("Module:$WirePath") | Select-Object -Last 1
 
         # Create a nested jacket signal to ensure sovereign structure
-        $jacketSignal = [Signal]::Start("Jacket:$WirePath") | Select-Object -Last 1
+        $jacketSignal = [SignalGraph.Signal]::Start("Jacket:$WirePath") | Select-Object -Last 1
         $jacketSignal.SetResult([ordered]@{
                 Name               = $moduleName
                 Project            = $project
@@ -100,7 +106,7 @@ function Resolve-ModulePathSignal {
         $opSignal.LogInformation("✅ Module signal prepared from WirePath: $WirePath")
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception in Resolve-PathGraphForModule: $_", $null, $_)
+        $opSignal.LogCritical("🔥 Exception in Resolve-PathGraphForModule: $_", $null, $_.Exception)
     }
 
     return $opSignal

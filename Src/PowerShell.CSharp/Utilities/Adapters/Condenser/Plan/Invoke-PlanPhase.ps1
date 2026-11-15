@@ -1,15 +1,15 @@
 function Invoke-PlanPhase {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory)][Signal]$ConductionSignal,
-        [Parameter(Mandatory)][Signal]$ItemSignal,
+        [Parameter(Mandatory)][SignalGraph.Signal]$ConductionSignal,
+        [Parameter(Mandatory)][SignalGraph.Signal]$ItemSignal,
         [Parameter(Mandatory)][object]$Phase,
         [string[]]$ReturnKeys = @()
     )
 
     $stTrace = Enter-STExecutionTrace -BoundaryKind 'Phase' -Name ([string]$Phase.Name) -Adapter 'Condenser.Memory' -Activity 'Generate'
     $stThrew=$false
-    $opSignal = [Signal]::Start('Invoke-PlanPhase', $ItemSignal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start('Invoke-PlanPhase', $ItemSignal) | Select-Object -Last 1
     try {
         $phaseSignal = Invoke-CondenserAdapter `
             -Slot 'Memory' `
@@ -22,7 +22,7 @@ function Invoke-PlanPhase {
         if ($opSignal.MergeSignalAndVerifyFailure($phaseSignal)) { return $opSignal }
 
         $graph = $ItemSignal.GetPointer()
-        if ($graph -isnot [Graph]) {
+        if ($graph -isnot [SignalGraph.Graph]) {
             throw 'Phase ItemSignal does not have a Graph pointer.'
         }
 
@@ -47,7 +47,7 @@ function Invoke-PlanPhase {
     }
     catch {
         $stThrew=$true
-        $null = $opSignal.LogCritical("Phase execution failed: $($_.Exception.Message)", $null, $_)
+        $null = $opSignal.LogCritical("Phase execution failed: $($_.Exception.Message)", $null, $_.Exception)
     }
     finally { Exit-STExecutionTrace $stTrace $opSignal $stThrew }
     return $opSignal

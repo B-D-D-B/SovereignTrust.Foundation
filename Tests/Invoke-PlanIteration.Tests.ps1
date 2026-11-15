@@ -1,7 +1,8 @@
-using module ../../SignalGraph/Src/PowerShell/SignalGraph.psd1
+using module ../../SignalGraph/Src/PowerShell/SignalGraph/SignalGraph.psd1
 
 $ErrorActionPreference = 'Stop'
 $foundationRoot = Join-Path $PSScriptRoot '../Src/PowerShell'
+. "$foundationRoot/Wrappers/Adapters/Invoke-CondenserAdapter.ps1"
 . "$foundationRoot/Utilities/Adapters/Condenser/Plan/Resolve-ClonePlan.ps1"
 . "$foundationRoot/Utilities/Adapters/Condenser/Plan/Invoke-PlanIteration.ps1"
 . "$foundationRoot/Utilities/Adapters/Condenser/Plan/Invoke-PlanIterationWorker.ps1"
@@ -48,6 +49,8 @@ Assert-True (-not $result.Failure() -and $result.HasResult()) 'Single iteration 
 Assert-True ($itemGraph.Grid.Contains('CurrentItem')) 'Iteration signal was not registered.'
 Assert-True ($itemGraph.Grid['CurrentItem'].GetResult() -eq 'B') 'Iteration value was not registered.'
 Assert-True ($itemGraph.Grid['CurrentItem'].GetProperty('IterationIndex') -eq 1) 'Iteration index metadata was not registered.'
+Assert-True (($itemGraph.Grid['CurrentItem'].GetProperty('IterationArray') -join ',') -eq 'A,B') 'Complete selected iteration array was not registered.'
+Assert-True ([object]::ReferenceEquals($itemGraph.Grid['CurrentItem'].GetReversePointer(), $itemSignal)) 'Iteration signal lost its parent.'
 Assert-True ($script:invocation.Slot -eq 'Plan' -and $script:invocation.Activity -eq 'InvokePhase') 'Iteration invoked the wrong adapter activity.'
 Assert-True ($script:invocation.Plan.Activity -eq 'InvokePhase') 'Iteration clone activity was not updated.'
 Assert-True ($plan.Activity -eq 'IteratePhase') 'Iteration execution mutated the caller plan.'

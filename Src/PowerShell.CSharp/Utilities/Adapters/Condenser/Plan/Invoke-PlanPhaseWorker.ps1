@@ -6,7 +6,7 @@ function Invoke-PlanPhaseWorker {
         [Parameter(Mandatory)][object]$Context
     )
 
-    $opSignal = [Signal]::Start("Invoke-PlanPhaseWorker:$($WorkItem.Index)", $Runtime.ConductionSignal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-PlanPhaseWorker:$($WorkItem.Index)", $Runtime.ConductionSignal) | Select-Object -Last 1
     try {
         $importSignal = Import-STSignalGraphSnapshot `
             -SnapshotJson ([string]$Context.SnapshotJson) `
@@ -27,7 +27,7 @@ function Invoke-PlanPhaseWorker {
         if ($phaseSignal.HasResult()) { $opSignal.SetResult($phaseSignal.GetResult()) }
     }
     catch {
-        $null = $opSignal.LogCritical("Background phase worker failed: $($_.Exception.Message)", $null, $_)
+        $null = $opSignal.LogCritical("Background phase worker failed: $($_.Exception.Message)", $null, $_.Exception)
     }
     return $opSignal
 }

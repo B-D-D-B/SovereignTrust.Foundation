@@ -7,7 +7,7 @@ function Invoke-TransformInject {
         [object]$target
     )
 
-    $opSignal = [Signal]::Start("Invoke-TransformInject") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-TransformInject") | Select-Object -Last 1
 
     function Convert-VirtualPathToXPath {
         [CmdletBinding()]
@@ -16,7 +16,7 @@ function Invoke-TransformInject {
             [string]$VirtualPath
         )
 
-        $opSignal = [Signal]::Start("Convert-VirtualPathToXPath") | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start("Convert-VirtualPathToXPath") | Select-Object -Last 1
 
         function ConvertTo-XPathLiteral {
             param([Parameter(Mandatory)][string]$Value)
@@ -121,7 +121,7 @@ function Invoke-TransformInject {
             $opSignal.MarkSuccess()
         }
         catch {
-            $opSignal.LogCritical("🔥 Exception during Convert-VirtualPathToXPath: $_", $null, $_)
+            $opSignal.LogCritical("🔥 Exception during Convert-VirtualPathToXPath: $_", $null, $_.Exception)
         }
 
         return $opSignal
@@ -181,7 +181,7 @@ function Invoke-TransformInject {
         $opSignal.LogInformation("✅ Transform from Inject Path Complete")
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception in Invoke-TransformInject: $_", $null, $_)
+        $opSignal.LogCritical("🔥 Exception in Invoke-TransformInject: $_", $null, $_.Exception)
     }
 
     return $opSignal

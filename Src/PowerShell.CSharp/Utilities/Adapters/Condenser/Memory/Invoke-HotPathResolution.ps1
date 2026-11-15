@@ -39,11 +39,11 @@
 function Invoke-HotPathResolution {
     param (
         [Parameter(Mandatory)][string]$Path,
-        [Parameter(Mandatory)][Signal]$Signal,
+        [Parameter(Mandatory)][SignalGraph.Signal]$Signal,
         [string]$HotPathMapPath = "%.HotPaths"
     )
 
-    $opSignal = [Signal]::Start("Invoke-HotPathResolution", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-HotPathResolution", $Signal) | Select-Object -Last 1
     $segments = $Path -split '\.'
 
     $hotMapSignal = Resolve-PathFromDictionary -Dictionary $Signal -Path $HotPathMapPath -SkipPathHydration | Select-Object -Last 1

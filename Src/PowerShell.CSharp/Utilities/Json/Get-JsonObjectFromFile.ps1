@@ -7,7 +7,7 @@ function Get-JsonObjectFromFile {
     )
 
     $signalName = "Get-JsonObjectFromFile:$VirtualPath"
-    $signal = [Signal]::new($signalName)
+    $signal = [SignalGraph.Signal]::new($signalName)
 
     try {
         $fullPath = Join-Path $RootFolder $VirtualPath
@@ -37,7 +37,7 @@ function Get-JsonObjectFromFile {
         $signal.LogInformation("✅ JSON loaded successfully from $fullPath.")
     }
     catch {
-        $signal.LogCritical("🔥 Exception: parsing JSON file at $($fullPath): $($_.Exception.Message)", $null, $_)
+        $signal.LogCritical("🔥 Exception: parsing JSON file at $($fullPath): $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $signal

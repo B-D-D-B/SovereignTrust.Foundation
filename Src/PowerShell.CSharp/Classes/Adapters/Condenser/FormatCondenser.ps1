@@ -20,15 +20,15 @@ UnsupportedActivity: FailedSignal
 ActivityComparison: CaseInsensitive
 #>
 class FormatCondenser {
-    [Signal]$Signal
+    [SignalGraph.Signal]$Signal
 
     FormatCondenser() {}
 
-    static [Signal] Start([MappedCondenserAdapter]$adapter, [Conductor]$conductor) {
-        $opSignal = [Signal]::Start("FormatCondenser.Start") | Select-Object -Last 1
+    static [SignalGraph.Signal] Start([SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$adapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
+        $opSignal = [SignalGraph.Signal]::Start("FormatCondenser.Start") | Select-Object -Last 1
 
         $instance = [FormatCondenser]::new()
-        $instance.Signal = [Signal]::Start("FormatCondenser", $adapter) | Select-Object -Last 1
+        $instance.Signal = [SignalGraph.Signal]::Start("FormatCondenser", $adapter) | Select-Object -Last 1
         $instance.Signal.SetJacket($conductor) | Out-Null
 
         $opSignal.SetResult($instance)
@@ -36,8 +36,8 @@ class FormatCondenser {
         return $opSignal
     }
 
-    [Signal]Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
-        $opSignal = [Signal]::Start("FormatCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
+    [SignalGraph.Signal]Invoke([string]$Slot, [string]$Activity, [SignalGraph.Signal]$ConductionSignal, [object]$Plan, [SignalGraph.Signal]$ItemSignal) {
+        $opSignal = [SignalGraph.Signal]::Start("FormatCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
 
         if ($Activity -notin @('Json', 'JsonArray', 'Xml', 'Text')) {
 #            $opSignal.LogCritical("Unsupported FormatCondenser activity: '$Activity'.")
@@ -150,7 +150,7 @@ class FormatCondenser {
     }
 
 
-    [Signal] InvokeByParameter(
+    [SignalGraph.Signal] InvokeByParameter(
         [string]$Action,
         [string]$Path,
         [object]$Value,
@@ -158,7 +158,7 @@ class FormatCondenser {
         [hashtable]$HydrationPlan,
         [string]$HotPathMapPath = "%.HotPaths"
     ) {
-        $opSignal = [Signal]::Start("FormatCondenser.InvokeByParameter", $this.Signal) | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start("FormatCondenser.InvokeByParameter", $this.Signal) | Select-Object -Last 1
 
         # 🔍 Step 1: Hot Path Resolution
         $hotPathSignal = Invoke-HotPathResolution -Path $Path -Signal $this.Signal -HotPathMapPath $HotPathMapPath | Select-Object -Last 1

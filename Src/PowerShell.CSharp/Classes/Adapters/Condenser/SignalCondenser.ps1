@@ -5,11 +5,11 @@ Activities: Log, Assert
 Failure: Critical Signal without Result; existing mapped/phase propagation applies.
 #>
 class SignalCondenser {
-    [Signal]$Signal
+    [SignalGraph.Signal]$Signal
 
-    static [SignalCondenser] Start([MappedCondenserAdapter]$mappedAdapter, [Conductor]$conductor) {
+    static [SignalCondenser] Start([SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$mappedAdapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
         $instance = [SignalCondenser]::new()
-        $instance.Signal = [Signal]::Start('SignalCondenser.Control') | Select-Object -Last 1
+        $instance.Signal = [SignalGraph.Signal]::Start('SignalCondenser.Control') | Select-Object -Last 1
         return $instance
     }
 
@@ -27,7 +27,7 @@ class SignalCondenser {
         return [pscustomobject]@{ Found = $true; Value = $property.Value }
     }
 
-    hidden [object] ReadPath([Signal]$itemSignal, [string]$path) {
+    hidden [object] ReadPath([SignalGraph.Signal]$itemSignal, [string]$path) {
         if (-not $this.ValidPath($path)) {
             return [pscustomobject]@{ Found = $false; Value = $null }
         }
@@ -61,8 +61,8 @@ class SignalCondenser {
             $path -cmatch '^(?:[A-Za-z_][A-Za-z0-9_]*|[*#@%~])(?:\.(?:[A-Za-z_][A-Za-z0-9_]*|[*#@%~]))*\z'
     }
 
-    [Signal] Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
-        $opSignal = [Signal]::Start('SignalCondenser.Invoke', $ItemSignal) | Select-Object -Last 1
+    [SignalGraph.Signal] Invoke([string]$Slot, [string]$Activity, [SignalGraph.Signal]$ConductionSignal, [object]$Plan, [SignalGraph.Signal]$ItemSignal) {
+        $opSignal = [SignalGraph.Signal]::Start('SignalCondenser.Invoke', $ItemSignal) | Select-Object -Last 1
         if ($Activity -cnotin @('Log', 'Assert')) {
             $null = $opSignal.LogCritical('Unsupported SignalCondenser activity.')
             return $opSignal

@@ -31,16 +31,16 @@
 
 function Invoke-GraphHydrationCondenser {
     param (
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
         [object]$Plan,
         [object]$ItemSignal,
         [string]$PlanWirePathPrefix = "%.%.%.@"  # <- new param with default
     )
 
-    $opSignal = [Signal]::Start("Invoke-GraphHydrationCondenser:$Plan.Name", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-GraphHydrationCondenser:$Plan.Name", $Signal) | Select-Object -Last 1
 
     $PlanName = $Plan.Name
-    $subSignal = [Signal]::Start("GraphPlan:$PlanName", $Signal) | Select-Object -Last 1
+    $subSignal = [SignalGraph.Signal]::Start("GraphPlan:$PlanName", $Signal) | Select-Object -Last 1
     $subSignal.SetJacket($ItemSignal) | Out-Null
 
     $invokeResult = Invoke-ApplyHydrationCondenser -Signal $Signal -Plan $Plan -ItemSignal $ItemSignal | Select-Object -Last 1
@@ -51,7 +51,7 @@ function Invoke-GraphHydrationCondenser {
 
 #    $ResolveAdapterSignal = Resolve-AdapterFromJacket -ConductionContext $Signal -Jacket $JacketSignal | Select-Object -Last 1
 
-#    $wrappedGraphSignal = [Signal]::Start("Graph:$PlanName", $Signal) | Select-Object -Last 1
+#    $wrappedGraphSignal = [SignalGraph.Signal]::Start("Graph:$PlanName", $Signal) | Select-Object -Last 1
 
     #$Adapter = $ResolveAdapterSignal.GetResult() | Select-Object -Last 1
     #    $wrappedGraphSignal.SetPointer($graphResult) | Out-Null
@@ -81,7 +81,7 @@ function Invoke-GraphHydrationCondenser {
 
     $graphResult = $graphSignal.GetResult()
 
-    $wrappedGraphSignal = [Signal]::Start("Graph:$PlanName", $Signal) | Select-Object -Last 1
+    $wrappedGraphSignal = [SignalGraph.Signal]::Start("Graph:$PlanName", $Signal) | Select-Object -Last 1
     $wrappedGraphSignal.SetPointer($graphResult) | Out-Null
 
     if ($Plan.TargetWirePath) {

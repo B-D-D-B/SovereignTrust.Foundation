@@ -4,7 +4,7 @@ function Invoke-EvaluateAgainstDoctrine {
         [Parameter()][string]$SourceName = "UnnamedScript"
     )
 
-    $signal = [Signal]::Start("Invoke-EvaluateAgainstDoctrine:$SourceName") | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Invoke-EvaluateAgainstDoctrine:$SourceName") | Select-Object -Last 1
     $score = 100
     $flags = @()
 

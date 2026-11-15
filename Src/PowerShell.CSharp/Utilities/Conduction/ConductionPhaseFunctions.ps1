@@ -9,7 +9,7 @@ function Realize-ConductionPhase {
         [Parameter(Mandatory)][object]$ConduitContext
     )
 
-    $signal = [Signal]::Start("Realize-ConductionPhase") | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Realize-ConductionPhase") | Select-Object -Last 1
 
     try {
         $resolvedSettings = $HydratedMemory
@@ -24,7 +24,7 @@ function Realize-ConductionPhase {
         $signal.LogInformation("✅ Phase realized from memory and settings.")
     }
     catch {
-        $signal.LogCritical("🔥 Exception: Failed to realize conduction phase: $_", $null, $_)
+        $signal.LogCritical("🔥 Exception: Failed to realize conduction phase: $_", $null, $_.Exception)
     }
 
     return $signal

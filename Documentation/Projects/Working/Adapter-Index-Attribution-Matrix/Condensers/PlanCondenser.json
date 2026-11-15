@@ -24,39 +24,47 @@
             {
               "sourceId": "condenser-plan",
               "lines": [
-                16,
-                17,
-                18,
-                19,
-                20,
-                21,
-                22,
-                23,
-                24,
-                25,
-                26,
-                135,
-                138,
-                144,
-                147
-              ]
-            },
-            {
-              "sourceId": "condenser-plan",
-              "lines": [
-                153,
-                154,
-                155,
-                181,
+                186,
+                195,
                 198,
                 199,
-                212,
                 228,
-                249,
-                252,
-                275,
-                285,
-                298
+                229,
+                230,
+                231,
+                232,
+                238,
+                268,
+                279,
+                282,
+                283,
+                284,
+                309,
+                311,
+                312,
+                324,
+                330,
+                332,
+                334,
+                335,
+                343,
+                344,
+                354,
+                361,
+                378,
+                379,
+                392,
+                406,
+                408,
+                418,
+                427,
+                432,
+                433,
+                436,
+                454,
+                455,
+                462,
+                470
               ]
             },
             {
@@ -177,17 +185,18 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    153,
-                    161,
-                    164,
-                    165,
-                    226,
+                    228,
                     238,
-                    247
+                    279,
+                    330,
+                    335,
+                    343,
+                    436,
+                    470
                   ]
                 }
               ],
-              "trace": "The resolver result is wrapped as an array; its count controls empty-array exit, warmup size and remaining work.",
+              "trace": "The resolver input is copied to an array; Filter, stable ordering and Limit produce the selected array before tracing/cloning/dispatch. Its count controls empty exit, capped warmup and remaining work; serial arguments and worker context carry that same complete array.",
               "conditional": true,
               "condition": "IteratePhase branch before iteration-array validation."
             }
@@ -214,10 +223,11 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    154,
-                    162,
-                    255,
-                    291
+                    229,
+                    234,
+                    342,
+                    435,
+                    469
                   ]
                 }
               ],
@@ -251,17 +261,13 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    199,
-                    205,
-                    222,
-                    240,
-                    301
+                    379
                   ]
                 }
               ],
               "trace": "The resolver receives literal -Default $false, validates a boolean, and passes it to the runspace-pool debug switch.",
               "conditional": true,
-              "condition": "IteratePhase with a nonempty iteration array and Config.Threading.Enabled true, after earlier validation succeeds."
+              "condition": "IteratePhase with a nonempty selected iteration array and Config.Threading.Enabled true, after earlier validation succeeds."
             }
           ],
           "default": {
@@ -270,7 +276,7 @@
         },
         {
           "path": "Config.Threading.DebugWorkItemIndex",
-          "description": "Select the work-item index for inline debugging.",
+          "description": "Retain the compatibility work-item index; it is parsed as an integer but does not filter inline worker items.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -289,17 +295,13 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    181,
-                    226,
-                    228,
-                    231,
-                    302
+                    408
                   ]
                 }
               ],
-              "trace": "The supplied Default is $warmupCount, computed as Math.Min(warmup, iterationArray.Count). Preserve this runtime expression instead of inventing a literal.",
+              "trace": "The resolver default is the selected-array-capped $warmupCount; the compatibility value is forwarded to the pool, which does not filter DebugInline items.",
               "conditional": true,
-              "condition": "IteratePhase with a nonempty iteration array and Config.Threading.Enabled true, after earlier validation succeeds."
+              "condition": "IteratePhase with a nonempty selected iteration array and Config.Threading.Enabled true, after earlier validation succeeds."
             }
           ],
           "default": {
@@ -330,10 +332,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    155,
-                    169,
-                    173,
-                    180
+                    230
                   ]
                 }
               ],
@@ -367,18 +366,13 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    197,
-                    212,
-                    215,
-                    216,
-                    241,
-                    299
+                    392
                   ]
                 }
               ],
               "trace": "The actual resolver Default expression is $maxParallelismSignal.GetResult(). That signal reads environment Config.MaxParallelism from ConductionSignal with its own fallback 1; the incoming property fallback remains a runtime expression, not the literal 1.",
               "conditional": true,
-              "condition": "IteratePhase with a nonempty iteration array and Config.Threading.Enabled true, after earlier validation succeeds."
+              "condition": "IteratePhase with a nonempty selected iteration array and Config.Threading.Enabled true, after earlier validation succeeds."
             }
           ],
           "default": {
@@ -409,16 +403,13 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    198,
-                    205,
-                    221,
-                    293
+                    378
                   ]
                 }
               ],
               "trace": "The resolver receives literal -Default $false; the boolean is validated and forwarded through workerContext.ReuseItemSignalGrid. The worker consumes that local context, not a new incoming Plan path.",
               "conditional": true,
-              "condition": "IteratePhase with a nonempty iteration array and Config.Threading.Enabled true, after earlier validation succeeds."
+              "condition": "IteratePhase with a nonempty selected iteration array and Config.Threading.Enabled true, after earlier validation succeeds."
             }
           ],
           "default": {
@@ -427,7 +418,7 @@
         },
         {
           "path": "Config.Threading.Warmup",
-          "description": "Set the nonnegative number of warmup iterations before parallel work, capped by the iteration count.",
+          "description": "Set the nonnegative number of initial serial iterations, capped by the selected count after Filter, OrderBy and Limit.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -446,16 +437,15 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    181,
-                    184,
-                    190,
-                    226
+                    354,
+                    361,
+                    406
                   ]
                 }
               ],
               "trace": "The resolver receives literal -Default 0; its value is cast to int, rejected if negative and capped with Math.Min.",
               "conditional": true,
-              "condition": "IteratePhase with a nonempty iteration array and Config.Threading.Enabled true, after earlier validation succeeds."
+              "condition": "IteratePhase with a nonempty selected iteration array and Config.Threading.Enabled true, after earlier validation succeeds."
             }
           ],
           "default": {
@@ -516,8 +506,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    138,
-                    144
+                    195
                   ]
                 }
               ],
@@ -548,8 +537,8 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    147,
-                    148
+                    198,
+                    199
                   ]
                 }
               ],
@@ -634,6 +623,192 @@
               "condition": "When an iteration executes through Invoke-PlanIteration (serial or a worker carrying a clone); no child-adapter implementation is recursively inventoried."
             }
           ]
+        },
+        {
+          "path": "Config.Filter",
+          "description": "Optionally retain iteration items using one Path|Default string or a nonempty array of them. Missing or null Filter leaves the collection unchanged. Each path resolves against an item; an absent or null path uses its literal boolean default. Native booleans and trimmed true/false text determine membership; other resolved values are false. Invalid non-null criteria fail before iteration. Filtering precedes OrderBy and Limit; excluded items have no ordering-key traversal.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    231
+                  ]
+                }
+              ],
+              "trace": "The existing graph resolver reads Filter with null default; retained values are produced before ordering and limiting. Excluded keys are not traversed.",
+              "conditional": true,
+              "condition": "IteratePhase selection before tracing, empty exit, cloning or dispatch."
+            }
+          ]
+        },
+        {
+          "path": "Config.FilterOperator",
+          "description": "Combine per-item Filter criteria using And or Or, case-insensitively. Missing or null FilterOperator defaults to And. Invalid non-null operators fail even when Filter is absent.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": "And"
+          },
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    232
+                  ]
+                }
+              ],
+              "trace": "The graph resolver reads FilterOperator with And default and validates And/Or even without Filter.",
+              "conditional": true,
+              "condition": "IteratePhase selection before tracing, empty exit, cloning or dispatch."
+            }
+          ]
+        },
+        {
+          "path": "Config.OrderBy",
+          "description": "Optionally trim and select one item-relative dotted identifier path with ASCII segments [A-Za-z_][A-Za-z0-9_]*, such as Value or Meta.Rank. Reject @, blank, nonstring and unsupported syntax; there is no scalar-self selector. Missing/null preserves input order without item-key validation. Each retained nonnull item resolves the configured path through shared Resolve-PathFromDictionary with null default and Information level; null items become null keys. Shared container, property, case-matching and getter semantics apply. Missing/null/unresolved keys without observable failure remain last in both directions. Nonnull keys must share String (ordinal-ignore-case), Boolean (false first), or SByte/Byte/Int16/UInt16/Int32/UInt32/Int64/UInt64/Decimal category; integers normalize losslessly to Decimal. Reject Single/Double, enums, mixed categories and complex keys; ties retain input order.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": null
+          },
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    68,
+                    79,
+                    84,
+                    282,
+                    285,
+                    286,
+                    287,
+                    312,
+                    313,
+                    314,
+                    317,
+                    319,
+                    321,
+                    327
+                  ]
+                }
+              ],
+              "trace": "Shared Resolve-PathFromDictionary reads this optional setting at Information level; OrderDirection supplies literal Desc default and OrderBy/Limit supply null. Each nonnull retained item key is resolved by its configured item-relative dotted path. Merge every resolver Signal and promote observable Critical/SignalEntry.Exception/thrown failures before selection dispatch, including Limit0. Missing/null/unresolved results without observable failure are null keys. Shared getters may execute; unreported ScriptProperty exceptions can become null keys.",
+              "conditional": true,
+              "condition": "IteratePhase selection before tracing, empty exit, cloning or dispatch."
+            }
+          ]
+        },
+        {
+          "path": "Config.OrderDirection",
+          "description": "Trimmed case-insensitive ASC or DESC; shared resolver explicitly uses -Default \"Desc\" and Information level, so missing/null defaults to DESC. Every other nonnull value fails even without OrderBy or with empty input. DESC reverses key comparison only; ties remain stable and null keys stay last.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": "Desc"
+          },
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    283,
+                    285,
+                    286,
+                    287
+                  ]
+                }
+              ],
+              "trace": "Shared Resolve-PathFromDictionary reads this optional setting at Information level; OrderDirection supplies literal Desc default and OrderBy/Limit supply null. Each nonnull retained item key is resolved by its configured item-relative dotted path. Merge every resolver Signal and promote observable Critical/SignalEntry.Exception/thrown failures before selection dispatch, including Limit0. Missing/null/unresolved results without observable failure are null keys. Shared getters may execute; unreported ScriptProperty exceptions can become null keys.",
+              "conditional": true,
+              "condition": "IteratePhase selection before tracing, empty exit, cloning or dispatch."
+            }
+          ]
+        },
+        {
+          "path": "Config.Limit",
+          "description": "Shared resolver uses null default and Information level; missing/null is unlimited. Accept only native Int32/Int64 >= 0; reject Boolean, string, floating/fractional, negative, array or object values. Apply after Filter and stable ordering; zero selects nothing and positive N selects min(N, retained count), with Int64 capped before index conversion. Counts selected records regardless of child success or completion.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": null
+          },
+          "evidence": [
+            {
+              "adapter": "PlanCondenser",
+              "references": [
+                {
+                  "sourceId": "condenser-mapped",
+                  "lines": [
+                    108,
+                    111,
+                    141
+                  ]
+                },
+                {
+                  "sourceId": "condenser-plan",
+                  "lines": [
+                    284,
+                    285,
+                    286,
+                    287
+                  ]
+                }
+              ],
+              "trace": "Shared Resolve-PathFromDictionary reads this optional setting at Information level; OrderDirection supplies literal Desc default and OrderBy/Limit supply null. Each nonnull retained item key is resolved by its configured item-relative dotted path. Merge every resolver Signal and promote observable Critical/SignalEntry.Exception/thrown failures before selection dispatch, including Limit0. Missing/null/unresolved results without observable failure are null keys. Shared getters may execute; unreported ScriptProperty exceptions can become null keys.",
+              "conditional": true,
+              "condition": "IteratePhase selection before tracing, empty exit, cloning or dispatch."
+            }
+          ]
         }
       ]
     },
@@ -659,29 +834,10 @@
             {
               "sourceId": "condenser-plan",
               "lines": [
-                16,
-                17,
-                18,
-                19,
-                20,
-                21,
-                22,
-                23,
-                24,
-                25,
-                26,
-                135,
-                138,
-                144,
-                147
-              ]
-            },
-            {
-              "sourceId": "condenser-plan",
-              "lines": [
-                342,
-                343,
-                344
+                186,
+                195,
+                198,
+                199
               ]
             }
           ]
@@ -709,8 +865,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    138,
-                    144
+                    195
                   ]
                 }
               ],
@@ -741,8 +896,8 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    147,
-                    148
+                    198,
+                    199
                   ]
                 }
               ],
@@ -776,37 +931,22 @@
             {
               "sourceId": "condenser-plan",
               "lines": [
-                16,
-                17,
-                18,
-                19,
-                20,
-                21,
-                22,
-                23,
-                24,
-                25,
-                26,
-                135,
-                138,
-                144,
-                147
-              ]
-            },
-            {
-              "sourceId": "condenser-plan",
-              "lines": [
-                48,
-                56,
-                57,
-                67,
-                76,
-                78,
-                95,
-                105,
-                109,
-                114,
-                348
+                102,
+                107,
+                108,
+                118,
+                122,
+                127,
+                129,
+                146,
+                156,
+                165,
+                186,
+                195,
+                198,
+                199,
+                528,
+                534
               ]
             },
             {
@@ -843,10 +983,9 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    91,
-                    95,
-                    109,
-                    348
+                    107,
+                    108,
+                    146
                   ]
                 }
               ],
@@ -877,11 +1016,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    78,
-                    79,
-                    81,
-                    82,
-                    348
+                    129
                   ]
                 }
               ],
@@ -915,10 +1050,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    56,
-                    57,
-                    59,
-                    348
+                    107
                   ]
                 }
               ],
@@ -949,11 +1081,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    57,
-                    59,
-                    61,
-                    62,
-                    348
+                    108
                   ]
                 }
               ],
@@ -984,10 +1112,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    114,
-                    115,
-                    117,
-                    348
+                    165
                   ]
                 }
               ],
@@ -1021,12 +1146,10 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    347,
-                    348,
-                    353,
-                    354,
-                    358,
-                    361
+                    127,
+                    168,
+                    176,
+                    534
                   ]
                 }
               ],
@@ -1057,8 +1180,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    138,
-                    144
+                    195
                   ]
                 }
               ],
@@ -1089,11 +1211,9 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    76,
-                    105,
-                    114,
-                    117,
-                    348
+                    127,
+                    168,
+                    176
                   ]
                 }
               ],
@@ -1124,8 +1244,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    67,
-                    348
+                    118
                   ]
                 }
               ],
@@ -1156,8 +1275,8 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    147,
-                    148
+                    198,
+                    199
                   ]
                 }
               ],
@@ -1191,37 +1310,25 @@
             {
               "sourceId": "condenser-plan",
               "lines": [
-                16,
-                17,
-                18,
-                19,
-                20,
-                21,
-                22,
-                23,
-                24,
-                25,
-                26,
-                135,
-                138,
-                144,
-                147
-              ]
-            },
-            {
-              "sourceId": "condenser-plan",
-              "lines": [
-                48,
-                56,
-                57,
-                67,
-                76,
-                78,
-                95,
-                105,
-                109,
-                114,
-                369
+                102,
+                107,
+                108,
+                118,
+                122,
+                127,
+                129,
+                146,
+                156,
+                165,
+                186,
+                195,
+                198,
+                199,
+                549,
+                575,
+                576,
+                577,
+                579
               ]
             }
           ]
@@ -1249,10 +1356,9 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    91,
-                    95,
-                    109,
-                    369
+                    107,
+                    108,
+                    146
                   ]
                 }
               ],
@@ -1283,11 +1389,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    78,
-                    79,
-                    81,
-                    82,
-                    369
+                    129
                   ]
                 }
               ],
@@ -1321,9 +1423,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    397,
-                    403,
-                    434
+                    577
                   ]
                 }
               ],
@@ -1357,10 +1457,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    56,
-                    57,
-                    59,
-                    369
+                    107
                   ]
                 }
               ],
@@ -1391,11 +1488,8 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    398,
-                    399,
-                    408,
-                    412,
-                    433
+                    578,
+                    579
                   ]
                 }
               ],
@@ -1432,11 +1526,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    57,
-                    59,
-                    61,
-                    62,
-                    369
+                    108
                   ]
                 }
               ],
@@ -1467,8 +1557,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    396,
-                    422
+                    576
                   ]
                 }
               ],
@@ -1502,10 +1591,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    114,
-                    115,
-                    117,
-                    369
+                    165
                   ]
                 }
               ],
@@ -1539,8 +1625,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    395,
-                    431
+                    575
                   ]
                 }
               ],
@@ -1577,8 +1662,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    138,
-                    144
+                    195
                   ]
                 }
               ],
@@ -1609,11 +1693,9 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    76,
-                    105,
-                    114,
-                    117,
-                    369
+                    127,
+                    168,
+                    176
                   ]
                 }
               ],
@@ -1644,7 +1726,10 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    395
+                    127,
+                    168,
+                    176,
+                    575
                   ]
                 }
               ],
@@ -1675,8 +1760,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    67,
-                    369
+                    118
                   ]
                 }
               ],
@@ -1707,8 +1791,8 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    147,
-                    148
+                    198,
+                    199
                   ]
                 }
               ],
@@ -1742,21 +1826,11 @@
             {
               "sourceId": "condenser-plan",
               "lines": [
-                16,
-                17,
-                18,
-                19,
-                20,
-                21,
-                22,
-                23,
-                24,
-                25,
-                26,
-                135,
-                138,
-                144,
-                147
+                186,
+                195,
+                198,
+                199,
+                629
               ]
             }
           ]
@@ -1784,11 +1858,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    443,
-                    444,
-                    449,
-                    451,
-                    459
+                    629
                   ]
                 }
               ],
@@ -1822,8 +1892,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    138,
-                    144
+                    195
                   ]
                 }
               ],
@@ -1854,8 +1923,8 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    147,
-                    148
+                    198,
+                    199
                   ]
                 }
               ],
@@ -1886,9 +1955,8 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    147,
-                    148,
-                    443
+                    118,
+                    623
                   ]
                 }
               ],
@@ -1919,9 +1987,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    147,
-                    148,
-                    443
+                    623
                   ]
                 }
               ],
@@ -1955,21 +2021,11 @@
             {
               "sourceId": "condenser-plan",
               "lines": [
-                16,
-                17,
-                18,
-                19,
-                20,
-                21,
-                22,
-                23,
-                24,
-                25,
-                26,
-                135,
-                138,
-                144,
-                147
+                186,
+                195,
+                198,
+                199,
+                652
               ]
             }
           ]
@@ -1997,9 +2053,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    470,
-                    472,
-                    484
+                    652
                   ]
                 }
               ],
@@ -2033,8 +2087,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    138,
-                    144
+                    195
                   ]
                 }
               ],
@@ -2065,8 +2118,8 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    147,
-                    148
+                    198,
+                    199
                   ]
                 }
               ],
@@ -2100,21 +2153,10 @@
             {
               "sourceId": "condenser-plan",
               "lines": [
-                16,
-                17,
-                18,
-                19,
-                20,
-                21,
-                22,
-                23,
-                24,
-                25,
-                26,
-                135,
-                138,
-                144,
-                147
+                186,
+                195,
+                198,
+                199
               ]
             }
           ]
@@ -2142,8 +2184,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    138,
-                    144
+                    195
                   ]
                 }
               ],
@@ -2174,8 +2215,8 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    147,
-                    148
+                    198,
+                    199
                   ]
                 }
               ],
@@ -2206,9 +2247,8 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    147,
-                    148,
-                    495
+                    118,
+                    679
                   ]
                 }
               ],
@@ -2239,9 +2279,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    147,
-                    148,
-                    495
+                    679
                   ]
                 }
               ],
@@ -2275,21 +2313,10 @@
             {
               "sourceId": "condenser-plan",
               "lines": [
-                16,
-                17,
-                18,
-                19,
-                20,
-                21,
-                22,
-                23,
-                24,
-                25,
-                26,
-                135,
-                138,
-                144,
-                147
+                186,
+                195,
+                198,
+                199
               ]
             }
           ]
@@ -2317,8 +2344,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    138,
-                    144
+                    195
                   ]
                 }
               ],
@@ -2349,8 +2375,8 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    147,
-                    148
+                    198,
+                    199
                   ]
                 }
               ],
@@ -2381,9 +2407,8 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    147,
-                    148,
-                    504
+                    118,
+                    688
                   ]
                 }
               ],
@@ -2414,9 +2439,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    147,
-                    148,
-                    504
+                    688
                   ]
                 }
               ],
@@ -2450,37 +2473,24 @@
             {
               "sourceId": "condenser-plan",
               "lines": [
-                16,
-                17,
-                18,
-                19,
-                20,
-                21,
-                22,
-                23,
-                24,
-                25,
-                26,
-                135,
-                138,
-                144,
-                147
-              ]
-            },
-            {
-              "sourceId": "condenser-plan",
-              "lines": [
-                48,
-                56,
-                57,
-                67,
-                76,
-                78,
-                95,
-                105,
-                109,
-                114,
-                513
+                102,
+                107,
+                108,
+                118,
+                122,
+                127,
+                129,
+                146,
+                156,
+                165,
+                186,
+                195,
+                198,
+                199,
+                697,
+                705,
+                711,
+                730
               ]
             }
           ]
@@ -2508,10 +2518,9 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    91,
-                    95,
-                    109,
-                    513
+                    107,
+                    108,
+                    146
                   ]
                 }
               ],
@@ -2542,11 +2551,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    78,
-                    79,
-                    81,
-                    82,
-                    513
+                    129
                   ]
                 }
               ],
@@ -2580,10 +2585,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    56,
-                    57,
-                    59,
-                    513
+                    107
                   ]
                 }
               ],
@@ -2614,11 +2616,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    57,
-                    59,
-                    61,
-                    62,
-                    513
+                    108
                   ]
                 }
               ],
@@ -2649,10 +2647,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    114,
-                    115,
-                    117,
-                    513
+                    165
                   ]
                 }
               ],
@@ -2686,7 +2681,10 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    527
+                    127,
+                    168,
+                    176,
+                    711
                   ]
                 }
               ],
@@ -2717,8 +2715,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    138,
-                    144
+                    195
                   ]
                 }
               ],
@@ -2749,11 +2746,9 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    76,
-                    105,
-                    114,
-                    117,
-                    513
+                    127,
+                    168,
+                    176
                   ]
                 }
               ],
@@ -2784,8 +2779,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    67,
-                    513
+                    118
                   ]
                 }
               ],
@@ -2816,8 +2810,8 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    147,
-                    148
+                    198,
+                    199
                   ]
                 }
               ],
@@ -2848,11 +2842,13 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    521,
-                    522,
-                    526,
-                    535,
-                    539
+                    705,
+                    706,
+                    710,
+                    711,
+                    721,
+                    726,
+                    727
                   ]
                 }
               ],
@@ -2883,10 +2879,13 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    521,
-                    522,
-                    526,
-                    527
+                    705,
+                    706,
+                    710,
+                    711,
+                    721,
+                    726,
+                    727
                   ]
                 }
               ],
@@ -2920,37 +2919,22 @@
             {
               "sourceId": "condenser-plan",
               "lines": [
-                16,
-                17,
-                18,
-                19,
-                20,
-                21,
-                22,
-                23,
-                24,
-                25,
-                26,
-                135,
-                138,
-                144,
-                147
-              ]
-            },
-            {
-              "sourceId": "condenser-plan",
-              "lines": [
-                48,
-                56,
-                57,
-                67,
-                76,
-                78,
-                95,
-                105,
-                109,
-                114,
-                556
+                102,
+                107,
+                108,
+                118,
+                122,
+                127,
+                129,
+                146,
+                156,
+                165,
+                186,
+                195,
+                198,
+                199,
+                740,
+                747
               ]
             }
           ]
@@ -2978,10 +2962,9 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    91,
-                    95,
-                    109,
-                    556
+                    107,
+                    108,
+                    146
                   ]
                 }
               ],
@@ -3012,11 +2995,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    78,
-                    79,
-                    81,
-                    82,
-                    556
+                    129
                   ]
                 }
               ],
@@ -3050,10 +3029,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    56,
-                    57,
-                    59,
-                    556
+                    107
                   ]
                 }
               ],
@@ -3084,11 +3060,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    57,
-                    59,
-                    61,
-                    62,
-                    556
+                    108
                   ]
                 }
               ],
@@ -3119,10 +3091,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    114,
-                    115,
-                    117,
-                    556
+                    165
                   ]
                 }
               ],
@@ -3156,8 +3125,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    138,
-                    144
+                    195
                   ]
                 }
               ],
@@ -3188,11 +3156,9 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    76,
-                    105,
-                    114,
-                    117,
-                    556
+                    127,
+                    168,
+                    176
                   ]
                 }
               ],
@@ -3223,8 +3189,7 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    67,
-                    556
+                    118
                   ]
                 }
               ],
@@ -3255,8 +3220,8 @@
                 {
                   "sourceId": "condenser-plan",
                   "lines": [
-                    147,
-                    148
+                    198,
+                    199
                   ]
                 }
               ],

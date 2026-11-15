@@ -14,7 +14,7 @@ function Test-IsClassDefined {
         [string]$ClassName
     )
 
-    $opSignal = [Signal]::Start("Test-IsClassDefined:$ClassName") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Test-IsClassDefined:$ClassName") | Select-Object -Last 1
 
     function Test-IsFunctionDefined {
         param (
@@ -67,7 +67,7 @@ function Test-IsClassDefined {
         }
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception while checking class: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("🔥 Exception while checking class: $($_.Exception.Message)", $null, $_.Exception)
         #$opSignal.SetResult($false)
     }
 

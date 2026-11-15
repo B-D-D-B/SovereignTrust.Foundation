@@ -35,7 +35,7 @@ function ConvertFrom-STSignalRecord {
 
     if ($null -eq $Record) { return $null }
 
-    $signal = [Signal]::Start([string]$Record.Name) | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start([string]$Record.Name) | Select-Object -Last 1
     if ($null -ne $Record.Meta) { $signal.SetMeta($Record.Meta) }
     foreach ($entry in @($Record.Entries)) {
         $null = $signal.LogMessage([string]$entry.Level, [string]$entry.Message, @($entry.Tags))
@@ -97,7 +97,7 @@ function Start-STBackgroundTaskExecution {
             param([object]$InputObject)
             if ($null -eq $InputObject) { return $false }
             $methods = @($InputObject.PSObject.Methods.Name)
-            return $methods -contains 'Failure' -and $methods -contains 'HasResult'
+            return $InputObject -is [SignalGraph.Signal] -and $methods -contains 'HasResult'
         }
 
         $initializationSignal = $null
@@ -200,9 +200,9 @@ function Start-STBackgroundTaskExecution {
 
 function Update-STBackgroundTasks {
     [CmdletBinding()]
-    param([Signal]$Signal)
+    param([SignalGraph.Signal]$Signal)
 
-    $opSignal = [Signal]::Start('Update-STBackgroundTasks', $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start('Update-STBackgroundTasks', $Signal) | Select-Object -Last 1
     try {
         foreach ($task in @($script:STBackgroundTasks.Values)) {
             if ($task.State -ne 'Running' -or $null -eq $task.Handle -or -not $task.Handle.IsCompleted) { continue }
@@ -255,7 +255,7 @@ function Update-STBackgroundTasks {
         $opSignal.SetResult(@($script:STBackgroundTasks.Values | ForEach-Object { ConvertTo-STBackgroundTaskStatus $_ }))
     }
     catch {
-        $null = $opSignal.LogCritical("Failed to update background tasks: $($_.Exception.Message)", $null, $_)
+        $null = $opSignal.LogCritical("Failed to update background tasks: $($_.Exception.Message)", $null, $_.Exception)
     }
     return $opSignal
 }
@@ -263,7 +263,7 @@ function Update-STBackgroundTasks {
 function Start-STBackgroundTask {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory)][Signal]$Signal,
+        [Parameter(Mandatory)][SignalGraph.Signal]$Signal,
         [Parameter(Mandatory)][object]$EnvironmentDefinition,
         [Parameter(Mandatory)][object]$WorkItem,
         [Parameter(Mandatory)][object]$WorkerContext,
@@ -275,7 +275,7 @@ function Start-STBackgroundTask {
         [switch]$DebugInline
     )
 
-    $opSignal = [Signal]::Start('Start-STBackgroundTask', $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start('Start-STBackgroundTask', $Signal) | Select-Object -Last 1
     $task = $null
     try {
         $selectedWorker = if ([Environment]::GetEnvironmentVariables('Process').Contains('ST_FOUNDATION_MANIFEST')) { Get-STWorkerSelection -FoundationModulePath $FoundationModulePath } else { $null }
@@ -328,16 +328,16 @@ function Start-STBackgroundTask {
             $task.Error = $_.Exception.ToString()
             $task.CompletedUtc = [DateTime]::UtcNow
         }
-        $null = $opSignal.LogCritical("Failed to start background task: $($_.Exception.Message)", $null, $_)
+        $null = $opSignal.LogCritical("Failed to start background task: $($_.Exception.Message)", $null, $_.Exception)
     }
     return $opSignal
 }
 
 function Get-STBackgroundTask {
     [CmdletBinding()]
-    param([Parameter(Mandatory)][string]$TaskId, [Signal]$Signal)
+    param([Parameter(Mandatory)][string]$TaskId, [SignalGraph.Signal]$Signal)
 
-    $opSignal = [Signal]::Start('Get-STBackgroundTask', $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start('Get-STBackgroundTask', $Signal) | Select-Object -Last 1
     $null = Update-STBackgroundTasks -Signal $opSignal | Select-Object -Last 1
     if (-not $script:STBackgroundTasks.ContainsKey($TaskId)) {
         $null = $opSignal.LogCritical("Background task '$TaskId' was not found.")
@@ -351,14 +351,14 @@ function Receive-STBackgroundTask {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)][string]$TaskId,
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
         [switch]$Wait,
         [switch]$RemoveAfterReceive,
         [switch]$AcknowledgeIntentionalCancellation,
         [ValidateRange(0, 300000)][int]$TimeoutMilliseconds = 0
     )
 
-    $opSignal = [Signal]::Start('Receive-STBackgroundTask', $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start('Receive-STBackgroundTask', $Signal) | Select-Object -Last 1
     if (-not $script:STBackgroundTasks.ContainsKey($TaskId)) {
         $null = $opSignal.LogCritical("Background task '$TaskId' was not found.")
         return $opSignal
@@ -404,13 +404,13 @@ function Wait-STBackgroundTasks {
     [CmdletBinding()]
     param(
         [string]$OwnerId,
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
         [switch]$RemoveAfterReceive,
         [switch]$MergeWorkerSignals,
         [ValidateRange(0, 300000)][int]$TimeoutMilliseconds = 0
     )
 
-    $opSignal = [Signal]::Start('Wait-STBackgroundTasks', $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start('Wait-STBackgroundTasks', $Signal) | Select-Object -Last 1
     $ids = @($script:STBackgroundTasks.Values | Where-Object { [string]::IsNullOrWhiteSpace($OwnerId) -or $_.OwnerId -eq $OwnerId } | ForEach-Object TaskId)
     $timer = [System.Diagnostics.Stopwatch]::StartNew()
     $results = foreach ($id in $ids) {
@@ -452,9 +452,9 @@ function Wait-STBackgroundTasks {
 
 function Stop-STBackgroundTask {
     [CmdletBinding()]
-    param([Parameter(Mandatory)][string]$TaskId, [Signal]$Signal)
+    param([Parameter(Mandatory)][string]$TaskId, [SignalGraph.Signal]$Signal)
 
-    $opSignal = [Signal]::Start('Stop-STBackgroundTask', $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start('Stop-STBackgroundTask', $Signal) | Select-Object -Last 1
     if (-not $script:STBackgroundTasks.ContainsKey($TaskId)) {
         $null = $opSignal.LogCritical("Background task '$TaskId' was not found.")
         return $opSignal
@@ -500,7 +500,7 @@ function Stop-STBackgroundTask {
         $task.Runspace.Dispose()
     }
     catch {
-        $null = $opSignal.LogCritical("Failed to stop background task '$TaskId'; ownership retained: $($_.Exception.Message)", $null, $_)
+        $null = $opSignal.LogCritical("Failed to stop background task '$TaskId'; ownership retained: $($_.Exception.Message)", $null, $_.Exception)
         return $opSignal
     }
     $task.PowerShell = $null

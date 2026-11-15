@@ -1,13 +1,13 @@
 function Resolve-ModuleFromAdapter {
     [CmdletBinding()]
     param (
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
         [string]$Slot,
         [string]$ModuleName,
         [string]$RelativePath
     )
 
-    $opSignal = [Signal]::Start("Resolve-ModuleFromAdapter") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Resolve-ModuleFromAdapter") | Select-Object -Last 1
 
     try {
         $adapterSignal = Resolve-PathFromDictionary -Dictionary ($Signal.GetControl($true)) -Path "%.*.#.Adapters.*.#.MappedStorage" -SignalLevel "Information" | Select-Object -Last 1
@@ -20,7 +20,7 @@ function Resolve-ModuleFromAdapter {
         }
 
         $adapter = $adapterSignal.GetResult() | Select-Object -Last 1
-        while ($adapter -is [Signal]) {
+        while ($adapter -is [SignalGraph.Signal]) {
             $adapter = $adapter.GetResult() | Select-Object -Last 1
         }
 
@@ -54,7 +54,7 @@ function Resolve-ModuleFromAdapter {
         })
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception in Resolve-ModuleFromAdapter: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("🔥 Exception in Resolve-ModuleFromAdapter: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $opSignal

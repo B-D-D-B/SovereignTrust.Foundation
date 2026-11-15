@@ -9,7 +9,7 @@
       "id": "plan-class",
       "repository": "SovereignTrust.Foundation",
       "path": "Src/PowerShell/Classes/Adapters/Condenser/PlanCondenser.ps1",
-      "sha256": "34F0C02C6B334A93C1D63A95B8E86E8E221E7F65636F54E7461F6F2BAD5A8163",
+      "sha256": "693B82AFC6888439400BFBE8457BD63C93A747577FAB8EEDCAAE9B2F81A79BD5",
       "symbol": "PlanCondenser"
     },
     {
@@ -52,8 +52,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 187,
-              "endLine": 187
+              "startLine": 218,
+              "endLine": 218
             }
           ]
         }
@@ -63,8 +63,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 171,
-            "endLine": 190
+            "startLine": 202,
+            "endLine": 221
           }
         ]
       },
@@ -75,8 +75,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 171,
-              "endLine": 190
+              "startLine": 202,
+              "endLine": 221
             }
           ]
         }
@@ -89,8 +89,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 171,
-              "endLine": 190
+              "startLine": 202,
+              "endLine": 221
             }
           ]
         }
@@ -105,8 +105,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 171,
-                "endLine": 190
+                "startLine": 202,
+                "endLine": 221
               }
             ]
           }
@@ -125,8 +125,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 171,
-              "endLine": 190
+              "startLine": 202,
+              "endLine": 221
             }
           ]
         }
@@ -153,8 +153,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 211,
-              "endLine": 211
+              "startLine": 242,
+              "endLine": 242
             }
           ]
         }
@@ -164,8 +164,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 197,
-            "endLine": 214
+            "startLine": 228,
+            "endLine": 245
           }
         ]
       },
@@ -176,8 +176,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 197,
-              "endLine": 214
+              "startLine": 228,
+              "endLine": 245
             }
           ]
         }
@@ -190,8 +190,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 197,
-              "endLine": 214
+              "startLine": 228,
+              "endLine": 245
             }
           ]
         }
@@ -206,8 +206,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 197,
-                "endLine": 214
+                "startLine": 228,
+                "endLine": 245
               }
             ]
           }
@@ -226,8 +226,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 197,
-              "endLine": 214
+              "startLine": 228,
+              "endLine": 245
             }
           ]
         }
@@ -254,8 +254,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 224,
-              "endLine": 224
+              "startLine": 255,
+              "endLine": 255
             }
           ]
         }
@@ -265,8 +265,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 215,
-            "endLine": 225
+            "startLine": 246,
+            "endLine": 256
           }
         ]
       },
@@ -277,8 +277,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 215,
-              "endLine": 225
+              "startLine": 246,
+              "endLine": 256
             }
           ]
         }
@@ -291,8 +291,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 215,
-              "endLine": 225
+              "startLine": 246,
+              "endLine": 256
             }
           ]
         }
@@ -307,8 +307,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 215,
-                "endLine": 225
+                "startLine": 246,
+                "endLine": 256
               }
             ]
           }
@@ -327,8 +327,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 215,
-              "endLine": 225
+              "startLine": 246,
+              "endLine": 256
             }
           ]
         }
@@ -355,8 +355,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 231,
-              "endLine": 231
+              "startLine": 262,
+              "endLine": 262
             }
           ]
         }
@@ -366,8 +366,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 222,
-            "endLine": 234
+            "startLine": 253,
+            "endLine": 265
           }
         ]
       },
@@ -378,8 +378,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 222,
-              "endLine": 234
+              "startLine": 253,
+              "endLine": 265
             }
           ]
         }
@@ -392,8 +392,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 222,
-              "endLine": 234
+              "startLine": 253,
+              "endLine": 265
             }
           ]
         }
@@ -408,8 +408,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 222,
-                "endLine": 234
+                "startLine": 253,
+                "endLine": 265
               }
             ]
           }
@@ -428,8 +428,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 222,
-              "endLine": 234
+              "startLine": 253,
+              "endLine": 265
             }
           ]
         }
@@ -456,8 +456,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 257,
-              "endLine": 257
+              "startLine": 349,
+              "endLine": 349
             }
           ]
         }
@@ -467,8 +467,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 251,
-            "endLine": 260
+            "startLine": 343,
+            "endLine": 352
           }
         ]
       },
@@ -479,8 +479,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 251,
-              "endLine": 260
+              "startLine": 343,
+              "endLine": 352
             }
           ]
         }
@@ -493,8 +493,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 251,
-              "endLine": 260
+              "startLine": 343,
+              "endLine": 352
             }
           ]
         }
@@ -509,8 +509,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 251,
-                "endLine": 260
+                "startLine": 343,
+                "endLine": 352
               }
             ]
           }
@@ -529,8 +529,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 251,
-              "endLine": 260
+              "startLine": 343,
+              "endLine": 352
             }
           ]
         }
@@ -557,8 +557,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 275,
-              "endLine": 275
+              "startLine": 367,
+              "endLine": 367
             }
           ]
         }
@@ -568,8 +568,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 268,
-            "endLine": 277
+            "startLine": 360,
+            "endLine": 369
           }
         ]
       },
@@ -580,8 +580,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 268,
-              "endLine": 277
+              "startLine": 360,
+              "endLine": 369
             }
           ]
         }
@@ -594,8 +594,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 268,
-              "endLine": 277
+              "startLine": 360,
+              "endLine": 369
             }
           ]
         }
@@ -610,8 +610,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 268,
-                "endLine": 277
+                "startLine": 360,
+                "endLine": 369
               }
             ]
           }
@@ -630,8 +630,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 268,
-              "endLine": 277
+              "startLine": 360,
+              "endLine": 369
             }
           ]
         }
@@ -658,8 +658,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 279,
-              "endLine": 279
+              "startLine": 371,
+              "endLine": 371
             }
           ]
         }
@@ -669,8 +669,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 268,
-            "endLine": 280
+            "startLine": 360,
+            "endLine": 372
           }
         ]
       },
@@ -681,8 +681,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 268,
-              "endLine": 280
+              "startLine": 360,
+              "endLine": 372
             }
           ]
         }
@@ -695,8 +695,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 268,
-              "endLine": 280
+              "startLine": 360,
+              "endLine": 372
             }
           ]
         }
@@ -711,8 +711,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 268,
-                "endLine": 280
+                "startLine": 360,
+                "endLine": 372
               }
             ]
           }
@@ -731,8 +731,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 268,
-              "endLine": 280
+              "startLine": 360,
+              "endLine": 372
             }
           ]
         }
@@ -759,8 +759,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 295,
-              "endLine": 295
+              "startLine": 387,
+              "endLine": 387
             }
           ]
         }
@@ -770,8 +770,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 283,
-            "endLine": 298
+            "startLine": 375,
+            "endLine": 390
           }
         ]
       },
@@ -782,8 +782,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 283,
-              "endLine": 298
+              "startLine": 375,
+              "endLine": 390
             }
           ]
         }
@@ -796,8 +796,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 283,
-              "endLine": 298
+              "startLine": 375,
+              "endLine": 390
             }
           ]
         }
@@ -812,8 +812,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 283,
-                "endLine": 298
+                "startLine": 375,
+                "endLine": 390
               }
             ]
           }
@@ -832,8 +832,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 283,
-              "endLine": 298
+              "startLine": 375,
+              "endLine": 390
             }
           ]
         }
@@ -860,8 +860,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 307,
-              "endLine": 307
+              "startLine": 399,
+              "endLine": 399
             }
           ]
         }
@@ -871,8 +871,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 299,
-            "endLine": 309
+            "startLine": 391,
+            "endLine": 401
           }
         ]
       },
@@ -883,8 +883,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 299,
-              "endLine": 309
+              "startLine": 391,
+              "endLine": 401
             }
           ]
         }
@@ -897,8 +897,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 299,
-              "endLine": 309
+              "startLine": 391,
+              "endLine": 401
             }
           ]
         }
@@ -913,8 +913,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 299,
-                "endLine": 309
+                "startLine": 391,
+                "endLine": 401
               }
             ]
           }
@@ -933,8 +933,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 299,
-              "endLine": 309
+              "startLine": 391,
+              "endLine": 401
             }
           ]
         }
@@ -961,8 +961,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 322,
-              "endLine": 322
+              "startLine": 414,
+              "endLine": 414
             }
           ]
         }
@@ -972,8 +972,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 314,
-            "endLine": 323
+            "startLine": 406,
+            "endLine": 415
           }
         ]
       },
@@ -984,8 +984,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 314,
-              "endLine": 323
+              "startLine": 406,
+              "endLine": 415
             }
           ]
         }
@@ -998,8 +998,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 314,
-              "endLine": 323
+              "startLine": 406,
+              "endLine": 415
             }
           ]
         }
@@ -1014,8 +1014,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 314,
-                "endLine": 323
+                "startLine": 406,
+                "endLine": 415
               }
             ]
           }
@@ -1034,8 +1034,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 314,
-              "endLine": 323
+              "startLine": 406,
+              "endLine": 415
             }
           ]
         }
@@ -1062,8 +1062,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 357,
-              "endLine": 357
+              "startLine": 449,
+              "endLine": 449
             }
           ]
         }
@@ -1073,8 +1073,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 283,
-            "endLine": 358
+            "startLine": 375,
+            "endLine": 450
           }
         ]
       },
@@ -1085,8 +1085,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 283,
-              "endLine": 358
+              "startLine": 375,
+              "endLine": 450
             }
           ]
         }
@@ -1099,8 +1099,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 283,
-              "endLine": 358
+              "startLine": 375,
+              "endLine": 450
             }
           ]
         }
@@ -1115,8 +1115,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 283,
-                "endLine": 358
+                "startLine": 375,
+                "endLine": 450
               }
             ]
           }
@@ -1135,8 +1135,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 283,
-              "endLine": 358
+              "startLine": 375,
+              "endLine": 450
             }
           ]
         }
@@ -1163,8 +1163,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 464,
-              "endLine": 464
+              "startLine": 556,
+              "endLine": 556
             }
           ]
         }
@@ -1174,8 +1174,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 456,
-            "endLine": 465
+            "startLine": 548,
+            "endLine": 557
           }
         ]
       },
@@ -1186,8 +1186,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 456,
-              "endLine": 465
+              "startLine": 548,
+              "endLine": 557
             }
           ]
         }
@@ -1200,8 +1200,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 456,
-              "endLine": 465
+              "startLine": 548,
+              "endLine": 557
             }
           ]
         }
@@ -1216,8 +1216,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 456,
-                "endLine": 465
+                "startLine": 548,
+                "endLine": 557
               }
             ]
           }
@@ -1236,8 +1236,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 456,
-              "endLine": 465
+              "startLine": 548,
+              "endLine": 557
             }
           ]
         }
@@ -1264,8 +1264,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 470,
-              "endLine": 470
+              "startLine": 562,
+              "endLine": 562
             }
           ]
         }
@@ -1275,8 +1275,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 462,
-            "endLine": 471
+            "startLine": 554,
+            "endLine": 563
           }
         ]
       },
@@ -1287,8 +1287,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 462,
-              "endLine": 471
+              "startLine": 554,
+              "endLine": 563
             }
           ]
         }
@@ -1301,8 +1301,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 462,
-              "endLine": 471
+              "startLine": 554,
+              "endLine": 563
             }
           ]
         }
@@ -1317,8 +1317,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 462,
-                "endLine": 471
+                "startLine": 554,
+                "endLine": 563
               }
             ]
           }
@@ -1337,8 +1337,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 462,
-              "endLine": 471
+              "startLine": 554,
+              "endLine": 563
             }
           ]
         }
@@ -1365,8 +1365,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 474,
-              "endLine": 474
+              "startLine": 566,
+              "endLine": 566
             }
           ]
         }
@@ -1376,8 +1376,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 467,
-            "endLine": 475
+            "startLine": 559,
+            "endLine": 567
           }
         ]
       },
@@ -1388,8 +1388,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 467,
-              "endLine": 475
+              "startLine": 559,
+              "endLine": 567
             }
           ]
         }
@@ -1402,8 +1402,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 467,
-              "endLine": 475
+              "startLine": 559,
+              "endLine": 567
             }
           ]
         }
@@ -1418,8 +1418,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 467,
-                "endLine": 475
+                "startLine": 559,
+                "endLine": 567
               }
             ]
           }
@@ -1438,8 +1438,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 467,
-              "endLine": 475
+              "startLine": 559,
+              "endLine": 567
             }
           ]
         }
@@ -1466,8 +1466,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 492,
-              "endLine": 492
+              "startLine": 584,
+              "endLine": 584
             }
           ]
         }
@@ -1477,8 +1477,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 483,
-            "endLine": 493
+            "startLine": 575,
+            "endLine": 585
           }
         ]
       },
@@ -1489,8 +1489,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 483,
-              "endLine": 493
+              "startLine": 575,
+              "endLine": 585
             }
           ]
         }
@@ -1503,8 +1503,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 483,
-              "endLine": 493
+              "startLine": 575,
+              "endLine": 585
             }
           ]
         }
@@ -1519,8 +1519,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 483,
-                "endLine": 493
+                "startLine": 575,
+                "endLine": 585
               }
             ]
           }
@@ -1539,8 +1539,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 483,
-              "endLine": 493
+              "startLine": 575,
+              "endLine": 585
             }
           ]
         }
@@ -1567,8 +1567,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 497,
-              "endLine": 497
+              "startLine": 589,
+              "endLine": 589
             }
           ]
         }
@@ -1578,8 +1578,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 483,
-            "endLine": 499
+            "startLine": 575,
+            "endLine": 591
           }
         ]
       },
@@ -1590,8 +1590,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 483,
-              "endLine": 499
+              "startLine": 575,
+              "endLine": 591
             }
           ]
         }
@@ -1604,8 +1604,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 483,
-              "endLine": 499
+              "startLine": 575,
+              "endLine": 591
             }
           ]
         }
@@ -1620,8 +1620,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 483,
-                "endLine": 499
+                "startLine": 575,
+                "endLine": 591
               }
             ]
           }
@@ -1640,8 +1640,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 483,
-              "endLine": 499
+              "startLine": 575,
+              "endLine": 591
             }
           ]
         }
@@ -1668,8 +1668,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 501,
-              "endLine": 501
+              "startLine": 593,
+              "endLine": 593
             }
           ]
         }
@@ -1679,8 +1679,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 483,
-            "endLine": 502
+            "startLine": 575,
+            "endLine": 594
           }
         ]
       },
@@ -1691,8 +1691,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 483,
-              "endLine": 502
+              "startLine": 575,
+              "endLine": 594
             }
           ]
         }
@@ -1705,8 +1705,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 483,
-              "endLine": 502
+              "startLine": 575,
+              "endLine": 594
             }
           ]
         }
@@ -1721,8 +1721,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 483,
-                "endLine": 502
+                "startLine": 575,
+                "endLine": 594
               }
             ]
           }
@@ -1741,8 +1741,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 483,
-              "endLine": 502
+              "startLine": 575,
+              "endLine": 594
             }
           ]
         }
@@ -1769,8 +1769,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 533,
-              "endLine": 533
+              "startLine": 625,
+              "endLine": 625
             }
           ]
         }
@@ -1780,8 +1780,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 530,
-            "endLine": 535
+            "startLine": 622,
+            "endLine": 627
           }
         ]
       },
@@ -1792,8 +1792,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 530,
-              "endLine": 535
+              "startLine": 622,
+              "endLine": 627
             }
           ]
         }
@@ -1806,8 +1806,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 530,
-              "endLine": 535
+              "startLine": 622,
+              "endLine": 627
             }
           ]
         }
@@ -1822,8 +1822,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 530,
-                "endLine": 535
+                "startLine": 622,
+                "endLine": 627
               }
             ]
           }
@@ -1842,8 +1842,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 530,
-              "endLine": 535
+              "startLine": 622,
+              "endLine": 627
             }
           ]
         }
@@ -1871,13 +1871,13 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 540,
-              "endLine": 540
+              "startLine": 632,
+              "endLine": 632
             },
             {
               "sourceId": "plan-class",
-              "startLine": 563,
-              "endLine": 563
+              "startLine": 655,
+              "endLine": 655
             }
           ]
         }
@@ -1887,8 +1887,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 537,
-            "endLine": 564
+            "startLine": 629,
+            "endLine": 656
           }
         ]
       },
@@ -1899,8 +1899,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 537,
-              "endLine": 564
+              "startLine": 629,
+              "endLine": 656
             }
           ]
         }
@@ -1913,8 +1913,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 537,
-              "endLine": 564
+              "startLine": 629,
+              "endLine": 656
             }
           ]
         }
@@ -1929,8 +1929,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 537,
-                "endLine": 564
+                "startLine": 629,
+                "endLine": 656
               }
             ]
           }
@@ -1949,8 +1949,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 537,
-              "endLine": 564
+              "startLine": 629,
+              "endLine": 656
             }
           ]
         }
@@ -1977,8 +1977,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 641,
-              "endLine": 641
+              "startLine": 733,
+              "endLine": 733
             }
           ]
         }
@@ -1988,8 +1988,8 @@
         "evidence": [
           {
             "sourceId": "plan-class",
-            "startLine": 613,
-            "endLine": 642
+            "startLine": 705,
+            "endLine": 734
           }
         ]
       },
@@ -2000,8 +2000,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 613,
-              "endLine": 642
+              "startLine": 705,
+              "endLine": 734
             }
           ]
         }
@@ -2014,8 +2014,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 613,
-              "endLine": 642
+              "startLine": 705,
+              "endLine": 734
             }
           ]
         }
@@ -2030,8 +2030,8 @@
             "evidence": [
               {
                 "sourceId": "plan-class",
-                "startLine": 613,
-                "endLine": 642
+                "startLine": 705,
+                "endLine": 734
               }
             ]
           }
@@ -2050,8 +2050,8 @@
           "evidence": [
             {
               "sourceId": "plan-class",
-              "startLine": 613,
-              "endLine": 642
+              "startLine": 705,
+              "endLine": 734
             }
           ]
         }
@@ -2694,6 +2694,937 @@
       "limitations": [
         "Source-only confidence; no runtime phase/provider execution.",
         "This assembled message requires both fixed throw and catch wrapper; other catch causes are unverified."
+      ]
+    },
+    {
+      "id": "iterate-orderby-syntax",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Plan.Config ordering/limit validation failed: Plan.Config.OrderBy must be a dotted item-relative identifier path.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 296,
+              "endLine": 296
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "IteratePhase selection catches this fixed inner guard before cloning or dispatch. OrderBy is nonstring, blank or outside the item-relative ASCII dotted-identifier grammar; @ is rejected.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 296,
+            "endLine": 296
+          },
+          {
+            "sourceId": "plan-class",
+            "startLine": 339,
+            "endLine": 339
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "OrderBy is nonstring, blank or outside the item-relative ASCII dotted-identifier grammar; @ is rejected.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 296,
+              "endLine": 296
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm canonical IteratePhase context, exact fixed message and redacted type/presence/structured Exception flags. Shared resolver getters may execute; do not rerun lookup merely for diagnosis.",
+          "expected": "OrderBy is nonstring, blank or outside the item-relative ASCII dotted-identifier grammar; @ is rejected.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 296,
+              "endLine": 296
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional input-owner proposal only; no automatic resolver/getter execution or provider effects.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use a dotted item-relative identifier such as Meta.Rank or Value; omit/null preserves input order. There is no scalar-self selector.",
+            "expected": "The specific fixed guard is no longer applicable under intended owned input semantics.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 296,
+                "endLine": 296
+              },
+              {
+                "sourceId": "plan-class",
+                "startLine": 339,
+                "endLine": 339
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical activity, exact assembled message or source identity differs.",
+          "Input ownership, intended ordering or effects of shared resolver/getters are uncertain.",
+          "Correction would expose payload, invoke unapproved getter effects or mutate unrelated state."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Inspect the specific configuration/type/structured-failure discriminator without running getters.",
+          "expected": "The fixed guard would be false; runtime selection/getter effects and downstream success remain unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 296,
+              "endLine": 296
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/records, values, paths, arbitrary exception details and credentials; retain canonical activity, exact fixed message, source identity and type/presence/structured Exception flags.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, runspace or provider execution.",
+        "Shared resolver container/property/case/getter semantics apply; getters may execute and affect caller objects.",
+        "An unreported throwing ScriptProperty can expose neither Critical nor SignalEntry.Exception and is indistinguishable from unresolved/null; reported reflected getter exceptions fail.",
+        "Only this exact assembled fixed guard is routed; other catch exceptions remain unresolved."
+      ]
+    },
+    {
+      "id": "iterate-order-direction",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Plan.Config ordering/limit validation failed: Plan.Config.OrderDirection must be ASC or DESC.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 301,
+              "endLine": 301
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "IteratePhase selection catches this fixed inner guard before cloning or dispatch. Nonnull OrderDirection is nonstring or trimmed value is neither ASC nor DESC case-insensitively.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 301,
+            "endLine": 301
+          },
+          {
+            "sourceId": "plan-class",
+            "startLine": 339,
+            "endLine": 339
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Nonnull OrderDirection is nonstring or trimmed value is neither ASC nor DESC case-insensitively.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 301,
+              "endLine": 301
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm canonical IteratePhase context, exact fixed message and redacted type/presence/structured Exception flags. Shared resolver getters may execute; do not rerun lookup merely for diagnosis.",
+          "expected": "Nonnull OrderDirection is nonstring or trimmed value is neither ASC nor DESC case-insensitively.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 301,
+              "endLine": 301
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional input-owner proposal only; no automatic resolver/getter execution or provider effects.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use ASC or DESC, or omit/null for the shared resolver Desc default; direction alone preserves input order.",
+            "expected": "The specific fixed guard is no longer applicable under intended owned input semantics.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 301,
+                "endLine": 301
+              },
+              {
+                "sourceId": "plan-class",
+                "startLine": 339,
+                "endLine": 339
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical activity, exact assembled message or source identity differs.",
+          "Input ownership, intended ordering or effects of shared resolver/getters are uncertain.",
+          "Correction would expose payload, invoke unapproved getter effects or mutate unrelated state."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Inspect the specific configuration/type/structured-failure discriminator without running getters.",
+          "expected": "The fixed guard would be false; runtime selection/getter effects and downstream success remain unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 301,
+              "endLine": 301
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/records, values, paths, arbitrary exception details and credentials; retain canonical activity, exact fixed message, source identity and type/presence/structured Exception flags.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, runspace or provider execution.",
+        "Shared resolver container/property/case/getter semantics apply; getters may execute and affect caller objects.",
+        "An unreported throwing ScriptProperty can expose neither Critical nor SignalEntry.Exception and is indistinguishable from unresolved/null; reported reflected getter exceptions fail.",
+        "Only this exact assembled fixed guard is routed; other catch exceptions remain unresolved."
+      ]
+    },
+    {
+      "id": "iterate-limit-type-range",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Plan.Config ordering/limit validation failed: Plan.Config.Limit must be a nonnegative native Int32 or Int64.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 304,
+              "endLine": 304
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "IteratePhase selection catches this fixed inner guard before cloning or dispatch. Nonnull Limit is not native Int32/Int64 or is negative.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 304,
+            "endLine": 304
+          },
+          {
+            "sourceId": "plan-class",
+            "startLine": 339,
+            "endLine": 339
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Nonnull Limit is not native Int32/Int64 or is negative.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 304,
+              "endLine": 304
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm canonical IteratePhase context, exact fixed message and redacted type/presence/structured Exception flags. Shared resolver getters may execute; do not rerun lookup merely for diagnosis.",
+          "expected": "Nonnull Limit is not native Int32/Int64 or is negative.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 304,
+              "endLine": 304
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional input-owner proposal only; no automatic resolver/getter execution or provider effects.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Use a nonnegative native Int32/Int64, or omit/null for unlimited; zero selects none after all key checks.",
+            "expected": "The specific fixed guard is no longer applicable under intended owned input semantics.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 304,
+                "endLine": 304
+              },
+              {
+                "sourceId": "plan-class",
+                "startLine": 339,
+                "endLine": 339
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical activity, exact assembled message or source identity differs.",
+          "Input ownership, intended ordering or effects of shared resolver/getters are uncertain.",
+          "Correction would expose payload, invoke unapproved getter effects or mutate unrelated state."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Inspect the specific configuration/type/structured-failure discriminator without running getters.",
+          "expected": "The fixed guard would be false; runtime selection/getter effects and downstream success remain unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 304,
+              "endLine": 304
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/records, values, paths, arbitrary exception details and credentials; retain canonical activity, exact fixed message, source identity and type/presence/structured Exception flags.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, runspace or provider execution.",
+        "Shared resolver container/property/case/getter semantics apply; getters may execute and affect caller objects.",
+        "An unreported throwing ScriptProperty can expose neither Critical nor SignalEntry.Exception and is indistinguishable from unresolved/null; reported reflected getter exceptions fail.",
+        "Only this exact assembled fixed guard is routed; other catch exceptions remain unresolved."
+      ]
+    },
+    {
+      "id": "iterate-order-category",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Plan.Config ordering/limit validation failed: Ordering keys must share one category.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 321,
+              "endLine": 321
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "IteratePhase selection catches this fixed inner guard before cloning or dispatch. Shared-resolved retained nonnull keys belong to different supported String, Boolean or exact integral/Decimal categories.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 321,
+            "endLine": 321
+          },
+          {
+            "sourceId": "plan-class",
+            "startLine": 339,
+            "endLine": 339
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "Shared-resolved retained nonnull keys belong to different supported String, Boolean or exact integral/Decimal categories.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 321,
+              "endLine": 321
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm canonical IteratePhase context, exact fixed message and redacted type/presence/structured Exception flags. Shared resolver getters may execute; do not rerun lookup merely for diagnosis.",
+          "expected": "Shared-resolved retained nonnull keys belong to different supported String, Boolean or exact integral/Decimal categories.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 321,
+              "endLine": 321
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional input-owner proposal only; no automatic resolver/getter execution or provider effects.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Choose an item-relative property with one supported nonnull key category across every retained record.",
+            "expected": "The specific fixed guard is no longer applicable under intended owned input semantics.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 321,
+                "endLine": 321
+              },
+              {
+                "sourceId": "plan-class",
+                "startLine": 339,
+                "endLine": 339
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical activity, exact assembled message or source identity differs.",
+          "Input ownership, intended ordering or effects of shared resolver/getters are uncertain.",
+          "Correction would expose payload, invoke unapproved getter effects or mutate unrelated state."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Inspect the specific configuration/type/structured-failure discriminator without running getters.",
+          "expected": "The fixed guard would be false; runtime selection/getter effects and downstream success remain unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 321,
+              "endLine": 321
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/records, values, paths, arbitrary exception details and credentials; retain canonical activity, exact fixed message, source identity and type/presence/structured Exception flags.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, runspace or provider execution.",
+        "Shared resolver container/property/case/getter semantics apply; getters may execute and affect caller objects.",
+        "An unreported throwing ScriptProperty can expose neither Critical nor SignalEntry.Exception and is indistinguishable from unresolved/null; reported reflected getter exceptions fail.",
+        "Only this exact assembled fixed guard is routed; other catch exceptions remain unresolved."
+      ]
+    },
+    {
+      "id": "iterate-order-key-type",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Plan.Config ordering/limit validation failed: Ordering key must be String, Boolean or an integral/Decimal number.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 79,
+              "endLine": 79
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "IteratePhase selection catches this fixed inner guard before cloning or dispatch. A shared-resolved retained nonnull key is outside String, Boolean, SByte/Byte/Int16/UInt16/Int32/UInt32/Int64/UInt64/Decimal. Single/Double, enum and complex values fail.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 79,
+            "endLine": 79
+          },
+          {
+            "sourceId": "plan-class",
+            "startLine": 339,
+            "endLine": 339
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "A shared-resolved retained nonnull key is outside String, Boolean, SByte/Byte/Int16/UInt16/Int32/UInt32/Int64/UInt64/Decimal. Single/Double, enum and complex values fail.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 79,
+              "endLine": 79
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm canonical IteratePhase context, exact fixed message and redacted type/presence/structured Exception flags. Shared resolver getters may execute; do not rerun lookup merely for diagnosis.",
+          "expected": "A shared-resolved retained nonnull key is outside String, Boolean, SByte/Byte/Int16/UInt16/Int32/UInt32/Int64/UInt64/Decimal. Single/Double, enum and complex values fail.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 79,
+              "endLine": 79
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional input-owner proposal only; no automatic resolver/getter execution or provider effects.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Choose a supported item-relative property. Wrap scalar keys in Value records and use OrderBy=Value; do not coerce floating values and lose distinctions.",
+            "expected": "The specific fixed guard is no longer applicable under intended owned input semantics.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 79,
+                "endLine": 79
+              },
+              {
+                "sourceId": "plan-class",
+                "startLine": 339,
+                "endLine": 339
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical activity, exact assembled message or source identity differs.",
+          "Input ownership, intended ordering or effects of shared resolver/getters are uncertain.",
+          "Correction would expose payload, invoke unapproved getter effects or mutate unrelated state."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Inspect the specific configuration/type/structured-failure discriminator without running getters.",
+          "expected": "The fixed guard would be false; runtime selection/getter effects and downstream success remain unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 79,
+              "endLine": 79
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/records, values, paths, arbitrary exception details and credentials; retain canonical activity, exact fixed message, source identity and type/presence/structured Exception flags.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, runspace or provider execution.",
+        "Shared resolver container/property/case/getter semantics apply; getters may execute and affect caller objects.",
+        "An unreported throwing ScriptProperty can expose neither Critical nor SignalEntry.Exception and is indistinguishable from unresolved/null; reported reflected getter exceptions fail.",
+        "Only this exact assembled fixed guard is routed; other catch exceptions remain unresolved."
+      ]
+    },
+    {
+      "id": "iterate-order-config-lookup",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Plan.Config ordering/limit validation failed: Plan.Config ordering/limit lookup failed.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 288,
+              "endLine": 288
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "IteratePhase selection catches this fixed inner guard before cloning or dispatch. A returned Config.OrderBy/OrderDirection/Limit resolver Signal is Critical or exposes a nonnull structured SignalEntry.Exception.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 288,
+            "endLine": 288
+          },
+          {
+            "sourceId": "plan-class",
+            "startLine": 339,
+            "endLine": 339
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "A returned Config.OrderBy/OrderDirection/Limit resolver Signal is Critical or exposes a nonnull structured SignalEntry.Exception.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 288,
+              "endLine": 288
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm canonical IteratePhase context, exact fixed message and redacted type/presence/structured Exception flags. Shared resolver getters may execute; do not rerun lookup merely for diagnosis.",
+          "expected": "A returned Config.OrderBy/OrderDirection/Limit resolver Signal is Critical or exposes a nonnull structured SignalEntry.Exception.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 288,
+              "endLine": 288
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional input-owner proposal only; no automatic resolver/getter execution or provider effects.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Inspect redacted structured lookup failure/source metadata and the originating Plan configuration owner before proposing a bounded input correction; do not infer cause from message wording.",
+            "expected": "The specific fixed guard is no longer applicable under intended owned input semantics.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 288,
+                "endLine": 288
+              },
+              {
+                "sourceId": "plan-class",
+                "startLine": 339,
+                "endLine": 339
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical activity, exact assembled message or source identity differs.",
+          "Input ownership, intended ordering or effects of shared resolver/getters are uncertain.",
+          "Correction would expose payload, invoke unapproved getter effects or mutate unrelated state."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Inspect the specific configuration/type/structured-failure discriminator without running getters.",
+          "expected": "The fixed guard would be false; runtime selection/getter effects and downstream success remain unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 288,
+              "endLine": 288
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/records, values, paths, arbitrary exception details and credentials; retain canonical activity, exact fixed message, source identity and type/presence/structured Exception flags.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, runspace or provider execution.",
+        "Shared resolver container/property/case/getter semantics apply; getters may execute and affect caller objects.",
+        "An unreported throwing ScriptProperty can expose neither Critical nor SignalEntry.Exception and is indistinguishable from unresolved/null; reported reflected getter exceptions fail.",
+        "Only this exact assembled fixed guard is routed; other catch exceptions remain unresolved."
+      ]
+    },
+    {
+      "id": "iterate-order-key-lookup",
+      "status": "source-verified",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "emittedMessages": [
+        {
+          "kind": "log",
+          "text": "Plan.Config ordering/limit validation failed: Plan.Config.OrderBy path resolution failed.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 315,
+              "endLine": 315
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "trigger": {
+        "condition": "IteratePhase selection catches this fixed inner guard before cloning or dispatch. A retained nonnull item key resolver Signal is Critical or exposes a nonnull structured SignalEntry.Exception.",
+        "evidence": [
+          {
+            "sourceId": "plan-class",
+            "startLine": 315,
+            "endLine": 315
+          },
+          {
+            "sourceId": "plan-class",
+            "startLine": 339,
+            "endLine": 339
+          }
+        ]
+      },
+      "likelyCauses": [
+        {
+          "text": "A retained nonnull item key resolver Signal is Critical or exposes a nonnull structured SignalEntry.Exception.",
+          "basis": "source",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 315,
+              "endLine": 315
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "mode": "static-read",
+          "action": "Confirm canonical IteratePhase context, exact fixed message and redacted type/presence/structured Exception flags. Shared resolver getters may execute; do not rerun lookup merely for diagnosis.",
+          "expected": "A retained nonnull item key resolver Signal is Critical or exposes a nonnull structured SignalEntry.Exception.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 315,
+              "endLine": 315
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "correction": {
+        "boundary": "Conditional input-owner proposal only; no automatic resolver/getter execution or provider effects.",
+        "steps": [
+          {
+            "mode": "local-edit",
+            "action": "Inspect redacted structured resolver failure, item-relative path ownership and getter metadata before proposing a bounded input correction; getter effects require owner review.",
+            "expected": "The specific fixed guard is no longer applicable under intended owned input semantics.",
+            "evidence": [
+              {
+                "sourceId": "plan-class",
+                "startLine": 315,
+                "endLine": 315
+              },
+              {
+                "sourceId": "plan-class",
+                "startLine": 339,
+                "endLine": 339
+              }
+            ]
+          }
+        ],
+        "stopWhen": [
+          "Canonical activity, exact assembled message or source identity differs.",
+          "Input ownership, intended ordering or effects of shared resolver/getters are uncertain.",
+          "Correction would expose payload, invoke unapproved getter effects or mutate unrelated state."
+        ]
+      },
+      "verification": [
+        {
+          "mode": "static-read",
+          "action": "Inspect the specific configuration/type/structured-failure discriminator without running getters.",
+          "expected": "The fixed guard would be false; runtime selection/getter effects and downstream success remain unverified.",
+          "evidence": [
+            {
+              "sourceId": "plan-class",
+              "startLine": 315,
+              "endLine": 315
+            },
+            {
+              "sourceId": "plan-class",
+              "startLine": 339,
+              "endLine": 339
+            }
+          ]
+        }
+      ],
+      "redaction": "Exclude Plan/records, values, paths, arbitrary exception details and credentials; retain canonical activity, exact fixed message, source identity and type/presence/structured Exception flags.",
+      "limitations": [
+        "Source-only confidence; no runtime plan, runspace or provider execution.",
+        "Shared resolver container/property/case/getter semantics apply; getters may execute and affect caller objects.",
+        "An unreported throwing ScriptProperty can expose neither Critical nor SignalEntry.Exception and is indistinguishable from unresolved/null; reported reflected getter exceptions fail.",
+        "Only this exact assembled fixed guard is routed; other catch exceptions remain unresolved."
       ]
     }
   ]

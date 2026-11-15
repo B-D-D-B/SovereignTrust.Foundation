@@ -13,7 +13,7 @@ function Invoke-STRunspacePool {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
 
         [Parameter(Mandatory)]
         [object]$EnvironmentDefinition,
@@ -38,7 +38,7 @@ function Invoke-STRunspacePool {
         [int]$DebugWorkItemIndex = 0
     )
 
-    $opSignal = [Signal]::Start('Invoke-STRunspacePool', $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start('Invoke-STRunspacePool', $Signal) | Select-Object -Last 1
     $pool = $null
     $jobs = [System.Collections.Generic.List[object]]::new()
     $results = [System.Collections.Generic.List[object]]::new()
@@ -89,7 +89,7 @@ function Invoke-STRunspacePool {
             return $null
         }
 
-        $localSignal = [Signal]::Start([string]$Record.Name) | Select-Object -Last 1
+        $localSignal = [SignalGraph.Signal]::Start([string]$Record.Name) | Select-Object -Last 1
         if ($null -ne $Record.Meta) {
             $localSignal.SetMeta($Record.Meta)
         }
@@ -222,7 +222,7 @@ function Invoke-STRunspacePool {
                 }
 
                 $methodNames = @($InputObject.PSObject.Methods.Name)
-                return $methodNames -contains 'Failure' -and
+                return $InputObject -is [SignalGraph.Signal] -and
                     $methodNames -contains 'HasResult' -and
                     $methodNames -contains 'GetResult'
             }
@@ -412,7 +412,7 @@ function Invoke-STRunspacePool {
         $opSignal.SetResult(@($results | Sort-Object -Property Index))
     }
     catch {
-        $null = $opSignal.LogCritical("Runspace pool failed: $($_.Exception.Message)", $null, $_)
+        $null = $opSignal.LogCritical("Runspace pool failed: $($_.Exception.Message)", $null, $_.Exception)
     }
     finally {
         foreach ($job in $jobs) {

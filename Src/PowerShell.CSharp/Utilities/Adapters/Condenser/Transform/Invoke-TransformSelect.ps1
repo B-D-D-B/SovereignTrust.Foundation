@@ -7,7 +7,7 @@ function Invoke-TransformSelect {
         [bool]$SourceHtmlDecode
     )
 
-    $opSignal = [Signal]::Start("Invoke-TransformSelect") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-TransformSelect") | Select-Object -Last 1
 
     function ConvertFrom-Xml {
         param (
@@ -61,7 +61,7 @@ function Invoke-TransformSelect {
             [string]$VirtualPath
         )
 
-        $opSignal = [Signal]::Start("Convert-VirtualPathToXPath") | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start("Convert-VirtualPathToXPath") | Select-Object -Last 1
 
         function ConvertTo-XPathLiteral {
             param([Parameter(Mandatory)][string]$Value)
@@ -212,7 +212,7 @@ function Invoke-TransformSelect {
             $opSignal.SetResult($result)
         }
         catch {
-            $opSignal.LogCritical("🔥 Exception during Convert-VirtualPathToXPath: $_", $null, $_)
+            $opSignal.LogCritical("🔥 Exception during Convert-VirtualPathToXPath: $_", $null, $_.Exception)
         }
 
         return $opSignal
@@ -284,7 +284,7 @@ function Invoke-TransformSelect {
         $opSignal.LogInformation("✅ Transform from Select Path Complete")
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception in Invoke-TransformSelect: $_", $null, $_)
+        $opSignal.LogCritical("🔥 Exception in Invoke-TransformSelect: $_", $null, $_.Exception)
     }
 
     return $opSignal

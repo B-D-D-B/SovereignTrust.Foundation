@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="SignalGraph">
+      <HintPath>../../Src/CSharp/Dependencies/SignalGraph/3.0.0/SignalGraph.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Compile Include="Wave2.Native.cs" />
+    <None Update="Fixtures/Wave2.MappedPolicies.json" CopyToOutputDirectory="PreserveNewest" TargetPath="Wave2.MappedPolicies.json" />
+    <ProjectReference Include="../../Src/CSharp/Foundation/SovereignTrust.Foundation.csproj" />
+  </ItemGroup>
+</Project>

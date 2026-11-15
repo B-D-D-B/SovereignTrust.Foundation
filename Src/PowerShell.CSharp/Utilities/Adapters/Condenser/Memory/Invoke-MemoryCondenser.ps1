@@ -10,13 +10,13 @@ function Invoke-MemoryCondenser {
         [Parameter(Mandatory)][string]$Action,  # "Read", "Write", "Remove", "Move"
         [Parameter(Mandatory)][string]$Path,
         [Parameter()][object]$Value,
-        [Parameter()][Signal]$HostSignal,
+        [Parameter()][SignalGraph.Signal]$HostSignal,
         [Parameter()][object]$TargetMemory,
         [Parameter()][hashtable]$HydrationPlan,
         [string]$DestinationPath  # Required only for Move
     )
 
-    $opSignal = [Signal]::Start("Invoke-MemoryCondenser:$Action", $HostSignal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-MemoryCondenser:$Action", $HostSignal) | Select-Object -Last 1
 
     # ░▒▓█ OPTIONAL HYDRATION █▓▒░
     if (-not $HydrationPlan.Skip) {

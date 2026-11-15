@@ -1,0 +1,164 @@
+[
+  {
+    "Id": "value.false",
+    "Pass": true,
+    "Value": {
+      "Type": "System.Boolean",
+      "Present": true,
+      "Value": false
+    }
+  },
+  {
+    "Id": "value.zero",
+    "Pass": true,
+    "Value": {
+      "Type": "System.Int32",
+      "Present": true,
+      "Value": 0
+    }
+  },
+  {
+    "Id": "value.empty",
+    "Pass": true,
+    "Value": {
+      "Type": "System.String",
+      "Present": true,
+      "Value": ""
+    }
+  },
+  {
+    "Id": "value.null",
+    "Pass": true,
+    "Value": {
+      "Type": null,
+      "Present": false,
+      "Value": null
+    }
+  },
+  {
+    "Id": "value.missing",
+    "Pass": true,
+    "Value": false
+  },
+  {
+    "Id": "array.0",
+    "Pass": true,
+    "Value": {
+      "Type": "System.Object[]",
+      "Count": 0,
+      "Values": []
+    }
+  },
+  {
+    "Id": "array.1",
+    "Pass": true,
+    "Value": {
+      "Type": "System.Object[]",
+      "Count": 1,
+      "Values": [
+        0
+      ]
+    }
+  },
+  {
+    "Id": "array.3",
+    "Pass": true,
+    "Value": {
+      "Type": "System.Object[]",
+      "Count": 3,
+      "Values": [
+        0,
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "Id": "severity.merge",
+    "Pass": true,
+    "Value": {
+      "Failure": true,
+      "Level": "Critical"
+    }
+  },
+  {
+    "Id": "graph.references",
+    "Pass": true,
+    "Value": true
+  },
+  {
+    "Id": "graph.case.shared",
+    "Pass": true,
+    "Value": {
+      "Count": 2,
+      "Keys": [
+        "Member"
+      ]
+    }
+  },
+  {
+    "Id": "graph.roundtrip",
+    "Pass": false,
+    "Value": {
+      "Error": "The property 'IsTerminal' cannot be found on this object. Verify that the property exists and can be set.",
+      "Dependency": "SignalGraph.PowerShell",
+      "JsonLength": 0
+    }
+  },
+  {
+    "Id": "graph.cycle.roundtrip",
+    "Pass": false,
+    "Value": {
+      "BlockedBy": "graph.roundtrip"
+    }
+  },
+  {
+    "Id": "dictionary.case.overwrite",
+    "Pass": true,
+    "Value": {
+      "Count": 1,
+      "Value": false
+    }
+  },
+  {
+    "Id": "plan.selected.phase",
+    "Pass": true,
+    "Value": {
+      "Phase": "NamedParentPhase",
+      "Steps": 1,
+      "Effect": "controlled",
+      "Calls": 1
+    }
+  },
+  {
+    "Id": "plan.trace",
+    "Pass": true,
+    "Value": {
+      "Status": "Succeeded",
+      "Child": "NamedParentPhase",
+      "Rows": 2
+    }
+  },
+  {
+    "Id": "storage.local.write.read",
+    "Pass": true,
+    "Value": {
+      "ReadType": "System.String",
+      "Marker": "complete",
+      "WriteType": "System.String",
+      "Values": [
+        false,
+        0,
+        ""
+      ]
+    }
+  },
+  {
+    "Id": "storage.local.delete.exists",
+    "Pass": true,
+    "Value": {
+      "Exists": false,
+      "Delete": true
+    }
+  }
+]

@@ -1,20 +1,20 @@
 function Invoke-NetworkAdapter {
     [CmdletBinding()]
     param (
-        [Signal]$MappedAdapterSignal,
-        [Conduit]$Conduit,
-        [Conductor]$Conductor,
-        [Signal]$ConductionSignal,
+        [SignalGraph.Signal]$MappedAdapterSignal,
+        [SovereignTrust.Foundation.Classes.Conduction.Conduit]$Conduit,
+        [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor,
+        [SignalGraph.Signal]$ConductionSignal,
         [string]$Slot,
         [object]$Plan,  # Typically a small PSObject or Phase class in the future
-        [Signal]$PlanSignal  # Typically a small PSObject or Phase class in the future
+        [SignalGraph.Signal]$PlanSignal  # Typically a small PSObject or Phase class in the future
     )
 
     if ( $Conduit -and -not $Conduit.IsRunning) {
         throw "Conduction is not running. Cannot invoke Phase."
     }
 
-    $opSignal = [Signal]::Start("Invoke-NetworkAdapter", $Conductor) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-NetworkAdapter", $Conductor) | Select-Object -Last 1
 
     if ($null -eq $Plan)
     {
@@ -47,7 +47,7 @@ function Invoke-NetworkAdapter {
             
             Start-AzureStorageQueueListener -Conduit $Conduit -Conductor $Conductor -ConductionSignal $ConductionSignal -Address $Address -MaxMessages $MaxMessages -PollIntervalSeconds $PollingInterval -Plan $Plan -ListenerPlan $ConductionPlanSignal
 
-            if ($current -is [Signal]) {
+            if ($current -is [SignalGraph.Signal]) {
                 $current = $current.Pointer
                 $opSignal.LogVerbose("🔗 Dereferenced *Pointer")
                 $processed = $true
@@ -58,7 +58,7 @@ function Invoke-NetworkAdapter {
             }
         }
         "Result" {
-            if ($current -is [Signal]) {
+            if ($current -is [SignalGraph.Signal]) {
                 $current = $current.Result
                 $opSignal.LogVerbose("🎯 Dereferenced @Result")
                 $processed = $true
@@ -109,7 +109,7 @@ function Invoke-NetworkAdapter {
 
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception during Invoke-TokenStorage: $_", $null, $_)
+        $opSignal.LogCritical("🔥 Exception during Invoke-TokenStorage: $_", $null, $_.Exception)
     }
 
     return $opSignal}

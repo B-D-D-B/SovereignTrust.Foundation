@@ -4,6 +4,11 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="../../../../SignalGraph/Src/CSharp/SignalGraph.csproj" />
+    <Reference Include="SignalGraph">
+      <HintPath>../Dependencies/SignalGraph/3.0.0/SignalGraph.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 </Project>

@@ -18,11 +18,11 @@ function Start-BondingConduction {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
-        [Signal]$Signal
+        [SignalGraph.Signal]$Signal
     )
 
     # ░▒▓█ START WRAPPER SIGNAL █▓▒░
-    $opSignal = [Signal]::Start("Start-BondingConduction", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Start-BondingConduction", $Signal) | Select-Object -Last 1
 
     # ░▒▓█ EXTRACT GSG ENVIRONMENT █▓▒░
     $gsg = $Signal.GetResult()
@@ -31,12 +31,12 @@ function Start-BondingConduction {
     }
 
     # ░▒▓█ CREATE NEW WORKING GRAPH █▓▒░
-    $graphSignal = [Graph]::Start("Graph:BondingConduction", $opSignal, $true) | Select-Object -Last 1
+    $graphSignal = [SignalGraph.Graph]::Start("Graph:BondingConduction", $opSignal, $true) | Select-Object -Last 1
     $graph = $graphSignal.GetResult()
     $opSignal.MergeSignal($graphSignal) | Out-Null
 
     # ░▒▓█ CREATE CONDUCTION SIGNAL █▓▒░
-    $conductionSignal = [Signal]::Start("ConductionSignal:Bonding", $opSignal) | Select-Object -Last 1
+    $conductionSignal = [SignalGraph.Signal]::Start("ConductionSignal:Bonding", $opSignal) | Select-Object -Last 1
     $conductionSignal.SetJacket($gsg) | Out-Null
     $conductionSignal.SetPointer($graph) | Out-Null
     $conductionSignal.LogInformation("🧪 ConductionSignal initialized with sovereign Jacket and Pointer.")

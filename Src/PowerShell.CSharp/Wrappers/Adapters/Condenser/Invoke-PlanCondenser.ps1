@@ -1,14 +1,14 @@
 function Invoke-PlanCondenser {
     [CmdletBinding()]
     param (
-        [Signal]$Signal,
-        [Signal]$ItemSignal,
+        [SignalGraph.Signal]$Signal,
+        [SignalGraph.Signal]$ItemSignal,
         [object]$Plan,
         [string]$Activity = 'InvokePlan'
     )
 
     # ░▒▓█ SIGNAL START █▓▒░
-    $opSignal = [Signal]::Start("Invoke-PlanCondenser") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-PlanCondenser") | Select-Object -Last 1
 
     try {
         
@@ -16,7 +16,7 @@ function Invoke-PlanCondenser {
         $consdenserSignal = Resolve-PathFromDictionary -Dictionary ($Signal.GetControl($true)) -Path $consdenserPath -SignalLevel "Information" | Select-Object -Last 1
 
         $consdenser = $consdenserSignal.GetResult()
-        while ($consdenser -is [Signal])
+        while ($consdenser -is [SignalGraph.Signal])
         {
             $consdenser = $consdenser.GetResult()
         }
@@ -38,7 +38,7 @@ function Invoke-PlanCondenser {
         }
     }
     catch {
-        $opSignal.LogCritical("Exception during conduction condenser run: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("Exception during conduction condenser run: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $opSignal

@@ -1,0 +1,9 @@
+{
+  "Version": "3.0.0",
+  "AssemblyIdentity": "SignalGraph, Version=3.0.0.0, Culture=neutral, PublicKeyToken=null",
+  "DllSha256": "85339B76A68132E56EB2649FACA825EB10F623938CF618E19507D5C5AFDFF713",
+  "PackageSha256": "E7D9ACDC5D19E6B04C820EAEBC120B5760AE36C5E2F8134616C40016AA33B22C",
+  "PackageDllEqual": true,
+  "SourcePrePostGuards": true,
+  "OwnerApproval": "Owner reports final Astra approval,113 C#tests and separate fresh PS smoke; contemporaneous review artifact hashes NOT recorded. These are CURRENT stable measured pins confirmed by root."
+}

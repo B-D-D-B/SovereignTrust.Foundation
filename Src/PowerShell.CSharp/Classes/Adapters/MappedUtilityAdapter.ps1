@@ -17,14 +17,14 @@ InvokeWithPlan and InvokeAdapterMethod have no Activity parameter.
 #>
 
 class MappedUtilityAdapter {
-    [Signal]$Signal
+    [SignalGraph.Signal]$Signal
 
     MappedUtilityAdapter() {
         # Use static Start() instead
     }
 
-    static [Signal] Start([object]$Conductor) {
-        $opSignal = [Signal]::Start("MappedUtilityAdapter.Start") | Select-Object -Last 1
+    static [SignalGraph.Signal] Start([object]$Conductor) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedUtilityAdapter.Start") | Select-Object -Last 1
 
         if (-not $Conductor) {
             $opSignal.LogCritical("Null Conductor passed to MappedUtilityAdapter.Start()")
@@ -32,12 +32,12 @@ class MappedUtilityAdapter {
         }
 
         try {
-            $adapter = [MappedUtilityAdapter]::new()
-            $adapter.Signal = [Signal]::Start("MappedUtilityAdapter") | Select-Object -Last 1
+            $adapter = [SovereignTrust.Foundation.Classes.Adapters.MappedUtilityAdapter]::new()
+            $adapter.Signal = [SignalGraph.Signal]::Start("MappedUtilityAdapter") | Select-Object -Last 1
             $adapter.Signal.SetJacket($Conductor)
             $adapter.Signal.SetReversePointer($Conductor)
 
-            $graphSignal = [Graph]::Start("MappedUtilityAdapter", $adapter, $false)
+            $graphSignal = [SignalGraph.Graph]::Start("MappedUtilityAdapter", $adapter, $false)
             $adapter.Signal.SetResult($graphSignal.GetResult())
             $adapter.Signal.SetPointer($graphSignal.GetResult())
 
@@ -45,16 +45,16 @@ class MappedUtilityAdapter {
             $opSignal.LogInformation("✅ MappedUtilityAdapter initialized.")
         }
         catch {
-            $opSignal.LogCritical("💥 Exception in MappedUtilityAdapter.Start(): $_", $null, $_)
+            $opSignal.LogCritical("💥 Exception in MappedUtilityAdapter.Start(): $_", $null, $_.Exception)
         }
 
         return $opSignal
     }
 
-    [Signal] RegisterAdapter([object]$AdapterInstance, [string]$Key = "UtilityService") {
-        $opSignal = [Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
-        if ($AdapterInstance -isnot [Signal]) {
-            $adapterSignal = [Signal]::Start("Adapter:$Key") | Select-Object -Last 1
+    [SignalGraph.Signal] RegisterAdapter([object]$AdapterInstance, [string]$Key = "UtilityService") {
+        $opSignal = [SignalGraph.Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
+        if ($AdapterInstance -isnot [SignalGraph.Signal]) {
+            $adapterSignal = [SignalGraph.Signal]::Start("Adapter:$Key") | Select-Object -Last 1
             $adapterSignal.SetResult($AdapterInstance)
         }
         else {
@@ -75,17 +75,17 @@ class MappedUtilityAdapter {
         return $opSignal
     }
 
-    [Signal] Invoke([object]$Context) {
+    [SignalGraph.Signal] Invoke([object]$Context) {
         return $this.Invoke($null, $Context) | Select-Object -Last 1
     }
 
-    [Signal] Invoke([string]$Slot, [object]$Context) {
+    [SignalGraph.Signal] Invoke([string]$Slot, [object]$Context) {
         return $this.Invoke($Slot, $Context) | Select-Object -Last 1
     }
 
-    [Signal]Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
+    [SignalGraph.Signal]Invoke([string]$Slot, [string]$Activity, [SignalGraph.Signal]$ConductionSignal, [object]$Plan, [SignalGraph.Signal]$ItemSignal) {
 
-        $opSignal = [Signal]::Start("MappedUtilityAdapter.Invoke:$Slot") | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start("MappedUtilityAdapter.Invoke:$Slot") | Select-Object -Last 1
 
         if ($Activity -notin @('Resize', 'Overlay', 'Inspect', 'MaterializeGeneratedImage', 'ValidateVisionSelection', 'FinalizeGeneratedImage')) {
             $opSignal.LogCritical("Unsupported MappedUtilityAdapter activity: '$Activity'.")
@@ -131,8 +131,8 @@ class MappedUtilityAdapter {
         return $opSignal
     }
 
-    [Signal] InvokeWithPlan([string]$Slot, [object]$Context, [object]$Plan = $null) {
-        $opSignal = [Signal]::Start("MappedUtilityAdapter.Invoke:$Slot.$Context") | Select-Object -Last 1
+    [SignalGraph.Signal] InvokeWithPlan([string]$Slot, [object]$Context, [object]$Plan = $null) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedUtilityAdapter.Invoke:$Slot.$Context") | Select-Object -Last 1
 
         $conductor = $this.Signal.GetJacket()
         $adapterSignal = Invoke-MappedUtilityAdapter -MappedAdapterSignal $this.Signal -Path $Context -Slot $Slot | Select-Object -Last 1
@@ -145,8 +145,8 @@ class MappedUtilityAdapter {
         return $opSignal
     }
 
-    [Signal] InvokeAdapterMethod([string]$MethodName, [object[]]$Args) {
-        $opSignal = [Signal]::Start("MappedUtilityAdapter.Invoke:$MethodName") | Select-Object -Last 1
+    [SignalGraph.Signal] InvokeAdapterMethod([string]$MethodName, [object[]]$Args) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedUtilityAdapter.Invoke:$MethodName") | Select-Object -Last 1
         $graph = $this.Signal.GetPointer()
 
         foreach ($key in $graph.Grid.Keys) {

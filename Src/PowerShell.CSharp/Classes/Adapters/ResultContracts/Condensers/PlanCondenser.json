@@ -822,5 +822,17 @@
         }
       }
     }
-  ]
+  ],
+  "nativeMigration": {
+    "Function": "CS-CURRENT-PS-MIGRATION-01",
+    "OriginalPlanSha256": "8C784F13CA3BC26150E8D1F048B582BDEA8FA611558E3679F250AB6B832E04C3",
+    "OriginalResolverSha256": "6339C7E6A9BDFD8837413D4D76FD606DFFEB0105E73E90558AF77BABC750103C",
+    "CopiedPlanSha256": "A802AD49D41C66E3D117093B727C524EE6CBB2CB42C1E16AFFA9CAF5DE96E90B",
+    "CopiedResolverSha256": "BA2BEE84ED5138E8D5194F1487E65D71719891FE134B3D19992EEAB77E9584DB",
+    "History": "Existing source citations remain historical; current original author unknown, explicitly user-adopted two files only",
+    "Ordering": "Current Double normalization; default Desc, null last, stable position ties; filter then sort then Limit; validate keys before Limit0",
+    "NativeApiRepair": "Only Numeric comparison repaired to Double.CompareTo because original Double.Compare does not exist; NaN lower than non-NaN, stable NaN ties, infinities ordered; not numeric source-parity proof",
+    "OrderingLookup": "Only dotted ordering key/settings boundary: existing PS note/dictionary resolver with source Contains error boundary, existing native Paths.TryMember for CLR getter/method access",
+    "SourceDiscrepancies": "Original error text integral/Decimal omits admitted Double; original catalog pins693B and tests rejectDouble/assumeDecimal ordering; current source numeric comparison remains known unsupported/nonPASS"
+  }
 }

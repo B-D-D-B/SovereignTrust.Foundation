@@ -11,7 +11,7 @@ function Get-AgentForConductor {
         [string]$RoleName
     )
 
-    $signal = [Signal]::Start("Get-AgentForConductor") | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Get-AgentForConductor") | Select-Object -Last 1
 
     try {
         # Resolve the Agent
@@ -39,7 +39,7 @@ function Get-AgentForConductor {
         $signal.SetResult($Agent)
     }
     catch {
-        $signal.LogCritical("Exception: Critical failure in Get-AgentForConductor: $_", $null, $_)
+        $signal.LogCritical("Exception: Critical failure in Get-AgentForConductor: $_", $null, $_.Exception)
     }
 
     return $signal

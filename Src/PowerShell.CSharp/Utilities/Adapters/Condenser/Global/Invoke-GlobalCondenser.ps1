@@ -11,7 +11,7 @@
 function Invoke-GlobalCondenser {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory)] [Signal]$Signal,
+        [Parameter(Mandatory)] [SignalGraph.Signal]$Signal,
         [Parameter(Mandatory)] [object]$Plan,
         [Parameter(Mandatory)] [object]$ItemSignal,
         [string]$HydrationStyle = "",
@@ -22,7 +22,7 @@ function Invoke-GlobalCondenser {
         $RegexPattern = "\[[^\[@]*=[^|]*\|\]"
     }
 
-    $opSignal = [Signal]::Start("Invoke-GlobalCondenser", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-GlobalCondenser", $Signal) | Select-Object -Last 1
     $result = $ItemSignal.GetResult()
 
     $MergeCondenserFeedback = $opSignal
@@ -45,7 +45,7 @@ function Invoke-GlobalCondenser {
 function Invoke-GlobalTokenCrawl {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory)] [Signal]$Signal,
+        [Parameter(Mandatory)] [SignalGraph.Signal]$Signal,
         [object]$MergeCondenserFeedback,
         [object]$CurrentObject,
         [string]$RegexPattern,

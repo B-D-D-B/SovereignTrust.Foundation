@@ -11,13 +11,13 @@
 function Invoke-ConductionCondenser {
     [CmdletBinding()]
     param (
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
         [object]$Plan,
         [object]$ItemSignal,
         [string]$PlanWirePathPrefix = "%.%.%.@"  # <- new param with default
     )
 
-    $opSignal = [Signal]::Start("Invoke-ConductionCondenser", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-ConductionCondenser", $Signal) | Select-Object -Last 1
 
 
     $sourcePathSignal = Resolve-SourcePathFromPlan -plan $Plan | Select-Object -Last 1
@@ -40,7 +40,7 @@ function Invoke-ConductionCondenser {
     while ($phaseIndex -lt $phaseKeys.Count) {
         $phaseKey = $phaseKeys[$phaseIndex]
         $phase = $phaseDict[$phaseKey]
-        $stepSignal = [Signal]::Start("Phase:$phaseKey", $Signal) | Select-Object -Last 1
+        $stepSignal = [SignalGraph.Signal]::Start("Phase:$phaseKey", $Signal) | Select-Object -Last 1
 
         $stepType = $phase.Type
         switch ($stepType) {
@@ -51,7 +51,7 @@ function Invoke-ConductionCondenser {
                     $stepSignal.SetResult($result)
                     $stepSignal.LogInformation("✅ Command executed for phase: $phaseKey")
                 } catch {
-                    $stepSignal.LogCritical("🔥 Exception in command phase '$phaseKey': $($_.Exception.Message)", $null, $_)
+                    $stepSignal.LogCritical("🔥 Exception in command phase '$phaseKey': $($_.Exception.Message)", $null, $_.Exception)
                 }
             }
             default {

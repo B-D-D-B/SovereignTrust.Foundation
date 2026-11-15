@@ -35,9 +35,9 @@ Use: Used for XPath-like dynamic lookups.
 function Resolve-TokenForProperty {
     [CmdletBinding()]
     param (
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
         [object]$Plan,
-        [Signal]$ItemSignal,
+        [SignalGraph.Signal]$ItemSignal,
 
         [object]$MergeCondenserFeedback,
 
@@ -51,7 +51,7 @@ function Resolve-TokenForProperty {
         [char]$SplitMatchCharacter
     )
 
-    $opSignal = [Signal]::Start("Resolve-TokenForProperty:$($Property.Name)", $null) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Resolve-TokenForProperty:$($Property.Name)", $null) | Select-Object -Last 1
 
     if ($HydrationStyle -eq "Deferred") {
         $RegexPattern = "(?s)\[[^\[\]\|]*\|\]"
@@ -133,7 +133,7 @@ function Resolve-TokenForProperty {
                 #$resultSignal = $adapter.Invoke($key);
                 $resultSignal = $adapter.Invoke($key, "Get", $Signal, $TokenPlan, $ItemSignal);
                 $opSignal.MergeSignal($resultSignal)
-                $lookupSignal = [Signal]::Start("Resolve-TokenForProperty:$($Property.Name)", $null) | Select-Object -Last 1
+                $lookupSignal = [SignalGraph.Signal]::Start("Resolve-TokenForProperty:$($Property.Name)", $null) | Select-Object -Last 1
                 
                 if ($resultSignal.HasResult()) {
                     $lookupSignal.SetResult($resultSignal.GetResult())
@@ -256,7 +256,7 @@ function Resolve-TokenForProperty {
         $opSignal.MergeSignal((Add-PathToDictionary -Dictionary $Property -Path "Value" -Value $propertyValue | Select-Object -Last 1))
     }
     catch {
-        $opSignal.LogCritical("Exception in global token resolution: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("Exception in global token resolution: $($_.Exception.Message)", $null, $_.Exception)
         # $null = $MergeCondenserFeedback.MissingWireGlobalFeedback.Invoke("", "", @())
     }
 
@@ -276,7 +276,7 @@ function Scan-DictionaryForValue {
         [string]$Key
     )
 
-    $signal = [Signal]::Start("Scan-DictionaryForValue:$Key", $null) | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Scan-DictionaryForValue:$Key", $null) | Select-Object -Last 1
 
     try {
         $currentDict = $Dictionary

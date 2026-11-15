@@ -1,0 +1,1474 @@
+[
+  {
+    "Name": "STTest",
+    "Order": 0,
+    "IsEnabled": true,
+    "Phases": [
+      {
+        "Name": "RunTest",
+        "Order": 0,
+        "Steps": [
+          {
+            "Name": "RecordTestDateTime",
+            "DeferredHydrationPlan": "@",
+            "Order": 0,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.TestResults.@.Timestamp",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Content": "[Dynamic.UtcNow()|]"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "GenerateTestFileName",
+            "Description": "Inject the test filename into the item graph at TestFileName.",
+            "DeferredHydrationPlan": "@",
+            "Order": 0,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.TestFileName",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Content": "[Dynamic.FormatDateTime([Dynamic.UtcNow()|],filedate)|]_[Dynamic.NewGuid()|]"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "InitializeTestRunId",
+            "Order": 0,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.TestRunId.@",
+            "ExitAfterAdapter": true,
+            "DeferredHydrationPlan": "@",
+            "Config": {
+              "Content": "[Dynamic.NewGuid()|]"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "InitializeTestRecordEvents",
+            "Order": 0,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.TestRecordEvents.@",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Content": {}
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "RunStorageTests",
+            "Description": "Invoke the loaded storage test phase, which iterates the configured storage adapters.",
+            "Order": 1,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RunStorageTests.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "RunCoreValueTests",
+            "Order": 1,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RunCoreValueTests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "RunPlanLifecycleTests",
+            "Order": 1,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RunPlanLifecycleTests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "RunAITests",
+            "Description": "Load the AI functionality plan after the storage tests.",
+            "Order": 2,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RunNetworkAITests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "RunQueueTests",
+            "Description": "Load the Queue functionality plan after the storage tests.",
+            "Order": 2,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RunQueueTests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "LoadAdapterResolutionPlan",
+            "Order": 3,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test-adapter-resolution.json",
+            "Path": "STTest-Adapter-Resolution",
+            "Format": "Json",
+            "Key": "STTestAdapterResolutionPlan",
+            "IsEnabled": false
+          },
+          {
+            "Name": "RunAdapterResolutionAssertions",
+            "Order": 4,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdapterResolutionPlan.@.Phases.AssertTestQueue.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "RunDataTests",
+            "Order": 5,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RunDataTests.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "RunSatelliteTests",
+            "Order": 6,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RunSatelliteTests.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "RunCondenserTests",
+            "Order": 8,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RunCondenserTests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "RunConductionTests",
+            "Order": 7,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RunConductionTests.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "RunSDATokenTests",
+            "Order": 9,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RunSDATokenTests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "RunCoreTokenTests",
+            "Order": 9,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RunCoreTokenTests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "RunUtilityMediaTests",
+            "Order": 10,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RunUtilityMediaTests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "RunStorageResultDetailTests",
+            "Order": 11,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RunStorageResultDetailTests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "RunConduitResultDetailTests",
+            "Order": 12,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RunConduitResultDetailTests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "RunQueueHandleDetailTests",
+            "Order": 13,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RunQueueHandleDetailTests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "RunMapTransportTests",
+            "Order": 14,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RunMapTransportTests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "RunMediaInspectTests",
+            "Order": 15,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RunMediaInspectTests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": true
+      },
+      {
+        "Name": "RunStorageTests",
+        "Order": 1,
+        "Steps": [
+          {
+            "Name": "LoadSTTest-Storage-FixturesFixture",
+            "Order": 0,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "fixtures/storage",
+            "Resource": "content-cases.json",
+            "Format": "Json",
+            "Path": "STTest-Storage-Fixtures",
+            "Key": "StorageContentCases",
+            "IsEnabled": true
+          },
+          {
+            "Name": "RequireSTTest-Storage-FixturesFixture",
+            "Order": 1,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Clone",
+            "ExitAfterAdapter": true,
+            "Path": "*.#.StorageContentCases.@.Cases.WriteContentTest.Inputs.WriteContentFile.Content",
+            "Key": "STTest-Storage-FixturesFixtureGuard",
+            "IsEnabled": true
+          },
+          {
+            "Name": "LoadStorageTestPlan",
+            "Description": "Load the STTest-Adapters-Storage plan from the test content plans directory into memory.",
+            "Order": 2,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test-adapters-storage.json",
+            "Path": "STTest-Adapters-Storage",
+            "Format": "Json",
+            "Key": "STTestAdaptersStoragePlan",
+            "IsEnabled": true
+          },
+          {
+            "Name": "InvokeStorageTests",
+            "Description": "Invoke the loaded storage test phase, which iterates the configured storage adapters.",
+            "Order": 3,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.RunTests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": true
+          }
+        ],
+        "IsEnabled": true
+      },
+      {
+        "Name": "RunStorageResultDetailTests",
+        "Order": 2,
+        "Steps": [
+          {
+            "Name": "LoadSTTest-Storage-FixturesFixture",
+            "Order": 0,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "fixtures/storage",
+            "Resource": "content-cases.json",
+            "Format": "Json",
+            "Path": "STTest-Storage-Fixtures",
+            "Key": "StorageContentCases",
+            "IsEnabled": false
+          },
+          {
+            "Name": "RequireSTTest-Storage-FixturesFixture",
+            "Order": 1,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Clone",
+            "ExitAfterAdapter": true,
+            "Path": "*.#.StorageContentCases.@.Cases.WriteContentTest.Inputs.WriteContentFile.Content",
+            "Key": "STTest-Storage-FixturesFixtureGuard",
+            "IsEnabled": false
+          },
+          {
+            "Name": "LoadStorageResultDetailPlan",
+            "Order": 2,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test-adapters-storage.json",
+            "Path": "STTest-Adapters-Storage",
+            "Format": "Json",
+            "Key": "STTestAdaptersStoragePlan",
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeStorageResultDetailTests",
+            "Order": 3,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.RunResultDetailTests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "RunConduitResultDetailTests",
+        "Order": 14,
+        "Steps": [
+          {
+            "Name": "LoadConduitResultDetailPlan",
+            "Order": 0,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test-adapters-condenser.json",
+            "Path": "STTest-Adapters-Condenser",
+            "Format": "Json",
+            "Key": "STTestAdaptersCondenserPlan",
+            "IsEnabled": false
+          },
+          {
+            "Name": "LoadCondenserFixtures",
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "fixtures/core",
+            "Resource": "condenser-cases.json",
+            "Format": "Json",
+            "Path": "STTest-Condenser-Fixtures",
+            "Key": "CondenserFixtures",
+            "Order": 1,
+            "IsEnabled": false
+          },
+          {
+            "Name": "RequireCondenserFixtures",
+            "Adapter": "Condenser.Transform",
+            "Activity": "Clone",
+            "Path": "*.#.CondenserFixtures.@.Fixtures.TransformProject.Value",
+            "Key": "CondenserFixturesGuard",
+            "ExitAfterAdapter": true,
+            "Order": 2,
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeConduitResultDetailTests",
+            "Order": 3,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersCondenserPlan.@.Phases.C1RunTests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "RunQueueHandleDetailTests",
+        "Order": 15,
+        "Steps": [
+          {
+            "Name": "LoadSTTest-QueueHandle-FixturesFixture",
+            "Order": 0,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "fixtures/queue",
+            "Resource": "handle-message-cases.json",
+            "Format": "Json",
+            "Path": "STTest-QueueHandle-Fixtures",
+            "Key": "QueueHandleFixtures",
+            "IsEnabled": false
+          },
+          {
+            "Name": "RequireSTTest-QueueHandle-FixturesFixture",
+            "Order": 1,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Clone",
+            "ExitAfterAdapter": true,
+            "Path": "*.#.QueueHandleFixtures.@.RunPathDetail.HandleOwnedPathMessage.MessageText",
+            "Key": "STTest-QueueHandle-FixturesFixtureGuard",
+            "IsEnabled": false
+          },
+          {
+            "Name": "LoadQueueHandleDetailPlan",
+            "Order": 2,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test-queue-handle-detail.json",
+            "Path": "STTest-Queue-Handle-Detail",
+            "Format": "Json",
+            "Key": "STTestQueueHandleDetailPlan",
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeQueueHandleDetailTests",
+            "Order": 3,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestQueueHandleDetailPlan.@.Phases.RunPathDetail.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "RunMapTransportTests",
+        "Order": 16,
+        "Steps": [
+          {
+            "Name": "LoadMapTransportFixture",
+            "Order": 0,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "fixtures/core",
+            "Resource": "map-transport.json",
+            "Format": "Json",
+            "Path": "STTest-MapTransport-Fixtures",
+            "Key": "MapTransportFixtures",
+            "IsEnabled": false
+          },
+          {
+            "Name": "LoadMapTransportPlan",
+            "Order": 1,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test-map-transport.json",
+            "Path": "STTest-Map-Transport",
+            "Format": "Json",
+            "Key": "STTestMapTransportPlan",
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeMapTransportTests",
+            "Order": 2,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestMapTransportPlan.@.Phases.MapDirect.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "RunMediaInspectTests",
+        "Order": 17,
+        "Steps": [
+          {
+            "Name": "LoadSTTest-MediaInspect-FixturesFixture",
+            "Order": 0,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "fixtures/media",
+            "Resource": "inspect-oracles.json",
+            "Format": "Json",
+            "Path": "STTest-MediaInspect-Fixtures",
+            "Key": "MediaInspectExpected",
+            "IsEnabled": false
+          },
+          {
+            "Name": "RequireSTTest-MediaInspect-FixturesFixture",
+            "Order": 1,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Clone",
+            "ExitAfterAdapter": true,
+            "Path": "*.#.MediaInspectExpected.@.Cases.DecodePng.Expected.CheckDecodeHash.ContentOperands",
+            "Key": "STTest-MediaInspect-FixturesFixtureGuard",
+            "IsEnabled": false
+          },
+          {
+            "Name": "LoadMediaInspectPlan",
+            "Order": 2,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test-media-inspect.json",
+            "Path": "STTest-Media-Inspect",
+            "Format": "Json",
+            "Key": "STTestMediaInspectPlan",
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeMediaInspectTests",
+            "Order": 3,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestMediaInspectPlan.@.Phases.DecodePng.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "RunPlanLifecycleTests",
+        "Order": 18,
+        "Steps": [
+          {
+            "Name": "LoadSTTest-Lifecycle-FixturesFixture",
+            "Order": 0,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "fixtures/lifecycle",
+            "Resource": "markers.json",
+            "Format": "Json",
+            "Path": "STTest-Lifecycle-Fixtures",
+            "Key": "LifecycleMarkers",
+            "IsEnabled": false
+          },
+          {
+            "Name": "RequireSTTest-Lifecycle-FixturesFixture",
+            "Order": 1,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Clone",
+            "ExitAfterAdapter": true,
+            "Path": "*.#.LifecycleMarkers.@.Cases.ChildShort.Inputs.ShortMarker.Content",
+            "Key": "STTest-Lifecycle-FixturesFixtureGuard",
+            "IsEnabled": false
+          },
+          {
+            "Name": "LoadPlanLifecycleFamily",
+            "Order": 2,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test-plan-lifecycle.json",
+            "Path": "STTest-Plan-Lifecycle",
+            "Format": "Json",
+            "Key": "STTestPlanLifecycle",
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokePlanLifecycleSelected",
+            "Order": 3,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlanLifecycle.@.Phases.DefaultAwait.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "RunCoreValueTests",
+        "Order": 19,
+        "Steps": [
+          {
+            "Name": "LoadCoreValueFixture",
+            "Order": 0,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "fixtures/core",
+            "Resource": "core-values.json",
+            "Format": "Json",
+            "Path": "STTest-CoreValues-Fixtures",
+            "Key": "CoreValueFixtures",
+            "IsEnabled": false
+          },
+          {
+            "Name": "LoadCoreValueFamily",
+            "Order": 1,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test-core-values.json",
+            "Path": "STTest-Core-Values",
+            "Format": "Json",
+            "Key": "STTestCoreValues",
+            "IsEnabled": false
+          },
+          {
+            "Name": "LoadExistingCondenserFamily",
+            "Order": 2,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test-adapters-condenser.json",
+            "Path": "STTest-Adapters-Condenser",
+            "Format": "Json",
+            "Key": "STTestAdaptersCondenserPlan",
+            "IsEnabled": false
+          },
+          {
+            "Name": "LoadCondenserFixtures",
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "fixtures/core",
+            "Resource": "condenser-cases.json",
+            "Format": "Json",
+            "Path": "STTest-Condenser-Fixtures",
+            "Key": "CondenserFixtures",
+            "Order": 3,
+            "IsEnabled": false
+          },
+          {
+            "Name": "RequireCondenserFixtures",
+            "Adapter": "Condenser.Transform",
+            "Activity": "Clone",
+            "Path": "*.#.CondenserFixtures.@.Fixtures.TransformProject.Value",
+            "Key": "CondenserFixturesGuard",
+            "ExitAfterAdapter": true,
+            "Order": 4,
+            "IsEnabled": false
+          },
+          {
+            "Name": "SeedCoreRunId",
+            "Order": 5,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.CondenserRunId.@",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Content": "[Memory.Item.*.#.TestRunId.@|]"
+            },
+            "DeferredHydrationPlan": "@",
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeSelectedCorePhase",
+            "Order": 6,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestCoreValues.@.Phases.TextFalse.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "RunQueueTests",
+        "Order": 3,
+        "Steps": [
+          {
+            "Name": "LoadSTTest-Queue-FixturesFixture",
+            "Order": 0,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "fixtures/queue",
+            "Resource": "message-envelope.json",
+            "Format": "Json",
+            "Path": "STTest-Queue-Fixtures",
+            "Key": "QueueMessageFixture",
+            "IsEnabled": false
+          },
+          {
+            "Name": "RequireSTTest-Queue-FixturesFixture",
+            "Order": 1,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Clone",
+            "ExitAfterAdapter": true,
+            "Path": "*.#.QueueMessageFixture.@.WriteTest.WriteCorrelatedQueueItem.MessageText",
+            "Key": "STTest-Queue-FixturesFixtureGuard",
+            "IsEnabled": false
+          },
+          {
+            "Name": "LoadQueuePlan",
+            "Order": 2,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test-queue-functionality.json",
+            "Path": "STTest-Queue-Functionality",
+            "Format": "Json",
+            "Key": "STTestQueuePlan",
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeQueueTests",
+            "Order": 3,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestQueuePlan.@.Phases.RunTests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "RunSDATokenTests",
+        "Order": 9,
+        "Steps": [
+          {
+            "Name": "LoadSTTest-SDA-FixturesFixture",
+            "Order": 0,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "fixtures/token",
+            "Resource": "sda-cases.json",
+            "Format": "Json",
+            "Path": "STTest-SDA-Fixtures",
+            "Key": "SDACaseFixtures",
+            "IsEnabled": false
+          },
+          {
+            "Name": "RequireSTTest-SDA-FixturesFixture",
+            "Order": 1,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Clone",
+            "ExitAfterAdapter": true,
+            "Path": "*.#.SDACaseFixtures.@.Fixtures",
+            "Key": "STTest-SDA-FixturesFixtureGuard",
+            "IsEnabled": false
+          },
+          {
+            "Name": "LoadSDATokenTestPlan",
+            "Order": 2,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test-adapters-token-sda.json",
+            "Format": "Json",
+            "Path": "STTest-Adapters-Token-SDA",
+            "Key": "STTestAdaptersTokenSDAPlan",
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeSDATokenTestPlan",
+            "Order": 3,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersTokenSDAPlan.@.Phases.RunTests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "RunCoreTokenTests",
+        "Order": 9,
+        "Steps": [
+          {
+            "Name": "LoadCoreTokenFixtures",
+            "Order": 0,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "fixtures/token",
+            "Resource": "core-cases.json",
+            "Format": "Json",
+            "Path": "STTest-TokenCore-Fixtures",
+            "Key": "TokenCoreFixtures",
+            "IsEnabled": false
+          },
+          {
+            "Name": "RequireCoreTokenFixtures",
+            "Order": 1,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Clone",
+            "ExitAfterAdapter": true,
+            "Path": "*.#.TokenCoreFixtures.@.Cases",
+            "Key": "TokenCoreFixtureGuard",
+            "IsEnabled": false
+          },
+          {
+            "Name": "LoadCoreTokenPlan",
+            "Order": 2,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test-adapters-token-core.json",
+            "Format": "Json",
+            "Path": "STTest-Adapters-Token-Core",
+            "Key": "STTestAdaptersTokenCorePlan",
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeCoreTokenPlan",
+            "Order": 3,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersTokenCorePlan.@.Phases.RunTests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "RunUtilityMediaTests",
+        "Order": 10,
+        "Steps": [
+          {
+            "Name": "LoadSTTest-UtilityMedia-FixturesFixture",
+            "Order": 0,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "fixtures/media",
+            "Resource": "utility-media-oracles.json",
+            "Format": "Json",
+            "Path": "STTest-UtilityMedia-Fixtures",
+            "Key": "UtilityMediaExpected",
+            "IsEnabled": false
+          },
+          {
+            "Name": "RequireSTTest-UtilityMedia-FixturesFixture",
+            "Order": 1,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Clone",
+            "ExitAfterAdapter": true,
+            "Path": "*.#.UtilityMediaExpected.@.Fixture",
+            "Key": "STTest-UtilityMedia-FixturesFixtureGuard",
+            "IsEnabled": false
+          },
+          {
+            "Name": "LoadUtilityMediaTestPlan",
+            "Order": 2,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test-adapters-utility-media.json",
+            "Format": "Json",
+            "Path": "STTest-Adapters-Utility-Media",
+            "Key": "STTestAdaptersUtilityMediaPlan",
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeUtilityMediaTestPlan",
+            "Order": 3,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersUtilityMediaPlan.@.Phases.RunTests.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "RecordTestResults",
+        "Order": 2,
+        "Steps": [
+          {
+            "Name": "CaptureTestRecordGroup",
+            "Order": 0,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.CurrentTestRecordGroup.@",
+            "ExitAfterAdapter": true,
+            "DeferredHydrationPlan": "@",
+            "Config": {
+              "Content": "[Memory.Plan.Config.TestGroup/]"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "CaptureTestRecordName",
+            "Order": 1,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.CurrentTestRecordName.@",
+            "ExitAfterAdapter": true,
+            "DeferredHydrationPlan": "@",
+            "Config": {
+              "Content": "[Memory.Plan.Config.TestName/]"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "CaptureTestRecordValue",
+            "Order": 2,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.CurrentTestRecordValue.@",
+            "ExitAfterAdapter": true,
+            "DeferredHydrationPlan": "@",
+            "Config": {
+              "Content": "[Memory.Plan.Config.TestResult/]"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "GenerateTestRecordEventId",
+            "Order": 3,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.CurrentTestRecordEventId.@",
+            "ExitAfterAdapter": true,
+            "DeferredHydrationPlan": "@",
+            "Config": {
+              "Content": "[Dynamic.NewGuid()|]"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "SerializeTestRecordEvent",
+            "Order": 4,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.CurrentTestRecordEventJson.@",
+            "ExitAfterAdapter": true,
+            "DeferredHydrationPlan": "@",
+            "Config": {
+              "Content": "{\"RunId\":[Dynamic.ToJson([Memory.Item.*.#.TestRunId.@~])|],\"EventId\":[Dynamic.ToJson([Memory.Item.*.#.CurrentTestRecordEventId.@~])|],\"Group\":[Dynamic.ToJson([Memory.Item.*.#.CurrentTestRecordGroup.@~])|],\"Name\":[Dynamic.ToJson([Memory.Item.*.#.CurrentTestRecordName.@~])|],\"Value\":[Dynamic.ToJson([Memory.Item.*.#.CurrentTestRecordValue.@~])|]}"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "ParseTestRecordEvent",
+            "Order": 5,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.CurrentTestRecordEvent.@",
+            "ExitAfterAdapter": true,
+            "DeferredHydrationPlan": "@",
+            "Config": {
+              "Content": "[Dynamic.FromJson([Memory.Item.*.#.CurrentTestRecordEventJson.@~])|]"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "InsertTestRecordEvent",
+            "Order": 6,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.TestRecordEvents.@.[Memory.Item.*.#.CurrentTestRecordEventId.@|]",
+            "ExitAfterAdapter": true,
+            "DeferredHydrationPlan": "@",
+            "Config": {
+              "Content": "[Memory.Item.*.#.CurrentTestRecordEvent.@|]",
+              "IfPresent": "Error"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "WriteTestRecordEvents",
+            "Order": 7,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Write",
+            "Container": "results",
+            "Resource": "test-record-events-[Memory.Item.*.#.TestFileName.@|].json",
+            "DeferredHydrationPlan": "@",
+            "Config": {
+              "Content": "[Memory.Item.*.#.TestRecordEvents.@|]"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "RecordBooleanResult",
+            "Order": 8,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RecordTestBooleanResults.Steps",
+            "ExitAfterAdapter": true,
+            "Config": "[Memory.Plan.Config/]",
+            "IsEnabled": true
+          },
+          {
+            "Name": "RecordOptionalValue",
+            "Order": 9,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RecordTestValueResults.Steps",
+            "ExitAfterAdapter": true,
+            "Config": "[Memory.Plan.Config/]",
+            "Description": "Scalar pilot: log supplied false, zero and empty strings; absent/null skip. Object/array capture is not established.",
+            "IsEnabled": true
+          },
+          {
+            "Name": "CaptureTestRecordJson",
+            "Order": 10,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.CurrentTestRecordJson.@",
+            "ExitAfterAdapter": true,
+            "DeferredHydrationPlan": "@",
+            "Config": {
+              "Content": "[Dynamic.ToJson([Memory.Item.*.#.CurrentTestRecordValue.@~])|]"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "RecordFailedResult",
+            "Order": 11,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RecordTestFailureResults.Steps",
+            "ExitAfterAdapter": true,
+            "DeferredHydrationPlan": "@",
+            "Config": "[Memory.Plan.Config/]",
+            "IsEnabled": true
+          }
+        ],
+        "IsEnabled": true
+      },
+      {
+        "Name": "RunNetworkAITests",
+        "Order": 4,
+        "ImageConsumers": [
+          "CodexCLI"
+        ],
+        "OwnedResources": [
+          {
+            "Adapter": "Storage.RemoteMedia",
+            "VirtualPath": "st-test-08-[Memory.Item.*.#.TestFileName.@|]-Shared.png",
+            "PreflightAbsentKey": "NetworkAISharedAbsent",
+            "UploadAttemptKey": "NetworkAISharedUploadAttempt",
+            "ReturnedUrlKey": "NetworkAISharedUploadUrl",
+            "ExpectedHostKey": "NetworkAISharedExpectedHost",
+            "ExpectedPathKey": "NetworkAISharedExpectedPath"
+          }
+        ],
+        "Steps": [
+          {
+            "Name": "LoadNetworkAITestPlan",
+            "Order": 0,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test-adapters-intelligence.json",
+            "Path": "STTest-Adapters-NetworkAI",
+            "Format": "Json",
+            "Key": "STTestAdaptersNetworkAIPlan",
+            "Config": {
+              "Break": false
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeNetworkAITestPlan",
+            "Order": 1,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersNetworkAIPlan.@.Phases.RunNetworkAITests.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false
+            },
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "RunDataTests",
+        "Order": 5,
+        "Steps": [
+          {
+            "Name": "LoadDataTestPlan",
+            "Order": 0,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test-adapters-data.json",
+            "Path": "STTest-Adapters-Data",
+            "Format": "Json",
+            "Key": "STTestAdaptersDataPlan",
+            "Config": {
+              "Break": false
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeDataTestPlan",
+            "Order": 1,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersDataPlan.@.Phases.RunTests.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false
+            },
+            "IsEnabled": false
+          }
+        ],
+        "OwnedResources": [],
+        "IsEnabled": false
+      },
+      {
+        "Name": "RunSatelliteTests",
+        "Order": 6,
+        "Steps": [
+          {
+            "Name": "LoadSatelliteTestPlan",
+            "Order": 0,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test-adapters-satellite.json",
+            "Path": "STTest-Adapters-Satellite",
+            "Format": "Json",
+            "Key": "STTestAdaptersSatellitePlan",
+            "Config": {
+              "Break": false
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "LoadTelemetryExpectedFixture",
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "fixtures/satellite",
+            "Resource": "telemetry-receipts.json",
+            "Format": "Json",
+            "Path": "STTest-TelemetryReceipt-Fixtures",
+            "Key": "TelemetryExpected",
+            "Order": 1,
+            "IsEnabled": false
+          },
+          {
+            "Name": "RequireTelemetryExpectedFixture",
+            "Adapter": "Condenser.Transform",
+            "Activity": "Clone",
+            "Path": "*.#.TelemetryExpected.@.ExpectedRawReceipt",
+            "Key": "TelemetryExpectedGuard",
+            "ExitAfterAdapter": true,
+            "Order": 2,
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeSatelliteTestPlan",
+            "Order": 3,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersSatellitePlan.@.Phases.RunTests.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false
+            },
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "RunCondenserTests",
+        "Order": 8,
+        "Steps": [
+          {
+            "Name": "LoadCondenserTestPlan",
+            "Order": 0,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test-adapters-condenser.json",
+            "Format": "Json",
+            "Path": "STTest-Adapters-Condenser",
+            "Key": "STTestAdaptersCondenserPlan",
+            "IsEnabled": false
+          },
+          {
+            "Name": "LoadCondenserFixtures",
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "fixtures/core",
+            "Resource": "condenser-cases.json",
+            "Format": "Json",
+            "Path": "STTest-Condenser-Fixtures",
+            "Key": "CondenserFixtures",
+            "Order": 1,
+            "IsEnabled": false
+          },
+          {
+            "Name": "RequireCondenserFixtures",
+            "Adapter": "Condenser.Transform",
+            "Activity": "Clone",
+            "Path": "*.#.CondenserFixtures.@.Fixtures.TransformProject.Value",
+            "Key": "CondenserFixturesGuard",
+            "ExitAfterAdapter": true,
+            "Order": 2,
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeCondenserTestPlan",
+            "Order": 3,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "ExitAfterAdapter": true,
+            "Path": "*.#.STTestAdaptersCondenserPlan.@.Phases.RunTests.Steps",
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "RunConductionTests",
+        "Order": 7,
+        "Steps": [
+          {
+            "Name": "LoadConductionTestPlan",
+            "Order": 0,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test-adapters-conduction.json",
+            "Path": "STTest-Adapters-Conduction",
+            "Format": "Json",
+            "Key": "STTestAdaptersConductionPlan",
+            "Config": {
+              "Break": false
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeConductionTestPlan",
+            "Order": 1,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersConductionPlan.@.Phases.RunTests.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false
+            },
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "RecordTestBooleanResults",
+        "Order": 11,
+        "Steps": [
+          {
+            "Name": "RecordTestResult",
+            "Description": "Write the current test result under its test group and test name in the item graph.",
+            "DeferredHydrationPlan": "@",
+            "Order": 0,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.TestResults.@.[Memory.Item.*.#.CurrentTestRecordGroup.@|].[Memory.Item.*.#.CurrentTestRecordName.@|]",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false,
+              "Content": "[Memory.Item.*.#.CurrentTestRecordValue.@|]"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "WriteTestResult",
+            "Description": "Write the content held in TestFile to test-file.json in the test container through the current storage adapter.",
+            "Order": 1,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Write",
+            "Container": "results",
+            "Resource": "test-results-[Memory.Item.*.#.TestFileName.@|].json",
+            "Config": {
+              "Break": false,
+              "Content": "[Memory.Item.*.#.TestResults.@|]"
+            },
+            "IsEnabled": true
+          }
+        ],
+        "IsEnabled": true
+      },
+      {
+        "Name": "RecordTestValueResults",
+        "Order": 12,
+        "Steps": [
+          {
+            "Name": "RecordTestValueTimestamp",
+            "Order": 0,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.TestValues.@.[Memory.Plan.Config.TestPlanName/].Timestamp",
+            "ExitAfterAdapter": true,
+            "DeferredHydrationPlan": "@",
+            "Config": {
+              "Content": "[Memory.Item.*.#.TestResults.@.Timestamp|]"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "SerializeTestVerboseEnvelope",
+            "Description": "Serialize the captured scalar description, Boolean result and actual value before object construction.",
+            "DeferredHydrationPlan": "@",
+            "Order": 1,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.TestVerboseEnvelopeJson.@",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false,
+              "Content": "{\"Description\":[Dynamic.ToJson([Memory.Plan.Config.TestDescription=~])/],\"Result\":[Dynamic.ToJson([Memory.Item.*.#.CurrentTestRecordValue.@~])|],\"Value\":[Dynamic.ToJson([Memory.Plan.Config.TestValue~])/]}"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "SerializeTestVerboseEnvelopeWithExpected",
+            "Description": "Serialize the same scalar envelope with an authored expectation when supplied.",
+            "DeferredHydrationPlan": "@",
+            "Order": 2,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.TestVerboseEnvelopeJson.@",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false,
+              "Content": "{\"Description\":[Dynamic.ToJson([Memory.Plan.Config.TestDescription=~])/],\"Result\":[Dynamic.ToJson([Memory.Item.*.#.CurrentTestRecordValue.@~])|],\"Value\":[Dynamic.ToJson([Memory.Plan.Config.TestValue~])/],\"Expected\":[Dynamic.ToJson([Memory.Plan.Config.TestExpected=~])/]}"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "RecordTestValue",
+            "Description": "Record the supplied final scalar observation under the same group and test name.",
+            "DeferredHydrationPlan": "@",
+            "Order": 3,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.TestValues.@.[Memory.Plan.Config.TestPlanName/].[Memory.Item.*.#.CurrentTestRecordGroup.@|].[Memory.Item.*.#.CurrentTestRecordName.@|]",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false,
+              "Content": "[Dynamic.FromJson([Memory.Item.*.#.TestVerboseEnvelopeJson.@~])|]"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "WriteTestValue",
+            "Description": "Write supplied final scalar observations to the companion values file.",
+            "Order": 4,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Write",
+            "Container": "results",
+            "Resource": "test-results-[Memory.Item.*.#.TestFileName.@|]-[Memory.Plan.Config.TestPlanName/]-verbose.json",
+            "Config": {
+              "Break": false,
+              "Content": "[Memory.Item.*.#.TestValues.@.[Memory.Plan.Config.TestPlanName/]|]"
+            },
+            "IsEnabled": true
+          }
+        ],
+        "IsEnabled": true
+      },
+      {
+        "Name": "RecordTestFailureResults",
+        "Order": 13,
+        "Steps": [
+          {
+            "Name": "RecordFailureTimestamp",
+            "Order": 0,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.TestFailures.@.Timestamp",
+            "ExitAfterAdapter": true,
+            "DeferredHydrationPlan": "@",
+            "Config": {
+              "Content": "[Memory.Item.*.#.TestResults.@.Timestamp|]"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "CaptureFailureEnvelopeWithValue",
+            "Order": 1,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.CurrentTestFailureEnvelopeJson.@",
+            "ExitAfterAdapter": true,
+            "DeferredHydrationPlan": "@",
+            "Config": {
+              "Content": "[Memory.Item.*.#.TestVerboseEnvelopeJson.@|]"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "CaptureFailureEnvelopeMissingValue",
+            "Order": 2,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.CurrentTestFailureEnvelopeJson.@",
+            "ExitAfterAdapter": true,
+            "DeferredHydrationPlan": "@",
+            "Config": {
+              "Content": "{\"Description\":[Dynamic.ToJson([Memory.Plan.Config.TestDescription=~])/],\"Result\":[Dynamic.ToJson([Memory.Item.*.#.CurrentTestRecordValue.@~])|],\"Value\":null}"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "CaptureFailureEnvelopeMissingValueWithExpected",
+            "Order": 3,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.CurrentTestFailureEnvelopeJson.@",
+            "ExitAfterAdapter": true,
+            "DeferredHydrationPlan": "@",
+            "Config": {
+              "Content": "{\"Description\":[Dynamic.ToJson([Memory.Plan.Config.TestDescription=~])/],\"Result\":[Dynamic.ToJson([Memory.Item.*.#.CurrentTestRecordValue.@~])|],\"Value\":null,\"Expected\":[Dynamic.ToJson([Memory.Plan.Config.TestExpected=~])/]}"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "RecordFailureEntry",
+            "Order": 4,
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.TestFailures.@.[Memory.Item.*.#.CurrentTestRecordGroup.@|].[Memory.Item.*.#.CurrentTestRecordName.@|]",
+            "ExitAfterAdapter": true,
+            "DeferredHydrationPlan": "@",
+            "Config": {
+              "Content": "[Dynamic.FromJson([Memory.Item.*.#.CurrentTestFailureEnvelopeJson.@~])|]"
+            },
+            "IsEnabled": true
+          },
+          {
+            "Name": "WriteFailureResults",
+            "Order": 5,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Write",
+            "Container": "results",
+            "Resource": "test-results-[Memory.Item.*.#.TestFileName.@|]-failures.json",
+            "DeferredHydrationPlan": "@",
+            "Config": {
+              "Content": "[Memory.Item.*.#.TestFailures.@|]"
+            },
+            "IsEnabled": true
+          }
+        ],
+        "IsEnabled": true
+      }
+    ]
+  },
+  {
+    "Name": "EmptySTTestPlan",
+    "Order": 1,
+    "IsEnabled": false,
+    "Phases": []
+  }
+]

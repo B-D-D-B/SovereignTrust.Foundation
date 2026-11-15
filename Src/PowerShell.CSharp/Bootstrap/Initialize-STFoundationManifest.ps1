@@ -6,5 +6,5 @@ if ([Environment]::GetEnvironmentVariables('Process').Contains('ST_FOUNDATION_MA
     Initialize-STSelectedProcessDiscovery -Selection $selection
     Initialize-STSelectedDependency -Selection $selection
 } else {
-    Import-Module -Name SignalGraph -ErrorAction Stop
+    throw 'ST_NATIVE_PACKET: copied Foundation requires explicit reviewed native selection'
 }

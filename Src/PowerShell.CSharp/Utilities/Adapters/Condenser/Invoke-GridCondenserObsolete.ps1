@@ -1,11 +1,11 @@
 function Invoke-GridCondenser {
     param (
         [Parameter(Mandatory)][object]$Conduction,
-        [Parameter(Mandatory)][Graph]$Graph,
+        [Parameter(Mandatory)][SignalGraph.Graph]$Graph,
         [string]$WirePath = $null
     )
 
-    $signal = [Signal]::Start("Invoke-GridCondenser") | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Invoke-GridCondenser") | Select-Object -Last 1
 
     # ░▒▓█ RESOLVE TARGET GRAPH REGION █▓▒░
     $GraphTarget = $Graph
@@ -19,7 +19,7 @@ function Invoke-GridCondenser {
     }
 
     # ░▒▓█ VALIDATE GRAPH TARGET █▓▒░
-    if (-not ($GraphTarget -is [Graph])) {
+    if (-not ($GraphTarget -is [SignalGraph.Graph])) {
         $signal.LogCritical("❌ Target resolved from WirePath is not a Graph.")
         return $signal
     }

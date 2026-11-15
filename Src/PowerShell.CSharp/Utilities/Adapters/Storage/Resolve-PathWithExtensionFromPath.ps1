@@ -1,10 +1,10 @@
 function Resolve-PathWithExtensionFromPath {
     param (
-        [Parameter(Mandatory)][Signal]$Signal,
+        [Parameter(Mandatory)][SignalGraph.Signal]$Signal,
         [Parameter(Mandatory)][string]$Path
     )
 
-    $opSignal = [Signal]::Start("Resolve-PathWithExtensionFromPath:$Path", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Resolve-PathWithExtensionFromPath:$Path", $Signal) | Select-Object -Last 1
 
     try {
         # Return as-is if path already ends with a known extension (case-insensitive)
@@ -40,7 +40,7 @@ function Resolve-PathWithExtensionFromPath {
         $opSignal.SetResult($result)
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception in Resolve-PathWithExtensionFromPath: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("🔥 Exception in Resolve-PathWithExtensionFromPath: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $opSignal

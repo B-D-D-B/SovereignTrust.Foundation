@@ -15,14 +15,14 @@ ActivityComparison: CaseInsensitive
 #>
 
 class MappedSatelliteAdapter {
-    [Signal]$Signal
+    [SignalGraph.Signal]$Signal
 
     MappedSatelliteAdapter() {
         # Use static Start() instead
     }
 
-    static [Signal] Start([object]$Conductor) {
-        $opSignal = [Signal]::Start("MappedSatelliteAdapter.Start") | Select-Object -Last 1
+    static [SignalGraph.Signal] Start([object]$Conductor) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedSatelliteAdapter.Start") | Select-Object -Last 1
 
         if (-not $Conductor) {
             $opSignal.LogCritical("Null Conductor passed to MappedSatelliteAdapter.Start()")
@@ -30,28 +30,28 @@ class MappedSatelliteAdapter {
         }
 
         try {
-            $adapter = [MappedSatelliteAdapter]::new()
-            $adapter.Signal = [Signal]::Start("MappedSatelliteAdapter") | Select-Object -Last 1
+            $adapter = [SovereignTrust.Foundation.Classes.Adapters.MappedSatelliteAdapter]::new()
+            $adapter.Signal = [SignalGraph.Signal]::Start("MappedSatelliteAdapter") | Select-Object -Last 1
             $adapter.Signal.SetJacket($Conductor)
             $adapter.Signal.SetReversePointer($Conductor)
 
-            $graphSignal = [Graph]::Start("MappedSatelliteAdapter", $adapter, $false)
+            $graphSignal = [SignalGraph.Graph]::Start("MappedSatelliteAdapter", $adapter, $false)
             $adapter.Signal.SetPointer($graphSignal.GetResult())
 
             $opSignal.SetResult($adapter)
             $opSignal.LogInformation("✅ MappedSatelliteAdapter initialized.")
         }
         catch {
-            $opSignal.LogCritical("💥 Exception in MappedSatelliteAdapter.Start(): $_", $null, $_)
+            $opSignal.LogCritical("💥 Exception in MappedSatelliteAdapter.Start(): $_", $null, $_.Exception)
         }
 
         return $opSignal
     }
 
-    [Signal] RegisterAdapter([object]$AdapterInstance, [string]$Key = "SatelliteService") {
-        $opSignal = [Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
-        if ($AdapterInstance -isnot [Signal]) {
-            $adapterSignal = [Signal]::Start("Adapter:$Key") | Select-Object -Last 1
+    [SignalGraph.Signal] RegisterAdapter([object]$AdapterInstance, [string]$Key = "SatelliteService") {
+        $opSignal = [SignalGraph.Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
+        if ($AdapterInstance -isnot [SignalGraph.Signal]) {
+            $adapterSignal = [SignalGraph.Signal]::Start("Adapter:$Key") | Select-Object -Last 1
             $adapterSignal.SetResult($AdapterInstance)
         }
         else {
@@ -74,8 +74,8 @@ class MappedSatelliteAdapter {
         return $opSignal
     }
 
-    [Signal] Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
-        $opSignal = [Signal]::Start("MappedSatelliteAdapter.Invoke:$Slot") | Select-Object -Last 1
+    [SignalGraph.Signal] Invoke([string]$Slot, [string]$Activity, [SignalGraph.Signal]$ConductionSignal, [object]$Plan, [SignalGraph.Signal]$ItemSignal) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedSatelliteAdapter.Invoke:$Slot") | Select-Object -Last 1
 
         if ($Activity -notin @('EmitEntries', 'EmitSignal', 'SendMessage', 'HandleResponse', 'EmitSignalFull')) {
             $opSignal.LogCritical("Unsupported MappedSatelliteAdapter activity: '$Activity'.")

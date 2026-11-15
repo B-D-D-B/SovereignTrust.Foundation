@@ -6,14 +6,14 @@ ActivityScope: None
 Activities: None; Invoke takes a slot, context, and plan without Activity.
 #>
 class MappedAdapterTemplate {
-    [Signal]$Signal  # Sovereign runtime container
+    [SignalGraph.Signal]$Signal  # Sovereign runtime container
 
     MappedAdapterTemplate() {
         # Use static Start() instead of constructor
     }
 
-    static [Signal] Start([object]$Source) {
-        $opSignal = [Signal]::Start("MappedAdapterTemplate.Start") | Select-Object -Last 1
+    static [SignalGraph.Signal] Start([object]$Source) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedAdapterTemplate.Start") | Select-Object -Last 1
 
         if (-not $Source) {
             $opSignal.LogCritical("Null source passed to MappedAdapterTemplate.Start()")
@@ -22,27 +22,27 @@ class MappedAdapterTemplate {
 
         try {
             $adapter = [MappedAdapterTemplate]::new()
-            $adapter.Signal = [Signal]::Start("MappedAdapterTemplate") | Select-Object -Last 1
+            $adapter.Signal = [SignalGraph.Signal]::Start("MappedAdapterTemplate") | Select-Object -Last 1
             $adapter.Signal.SetJacket($Source)
             $adapter.Signal.SetReversePointer($Source)
 
-            $graphSignal = [Graph]::Start("MappedAdapterTemplate", $adapter, $false)
+            $graphSignal = [SignalGraph.Graph]::Start("MappedAdapterTemplate", $adapter, $false)
             $adapter.Signal.SetResult($graphSignal.GetResult())
 
             $opSignal.SetResult($adapter)
             $opSignal.LogInformation("✅ MappedAdapterTemplate initialized.")
         }
         catch {
-            $opSignal.LogCritical("💥 Exception during MappedAdapterTemplate.Start(): $_", $null, $_)
+            $opSignal.LogCritical("💥 Exception during MappedAdapterTemplate.Start(): $_", $null, $_.Exception)
         }
 
         return $opSignal
     }
 
-    [Signal] Register([string]$Key, [object]$SubAdapter) {
-        $opSignal = [Signal]::Start("RegisterAdapter:$Key") | Select-Object -Last 1
+    [SignalGraph.Signal] Register([string]$Key, [object]$SubAdapter) {
+        $opSignal = [SignalGraph.Signal]::Start("RegisterAdapter:$Key") | Select-Object -Last 1
 
-        $subSignal = [Signal]::Start("Adapter:$Key") | Select-Object -Last 1
+        $subSignal = [SignalGraph.Signal]::Start("Adapter:$Key") | Select-Object -Last 1
         $subSignal.SetResult($SubAdapter)
 
         $graph = $this.Signal.GetResult()
@@ -59,9 +59,9 @@ class MappedAdapterTemplate {
         return $opSignal
     }
 
-#    [Signal] Invoke([object]$Context) {
-    [Signal] Invoke([string]$Slot, [Signal]$Context, [object]$Plan) {
-        $opSignal = [Signal]::Start("MappedAdapterTemplate.Invoke") | Select-Object -Last 1
+#    [SignalGraph.Signal] Invoke([object]$Context) {
+    [SignalGraph.Signal] Invoke([string]$Slot, [SignalGraph.Signal]$Context, [object]$Plan) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedAdapterTemplate.Invoke") | Select-Object -Last 1
         $graph = $this.Signal.GetResult()
 
         foreach ($key in $graph.Grid.Keys) {

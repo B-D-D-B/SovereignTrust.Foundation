@@ -6,7 +6,7 @@ function Register-ModuleLoaded {
         [string]$Version
     )
 
-    $signal = [Signal]::Start("Register-ModuleLoaded:$ModuleName") | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Register-ModuleLoaded:$ModuleName") | Select-Object -Last 1
 
     # ░▒▓█ MODULE LOADED MEMORY █▓▒░
     $moduleJacket = @{
@@ -15,7 +15,7 @@ function Register-ModuleLoaded {
         Loaded   = $true
     }
 
-    $moduleSignal = [Signal]::new($ModuleName)
+    $moduleSignal = [SignalGraph.Signal]::new($ModuleName)
     $moduleSignal.SetResult($moduleJacket)
     $moduleSignal.LogInformation("✅ Module '$ModuleName' marked as loaded with version $Version.")
 

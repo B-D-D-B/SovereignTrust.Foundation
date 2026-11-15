@@ -1,12 +1,12 @@
 function Invoke-EmbeddedFileSystem_ExistsObject {
     param (
-        [Parameter(Mandatory)][Signal]$Signal,
+        [Parameter(Mandatory)][SignalGraph.Signal]$Signal,
         [Parameter(Mandatory)][string]$VirtualPath,
         [Parameter()][string]$PathSuffix,
         [Parameter(Mandatory)][object]$Addresses
     )
 
-    $opSignal = [Signal]::Start("Invoke-EmbeddedFileSystem_ExistsObject:$VirtualPath", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-EmbeddedFileSystem_ExistsObject:$VirtualPath", $Signal) | Select-Object -Last 1
 
     try {
         if ($PathSuffix -and -not $VirtualPath.EndsWith($PathSuffix, [System.StringComparison]::OrdinalIgnoreCase)) {
@@ -31,7 +31,7 @@ function Invoke-EmbeddedFileSystem_ExistsObject {
         $opSignal.SetResult($false)
     }
     catch {
-        $opSignal.LogCritical("Exception during Invoke-EmbeddedFileSystem_ExistsObject: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("Exception during Invoke-EmbeddedFileSystem_ExistsObject: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $opSignal

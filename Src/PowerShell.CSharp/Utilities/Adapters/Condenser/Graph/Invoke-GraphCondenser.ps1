@@ -2,10 +2,10 @@ function Invoke-GraphCondenser {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
-        [Signal]$Signal
+        [SignalGraph.Signal]$Signal
     )
 
-    $opSignal = [Signal]::Start("Invoke-GraphCondenser", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-GraphCondenser", $Signal) | Select-Object -Last 1
 
     $plansSignal = Resolve-PathFromDictionary -Dictionary $Signal -Path "%.%.%.@.GraphPlans" | Select-Object -Last 1
     if ($opSignal.MergeSignalAndVerifyFailure($plansSignal)) {
@@ -21,9 +21,9 @@ function Invoke-GraphCondenser {
 
     function Invoke-CondenserForPlan {
         param (
-            [Signal]$Signal,
+            [SignalGraph.Signal]$Signal,
             [object]$Plan,
-            [Signal]$ItemSignal,
+            [SignalGraph.Signal]$ItemSignal,
             [string]$PlanWirePathPrefix = "%.@",
             [string]$OverrideCondenserType = $null
         )
@@ -52,7 +52,7 @@ function Invoke-GraphCondenser {
             }
             default {
                 #            return Invoke-GridCondenser -Signal $Signal -Plan $Plan -ItemSignal $ItemSignal -PlanWirePathPrefix $PlanWirePathPrefix | Select-Object -Last 1
-                $logSignal = [Signal]::Start("CondenserDispatch:$($Plan.Name)", $Signal) | Select-Object -Last 1
+                $logSignal = [SignalGraph.Signal]::Start("CondenserDispatch:$($Plan.Name)", $Signal) | Select-Object -Last 1
                 $logSignal.LogWarning("Unsupported CondenserType '$($Plan.CondenserType)' for plan: $($Plan.Name)")
                 return $logSignal
             }
@@ -61,13 +61,13 @@ function Invoke-GraphCondenser {
 
     function Invoke-PlanAndDependents {
         param (
-            [Signal]$Signal,
+            [SignalGraph.Signal]$Signal,
             [object]$Plan,
             [object]$Item,
             [object]$ParentPlan = $null
         )
 
-        $planSignal = [Signal]::Start("GraphPlan:$($Plan.Name)", $Signal) | Select-Object -Last 1
+        $planSignal = [SignalGraph.Signal]::Start("GraphPlan:$($Plan.Name)", $Signal) | Select-Object -Last 1
 
         if ($Plan.CondenserType -eq "Fab") {
             $opSignal.LogInformation("🔄 Executing Token Condenser for plan: $($Plan.Name)")
@@ -117,12 +117,12 @@ function Invoke-GraphCondenser {
                     continue
                 }
 
-                if ($subItem -is [Signal]) {
+                if ($subItem -is [SignalGraph.Signal]) {
                     # Already a signal → use it directly
                     $subItemSignal = $subItem
                 } else {
                     # Not a signal → wrap it
-                    $subItemSignal = [Signal]::Start("Item:$($subItem.Name):Wrapper", $Item) | Select-Object -Last 1
+                    $subItemSignal = [SignalGraph.Signal]::Start("Item:$($subItem.Name):Wrapper", $Item) | Select-Object -Last 1
                     $subItemSignal.SetResult($subItem) | Out-Null
                 }
 
@@ -158,7 +158,7 @@ function Invoke-GraphCondenser {
                     }
                 }
 
-                $subItemJacketSignal = [Signal]::Start("Item:$($subItem.Name):Jacket", $Item) | Select-Object -Last 1
+                $subItemJacketSignal = [SignalGraph.Signal]::Start("Item:$($subItem.Name):Jacket", $Item) | Select-Object -Last 1
                 $subItemJacketSignal.SetJacket($subItemSignal) | Out-Null
 
                 $steps = $plans | Sort-Object Order | Where-Object { $_.DependsOn -eq $Plan.Name }

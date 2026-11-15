@@ -7,18 +7,18 @@ function Invoke-RestCondenserCore {
         [string]$Slot,
         # Conduction Signal
         [Parameter(Mandatory)]
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
 
         # Phase Set Signal (contains array of Phase ItemSignals or phase objects)
         [Parameter(Mandatory)]
-        [Signal]$ItemSignal,
+        [SignalGraph.Signal]$ItemSignal,
 
         # Full plan object
         [Parameter(Mandatory)]
         [object]$Plan
     )
 
-    $opSignal = [Signal]::Start("Invoke-RestCondenserCore", $ItemSignal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-RestCondenserCore", $ItemSignal) | Select-Object -Last 1
 
     # Build headers based on if there's a body to send.
     $headers = @{
@@ -48,7 +48,7 @@ function Invoke-RestCondenserCore {
             $targetPath = [System.IO.Path]::GetFullPath($targetPath)
         }
         catch {
-            return $opSignal.LogCritical("Config.TargetPath is not a valid filesystem path: $($_.Exception.Message)", $null, $_)
+            return $opSignal.LogCritical("Config.TargetPath is not a valid filesystem path: $($_.Exception.Message)", $null, $_.Exception)
         }
         if ([bool]$Plan.Config.ReturnHttpStatus -or [string]$Plan.Config.Method -ine 'Get' -or
             $null -ne $Plan.Config.SourcePath -or $null -ne $Plan.Config.Body -or $null -ne $Plan.Config.Form) {
@@ -218,12 +218,12 @@ function Invoke-RestCondenserCore {
                 if ($returnHttpStatus -or $targetPathProvided) {
                     if ($targetPathProvided -and $targetAuthRefreshes -ge 1) {
                         if ($redactDiagnostics) { return $opSignal.LogCritical('REST authentication refresh failed.') }
-                        return $opSignal.LogCritical("Authentication still failed after token refresh for '$FinalUrl'.", $null, $_)
+                        return $opSignal.LogCritical("Authentication still failed after token refresh for '$FinalUrl'.", $null, $_.Exception)
                     }
                     if ($targetPathProvided) { $targetAuthRefreshes++ }
                     if ($statusModeAuthRefreshes -ge 1) {
                         if ($redactDiagnostics) { $opSignal.LogCritical('REST authentication refresh failed.') }
-                        else { $opSignal.LogCritical("Authentication still failed after token refresh for '$FinalUrl'.", $null, $_) }
+                        else { $opSignal.LogCritical("Authentication still failed after token refresh for '$FinalUrl'.", $null, $_.Exception) }
                         return $opSignal
                     }
                     $statusModeAuthRefreshes++
@@ -237,7 +237,7 @@ function Invoke-RestCondenserCore {
                 }
                 else {
                     if ($redactDiagnostics) { $opSignal.LogCritical('REST bearer token refresh failed.') }
-                    else { $opSignal.LogCritical("Failed to refresh bearer token. Cannot retry request to '$FinalUrl'.", $null, $_) }
+                    else { $opSignal.LogCritical("Failed to refresh bearer token. Cannot retry request to '$FinalUrl'.", $null, $_.Exception) }
                     return $opSignal
                 }
             }
@@ -256,7 +256,7 @@ function Invoke-RestCondenserCore {
                 }
                 else {
                     if ($redactDiagnostics) { $opSignal.LogCritical('REST bearer token refresh failed.') }
-                    else { $opSignal.LogCritical("Failed to refresh bearer token. Cannot retry request to '$FinalUrl'.", $null, $_) }
+                    else { $opSignal.LogCritical("Failed to refresh bearer token. Cannot retry request to '$FinalUrl'.", $null, $_.Exception) }
                     return $opSignal
                 }
             }
@@ -266,7 +266,7 @@ function Invoke-RestCondenserCore {
 
             if ($attempts -gt $maxAttempts) {
                 if ($redactDiagnostics) { $opSignal.LogCritical('REST request failed.') }
-                else { $opSignal.LogCritical("Exception during attempt $($attempts) on call to '$FinalUrl' $message", $null, $_) }
+                else { $opSignal.LogCritical("Exception during attempt $($attempts) on call to '$FinalUrl' $message", $null, $_.Exception) }
                 return $opSignal
             }
 

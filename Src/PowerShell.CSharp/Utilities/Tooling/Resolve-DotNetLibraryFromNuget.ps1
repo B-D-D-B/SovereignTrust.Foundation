@@ -7,7 +7,7 @@ function Resolve-DotNetLibraryFromNuget {
         [string]$TargetFramework = "netstandard2.0"
     )
 
-    $signal = [Signal]::Start("Ensure-DotNetLibrary:$LibraryName") | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Ensure-DotNetLibrary:$LibraryName") | Select-Object -Last 1
 
     try {
         $nugetPath = Join-Path $TargetFolder "Tools"
@@ -26,7 +26,7 @@ function Resolve-DotNetLibraryFromNuget {
                 Invoke-WebRequest -Uri "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" -OutFile $nugetExe
                 $signal.LogInformation("⬇️ Downloaded nuget.exe")
             } catch {
-                $signal.LogCritical("Failed to download nuget.exe: $($_.Exception.Message)", $null, $_)
+                $signal.LogCritical("Failed to download nuget.exe: $($_.Exception.Message)", $null, $_.Exception)
                 return $signal
             }
         }
@@ -42,7 +42,7 @@ function Resolve-DotNetLibraryFromNuget {
 
                 $signal.LogInformation("📦 Installed $LibraryName@$LibraryVersion")
             } catch {
-                $signal.LogCritical("Failed NuGet install: $($_.Exception.Message)", $null, $_)
+                $signal.LogCritical("Failed NuGet install: $($_.Exception.Message)", $null, $_.Exception)
                 return $signal
             }
         }
@@ -63,7 +63,7 @@ function Resolve-DotNetLibraryFromNuget {
         }
     }
     catch {
-        $signal.LogCritical("🔥 Unexpected failure: $($_.Exception.Message)", $null, $_)
+        $signal.LogCritical("🔥 Unexpected failure: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $signal

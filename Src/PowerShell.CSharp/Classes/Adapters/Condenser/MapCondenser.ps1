@@ -22,26 +22,26 @@ UnsupportedActivity: FailedSignal
 ActivityComparison: CaseInsensitive
 #>
 class MapCondenser {
-    [Conductor]$Conductor
-    [MappedCondenserAdapter]$MappedCondenserAdapter
-    [Signal]$Signal  # Previously ControlSignal
+    [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor
+    [SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$MappedCondenserAdapter
+    [SignalGraph.Signal]$Signal  # Previously ControlSignal
 
     MapCondenser() {
         # Empty constructor — use .Start()
     }
        
-    static [MapCondenser] Start([MappedCondenserAdapter]$mappedAdapter, [Conductor]$conductor) {
+    static [MapCondenser] Start([SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$mappedAdapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
         $instance = [MapCondenser]::new()
         $instance.MappedCondenserAdapter = $mappedAdapter
         $instance.Conductor = $conductor
-        $instance.Signal = [Signal]::Start("MapCondenser.Start") | Select-Object -Last 1
+        $instance.Signal = [SignalGraph.Signal]::Start("MapCondenser.Start") | Select-Object -Last 1
         return $instance
     }
 
-    [Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
+    [SignalGraph.Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
         # For the Content Condenser, the plan contains the steps to perform, similar to the steps in the FormulaGraphCondenser but 2 dimensional mappings
 
-        $opSignal = [Signal]::Start("MapCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start("MapCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
 
         if ($Activity -notin @('Invoke', 'Map')) {
 #            $opSignal.LogCritical("Unsupported MapCondenser activity: '$Activity'.")
@@ -124,7 +124,7 @@ class MapCondenser {
                     if ($contentSignal.Failure() -or -not $contentSignal.HasResult()) { return $opSignal.LogCritical('Map proposal Content is missing.') }
                     $modeSignal = Resolve-PathFromDictionary -Dictionary $proposalSignal -Path '@.CondenserMode' -Default 'Direct' -SignalLevel 'Warning' | Select-Object -Last 1
                     if ($modeSignal.Failure() -or $modeSignal.GetResult() -notin @('Direct','Template')) { return $opSignal.LogCritical('Map proposal CondenserMode is unsupported.') }
-                    $dataProxy = [Signal]::Start('MapCondenser.DataProxy', $ItemSignal) | Select-Object -Last 1
+                    $dataProxy = [SignalGraph.Signal]::Start('MapCondenser.DataProxy', $ItemSignal) | Select-Object -Last 1
                     $dataProxy.SetResult($data)
                     $Context = $ItemSignal
                     $resultSignal = Invoke-MapCondenser -Signal $dataProxy -ProposalSignal $proposalSignal -Context $Context | Select-Object -Last 1
@@ -152,8 +152,8 @@ class MapCondenser {
 
     }
 
-    [Signal] Invoke([Signal]$ItemSignal, [object]$Plan, [object]$Context = $null) {
-        $opSignal = [Signal]::Start("MapCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
+    [SignalGraph.Signal] Invoke([SignalGraph.Signal]$ItemSignal, [object]$Plan, [object]$Context = $null) {
+        $opSignal = [SignalGraph.Signal]::Start("MapCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
 
         if ($null -eq $Plan) {
             $PlanSignal = Resolve-PathFromDictionary -Dictionary $ItemSignal -Path "%.@.Plan" | Select-Object -Last 1

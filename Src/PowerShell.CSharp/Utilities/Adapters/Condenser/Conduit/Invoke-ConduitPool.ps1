@@ -9,16 +9,16 @@
 function Invoke-ConduitPool {
     [CmdletBinding()]
     param(
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
         [object]$Plan,
-        [Signal]$ItemSignal,
+        [SignalGraph.Signal]$ItemSignal,
 
         [object]$Conductor,
 
         [int]$MaxThreads = 6
     )
 
-    $opSignal = [Signal]::Start("Invoke-WorkItemsInRunspacePool", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-WorkItemsInRunspacePool", $Signal) | Select-Object -Last 1
 
     $WorkDict = $ItemSignal.GetResult($true).Grid
     $MaxThreads = 4
@@ -29,7 +29,7 @@ function Invoke-ConduitPool {
         if ($null -eq $item) { continue }
 
         if ($null -eq $item.Signal) {
-            $item.Signal = [Signal]::Start("WorkItem:$id", $Conductor)
+            $item.Signal = [SignalGraph.Signal]::Start("WorkItem:$id", $Conductor)
         }
         $item.State  = "Queued"
         $item.Error  = $null jjjjjjj
@@ -159,7 +159,7 @@ function Invoke-ConduitPool {
         }
     }
     catch {
-        $opSignal.LogCritical("Exception during conduction condenser run: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("Exception during conduction condenser run: $($_.Exception.Message)", $null, $_.Exception)
     }
     finally {
         try { $pool.Close() } catch { }
@@ -180,7 +180,7 @@ function Invoke-ConduitPool {
         }
 
         # Optional: Merge worker telemetry into the operation signal deterministically
-        if ($item.Signal -is [Signal]) {
+        if ($item.Signal -is [SignalGraph.Signal]) {
             $opSignal.MergeSignal(@($item.Signal)) | Out-Null
         }
 

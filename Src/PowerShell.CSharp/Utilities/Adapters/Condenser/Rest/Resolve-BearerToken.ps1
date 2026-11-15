@@ -5,7 +5,7 @@ function Resolve-BearerToken {
         [string]$Address
     )
 
-    $opSignal = [Signal]::Start("Resolve-BearerToken") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Resolve-BearerToken") | Select-Object -Last 1
 
     try {
         # Requires Azure CLI

@@ -1,0 +1,7 @@
+{
+  "Name": "C01.UnsupportedActivity",
+  "Steps": [
+    { "Name": "UnsupportedStorageActivity", "Adapter": "Storage.LocalContent", "Activity": "Wave2Unsupported", "Container": "sentinel", "Resource": "first.json" },
+    { "Name": "LaterSentinel", "Adapter": "Storage.LocalContent", "Activity": "Write", "Container": "sentinel", "Resource": "must-not-exist.json", "Config": { "Content": { "Unexpected": true } } }
+  ]
+}

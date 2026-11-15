@@ -1,9 +1,9 @@
 function Invoke-TokenStorage {
     [CmdletBinding()]
     param (
-        #[Conduit]$Conduit,
-        [Signal]$Signal,
-        [Signal]$ItemSignal,
+        #[SovereignTrust.Foundation.Classes.Conduction.Conduit]$Conduit,
+        [SignalGraph.Signal]$Signal,
+        [SignalGraph.Signal]$ItemSignal,
         [string]$Path,
         [object]$Plan  # Typically a small PSObject or Phase class in the future
     )
@@ -12,7 +12,7 @@ function Invoke-TokenStorage {
         throw "Conduction is not running. Cannot invoke Phase."
     }
 
-    $opSignal = [Signal]::Start("Invoke-TokenStorage", $Conductor) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-TokenStorage", $Conductor) | Select-Object -Last 1
 
 
     try {
@@ -68,7 +68,7 @@ function Invoke-TokenStorage {
         }
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception during Invoke-TokenStorage: $_", $null, $_)
+        $opSignal.LogCritical("🔥 Exception during Invoke-TokenStorage: $_", $null, $_.Exception)
     }
 
     return $opSignal

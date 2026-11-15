@@ -123,15 +123,15 @@ function Invoke-CondenserAdapter {
         [string]$VirtualPath,
         [string]$Slot,
         [string]$Activity,
-        [Parameter(Mandatory)][Signal]$Signal,
+        [Parameter(Mandatory)][SignalGraph.Signal]$Signal,
         [object]$Plan,
-        [Parameter(Mandatory)][Signal]$ItemSignal
+        [Parameter(Mandatory)][SignalGraph.Signal]$ItemSignal
     )
 
     $stTrace = Enter-STExecutionTrace -BoundaryKind 'Condenser' -Name ("Condenser."+ $Slot+"/"+$(if($Activity){$Activity}else{'Invoke'})) -Adapter ("Condenser."+ $Slot) -Activity $(if($Activity){$Activity}else{'Invoke'})
     $stThrew=$false
     # ░▒▓█ SIGNAL START █▓▒░
-    $opSignal = [Signal]::Start("Invoke-CondenserAdapter", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-CondenserAdapter", $Signal) | Select-Object -Last 1
 
     try {
         # ░▒▓█ VALIDATE INPUT █▓▒░
@@ -180,7 +180,7 @@ function Invoke-CondenserAdapter {
         #$opSignal.LogInformation("🧭 Condenser route: Slot='$Slot' Activity='$Activity' VirtualPath='$vp' AdapterPath='$adapterPath'")
 
         # ░▒▓█ INVOKE █▓▒░
-        $adapterInvokeSignal = $adapter.Invoke($Slot, $Activity, $Signal, $Plan, $ItemSignal) | Select-Object -Last 1
+        $adapterInvokeSignal = Invoke-STNativeMappedAdapter -MappedAdapter $adapter -Family Condenser -Slot $Slot -Activity $Activity -ConductionSignal $Signal -Plan $Plan -ItemSignal $ItemSignal | Select-Object -Last 1
         if ($opSignal.MergeSignalAndVerifyFailure(@($adapterInvokeSignal))) {
             $opSignal.LogCritical("Condenser Adapter invocation failed (Slot='$Slot', Activity='$Activity').")
             return $opSignal
@@ -193,7 +193,7 @@ function Invoke-CondenserAdapter {
     }
     catch {
         $stThrew=$true
-        $opSignal.LogCritical("Exception during Invoke-CondenserAdapter: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("Exception during Invoke-CondenserAdapter: $($_.Exception.Message)", $null, $_.Exception)
         return $opSignal
     }
     finally { Exit-STExecutionTrace $stTrace $opSignal $stThrew }

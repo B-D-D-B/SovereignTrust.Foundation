@@ -1,7 +1,7 @@
 function Resolve-ConductorAdapters {
     param (
         [Parameter(Mandatory = $true)]
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
 
         [Parameter(Mandatory)]
         [object]$Conductor,
@@ -11,7 +11,7 @@ function Resolve-ConductorAdapters {
         [bool]$RetryFailedResolution = $false
     )
 
-    $opSignal = [Signal]::Start("ResolveConductorAdapters") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("ResolveConductorAdapters") | Select-Object -Last 1
 
     try {
         # ░▒▓█ MEMORY PREPARATION █▓▒░

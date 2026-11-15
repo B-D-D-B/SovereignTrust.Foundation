@@ -3,7 +3,7 @@ function Resolve-ClonePlan {
         [object]$Plan
     )
 
-    $opSignal = [Signal]::Start("Resolve-ClonePlan") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Resolve-ClonePlan") | Select-Object -Last 1
 
     $conductionPlan = $null
     $conductionPhase = $null

@@ -1,12 +1,12 @@
 function Invoke-MappedStorageAdapterWrapper {
     [CmdletBinding()]
     param (
-        [Signal]$OpSignal = $null,
+        [SignalGraph.Signal]$OpSignal = $null,
         [object]$Signal
     )
 
     # ░▒▓█ SIGNAL START █▓▒░
-    $opSignal = $OpSignal ??  [Signal]::Start("Invoke-ConductionCondenser") | Select-Object -Last 1
+    $opSignal = $OpSignal ??  [SignalGraph.Signal]::Start("Invoke-ConductionCondenser") | Select-Object -Last 1
 
     try {
         # ░▒▓█ VALIDATE INPUT █▓▒░
@@ -35,7 +35,7 @@ function Invoke-MappedStorageAdapterWrapper {
 
     }
     catch {
-        $opSignal.LogCritical("Exception during conduction condenser run: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("Exception during conduction condenser run: $($_.Exception.Message)", $null, $_.Exception)
     }
 
             return $opSignal

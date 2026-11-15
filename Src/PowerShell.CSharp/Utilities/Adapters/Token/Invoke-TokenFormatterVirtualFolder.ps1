@@ -4,7 +4,7 @@ function Invoke-TokenFormatterVirtualFolder {
         [object]$Plan
     )
 
-    $opSignal = [Signal]::Start("Invoke-TokenFormatterVirtualFolder") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-TokenFormatterVirtualFolder") | Select-Object -Last 1
 
     try {
         # Split into path segments
@@ -16,7 +16,7 @@ function Invoke-TokenFormatterVirtualFolder {
         $opSignal.LogInformation("✅ Formatted path: $formatted")
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception in Invoke-TokenFormatterVirtualFolder: $_", $null, $_)
+        $opSignal.LogCritical("🔥 Exception in Invoke-TokenFormatterVirtualFolder: $_", $null, $_.Exception)
     }
 
     return $opSignal

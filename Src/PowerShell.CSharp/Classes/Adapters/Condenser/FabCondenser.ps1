@@ -22,24 +22,24 @@ UnsupportedActivity: FailedSignal
 ActivityComparison: CaseInsensitive
 #>
 class FabCondenser {
-    [Conductor]$Conductor
-    [MappedCondenserAdapter]$MappedCondenserAdapter
-    [Signal]$Signal  # Previously ControlSignal
+    [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor
+    [SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$MappedCondenserAdapter
+    [SignalGraph.Signal]$Signal  # Previously ControlSignal
 
     FabCondenser() {
         # Empty constructor — use .Start()
     }
        
-    static [FabCondenser] Start([MappedCondenserAdapter]$mappedAdapter, [Conductor]$conductor) {
+    static [FabCondenser] Start([SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$mappedAdapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
         $instance = [FabCondenser]::new()
         $instance.MappedCondenserAdapter = $mappedAdapter
         $instance.Conductor = $conductor
-        $instance.Signal = [Signal]::Start("FabCondenser.Control") | Select-Object -Last 1
+        $instance.Signal = [SignalGraph.Signal]::Start("FabCondenser.Control") | Select-Object -Last 1
         return $instance
     }
 
-    [Signal]Invoke($Slot, $Activity, $Signal, $Plan, $ItemSignal) {
-        $opSignal = [Signal]::Start("FabCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
+    [SignalGraph.Signal]Invoke($Slot, $Activity, $Signal, $Plan, $ItemSignal) {
+        $opSignal = [SignalGraph.Signal]::Start("FabCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
 
         if ($Activity -notin @('Invoke', 'ObserveMappedAdapter')) {
             $opSignal.LogCritical("Unsupported FabCondenser activity: '$Activity'.")
@@ -54,7 +54,7 @@ class FabCondenser {
         $JacketSignal = $JacketSignalWrapper.GetResult()
         try {
             $source = $JacketSignal
-            while ($source -is [Signal]) { $source = $source.GetResult($true) }
+            while ($source -is [SignalGraph.Signal]) { $source = $source.GetResult($true) }
             $sourcePath = [string]$source.VirtualPath
             $parts = @($sourcePath -split '\.')
             if ($parts.Count -lt 5 -or [string]::IsNullOrWhiteSpace($parts[2]) -or
@@ -71,7 +71,7 @@ class FabCondenser {
             }
         }
         catch {
-            $opSignal.LogCritical("Selected source jacket cannot be inspected: $($_.Exception.Message)", $null, $_)
+            $opSignal.LogCritical("Selected source jacket cannot be inspected: $($_.Exception.Message)", $null, $_.Exception)
             return $opSignal
         }
         $loadingMode = 'Lazy'
@@ -137,11 +137,11 @@ class FabCondenser {
             if (-not $mappedResult.Success() -or -not $mappedResult.HasResult()) { throw 'Mapped container is unavailable after registration.' }
             $mapped = $mappedResult.GetResult($true)
             $graph = $mapped.Signal.GetPointer()
-            if ($graph -isnot [Graph] -or $null -eq $graph.Grid -or -not $graph.Grid.Contains($sourceIdentity.Slot)) {
+            if ($graph -isnot [SignalGraph.Graph] -or $null -eq $graph.Grid -or -not $graph.Grid.Contains($sourceIdentity.Slot)) {
                 throw 'Selected slot was not stored in the mapped graph.'
             }
             $slotSignal = $graph.Grid[$sourceIdentity.Slot]
-            if ($slotSignal -isnot [Signal] -or -not [object]::ReferenceEquals($slotSignal.GetResult($true), $addSignal.GetResult())) {
+            if ($slotSignal -isnot [SignalGraph.Signal] -or -not [object]::ReferenceEquals($slotSignal.GetResult($true), $addSignal.GetResult())) {
                 throw 'Stored slot differs from the registration result.'
             }
             $null = $slotSignal.AddProperty('FabSourceIdentity', $sourceIdentity)
@@ -150,7 +150,7 @@ class FabCondenser {
             }
         }
         catch {
-            $opSignal.LogCritical("Mapped registration has partial state; source identity attachment failed: $($_.Exception.Message)", $null, $_)
+            $opSignal.LogCritical("Mapped registration has partial state; source identity attachment failed: $($_.Exception.Message)", $null, $_.Exception)
             return $opSignal
         }
 
@@ -159,8 +159,8 @@ class FabCondenser {
         return $opSignal
     }
 
-    [Signal] ObserveMappedAdapter([Signal]$Signal, [object]$Plan, [Signal]$ItemSignal) {
-        $opSignal = [Signal]::Start('FabCondenser.ObserveMappedAdapter', $ItemSignal) | Select-Object -Last 1
+    [SignalGraph.Signal] ObserveMappedAdapter([SignalGraph.Signal]$Signal, [object]$Plan, [SignalGraph.Signal]$ItemSignal) {
+        $opSignal = [SignalGraph.Signal]::Start('FabCondenser.ObserveMappedAdapter', $ItemSignal) | Select-Object -Last 1
         try {
             $kind = [string]$Plan.Config.Kind
             $slot = [string]$Plan.Config.Slot
@@ -180,7 +180,7 @@ class FabCondenser {
             }
             $mapped = $mappedResult.GetResult($true)
             $graph = $mapped.Signal.GetPointer()
-            if ($graph -isnot [Graph] -or $null -eq $graph.Grid) {
+            if ($graph -isnot [SignalGraph.Graph] -or $null -eq $graph.Grid) {
                 $opSignal.LogCritical("Mapped$kind graph is unavailable.")
                 return $opSignal
             }
@@ -189,7 +189,7 @@ class FabCondenser {
                 return $opSignal
             }
             $slotSignal = $graph.Grid[$slot]
-            if ($slotSignal -isnot [Signal] -or -not $slotSignal.HasResult()) {
+            if ($slotSignal -isnot [SignalGraph.Signal] -or -not $slotSignal.HasResult()) {
                 $opSignal.LogCritical("Mapped$kind slot '$slot' has no registration or instance.")
                 return $opSignal
             }
@@ -221,7 +221,7 @@ class FabCondenser {
                 return $opSignal
             }
             $jacket = $instance.Signal.GetJacket().GetResult()
-            if ($jacket -is [Signal]) { $jacket = $jacket.GetResult() }
+            if ($jacket -is [SignalGraph.Signal]) { $jacket = $jacket.GetResult() }
             $instancePath = [string]$jacket.VirtualPath
             if ([string]$jacket.Kind -cne $kind -or [string]$jacket.Slot -cne $slot -or
                 [string]::IsNullOrWhiteSpace($instancePath)) {
@@ -266,7 +266,7 @@ class FabCondenser {
             })
         }
         catch {
-            $opSignal.LogCritical("Mapped adapter observation failed: $($_.Exception.Message)", $null, $_)
+            $opSignal.LogCritical("Mapped adapter observation failed: $($_.Exception.Message)", $null, $_.Exception)
         }
         return $opSignal
     }

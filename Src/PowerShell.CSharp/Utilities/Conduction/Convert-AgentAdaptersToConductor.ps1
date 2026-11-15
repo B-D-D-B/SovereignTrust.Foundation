@@ -30,7 +30,7 @@ function Convert-AgentAdaptersToConductor {
         [object]$Conductor
     )
 
-    $signal = [Signal]::Start("Convert-AgentAdaptersToConductor") | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Convert-AgentAdaptersToConductor") | Select-Object -Last 1
 
     function Add-AdapterJacket {
         param (
@@ -84,7 +84,7 @@ function Convert-AgentAdaptersToConductor {
         $signal.SetResult($Conductor)
     }
     catch {
-        $signal.LogCritical("Exception: critical failure in Convert-AgentAdaptersToConductor: $($_.Exception.Message)", $null, $_)
+        $signal.LogCritical("Exception: critical failure in Convert-AgentAdaptersToConductor: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $signal

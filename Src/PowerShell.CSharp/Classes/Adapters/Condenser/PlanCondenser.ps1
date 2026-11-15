@@ -29,24 +29,24 @@ UnsupportedActivity: FailedSignal
 ActivityComparison: CaseInsensitive
 #>
 class PlanCondenser {
-    [Conductor]$Conductor
-    [MappedCondenserAdapter]$MappedCondenserAdapter
-    [Signal]$Signal
+    [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor
+    [SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$MappedCondenserAdapter
+    [SignalGraph.Signal]$Signal
 
     PlanCondenser() {
         # Empty constructor — use Start()
     }
 
-    static [PlanCondenser] Start([MappedCondenserAdapter]$mappedAdapter, [Conductor]$conductor) {
+    static [PlanCondenser] Start([SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$mappedAdapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
         $instance = [PlanCondenser]::new()
         $instance.MappedCondenserAdapter = $mappedAdapter
         $instance.Conductor = $conductor
-        $instance.Signal = [Signal]::Start("PlanCondenser.Control") | Select-Object -Last 1
+        $instance.Signal = [SignalGraph.Signal]::Start("PlanCondenser.Control") | Select-Object -Last 1
         return $instance
     }
 
-    [Signal] TestIterationFilter([Signal]$ParentSignal, $Item, [object[]]$Criteria, [string]$Operator) {
-        $filterSignal = [Signal]::Start('PlanCondenser.TestIterationFilter', $ParentSignal) | Select-Object -Last 1
+    [SignalGraph.Signal] TestIterationFilter([SignalGraph.Signal]$ParentSignal, $Item, [object[]]$Criteria, [string]$Operator) {
+        $filterSignal = [SignalGraph.Signal]::Start('PlanCondenser.TestIterationFilter', $ParentSignal) | Select-Object -Last 1
         $matched = $Operator -eq 'And'
         foreach ($criterion in $Criteria) {
             $value = $criterion.Default
@@ -65,13 +65,70 @@ class PlanCondenser {
         return $filterSignal
     }
 
-    [Signal] ResolveInsertPhaseSteps(
-        [Signal]$ParentSignal,
+    static [SignalGraph.Signal] ResolveOrderingPath($Dictionary, [string]$Path) {
+        $operation = [SignalGraph.Signal]::Start('PlanCondenser.ResolveOrderingPath', $Dictionary)
+        try {
+            $current = $Dictionary
+            foreach ($segment in ($Path -split '\.')) {
+                if ($null -eq $current) { break }
+                if ($current.GetType() -eq [System.Management.Automation.PSCustomObject] -or $current -is [System.Collections.IDictionary]) {
+                    # Preserve the selected PS resolver's dictionary call boundary,
+                    # including structured errors from unsupported Contains signatures.
+                    if ($current -is [System.Collections.IDictionary]) { $null = $current.Contains($segment) }
+                    $resolved = Resolve-PathFromDictionary -Dictionary $current -Path $segment -Default $null -SignalLevel Information | Select-Object -Last 1
+                    if ($operation.MergeSignalAndVerifyFailure($resolved)) { return $operation }
+                    $current = $resolved.GetResult()
+                }
+                else {
+                    $value = $null
+                    if (-not [SignalGraph.Paths]::TryMember($current, $segment, [ref]$value)) { $current = $null; break }
+                    $current = $value
+                }
+            }
+            $operation.Result = $current
+        }
+        catch { $null = $operation.LogCritical($_.Exception.Message, $null, $_.Exception) }
+        return $operation
+    }
+
+    static [object] ResolveIterationKey($KeyValue) {
+        $value = $KeyValue
+        $category = $null
+        if ($null -ne $value) {
+            $valueType = $value.GetType()
+            if ($valueType -eq [string]) { $category = 'String' }
+            elseif ($valueType -eq [bool]) { $category = 'Boolean' }
+            elseif ($valueType -in @([sbyte], [byte], [int16], [uint16], [int32], [uint32], [int64], [uint64], [double], [decimal])) {
+                $category = 'Numeric'
+                $value = [double]$value
+            }
+            else { throw 'Ordering key must be String, Boolean or an integral/Decimal number.' }
+        }
+        return [pscustomobject]@{ Value = $value; Category = $category }
+    }
+
+    static [int] CompareIterationKeys($Left, $Right, [bool]$Descending) {
+        if ($null -eq $Left.Key -and $null -eq $Right.Key) { return $Left.Position.CompareTo($Right.Position) }
+        if ($null -eq $Left.Key) { return 1 }
+        if ($null -eq $Right.Key) { return -1 }
+        $comparison = switch ($Left.Category) {
+            'String' { [StringComparer]::OrdinalIgnoreCase.Compare($Left.Key, $Right.Key) }
+            'Boolean' { $Left.Key.CompareTo($Right.Key) }
+            'Numeric' { ([double]$Left.Key).CompareTo([double]$Right.Key) }
+            default { throw 'Unsupported ordering category.' }
+        }
+        if ($Descending) { $comparison = -$comparison }
+        if ($comparison -eq 0) { return $Left.Position.CompareTo($Right.Position) }
+        return $comparison
+    }
+
+    [SignalGraph.Signal] ResolveInsertPhaseSteps(
+        [SignalGraph.Signal]$ParentSignal,
         $ConductionSignal,
         $Plan,
         $ItemSignal
     ) {
-        $opSignal = [Signal]::Start("PlanCondenser.ResolveInsertPhaseSteps", $ParentSignal) | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start("PlanCondenser.ResolveInsertPhaseSteps", $ParentSignal) | Select-Object -Last 1
 
         $iteration = $Plan.Config.Iteration ?? 0
         if ($Plan.Config.PreventReclone -and $iteration -gt 0)
@@ -116,7 +173,7 @@ class PlanCondenser {
         }
 
         # Hydrate the injected steps
-        $subItemSignal = [Signal]::Start("PlanCondenser.ResolveInsertPhaseSteps", $ItemSignal) | Select-Object -Last 1
+        $subItemSignal = [SignalGraph.Signal]::Start("PlanCondenser.ResolveInsertPhaseSteps", $ItemSignal) | Select-Object -Last 1
         $subItemSignal.SetJacketResult($phaseSteps)
 
         # Pass through the Pointer so the Hydration process has it available to resolve values.
@@ -152,8 +209,8 @@ class PlanCondenser {
         return $opSignal
     }
 
-    [Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
-        $opSignal = [Signal]::Start("PlanCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
+    [SignalGraph.Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
+        $opSignal = [SignalGraph.Signal]::Start("PlanCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
 
         if ($Activity -notin @('IteratePhase', 'InvokePlan', 'InvokePhase', 'InvokePhaseAsync', 'AwaitPhase', 'AwaitAllPhases', 'GetPhaseStatus', 'StopPhase', 'InsertPhaseSteps', 'AddPhaseSteps')) {
             $opSignal.LogCritical("Unsupported PlanCondenser activity: '$Activity'.")
@@ -241,11 +298,72 @@ class PlanCondenser {
                                 if ($filterSignal.GetResult()) { $retained.Add($iteration) }
                             }
                             catch {
-                                $null = $opSignal.LogCritical("Plan.Config.Filter evaluation failed: $($_.Exception.Message)", $null, $_)
+                                $null = $opSignal.LogCritical("Plan.Config.Filter evaluation failed: $($_.Exception.Message)", $null, $_.Exception)
                                 return $opSignal
                             }
                         }
                         $iterationArray = $retained.ToArray()
+                    }
+                    try {
+                        $orderBySignal = [PlanCondenser]::ResolveOrderingPath($Plan, 'Config.OrderBy')
+                        $directionSignal = [PlanCondenser]::ResolveOrderingPath($Plan, 'Config.OrderDirection')
+                        $limitSignal = [PlanCondenser]::ResolveOrderingPath($Plan, 'Config.Limit')
+                        foreach ($settingSignal in @($orderBySignal, $directionSignal, $limitSignal)) {
+                            $null = $opSignal.MergeSignal(@($settingSignal))
+                            if ($settingSignal.Failure() -or @($settingSignal.Entries | Where-Object { $null -ne $_.Exception }).Count -gt 0) {
+                                throw 'Plan.Config ordering/limit lookup failed.'
+                            }
+                        }
+                        $orderBy = $orderBySignal.HasResult() ? $orderBySignal.GetResult() : $null
+                        $direction = $directionSignal.HasResult() ? $directionSignal.GetResult() : 'Desc'
+                        $limit = $limitSignal.HasResult() ? $limitSignal.GetResult() : $null
+                        if ($null -ne $orderBy) {
+                            if ($orderBy -isnot [string] -or $orderBy.Trim() -cnotmatch '^[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*$') {
+                                throw 'Plan.Config.OrderBy must be a dotted item-relative identifier path.'
+                            }
+                            $orderBy = $orderBy.Trim()
+                        }
+                        if ($null -ne $direction -and ($direction -isnot [string] -or $direction.Trim() -notin @('ASC', 'DESC'))) {
+                            throw 'Plan.Config.OrderDirection must be ASC or DESC.'
+                        }
+                        if ($null -ne $limit -and (($limit -isnot [int32] -and $limit -isnot [int64]) -or $limit -lt 0)) {
+                            throw 'Plan.Config.Limit must be a nonnegative native Int32 or Int64.'
+                        }
+                        if ($null -ne $orderBy) {
+                            $ordered = [System.Collections.Generic.List[object]]::new()
+                            $category = $null
+                            for ($position = 0; $position -lt $iterationArray.Count; $position++) {
+                                $keyValue = $null
+                                if ($null -ne $iterationArray[$position]) {
+                                    $keySignal = [PlanCondenser]::ResolveOrderingPath($iterationArray[$position], $orderBy)
+                                    $null = $opSignal.MergeSignal(@($keySignal))
+                                    if ($keySignal.Failure() -or @($keySignal.Entries | Where-Object { $null -ne $_.Exception }).Count -gt 0) {
+                                        throw 'Plan.Config.OrderBy path resolution failed.'
+                                    }
+                                    if ($keySignal.HasResult()) { $keyValue = $keySignal.GetResult() }
+                                }
+                                $key = [PlanCondenser]::ResolveIterationKey($keyValue)
+                                if ($null -ne $key.Category) {
+                                    if ($null -ne $category -and $category -ne $key.Category) { throw 'Ordering keys must share one category.' }
+                                    $category = $key.Category
+                                }
+                                $ordered.Add([pscustomobject]@{ Value = $iterationArray[$position]; Key = $key.Value; Category = $key.Category; Position = $position })
+                            }
+                            $descending = $null -ne $direction -and $direction.Trim() -ieq 'DESC'
+                            $ordered.Sort([System.Comparison[object]]{ param($left, $right) return [PlanCondenser]::CompareIterationKeys($left, $right, $descending) })
+                            $selected = [System.Collections.Generic.List[object]]::new()
+                            foreach ($entry in $ordered) { $selected.Add($entry.Value) }
+                            $iterationArray = $selected.ToArray()
+                        }
+                        if ($null -ne $limit -and $limit -lt $iterationArray.Count) {
+                            $selected = [System.Collections.Generic.List[object]]::new()
+                            for ($position = 0; $position -lt [int]$limit; $position++) { $selected.Add($iterationArray[$position]) }
+                            $iterationArray = $selected.ToArray()
+                        }
+                    }
+                    catch {
+                        $null = $opSignal.LogCritical("Plan.Config ordering/limit validation failed: $($_.Exception.Message)", $null, $_.Exception)
+                        return $opSignal
                     }
                     $iterationName = [string]$iterationNameSignal.GetResult()
                     Write-STExecutionTraceDecision $stPlanTrace 'IterationArray' ($iterationArray.Count -gt 0) 'Required' $null $null $iterationArray.Count

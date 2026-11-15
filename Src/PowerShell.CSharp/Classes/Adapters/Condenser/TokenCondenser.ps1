@@ -20,27 +20,27 @@ UnsupportedActivity: FailedSignal
 ActivityComparison: CaseInsensitive
 #>
 class TokenCondenser {
-    [Conductor]$Conductor
-    [MappedCondenserAdapter]$MappedCondenserAdapter
-    [Signal]$Signal
+    [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor
+    [SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$MappedCondenserAdapter
+    [SignalGraph.Signal]$Signal
 
     TokenCondenser() {
         # Empty constructor — use Start()
     }
 
-    static [TokenCondenser] Start([MappedCondenserAdapter]$mappedAdapter, [Conductor]$conductor) {
+    static [TokenCondenser] Start([SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$mappedAdapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
         $instance = [TokenCondenser]::new()
         $instance.MappedCondenserAdapter = $mappedAdapter
         $instance.Conductor = $conductor
-        $instance.Signal = [Signal]::Start("TokenCondenser.Control") | Select-Object -Last 1
+        $instance.Signal = [SignalGraph.Signal]::Start("TokenCondenser.Control") | Select-Object -Last 1
         return $instance
     }
 
         
 
 
-    [Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
-        $opSignal = [Signal]::Start("TokenCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
+    [SignalGraph.Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
+        $opSignal = [SignalGraph.Signal]::Start("TokenCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
 
         if ($Activity -notin @('Parse','Read')) {
             $opSignal.LogCritical("Unsupported TokenCondenser activity: '$Activity'.")
@@ -96,8 +96,8 @@ class TokenCondenser {
         return $opSignal
     }
 
-    [Signal] GetToken([string]$Value, $CondenserSignal, [bool]$ThrowExceptionOnEmpty = $true, [int]$RetryAttempts = 2) {
-        $opSignal = [Signal]::Start("GetToken:$Value") | Select-Object -Last 1
+    [SignalGraph.Signal] GetToken([string]$Value, $CondenserSignal, [bool]$ThrowExceptionOnEmpty = $true, [int]$RetryAttempts = 2) {
+        $opSignal = [SignalGraph.Signal]::Start("GetToken:$Value") | Select-Object -Last 1
 
         if ([string]::IsNullOrWhiteSpace($Value)) {
             $opSignal.LogWarning("Token value was empty or null.")
@@ -140,15 +140,15 @@ class TokenCondenser {
         return $opSignal
     }
 
-    [Signal] GetContext($TokenDocument, $TokenGraphOverrides, $OverloadGraphVirtualPath = $null) {
-        $opSignal = [Signal]::Start("GetContext") | Select-Object -Last 1
+    [SignalGraph.Signal] GetContext($TokenDocument, $TokenGraphOverrides, $OverloadGraphVirtualPath = $null) {
+        $opSignal = [SignalGraph.Signal]::Start("GetContext") | Select-Object -Last 1
 
         try {
             $settings = $this.GetMergeCondenserSettings()
             $nodeName = $settings.CondenserSettingsNodeName
 
             $tokenGraphsSignal = if ($TokenDocument -is [Newtonsoft.Json.Linq.JToken]) {
-                [Signal]::Start($TokenDocument.SelectToken($nodeName)) | Select-Object -Last 1
+                [SignalGraph.Signal]::Start($TokenDocument.SelectToken($nodeName)) | Select-Object -Last 1
             }
             else {
                 Resolve-PathFromDictionary -Dictionary $TokenDocument -Path $nodeName
@@ -224,7 +224,7 @@ class TokenCondenser {
             return $opSignal
         }
         catch {
-            $opSignal.LogCritical("Exception in GetContext: $($_.Exception.Message)", $null, $_)
+            $opSignal.LogCritical("Exception in GetContext: $($_.Exception.Message)", $null, $_.Exception)
             return $opSignal
         }
     }

@@ -44,24 +44,24 @@ ActivityScope: None
 Activities: None; Invoke takes a path and plan without Activity.
 #>
 class GraphCondenser {
-    [Conductor]$Conductor
-    [MappedCondenserAdapter]$MappedCondenserAdapter
-    [Signal]$Signal  # Sovereign control signal
+    [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor
+    [SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$MappedCondenserAdapter
+    [SignalGraph.Signal]$Signal  # Sovereign control signal
 
     GraphCondenser() {
         # Empty constructor, to enforce use of .Start()472
     }
 
-    static [GraphCondenser] Start([MappedCondenserAdapter]$mappedAdapter, [Conductor]$conductor) {
+    static [GraphCondenser] Start([SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$mappedAdapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
         $instance = [GraphCondenser]::new()
         $instance.MappedCondenserAdapter = $mappedAdapter
         $instance.Conductor = $conductor
-        $instance.Signal = [Signal]::Start("GraphCondenser")
+        $instance.Signal = [SignalGraph.Signal]::Start("GraphCondenser")
         return $instance
     }
 
-    [Signal] Invoke([string]$Path, [object]$Plan) {
-        $opSignal = [Signal]::Start("GraphLauncher.Invoke", $this.Signal) | Select-Object -Last 1
+    [SignalGraph.Signal] Invoke([string]$Path, [object]$Plan) {
+        $opSignal = [SignalGraph.Signal]::Start("GraphLauncher.Invoke", $this.Signal) | Select-Object -Last 1
 
         $sourceSignal = Resolve-PathFromDictionary -Dictionary $this.Conductor -Path "%.FlatFormulaSource" | Select-Object -Last 1
         $opSignal.MergeSignal($sourceSignal) | Out-Null
@@ -74,7 +74,7 @@ class GraphCondenser {
         $sourceData = $sourceSignal.GetResult()
 
         # Construct signal to feed into the GraphCondenser
-        $feedSignal = [Signal]::Start("GraphCondenser.Feed", $opSignal, $null, $sourceData) | Select-Object -Last 1
+        $feedSignal = [SignalGraph.Signal]::Start("GraphCondenser.Feed", $opSignal, $null, $sourceData) | Select-Object -Last 1
         Add-PathToDictionary -Dictionary $feedSignal -Path "$.%.GraphPlans" -Value $sourceData.GraphPlans | Out-Null
 
         # Call our declarative plan processor
@@ -85,8 +85,8 @@ class GraphCondenser {
         return $opSignal
     }
 
-    [Signal] InvokeFromPlanPath([string]$PlanWirePath, [object]$jacketObject) {
-        $opSignal = [Signal]::Start("GraphCondenser.InvokeFromPlanPath") | Select-Object -Last 1
+    [SignalGraph.Signal] InvokeFromPlanPath([string]$PlanWirePath, [object]$jacketObject) {
+        $opSignal = [SignalGraph.Signal]::Start("GraphCondenser.InvokeFromPlanPath") | Select-Object -Last 1
 
         # Determine base memory to evolve (from existing Result or jacket)
         $initialMemory = if ($this.Signal -and $this.Signal.HasResult()) {
@@ -97,7 +97,7 @@ class GraphCondenser {
         }
 
         # Start a new signal for Condenser with memory + jacket
-        $condenserSignal = [Signal]::Start("GridCondenser", $jacketObject) | Select-Object -Last 1
+        $condenserSignal = [SignalGraph.Signal]::Start("GridCondenser", $jacketObject) | Select-Object -Last 1
         $condenserSignal.SetJacket($jacketObject) | Out-Null
 
         # Extract graph plans using WirePath
@@ -121,11 +121,11 @@ class GraphCondenser {
         return $opSignal
     }
 
-    [Signal] InvokeFromPlanPathOld([string]$PlanWirePath, [object]$jacketObject) {
-        $opSignal = [Signal]::Start("GraphCondenser.InvokeFromPlanPath") | Select-Object -Last 1
+    [SignalGraph.Signal] InvokeFromPlanPathOld([string]$PlanWirePath, [object]$jacketObject) {
+        $opSignal = [SignalGraph.Signal]::Start("GraphCondenser.InvokeFromPlanPath") | Select-Object -Last 1
 
         # Construct base signal with your jacketed runtime object
-        $condenserSignal = [Signal]::Start("GridCondenser", $opSignal, $null, $jacketObject) | Select-Object -Last 1
+        $condenserSignal = [SignalGraph.Signal]::Start("GridCondenser", $opSignal, $null, $jacketObject) | Select-Object -Last 1
         $condenserSignal.SetJacket($jacketObject) | Out-Null
 
         # Extract the graph plan array from the wire path

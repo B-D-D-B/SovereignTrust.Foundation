@@ -8,18 +8,18 @@ InvokeOld(Context, Plan) has no Activity parameter.
 #>
 
 class MappedCondenserAdapter {
-    [Signal]$Signal
+    [SignalGraph.Signal]$Signal
 
     MappedCondenserAdapter() {
         # Use static Start() to initialize
     }
 
-    static [Signal] Start() {
-        return [Signal]::Start($null)
+    static [SignalGraph.Signal] Start() {
+        return [SignalGraph.Signal]::Start($null)
     }
 
-    static [Signal] Start([object]$conductor) {
-        $opSignal = [Signal]::Start("MappedCondenser.Start") | Select-Object -Last 1
+    static [SignalGraph.Signal] Start([object]$conductor) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedCondenser.Start") | Select-Object -Last 1
 
         if (-not $conductor) {
             $opSignal.LogCritical("Null Conductor passed to Start().")
@@ -27,12 +27,12 @@ class MappedCondenserAdapter {
         }
 
         try {
-            $adapter = [MappedCondenserAdapter]::new()
-            $adapter.Signal = [Signal]::Start("MappedCondenser") | Select-Object -Last 1
+            $adapter = [SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]::new()
+            $adapter.Signal = [SignalGraph.Signal]::Start("MappedCondenser") | Select-Object -Last 1
             $adapter.Signal.SetJacket($conductor)
             $adapter.Signal.SetReversePointer($conductor)
 
-            $graphSignal = [Graph]::Start("MappedCondenser", $adapter, $false)
+            $graphSignal = [SignalGraph.Graph]::Start("MappedCondenser", $adapter, $false)
             $adapter.Signal.SetResult($graphSignal, $true)
             $adapter.Signal.SetPointer($graphSignal.GetResult()) 
 
@@ -40,15 +40,15 @@ class MappedCondenserAdapter {
             $opSignal.LogInformation("✅ MappedCondenserAdapter initialized successfully.")
         }
         catch {
-            $opSignal.LogCritical("💥 Exception during adapter setup: $_", $null, $_)
+            $opSignal.LogCritical("💥 Exception during adapter setup: $_", $null, $_.Exception)
         }
 
         return $opSignal
     }
 
-    [Signal] RegisterAdapter([object]$CondenserAdapter, [string]$Key) {
-        $opSignal = [Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
-        $adapterSignal = [Signal]::Start("Adapter:$Key") | Select-Object -Last 1
+    [SignalGraph.Signal] RegisterAdapter([object]$CondenserAdapter, [string]$Key) {
+        $opSignal = [SignalGraph.Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
+        $adapterSignal = [SignalGraph.Signal]::Start("Adapter:$Key") | Select-Object -Last 1
         $adapterSignal.SetResult($CondenserAdapter)
 
         $graph = $this.Signal.GetResult() | Select-Object -Last 1
@@ -65,8 +65,8 @@ class MappedCondenserAdapter {
         return $opSignal
     }
 
-    [Signal] Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
-        $opSignal = [Signal]::Start("MappedCondenser.Invoke") | Select-Object -Last 1
+    [SignalGraph.Signal] Invoke([string]$Slot, [string]$Activity, [SignalGraph.Signal]$ConductionSignal, [object]$Plan, [SignalGraph.Signal]$ItemSignal) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedCondenser.Invoke") | Select-Object -Last 1
 
     try {
         
@@ -95,14 +95,14 @@ class MappedCondenserAdapter {
         }
     }
     catch {
-        $opSignal.LogCritical("Exception during conduction condenser run: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("Exception during conduction condenser run: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $opSignal
     }
 
-    [Signal] InvokeOld([object]$Context, [object]$Plan) {
-        $opSignal = [Signal]::Start("MappedCondenser.Invoke") | Select-Object -Last 1
+    [SignalGraph.Signal] InvokeOld([object]$Context, [object]$Plan) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedCondenser.Invoke") | Select-Object -Last 1
         $graph = $this.Signal.GetResult() | Select-Object -Last 1
 
         foreach ($key in $graph.Grid.Keys) {

@@ -25,28 +25,28 @@ class ConductionCondenser {
         return [math]::Abs($ActualDuration - $RequestedDuration) -le 0.1
     }
 
-    [Conductor]$Conductor
-    [MappedCondenserAdapter]$MappedCondenserAdapter
-    [Signal]$Signal  # Previously ControlSignal
+    [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor
+    [SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$MappedCondenserAdapter
+    [SignalGraph.Signal]$Signal  # Previously ControlSignal
 
     ConductionCondenser() {
         # Empty constructor — use .Start()
     }
        
-    static [ConductionCondenser] Start([MappedCondenserAdapter]$mappedAdapter, [Conductor]$conductor) {
+    static [ConductionCondenser] Start([SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$mappedAdapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
         $instance = [ConductionCondenser]::new()
         $instance.MappedCondenserAdapter = $mappedAdapter
         $instance.Conductor = $conductor
-        $instance.Signal = [Signal]::Start("ConductionCondenser.Control") | Select-Object -Last 1
+        $instance.Signal = [SignalGraph.Signal]::Start("ConductionCondenser.Control") | Select-Object -Last 1
         return $instance
     }
 
     
-    [Signal]Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
+    [SignalGraph.Signal]Invoke([string]$Slot, [string]$Activity, [SignalGraph.Signal]$ConductionSignal, [object]$Plan, [SignalGraph.Signal]$ItemSignal) {
 
         # For the Content Condenser, the plan contains the steps to perform, similar to the steps in the FormulaGraphCondenser but 2 dimensional mappings
 
-        $opSignal = [Signal]::Start("ConductionCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start("ConductionCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
 
 #        if ($Activity -notin @('ST')) {
 #            $opSignal.LogCritical("Unsupported ConductionCondenser activity: '$Activity'.")
@@ -93,7 +93,7 @@ class ConductionCondenser {
             }
             catch {
                 if ($null -ne $stopwatch) { $stopwatch.Stop() }
-                $opSignal.LogCritical("Sleep failed: $($_.Exception.Message)", $null, $_)
+                $opSignal.LogCritical("Sleep failed: $($_.Exception.Message)", $null, $_.Exception)
                 return $opSignal
             }
         }
@@ -121,11 +121,11 @@ class ConductionCondenser {
         return $opSignal
     }
 
-    [Signal] Invoke([object]$Context) {
+    [SignalGraph.Signal] Invoke([object]$Context) {
         return $this.Invoke($Context, $null) | Select-Object -Last 1
     }
 
-    [Signal] Invoke([object]$Context, [object]$Plan) {
+    [SignalGraph.Signal] Invoke([object]$Context, [object]$Plan) {
         return Invoke-ConductionCondenser -ConductionSignal $Context | Select-Object -Last 1
     }
 }

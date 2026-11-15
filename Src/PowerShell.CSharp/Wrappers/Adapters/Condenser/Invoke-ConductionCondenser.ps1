@@ -6,7 +6,7 @@ function Invoke-ConductionCondenser {
     )
 
     # ░▒▓█ SIGNAL START █▓▒░
-    $opSignal = [Signal]::Start("Invoke-ConductionCondenser") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-ConductionCondenser") | Select-Object -Last 1
 
     try {
         # ░▒▓█ VALIDATE INPUT █▓▒░
@@ -36,7 +36,7 @@ function Invoke-ConductionCondenser {
         return $opSignal
     }
     catch {
-        $opSignal.LogCritical("Exception during conduction condenser run: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("Exception during conduction condenser run: $($_.Exception.Message)", $null, $_.Exception)
         return $opSignal
     }
 

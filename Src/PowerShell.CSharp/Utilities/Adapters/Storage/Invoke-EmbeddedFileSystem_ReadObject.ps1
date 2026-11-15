@@ -1,6 +1,6 @@
 function Invoke-EmbeddedFileSystem_ReadObject {
     param (
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
         [Parameter(Mandatory)][string]$VirtualPath,
         [Parameter()][string]$PathSuffix,
         [Parameter()][AllowNull()][string]$TargetPath,
@@ -10,7 +10,7 @@ function Invoke-EmbeddedFileSystem_ReadObject {
         [Parameter()][object]$Addresses
     )
 
-    $opSignal = [Signal]::Start("Invoke-ReadVirtualFileFromAddresses:$VirtualPath", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-ReadVirtualFileFromAddresses:$VirtualPath", $Signal) | Select-Object -Last 1
 
     try {
         if ($TargetPathProvided) {
@@ -86,7 +86,7 @@ function Invoke-EmbeddedFileSystem_ReadObject {
         $opSignal.LogMessage($SignalLevel, "File '$VirtualPath' not found in any address.")
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception during Invoke-ReadVirtualFileFromAddresses: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("🔥 Exception during Invoke-ReadVirtualFileFromAddresses: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $opSignal

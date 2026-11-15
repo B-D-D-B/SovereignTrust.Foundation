@@ -1,0 +1,288 @@
+{
+  "SchemaVersion": 2,
+  "Integration": {
+    "ExecutionState": "C01ExplicitLocalFixture",
+    "SourceDeclarationState": "BlockedPendingProductReview",
+    "ExcludedAdapterDefinitions": [
+      {
+        "Name": "SDA",
+        "Dependencies": [
+          "ST-LC-001",
+          "ST-LC-002"
+        ],
+        "MissingBinding": "Run-specific destinations, resources and guards not bound; declaration excluded from active role",
+        "Definition": {
+          "Name": "SDA",
+          "VirtualPath": "SDAFusion.Adapters.Conduction.SDA.SDA.Persistent.Run",
+          "IsMapped": true
+        },
+        "Status": "Unavailable"
+      },
+      {
+        "Name": "ST_Conduction_ST",
+        "Dependencies": [
+          "ST-LC-001",
+          "ST-LC-002"
+        ],
+        "MissingBinding": "Run-specific destinations, resources and guards not bound; declaration excluded from active role",
+        "Definition": {
+          "Name": "ST_Conduction_ST",
+          "VirtualPath": "SovereignTrust.Adapters.Conduction.ST.ST.Persistent.Run",
+          "IsMapped": true
+        },
+        "Status": "Unavailable"
+      },
+      {
+        "Name": "ST_Conduction",
+        "Dependencies": [
+          "ST-LC-001",
+          "ST-LC-002"
+        ],
+        "MissingBinding": "Run-specific destinations, resources and guards not bound; declaration excluded from active role",
+        "Definition": {
+          "Name": "ST_Conduction",
+          "VirtualPath": "SovereignTrust.Adapters.Conduction.ST.System.Persistent.Run",
+          "IsMapped": true
+        },
+        "Status": "Unavailable"
+      },
+      {
+        "Name": "ST_Session",
+        "Dependencies": [
+          "ST-LC-001",
+          "ST-LC-002"
+        ],
+        "MissingBinding": "Run-specific destinations, resources and guards not bound; declaration excluded from active role",
+        "Definition": {
+          "Name": "ST_Session",
+          "VirtualPath": "SovereignTrust.Adapters.Session.ST.System.Persistent.Run",
+          "IsMapped": true
+        },
+        "Status": "Unavailable"
+      },
+      {
+        "Name": "SDATokens",
+        "Dependencies": [
+          "B10"
+        ],
+        "MissingBinding": "Run-specific destinations, resources and guards not bound; declaration excluded from active role",
+        "Definition": {
+          "Name": "SDATokens",
+          "VirtualPath": "SDAFusion.Adapters.Token.SDA.SDA.Persistent.Generate",
+          "IsMapped": true
+        },
+        "Status": "Unavailable"
+      },
+      {
+        "Name": "SDAMedia",
+        "Dependencies": [
+          "B10"
+        ],
+        "MissingBinding": "Run-specific destinations, resources and guards not bound; declaration excluded from active role",
+        "Definition": {
+          "Name": "SDAMedia",
+          "VirtualPath": "SDAFusion.Adapters.Utility.Media.Media.Persistent.Generate",
+          "IsMapped": true
+        },
+        "Status": "Unavailable"
+      },
+      {
+        "Name": "ArtifactProcess",
+        "Dependencies": [
+          "B02",
+          "B09",
+          "B10"
+        ],
+        "MissingBinding": "No app registration in selected source; select package and runtime contract",
+        "Definition": null,
+        "Status": "Unavailable"
+      },
+      {
+        "Name": "Secrets",
+        "Dependencies": [
+          "B06"
+        ],
+        "MissingBinding": "Run-specific destinations, resources and guards not bound; declaration excluded from active role",
+        "Definition": {
+          "Name": "Secrets",
+          "VirtualPath": "SovereignTrust.Adapters.Storage.AzureKeyVault.Secrets.Persistent.Read",
+          "IsMapped": true
+        },
+        "Status": "Unavailable"
+      },
+      {
+        "Name": "SDAFusionDatabase",
+        "Dependencies": [
+          "B02",
+          "B06"
+        ],
+        "MissingBinding": "Run-specific destinations, resources and guards not bound; declaration excluded from active role",
+        "Definition": {
+          "Name": "SDAFusionDatabase",
+          "VirtualPath": "SovereignTrust.Adapters.Data.AzureSql.FusionDatabase.Persistent.Full",
+          "IsMapped": true
+        },
+        "Status": "Unavailable"
+      },
+      {
+        "Name": "RemoteMedia",
+        "Dependencies": [
+          "B04",
+          "B06"
+        ],
+        "MissingBinding": "Run-specific destinations, resources and guards not bound; declaration excluded from active role",
+        "Definition": {
+          "Name": "RemoteMedia",
+          "VirtualPath": "SovereignTrust.Adapters.Storage.AzureStorageAccount.RemoteMedia.Persistent.Read",
+          "IsMapped": true
+        },
+        "Status": "Unavailable"
+      },
+      {
+        "Name": "RelayQueue",
+        "Dependencies": [
+          "B05",
+          "B06"
+        ],
+        "MissingBinding": "Run-specific destinations, resources and guards not bound; declaration excluded from active role",
+        "Definition": {
+          "Name": "RelayQueue",
+          "VirtualPath": "SovereignTrust.Adapters.Queue.AzureStorageQueue.RelayQueue.Persistent.ReadWrite",
+          "IsMapped": true
+        },
+        "Status": "Unavailable"
+      },
+      {
+        "Name": "ConversationQueue",
+        "Dependencies": [
+          "B05",
+          "B06"
+        ],
+        "MissingBinding": "Run-specific destinations, resources and guards not bound; declaration excluded from active role",
+        "Definition": {
+          "Name": "ConversationQueue",
+          "VirtualPath": "SovereignTrust.Adapters.Queue.AzureStorageQueue.ConversationQueue.Persistent.ReadWrite",
+          "IsMapped": true
+        },
+        "Status": "Unavailable"
+      },
+      {
+        "Name": "SDAFoundryAI",
+        "Dependencies": [
+          "B04",
+          "B06"
+        ],
+        "MissingBinding": "Run-specific destinations, resources and guards not bound; declaration excluded from active role",
+        "Definition": {
+          "Name": "SDAFoundryAI",
+          "VirtualPath": "SovereignTrust.Adapters.Intelligence.AzureFoundry.AI.Persistent.Run",
+          "IsMapped": true
+        },
+        "Status": "Unavailable"
+      },
+      {
+        "Name": "Telemetry",
+        "Dependencies": [
+          "B07",
+          "B10"
+        ],
+        "MissingBinding": "Run-specific destinations, resources and guards not bound; declaration excluded from active role",
+        "Definition": {
+          "Name": "Telemetry",
+          "VirtualPath": "SovereignTrust.Adapters.Satellite.AzureApplicationInsights.Telemetry.Persistent.Run",
+          "IsMapped": true
+        },
+        "Status": "Unavailable"
+      }
+    ],
+    "NoExternalProviders": true
+  },
+  "Agents": [
+    {
+      "Name": "st-test",
+      "Roles": [
+        {
+          "Name": "STIntegrationTest",
+          "IsHostRole": true,
+          "ExpectedResults": [
+            {
+              "Group": "StorageAdapter",
+              "Name": "LocalContent.WriteContent"
+            },
+            {
+              "Group": "StorageAdapter",
+              "Name": "LocalContent.ReadContent"
+            },
+            {
+              "Group": "StorageAdapter",
+              "Name": "LocalContent.DeleteContent"
+            },
+            {
+              "Group": "StorageAdapter",
+              "Name": "LocalContent.ExistsContent"
+            }
+          ],
+          "EnvironmentConfig": {
+            "SupportParallelism": true
+          },
+          "Plan": {
+            "Name": "ST-Test",
+            "Phases": [
+              {
+                "Name": "FullSuite",
+                "Order": 0,
+                "Steps": [
+                  {
+                    "Name": "LoadTestPlan",
+                    "Description": "Load the STTest plan from the test content plans directory into memory.",
+                    "Order": 0,
+                    "Adapter": "Storage.LocalContent",
+                    "Activity": "Read",
+                    "Container": "plans",
+                    "Resource": "st-test.json",
+                    "Path": "STTest",
+                    "Format": "Json",
+                    "Key": "STTestPlan",
+                    "Config": {
+                      "Break": false
+                    }
+                  },
+                  {
+                    "Name": "InvokeStorageTests",
+                    "Description": "Invoke the loaded storage test phase, which iterates the configured storage adapters.",
+                    "Order": 1,
+                    "Adapter": "Condenser.Plan",
+                    "Activity": "InvokePhase",
+                    "Path": "*.#.STTestPlan.@.Phases.RunTest.Steps",
+                    "ExitAfterAdapter": true,
+                    "Config": {
+                      "Break": false
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "Adapters": [
+            {
+              "Name": "Modules",
+              "VirtualPath": "SovereignTrust.Adapters.Storage.EmbeddedFileSystem.ModuleRoots.Persistent.Read",
+              "IsMapped": true,
+              "Addresses": [
+                "[Formatter.FilePath.[System.STTestSourceRoot/]/]"
+              ]
+            },
+            {
+              "Name": "LocalContent",
+              "VirtualPath": "SovereignTrust.Adapters.Storage.EmbeddedFileSystem.LocalContent.Persistent.Read",
+              "IsMapped": true,
+              "Addresses": [
+                "[Formatter.FilePath.[System.STTestContentRoot/]/]"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

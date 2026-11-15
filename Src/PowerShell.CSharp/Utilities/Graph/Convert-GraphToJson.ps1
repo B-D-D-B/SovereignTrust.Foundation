@@ -2,13 +2,13 @@
 function Convert-GraphToJson {
     param (
         [Parameter(Mandatory = $true)]
-        [Graph]$Graph,
+        [SignalGraph.Graph]$Graph,
 
         [Parameter()]
         [bool]$IgnoreInternalObjects = $false
     )
 
-    $signal = [Signal]::Start("Convert-GraphToJson") | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Convert-GraphToJson") | Select-Object -Last 1
 
     try {
         $exportObject = @{
@@ -31,7 +31,7 @@ function Convert-GraphToJson {
         $signal.LogInformation("✅ Graph successfully serialized into JSON.")
     }
     catch {
-        $signal.LogCritical("🔥 Exception: Failed to convert Graph to JSON: $($_.Exception.Message)", $null, $_)
+        $signal.LogCritical("🔥 Exception: Failed to convert Graph to JSON: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $signal

@@ -12,14 +12,14 @@ The path and method Invoke overloads have no Activity parameter.
 #>
 
 class MappedTokenAdapter {
-    [Signal]$Signal
+    [SignalGraph.Signal]$Signal
 
     MappedTokenAdapter() {
         # Use static Start() instead
     }
 
-    static [Signal] Start([object]$Conductor) {
-        $opSignal = [Signal]::Start("MappedTokenAdapter.Start") | Select-Object -Last 1
+    static [SignalGraph.Signal] Start([object]$Conductor) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedTokenAdapter.Start") | Select-Object -Last 1
 
         if (-not $Conductor) {
             $opSignal.LogCritical("Null Conductor passed to MappedTokenAdapter.Start()")
@@ -27,31 +27,31 @@ class MappedTokenAdapter {
         }
 
         try {
-            $adapter = [MappedTokenAdapter]::new()
-            $adapter.Signal = [Signal]::Start("MappedTokenAdapter") | Select-Object -Last 1
+            $adapter = [SovereignTrust.Foundation.Classes.Adapters.MappedTokenAdapter]::new()
+            $adapter.Signal = [SignalGraph.Signal]::Start("MappedTokenAdapter") | Select-Object -Last 1
 
             # Yes, this is a weird place to keep the Conductor, we played around with putting it in the Signal, 
             # but now we know it should be in Grid of the Signal or just include a $Conductor in the adapter
             $adapter.Signal.SetJacket($Conductor)
             $adapter.Signal.SetReversePointer($Conductor)
 
-            $graphSignal = [Graph]::Start("MappedTokenAdapter", $adapter, $false)
+            $graphSignal = [SignalGraph.Graph]::Start("MappedTokenAdapter", $adapter, $false)
             $adapter.Signal.SetPointer($graphSignal)
 
             $opSignal.SetResult($adapter)
             $opSignal.LogInformation("✅ MappedTokenAdapter initialized.")
         }
         catch {
-            $opSignal.LogCritical("💥 Exception in MappedTokenAdapter.Start(): $_", $null, $_)
+            $opSignal.LogCritical("💥 Exception in MappedTokenAdapter.Start(): $_", $null, $_.Exception)
         }
 
         return $opSignal
     }
 
-    [Signal] RegisterAdapter([object]$AdapterInstance, [string]$Key = "StorageService") {
-        $opSignal = [Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
-        if ($AdapterInstance -isnot [Signal]) {
-            $adapterSignal = [Signal]::Start("Adapter:$Key") | Select-Object -Last 1
+    [SignalGraph.Signal] RegisterAdapter([object]$AdapterInstance, [string]$Key = "StorageService") {
+        $opSignal = [SignalGraph.Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
+        if ($AdapterInstance -isnot [SignalGraph.Signal]) {
+            $adapterSignal = [SignalGraph.Signal]::Start("Adapter:$Key") | Select-Object -Last 1
             $adapterSignal.SetResult($AdapterInstance)
         }
         else {
@@ -75,8 +75,8 @@ class MappedTokenAdapter {
     }
 
 
-    [Signal] Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
-        $opSignal = [Signal]::Start("MappedTokenAdapter.Invoke") | Select-Object -Last 1
+    [SignalGraph.Signal] Invoke([string]$Slot, [string]$Activity, [SignalGraph.Signal]$ConductionSignal, [object]$Plan, [SignalGraph.Signal]$ItemSignal) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedTokenAdapter.Invoke") | Select-Object -Last 1
 
         if ($Activity -notin @('Get','Read')) {
             $opSignal.LogCritical("Unsupported MappedTokenAdapter activity: '$Activity'.")
@@ -99,14 +99,14 @@ class MappedTokenAdapter {
             }
         }
         catch {
-            $opSignal.LogCritical("🔥 Exception in MappedTokenAdapter.Invoke: $($_.Exception.Message)", $null, $_)
+            $opSignal.LogCritical("🔥 Exception in MappedTokenAdapter.Invoke: $($_.Exception.Message)", $null, $_.Exception)
         }
 
         return $opSignal
     }
 
-    [Signal] Invoke([object]$Path) {
-        $opSignal = [Signal]::Start("MappedTokenAdapter.Invoke") | Select-Object -Last 1
+    [SignalGraph.Signal] Invoke([object]$Path) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedTokenAdapter.Invoke") | Select-Object -Last 1
 
         try {
             # Yes, this is a weird place to keep the Conductor, we played around with putting it in the Signal, 
@@ -124,14 +124,14 @@ class MappedTokenAdapter {
             }
         }
         catch {
-            $opSignal.LogCritical("🔥 Exception in MappedTokenAdapter.Invoke: $($_.Exception.Message)", $null, $_)
+            $opSignal.LogCritical("🔥 Exception in MappedTokenAdapter.Invoke: $($_.Exception.Message)", $null, $_.Exception)
         }
 
         return $opSignal
     }
 
-    [Signal] InvokeAdapterMethod([string]$MethodName, [object[]]$Args) {
-        $opSignal = [Signal]::Start("MappedTokenAdapter.Invoke:$MethodName") | Select-Object -Last 1
+    [SignalGraph.Signal] InvokeAdapterMethod([string]$MethodName, [object[]]$Args) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedTokenAdapter.Invoke:$MethodName") | Select-Object -Last 1
         $graph = $this.Signal.GetResult()
 
         foreach ($key in $graph.Grid.Keys) {

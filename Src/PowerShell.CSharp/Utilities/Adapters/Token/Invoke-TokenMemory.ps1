@@ -1,14 +1,14 @@
 function Invoke-TokenMemory {
     [CmdletBinding()]
     param (
-        [MappedTokenAdapter]$MappedAdapter,
+        [SovereignTrust.Foundation.Classes.Adapters.MappedTokenAdapter]$MappedAdapter,
         [string]$Slot,
         # Conductor / environment signal that contains adapters (mapped attachments)
         [Parameter(Mandatory = $false)]
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
 
         [Parameter(Mandatory = $false)]
-        [Signal]$ItemSignal,
+        [SignalGraph.Signal]$ItemSignal,
 
         [object]$Plan,
 
@@ -20,7 +20,7 @@ function Invoke-TokenMemory {
         [string]$Activity
     )
 
-    $opSignal = [Signal]::Start("Invoke-TokenMemory", $ItemSignal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-TokenMemory", $ItemSignal) | Select-Object -Last 1
 
     try {
         $Key = $Plan.Path
@@ -182,7 +182,7 @@ function Invoke-TokenMemory {
         }
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception during Invoke-TokenMemory: $_", $null, $_)
+        $opSignal.LogCritical("🔥 Exception during Invoke-TokenMemory: $_", $null, $_.Exception)
     }
 
     return $opSignal

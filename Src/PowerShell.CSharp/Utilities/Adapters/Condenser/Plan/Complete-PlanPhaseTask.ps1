@@ -2,15 +2,15 @@ function Complete-PlanPhaseTask {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)][string]$TaskId,
-        [Parameter(Mandatory)][Signal]$ItemSignal,
-        [Signal]$Signal,
+        [Parameter(Mandatory)][SignalGraph.Signal]$ItemSignal,
+        [SignalGraph.Signal]$Signal,
         [ValidateSet('Error', 'PreserveParent', 'OverwriteParent')]
         [string]$CollisionAction = 'Error',
         [switch]$RemoveAfterReceive,
         [ValidateRange(0, 300000)][int]$TimeoutMilliseconds = 0
     )
 
-    $opSignal = [Signal]::Start('Complete-PlanPhaseTask', $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start('Complete-PlanPhaseTask', $Signal) | Select-Object -Last 1
     $receiveSignal = Receive-STBackgroundTask `
         -TaskId $TaskId `
         -Signal $opSignal `
@@ -40,7 +40,7 @@ function Complete-PlanPhaseTask {
     }
 
     $graph = $ItemSignal.GetPointer()
-    if ($graph -isnot [Graph]) {
+    if ($graph -isnot [SignalGraph.Graph]) {
         $null = $opSignal.LogCritical('AwaitPhase ItemSignal does not have a Graph pointer.')
         return $opSignal
     }
@@ -59,7 +59,7 @@ function Complete-PlanPhaseTask {
         }
         if (-not $shouldImport) { continue }
 
-        $importedSignal = [Signal]::Start([string]$record.Name, $ItemSignal) | Select-Object -Last 1
+        $importedSignal = [SignalGraph.Signal]::Start([string]$record.Name, $ItemSignal) | Select-Object -Last 1
         if ($null -ne $record.Meta) { $importedSignal.SetMeta($record.Meta) }
         if ([bool]$record.HasResult) { $importedSignal.SetResult($record.Result) }
         $registerSignal = $graph.RegisterSignal($key, $importedSignal) | Select-Object -Last 1

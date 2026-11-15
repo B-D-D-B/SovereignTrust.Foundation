@@ -52,23 +52,23 @@ UnsupportedActivity: FailedSignal
 ActivityComparison: CaseInsensitive
 #>
 class TransformCondenser {
-    [Conductor]$Conductor
-    [MappedCondenserAdapter]$MappedCondenserAdapter
-    [Signal]$Signal  # Sovereign control signal (previously ControlSignal)
+    [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor
+    [SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$MappedCondenserAdapter
+    [SignalGraph.Signal]$Signal  # Sovereign control signal (previously ControlSignal)
 
     TransformCondenser() {
     }
 
-    static [TransformCondenser] Start([MappedCondenserAdapter]$mappedAdapter, [Conductor]$conductor) {
+    static [TransformCondenser] Start([SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$mappedAdapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
         $instance = [TransformCondenser]::new()
         $instance.MappedCondenserAdapter = $mappedAdapter
         $instance.Conductor = $conductor
-        $instance.Signal = [Signal]::Start("TransformCondenser.Control") | Select-Object -Last 1
+        $instance.Signal = [SignalGraph.Signal]::Start("TransformCondenser.Control") | Select-Object -Last 1
         return $instance
     }
 
-    [Signal]Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
-        $opSignal = [Signal]::Start("TransformCondenser.Invoke") | Select-Object -Last 1
+    [SignalGraph.Signal]Invoke([string]$Slot, [string]$Activity, [SignalGraph.Signal]$ConductionSignal, [object]$Plan, [SignalGraph.Signal]$ItemSignal) {
+        $opSignal = [SignalGraph.Signal]::Start("TransformCondenser.Invoke") | Select-Object -Last 1
 
         if ($Activity -notin @('Project', 'Select', 'Inject', 'RegisterSignal', 'UnregisterSignalKeys', 'Clone', 'Merge')) {
             $opSignal.LogCritical("Unsupported TransformCondenser activity: '$Activity'.")
@@ -120,12 +120,12 @@ class TransformCondenser {
                                         $nodeContent = ConvertFrom-Json -InputObject $templateJson -Depth 100 -NoEnumerate -ErrorAction Stop
                                     }
                                     catch {
-                                        $null = $opSignal.LogCritical("Failed to clone Project template for a node: $($_.Exception.Message)", $null, $_)
+                                        $null = $opSignal.LogCritical("Failed to clone Project template for a node: $($_.Exception.Message)", $null, $_.Exception)
                                         return $opSignal
                                     }
-                                    $nodeTemplateSignal = [Signal]::Start("TransformCondenser.Project.NodeTemplate", $ItemSignal) | Select-Object -Last 1
+                                    $nodeTemplateSignal = [SignalGraph.Signal]::Start("TransformCondenser.Project.NodeTemplate", $ItemSignal) | Select-Object -Last 1
                                     $nodeTemplateSignal.SetResult($nodeContent)
-                                    $HydrationSignal = [Signal]::Start("TransformCondenser.Invoke.Hydration") | Select-Object -Last 1
+                                    $HydrationSignal = [SignalGraph.Signal]::Start("TransformCondenser.Invoke.Hydration") | Select-Object -Last 1
                                     $HydrationSignal.SetJacket($nodeTemplateSignal)
                                     $HydrationSignal.SetPointer($ItemSignal.GetPointer())
                                     $HydrationSignal.SetResult($node)
@@ -183,7 +183,7 @@ class TransformCondenser {
                         }
 
                         #$null = Add-PathToDictionary -Dictionary $ContentPlan -Path "Config" -Value $node
-                        $HydrationSignal = [Signal]::Start("TransformCondenser.Invoke.Hydration") | Select-Object -Last 1
+                        $HydrationSignal = [SignalGraph.Signal]::Start("TransformCondenser.Invoke.Hydration") | Select-Object -Last 1
                         $HydrationSignal.SetJacket($resultSignal)
                         $HydrationSignal.SetPointer($ItemSignal.GetPointer())
 #                        $HydrationSignal.SetResult($node)
@@ -280,7 +280,7 @@ class TransformCondenser {
                         $source = ConvertFrom-Json -InputObject $json -Depth 10 -NoEnumerate -ErrorAction Stop
                     }
                     catch {
-                        $null = $opSignal.LogCritical("Clone JSON conversion failed: $($_.Exception.Message)", $null, $_)
+                        $null = $opSignal.LogCritical("Clone JSON conversion failed: $($_.Exception.Message)", $null, $_.Exception)
                         return $opSignal
                     }
                     

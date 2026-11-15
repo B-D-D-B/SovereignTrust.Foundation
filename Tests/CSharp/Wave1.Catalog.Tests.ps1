@@ -1,7 +1,7 @@
 param([Parameter(Mandatory)][string]$OutputPath)
 $ErrorActionPreference='Stop'
 $repo=[IO.Path]::GetFullPath("$PSScriptRoot/../..")
-$catalog=Join-Path $repo 'Src/PowerShell/Classes/Adapters/Catalog'
+$catalog=Join-Path $repo 'Src/PowerShell.CSharp/Classes/Adapters/Catalog'
 if(Test-Path -LiteralPath $OutputPath){throw 'ST_CATALOG_OUTPUT: requires absent owned file'}
 $waves=@{
     MappedCondenserAdapter=@(2,6);FabCondenser=@(2,6)
@@ -25,10 +25,10 @@ $owners=@(foreach($file in $primaryFiles|Sort-Object FullName){
     $data=Get-Content $file.FullName -Raw|ConvertFrom-Json -Depth 60
     $name=$data.name
     if(-not $waves.ContainsKey($name)){throw "ST_CATALOG_OWNER: $name"}
-    $primary=if($name.StartsWith('Mapped')){"Src/PowerShell/Classes/Adapters/$name.ps1"}else{"Src/PowerShell/Classes/Adapters/Condenser/$name.ps1"}
+    $primary=if($name.StartsWith('Mapped')){"Src/PowerShell.CSharp/Classes/Adapters/$name.ps1"}else{"Src/PowerShell.CSharp/Classes/Adapters/Condenser/$name.ps1"}
     if(-not(Test-Path (Join-Path $repo $primary))){throw "ST_CATALOG_SOURCE: $primary"}
     $domain=($name -replace '^Mapped','' -replace 'Condenser$','' -replace 'Adapter$','')
-    $helperRoots=@("Src/PowerShell/Utilities/Adapters/$domain","Src/PowerShell/Utilities/Adapters/Condenser/$domain")
+    $helperRoots=@("Src/PowerShell.CSharp/Utilities/Adapters/$domain","Src/PowerShell.CSharp/Utilities/Adapters/Condenser/$domain")
     $helpers=@($helperRoots|Where-Object{Test-Path (Join-Path $repo $_)}|ForEach-Object{Get-ChildItem (Join-Path $repo $_) -File -Recurse}|ForEach-Object{[IO.Path]::GetRelativePath($repo,$_.FullName).Replace('\','/')})
     $contract=[IO.Path]::GetFullPath((Join-Path $file.DirectoryName $data.resultContractRef.file))
     if(-not(Test-Path $contract)){throw "ST_CATALOG_CONTRACT: $name"}

@@ -31,16 +31,16 @@
 
 function Invoke-HydrateTokenCondenser {
     param (
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
         [object]$Plan,
         [object]$ItemSignal,
         [string]$PlanWirePathPrefix = "%.%.%.@"  # <- new param with default
     )
 
-    $opSignal = [Signal]::Start("Invoke-GridCondenser:$PlanName", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-GridCondenser:$PlanName", $Signal) | Select-Object -Last 1
 
     $PlanName = $Plan.Name
-    $subSignal = [Signal]::Start("GraphPlan:$PlanName", $Signal) | Select-Object -Last 1
+    $subSignal = [SignalGraph.Signal]::Start("GraphPlan:$PlanName", $Signal) | Select-Object -Last 1
     $subSignal.SetJacket($ItemSignal) | Out-Null
 
     $addPlanSignal = Add-PathToDictionary -Dictionary $subSignal -Path "${PlanWirePathPrefix}.Plan" -Value $Plan | Select-Object -Last 1
@@ -58,7 +58,7 @@ function Invoke-HydrateTokenCondenser {
 
     $graphResult = $graphSignal.GetResult()
 
-    $wrappedGraphSignal = [Signal]::Start("Graph:$PlanName", $Signal) | Select-Object -Last 1
+    $wrappedGraphSignal = [SignalGraph.Signal]::Start("Graph:$PlanName", $Signal) | Select-Object -Last 1
     $wrappedGraphSignal.SetPointer($graphResult) | Out-Null
 
     # Option to replace Jacket or other location with the output that is going into the opSignal result. (to replace the $graphSignal)

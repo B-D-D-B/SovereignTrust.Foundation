@@ -1,5 +1,7 @@
-using module SignalGraph
 . "$PSScriptRoot/Bootstrap/STFoundationSelection.ps1"
+. "$PSScriptRoot/Bootstrap/STNativeSignalCompatibility.ps1"
+. "$PSScriptRoot/Bootstrap/STNativeFoundationRuntime.ps1"
+. "$PSScriptRoot/Bootstrap/STNativeBusinessInterop.ps1"
     # Import shared functions for Map Condensers
 
     $mapSharedPath = Join-Path $PSScriptRoot "Utilities/Adapters/Condenser/Map/MapCondenser.Shared.psm1"
@@ -12,8 +14,8 @@ function Start-SignalWrapper(
 }
 
 function Invoke-Telemetry(
-    [Signal]$Signal,
-    [Signal]$ItemSignal
+    [SignalGraph.Signal]$Signal,
+    [SignalGraph.Signal]$ItemSignal
 ){
     Invoke-MappedAdapter -Adapter "Satellite.Telemetry" -Activity "EmitSignalFull" -Signal $Signal -Plan ([pscustomobject]@{}) -ItemSignal $ItemSignal
 }
@@ -342,3 +344,5 @@ Export-ModuleMember -Function Invoke-Telemetry
 
 
 Export-ModuleMember -Function Get-STFoundationSelection, Assert-STFoundationSelection, Read-STSelectionPacket, Import-STSelectedFoundation, Get-STSelectionProvenance, New-STSelectedRunspace, Get-STWorkerSelection, New-STSelectedInitialSessionState
+
+Export-ModuleMember -Function Resolve-PathFromDictionary,Start-Signal,Resolve-Graph,Resolve-GraphForJsonArray,Resolve-PathHydration,Add-PathToDictionary,Remove-PathFromDictionary,Move-PathInDictionary,Resolve-InnerPathFromDictionary,Get-ResolvedValueFromPathSignal,Invoke-ParseFilterSegment

@@ -919,7 +919,7 @@ function Resolve-TokenDynamic {
                     throw "GreaterThan() requires two arguments. ($($resolvedArgs.Count) was supplied)"
                 }
 
-                $result = [int]$resolvedArgs[0] -gt [int]$resolvedArgs[1]
+                $result = [double]$resolvedArgs[0] -gt [double]$resolvedArgs[1]
 
                 $opSignal.SetResult($result)
                 return $opSignal
@@ -930,7 +930,7 @@ function Resolve-TokenDynamic {
                     throw "LesserThan() requires two arguments. ($($resolvedArgs.Count) was supplied)"
                 }
 
-                $result = [int]$resolvedArgs[0] -lt [int]$resolvedArgs[1]
+                $result = [decimal]$resolvedArgs[0] -lt [decimal]$resolvedArgs[1]
 
                 $opSignal.SetResult($result)
                 return $opSignal

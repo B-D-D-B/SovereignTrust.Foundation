@@ -6,8 +6,8 @@ function Resolve-PathGraphForPublisher {
         [Parameter()][string]$RootPath = "m:/sda/Projects-meta"
     )
 
-    $signal = [Signal]::Start("Resolve-PathGraphForSDAPublisher:$WirePath") | Select-Object -Last 1
-    $graphSignal = [Graph]::Start("Resolve-PathGraphForSDAPublisher:$WirePath", $opSignal, $true) | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Resolve-PathGraphForSDAPublisher:$WirePath") | Select-Object -Last 1
+    $graphSignal = [SignalGraph.Graph]::Start("Resolve-PathGraphForSDAPublisher:$WirePath", $opSignal, $true) | Select-Object -Last 1
     $graph = $graphSignal.GetResult()
 
     $graph.Start()
@@ -30,7 +30,7 @@ function Resolve-PathGraphForPublisher {
         $fullFolderPath = Convert-Path (Resolve-Path $folderPath -ErrorAction SilentlyContinue) ?? (Join-Path (Get-Location) $folderPath)
         $fullFilePath = Join-Path $fullFolderPath $fileName
 
-        $nodeSignal = [Signal]::new($levelName)
+        $nodeSignal = [SignalGraph.Signal]::new($levelName)
         $nodeSignal.SetResult(@{
             Level              = $i
             Segment            = $segment
@@ -43,7 +43,7 @@ function Resolve-PathGraphForPublisher {
         $graph.RegisterSignal($levelName, $nodeSignal)
     }
 
-    $graph.Finalize()
+    $graph.Complete()
     $signal.SetResult($graph)
     $signal.LogInformation("✅ Graph for SDA publishing path structure resolved.")
     return $signal

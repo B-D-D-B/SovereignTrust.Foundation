@@ -4,13 +4,13 @@ function Resolve-RegisteredAdapter {
         [object]$Registration,
 
         [Parameter(Mandatory)]
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
 
         [Parameter(Mandatory)]
         [object]$ConductionContext
     )
 
-    $opSignal = [Signal]::Start('Resolve-RegisteredAdapter', $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start('Resolve-RegisteredAdapter', $Signal) | Select-Object -Last 1
 
     if ($null -eq $Registration -or -not [bool]$Registration.IsAdapterRegistration) {
         $opSignal.SetResult($Registration)
@@ -80,7 +80,7 @@ function Resolve-RegisteredAdapter {
         $null = $opSignal.LogCritical(
             "Failed to resolve lazy adapter '$($Registration.Kind).$($Registration.Slot)': $($_.Exception.Message)",
             $null,
-            $_
+            $_.Exception
         )
     }
     finally {

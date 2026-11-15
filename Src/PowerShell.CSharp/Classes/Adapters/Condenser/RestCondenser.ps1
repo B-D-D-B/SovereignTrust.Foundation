@@ -27,30 +27,30 @@ UnsupportedActivity: FailedSignal
 ActivityComparison: CaseInsensitive
 #>
 class RestCondenser {
-    [Conductor]$Conductor
-    [MappedCondenserAdapter]$MappedCondenserAdapter
-    [Signal]$Signal
+    [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor
+    [SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$MappedCondenserAdapter
+    [SignalGraph.Signal]$Signal
 
     RestCondenser() {
         # Empty constructor — use Start()
     }
 
-    static [RestCondenser] Start([MappedCondenserAdapter]$mappedAdapter, [Conductor]$conductor) {
+    static [RestCondenser] Start([SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$mappedAdapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
         $instance = [RestCondenser]::new()
         $instance.MappedCondenserAdapter = $mappedAdapter
         $instance.Conductor = $conductor
-        $instance.Signal = [Signal]::Start("RestCondenser.Control") | Select-Object -Last 1
+        $instance.Signal = [SignalGraph.Signal]::Start("RestCondenser.Control") | Select-Object -Last 1
         return $instance
     }
 
-    [Signal] Invoke(
+    [SignalGraph.Signal] Invoke(
         [string]$Slot,
         [string]$Activity,
-        [Signal]$ConductionSignal,
+        [SignalGraph.Signal]$ConductionSignal,
         [object]$Plan,
-        [Signal]$ItemSignal
+        [SignalGraph.Signal]$ItemSignal
     ) {
-        $opSignal = [Signal]::Start("RestCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start("RestCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
 
         if ($Activity -notin @('Get', 'Head', 'Post', 'Put', 'Patch', 'Delete', 'Options')) {
             $opSignal.LogCritical("Unsupported RestCondenser activity: '$Activity'.")
@@ -106,11 +106,11 @@ class RestCondenser {
         return $opSignal
     }
 
-[Signal] GetStorageVersionHeaders(
-    [Signal]$ConductionSignal,
+[SignalGraph.Signal] GetStorageVersionHeaders(
+    [SignalGraph.Signal]$ConductionSignal,
     [object]$Plan
 ) {
-    $opSignal = [Signal]::Start("RestCondenser.GetStorageVersionHeaders", $ConductionSignal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("RestCondenser.GetStorageVersionHeaders", $ConductionSignal) | Select-Object -Last 1
 
     try {
         if (-not $Plan) {
@@ -173,19 +173,19 @@ class RestCondenser {
         }
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception in RestCondenser.GetStorageVersionHeaders: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("🔥 Exception in RestCondenser.GetStorageVersionHeaders: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $opSignal
 }
 
 
-    [Signal] ResolveBearerToken(
-        [Signal]$ConductionSignal,
+    [SignalGraph.Signal] ResolveBearerToken(
+        [SignalGraph.Signal]$ConductionSignal,
         [object]$Plan,
         [bool]$ClearExistingFirst
     ) {
-        $opSignal = [Signal]::Start("RestCondenser.ResolveBearerToken", $ConductionSignal) | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start("RestCondenser.ResolveBearerToken", $ConductionSignal) | Select-Object -Last 1
 
         try {
             if (-not $ConductionSignal) {
@@ -220,7 +220,7 @@ class RestCondenser {
             }
             else {
                 # Create a graph and store it back under the path
-                $tokensGraphSignal = [Graph]::Start("AccessTokens", $ConductionSignal, $false) | Select-Object -Last 1
+                $tokensGraphSignal = [SignalGraph.Graph]::Start("AccessTokens", $ConductionSignal, $false) | Select-Object -Last 1
                 if ($opSignal.MergeSignalAndVerifyFailure(@($tokensGraphSignal))) { return $opSignal }
 
                 $tokensGraph = $tokensGraphSignal.GetResult($true)
@@ -264,7 +264,7 @@ class RestCondenser {
             }
 
             # Register token in graph as a Signal (so it’s traceable + consistent)
-            $tokenSignal = [Signal]::Start("BearerToken:$hostAddress", $ConductionSignal) | Select-Object -Last 1
+            $tokenSignal = [SignalGraph.Signal]::Start("BearerToken:$hostAddress", $ConductionSignal) | Select-Object -Last 1
             $tokenSignal.SetResult($token)
 
             $registerSignal = $tokensGraph.RegisterSignal($hostAddress, $tokenSignal) | Select-Object -Last 1
@@ -274,7 +274,7 @@ class RestCondenser {
             $opSignal.LogInformation("✅ Bearer token resolved and cached for host: $hostAddress")
         }
         catch {
-            $opSignal.LogCritical("🔥 Exception in ResolveBearerToken: $($_.Exception.Message)", $null, $_)
+            $opSignal.LogCritical("🔥 Exception in ResolveBearerToken: $($_.Exception.Message)", $null, $_.Exception)
         }
 
         return $opSignal

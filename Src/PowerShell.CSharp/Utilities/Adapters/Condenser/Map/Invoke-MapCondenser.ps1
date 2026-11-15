@@ -1,14 +1,13 @@
-using module SignalGraph
 
 function Invoke-MapCondenser {
     [CmdletBinding()]
     param (
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
         [object]$ProposalSignal,
         [object]$Context = $null
     )
 
-    $opSignal = [Signal]::Start("Invoke-MapCondenser", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-MapCondenser", $Signal) | Select-Object -Last 1
 
     if ($ProposalSignal -isnot $Signal.GetType() -or -not $ProposalSignal.HasResult()) {
         $opSignal.LogCritical("Proposal must be a Signal with a Result.")

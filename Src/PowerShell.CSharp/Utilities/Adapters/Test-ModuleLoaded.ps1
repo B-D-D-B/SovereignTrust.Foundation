@@ -4,7 +4,7 @@ function Test-ModuleLoaded {
         [Parameter(Mandatory = $true)][string]$ModuleName
     )
 
-    $signal = [Signal]::Start("Test-ModuleLoaded:$ModuleName") | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Test-ModuleLoaded:$ModuleName") | Select-Object -Last 1
 
     # ░▒▓█ RESOLVE MODULE SIGNAL █▓▒░
     $resolveSignal = Resolve-PathFromDictionary -Dictionary $ModulesGraph -Path "$ModuleName.Result.Loaded" | Select-Object -Last 1

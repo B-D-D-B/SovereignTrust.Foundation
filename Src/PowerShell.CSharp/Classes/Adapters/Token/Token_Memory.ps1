@@ -10,24 +10,24 @@ UnsupportedActivity: FailedSignal
 ActivityComparison: CaseInsensitive
 #>
 class Token_Memory {
-    [Signal]$Signal
-    [Conductor]$Conductor
-    [MappedTokenAdapter]$MappedAdapter
+    [SignalGraph.Signal]$Signal
+    [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor
+    [SovereignTrust.Foundation.Classes.Adapters.MappedTokenAdapter]$MappedAdapter
     [object]$Jacket
 
     Token_Memory() {
     }
 
-    static [Token_Memory] Start([MappedTokenAdapter]$mappedAdapter, [Conductor]$conductor) {
+    static [Token_Memory] Start([SovereignTrust.Foundation.Classes.Adapters.MappedTokenAdapter]$mappedAdapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
         $instance = [Token_Memory]::new()
         $instance.MappedAdapter = $mappedAdapter
         $instance.Conductor = $conductor
-        $instance.Signal = [Signal]::Start("TokenMemory")
+        $instance.Signal = [SignalGraph.Signal]::Start("TokenMemory")
         return $instance
     }
 
-    [Signal] Construct([object]$dictionary) {
-        $opSignal = [Signal]::Start("Construct-TokenMemory") | Select-Object -Last 1
+    [SignalGraph.Signal] Construct([object]$dictionary) {
+        $opSignal = [SignalGraph.Signal]::Start("Construct-TokenMemory") | Select-Object -Last 1
 
         try {
             if ($null -eq $dictionary) {
@@ -44,8 +44,8 @@ class Token_Memory {
         return $opSignal
     }
 
-    [Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
-        $opSignal = [Signal]::Start("Token_Memory.Invoke") | Select-Object -Last 1
+    [SignalGraph.Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
+        $opSignal = [SignalGraph.Signal]::Start("Token_Memory.Invoke") | Select-Object -Last 1
 
         if ($Activity -notin @('Get')) {
             $opSignal.LogCritical("Unsupported Token_Memory activity: '$Activity'.")
@@ -66,7 +66,7 @@ class Token_Memory {
             }
         }
         catch {
-            $opSignal.LogCritical("🔥 Exception in Token_Memory.Invoke: $($_.Exception.Message)", $null, $_)
+            $opSignal.LogCritical("🔥 Exception in Token_Memory.Invoke: $($_.Exception.Message)", $null, $_.Exception)
         }
 
         return $opSignal

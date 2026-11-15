@@ -558,7 +558,7 @@
       "mappedAdapter": "MappedCondenserAdapter",
       "condenser": "PlanCondenser",
       "status": "unresolved",
-      "inspection": "Current PlanCondenser ten declared activities and direct IteratePhase, InvokePhase, InvokePhaseAsync, Await, InsertPhaseSteps class/Plan helpers inspected. Source-specific configuration, step and worker-result guards have bounded routes; broad filter/helper/worker exceptions and unproven branches remain unverified/unrouted. InvokePlan is reserved; unsupported activity has no v1 selector. Full Plan coverage unresolved; source-only confidence.",
+      "inspection": "Current PlanCondenser ten declared activities and direct IteratePhase, InvokePhase, InvokePhaseAsync, Await, InsertPhaseSteps class/Plan helpers inspected. Source-specific configuration, shared-resolver ordering/limit selection, step and worker-result guards have bounded routes; broad filter/helper/worker exceptions and unproven branches remain unverified/unrouted. InvokePlan is reserved; unsupported activity has no v1 selector. Full Plan coverage unresolved; source-only confidence.",
       "parts": [
         {
           "part": "invoke",
@@ -570,7 +570,7 @@
           "id": "plan-class",
           "repository": "SovereignTrust.Foundation",
           "path": "Src/PowerShell/Classes/Adapters/Condenser/PlanCondenser.ps1",
-          "sha256": "34F0C02C6B334A93C1D63A95B8E86E8E221E7F65636F54E7461F6F2BAD5A8163",
+          "sha256": "693B82AFC6888439400BFBE8457BD63C93A747577FAB8EEDCAAE9B2F81A79BD5",
           "symbol": "PlanCondenser"
         },
         {
@@ -639,6 +639,12 @@
           "reportedText": "Forwarded child/ST runspace/task failure and envelope.Error text",
           "reason": "Class merges many child Signals and Complete-PlanPhaseTask can log arbitrary envelope.Error; these do not create a distinct Plan-owned cause-specific correction.",
           "neededEvidence": "Canonical child/task owner, declared activity and redacted failure source/guard before proposing an owner route."
+        },
+        {
+          "id": "iterate-order-limit-other-exception",
+          "reportedText": "Plan.Config ordering/limit validation failed: <other exception>",
+          "reason": "The ordering/limit catch can log arbitrary exception text; only exact assembled fixed guards are routed. Shared resolver getters may run. Critical, structured SignalEntry.Exception or thrown failures are observable; an unreported throwing ScriptProperty can become unresolved/null, and the broad wrapper alone identifies no correction.",
+          "neededEvidence": "Redacted exception class, structured SignalEntry.Exception/Critical status and source-correlated site plus canonical IteratePhase context; no values, paths or unapproved getter reruns."
         }
       ]
     },
@@ -8856,6 +8862,104 @@
         }
       ],
       "part": "Data_AzureDataExplorer"
+    },
+    {
+      "ownerId": "Condensers/PlanCondenser",
+      "entryId": "iterate-orderby-syntax",
+      "part": "invoke",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "messages": [
+        "Plan.Config ordering/limit validation failed: Plan.Config.OrderBy must be a dotted item-relative identifier path."
+      ]
+    },
+    {
+      "ownerId": "Condensers/PlanCondenser",
+      "entryId": "iterate-order-direction",
+      "part": "invoke",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "messages": [
+        "Plan.Config ordering/limit validation failed: Plan.Config.OrderDirection must be ASC or DESC."
+      ]
+    },
+    {
+      "ownerId": "Condensers/PlanCondenser",
+      "entryId": "iterate-limit-type-range",
+      "part": "invoke",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "messages": [
+        "Plan.Config ordering/limit validation failed: Plan.Config.Limit must be a nonnegative native Int32 or Int64."
+      ]
+    },
+    {
+      "ownerId": "Condensers/PlanCondenser",
+      "entryId": "iterate-order-category",
+      "part": "invoke",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "messages": [
+        "Plan.Config ordering/limit validation failed: Ordering keys must share one category."
+      ]
+    },
+    {
+      "ownerId": "Condensers/PlanCondenser",
+      "entryId": "iterate-order-key-type",
+      "part": "invoke",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "messages": [
+        "Plan.Config ordering/limit validation failed: Ordering key must be String, Boolean or an integral/Decimal number."
+      ]
+    },
+    {
+      "ownerId": "Condensers/PlanCondenser",
+      "entryId": "iterate-order-config-lookup",
+      "part": "invoke",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "messages": [
+        "Plan.Config ordering/limit validation failed: Plan.Config ordering/limit lookup failed."
+      ]
+    },
+    {
+      "ownerId": "Condensers/PlanCondenser",
+      "entryId": "iterate-order-key-lookup",
+      "part": "invoke",
+      "adapters": [
+        "PlanCondenser"
+      ],
+      "activities": [
+        "IteratePhase"
+      ],
+      "messages": [
+        "Plan.Config ordering/limit validation failed: Plan.Config.OrderBy path resolution failed."
+      ]
     }
   ]
 }

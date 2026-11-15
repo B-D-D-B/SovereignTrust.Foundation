@@ -2,9 +2,9 @@
 function Invoke-Conduction {
     [CmdletBinding()]
     param (
-        [Signal]$Signal,
-        [Conductor]$Conductor,
-        [Conduit]$Conduit,
+        [SignalGraph.Signal]$Signal,
+        [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor,
+        [SovereignTrust.Foundation.Classes.Conduction.Conduit]$Conduit,
         [object]$Phase  # Typically a small PSObject or Phase class in the future
         
     )

@@ -23,13 +23,13 @@ function Invoke-ST {
         [CmdletBinding()]
         param (
             [Parameter(Mandatory)]
-            [Signal]$Signal,   # Signal with Conductor.Signal in Jacket
+            [SignalGraph.Signal]$Signal,   # Signal with Conductor.Signal in Jacket
 
             [Parameter(Mandatory)]
             [object]$Overlay
         )
 
-        $opSignal = [Signal]::Start("Invoke-ST: Conduction Runner", $Signal) | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start("Invoke-ST: Conduction Runner", $Signal) | Select-Object -Last 1
         
         # Acts as the Conduction Signal with the Conductor
         $opSignal.SetControl($Signal)
@@ -96,7 +96,7 @@ function Invoke-ST {
         # ──────────────────────────────────────────────────────────────────────
         # Execute Memory.Generate
         # ──────────────────────────────────────────────────────────────────────
-        $TargetSignal = [Signal]::Start("Invoke-PlanWithOptionalContext", $opSignal) | Select-Object -Last 1
+        $TargetSignal = [SignalGraph.Signal]::Start("Invoke-PlanWithOptionalContext", $opSignal) | Select-Object -Last 1
 
         $sourceSignal = Invoke-CondenserAdapter `
             -Slot "Memory" `
@@ -121,7 +121,7 @@ function Invoke-ST {
         [CmdletBinding()]
         param (
             [Parameter(Mandatory)]
-            [Signal]$Signal,   # Signal with Conductor.Signal in Jacket
+            [SignalGraph.Signal]$Signal,   # Signal with Conductor.Signal in Jacket
 
             [Parameter(Mandatory)]
             [object]$Overlay,
@@ -130,7 +130,7 @@ function Invoke-ST {
             [bool]$GenerateMemory
         )
 
-        $opSignal = [Signal]::Start("Resolve-ConductionPlanRoute", $Signal) | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start("Resolve-ConductionPlanRoute", $Signal) | Select-Object -Last 1
 
         $opSignal.LogInformation("🧭 Resolving ConductionPlanRoute from RouteOverlay.")
 
@@ -177,7 +177,7 @@ function Invoke-ST {
         # ──────────────────────────────────────────────────────────────────────
         # Execute Memory.Generate
         # ──────────────────────────────────────────────────────────────────────
-        $TargetSignal = [Signal]::Start("Resolve-ConductionPlanRoute.Target", $opSignal) | Select-Object -Last 1
+        $TargetSignal = [SignalGraph.Signal]::Start("Resolve-ConductionPlanRoute.Target", $opSignal) | Select-Object -Last 1
 
         $sourceSignal = Invoke-CondenserAdapter `
             -Slot "Memory" `
@@ -215,14 +215,14 @@ function Invoke-ST {
         [CmdletBinding()]
         param (
             [Parameter(Mandatory)]
-            [Signal]$Signal,
+            [SignalGraph.Signal]$Signal,
 
             [object]$ConductionContext,
             [object]$ConductionContextOverlay
         )
 
         # ░▒▓█ SIGNAL START █▓▒░
-        $opSignal = [Signal]::Start("Resolve-ConductionContext", $Signal) | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start("Resolve-ConductionContext", $Signal) | Select-Object -Last 1
 
         try {
             $opSignal.LogInformation("🧭 Resolving ConductionContext.")
@@ -258,13 +258,13 @@ function Invoke-ST {
             return $opSignal
         }
         catch {
-            $opSignal.LogCritical("Exception in Resolve-ConductionContext: $($_.Exception.Message)", $null, $_)
+            $opSignal.LogCritical("Exception in Resolve-ConductionContext: $($_.Exception.Message)", $null, $_.Exception)
             return $opSignal
         }
     }
 
     # ░▒▓█ START WRAPPER SIGNAL █▓▒░
-    $opSignal = [Signal]::Start("Start-SovereignTrust") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Start-SovereignTrust") | Select-Object -Last 1
 
     $runtimeSignal = Initialize-STEnvironment -Environment $Environment -ParentSignal $opSignal | Select-Object -Last 1
     if ($opSignal.MergeSignalAndVerifyFailure(@($runtimeSignal))) {
@@ -298,7 +298,7 @@ function Invoke-ST {
 
     <# TODO: Move or delete #> <#
     function TestTelemetry([object]$conductorJacketSignal) {
-        $testOpSignal = [Signal]::Start("🎯 Start TestOpSignal", $environmentSignal) | Select-Object -Last 1
+        $testOpSignal = [SignalGraph.Signal]::Start("🎯 Start TestOpSignal", $environmentSignal) | Select-Object -Last 1
         $testOpSignal.AddTag("Mine")
         $testOpSignal.AddProperty("SignalId", ([guid]::NewGuid().ToString()))
         $testOpSignal.LogInformation("✅ Test Information Level");
@@ -339,7 +339,7 @@ function Invoke-ST {
         $conductionPlanRouteSignal = Invoke-PlanWithOptionalContext -Signal $conductorJacketSignal -Overlay $ConductionPlanRoute  | Select-Object -Last 1
 
 
-        $entryFilterSignal = [Signal]::Start("EntryFilter", $null) | Select-Object -Last 1
+        $entryFilterSignal = [SignalGraph.Signal]::Start("EntryFilter", $null) | Select-Object -Last 1
         $entryFilterSignal.MergeSignal($opSignal, $null, "Skip")
 
         $opSignal.Entries = $entryFilterSignal.Entries

@@ -2,11 +2,11 @@ function Invoke-VisualizeSignalTreeTrace {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
-        [Signal]$JacketSignal,
-        [Signal]$ResultSignal
+        [SignalGraph.Signal]$JacketSignal,
+        [SignalGraph.Signal]$ResultSignal
     )
 
-    $opSignal = [Signal]::Start("VisualizeSignalTreeTrace", $JacketSignal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("VisualizeSignalTreeTrace", $JacketSignal) | Select-Object -Last 1
     $opSignal.SetJacket($JacketSignal)
 
     if ($null -eq $ResultSignal) {
@@ -16,7 +16,7 @@ function Invoke-VisualizeSignalTreeTrace {
         }
     }
 
-    $diagramSignal = [Signal]::Start("SignalTree:Diagram", $ResultSignal) | Select-Object -Last 1
+    $diagramSignal = [SignalGraph.Signal]::Start("SignalTree:Diagram", $ResultSignal) | Select-Object -Last 1
     $diagramSignal.SetJacket($ResultSignal)
 
     $allDiagramSignals = @()
@@ -33,7 +33,7 @@ function Invoke-VisualizeSignalTreeTrace {
         }
 
         foreach ($entry in $entries) {
-            if ($entry -is [SignalEntry]) {
+            if ($entry -is [SignalGraph.SignalEntry]) {
                 if ($entry.Level -in @("Information", "ignoreVerbose") -and $entry.Message -like "*SignalTree:*") {
                     $emitLine = Emit-SignalTreeLine -Target $diagramSignal -Line $entry.Message -Level $entry.Level -TraceID $opSignal.Name -TraceScope "Replay" -Minimal $true | Select-Object -Last 1
                     $allDiagramSignals += $emitLine

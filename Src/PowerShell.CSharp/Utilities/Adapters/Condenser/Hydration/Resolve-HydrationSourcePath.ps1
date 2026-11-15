@@ -1,11 +1,11 @@
 function Resolve-HydrationSourcePath {
     param (
-        [Parameter(Mandatory)][Graph]$Graph,
+        [Parameter(Mandatory)][SignalGraph.Graph]$Graph,
         [Parameter(Mandatory)][hashtable]$Intent,
         [Parameter()][string]$Kind = "Storage",
         [Parameter()][string]$Slot = "PrimaryContent"
     )
-    $signal = [Signal]::Start("Resolve-HydrationSourcePath") | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Resolve-HydrationSourcePath") | Select-Object -Last 1
     try {
         $relativePath = $Intent.RelativePath
         if (-not $relativePath) {
@@ -25,7 +25,7 @@ function Resolve-HydrationSourcePath {
         $signal.SetResult($fullPath)
         $signal.LogInformation("📁 Resolved source path: $fullPath")
     } catch {
-        $signal.LogCritical("🔥 Exception in Resolve-HydrationSourcePath: $($_.Exception.Message)", $null, $_)
+        $signal.LogCritical("🔥 Exception in Resolve-HydrationSourcePath: $($_.Exception.Message)", $null, $_.Exception)
     }
     return $signal
 }

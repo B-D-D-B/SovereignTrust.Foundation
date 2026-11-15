@@ -10,7 +10,7 @@
 # - Signals (Jacket-bound memory containers)
 # - Graphs (living memory meshes)
 #
-# TODO: Replace [Signal]$Signal with [Graph]$SignalGraph to enable sovereign lineage tracking.
+# TODO: Replace [SignalGraph.Signal]$Signal with [SignalGraph.Graph]$SignalGraph to enable sovereign lineage tracking.
 #       Each method should register its signal as a node in the Graph using RegisterSignal().
 #       This elevates the signal from a linear log to a queryable, memory-safe signal map.
 #
@@ -33,29 +33,29 @@ UnsupportedActivity: FailedSignal
 ActivityComparison: CaseInsensitive
 #>
 class MergeCondenser {
-    [Conductor]$Conductor
-    [MappedCondenserAdapter]$MappedCondenserAdapter
-    [Signal]$Signal  # Sovereign control signal (previously ControlSignal)
+    [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor
+    [SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$MappedCondenserAdapter
+    [SignalGraph.Signal]$Signal  # Sovereign control signal (previously ControlSignal)
 
     MergeCondenser() {
     }
 
-    static [MergeCondenser] Start([MappedCondenserAdapter]$mappedAdapter, [Conductor]$conductor) {
+    static [MergeCondenser] Start([SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$mappedAdapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
         $instance = [MergeCondenser]::new()
         $instance.MappedCondenserAdapter = $mappedAdapter
         $instance.Conductor = $conductor
-        $instance.Signal = [Signal]::Start("MergeCondenser.Control") | Select-Object -Last 1
+        $instance.Signal = [SignalGraph.Signal]::Start("MergeCondenser.Control") | Select-Object -Last 1
         return $instance
     }
 
-[Signal]Invoke(
+[SignalGraph.Signal]Invoke(
     [string]$Slot,
     [string]$Activity,
-    [Signal]$ConductionSignal,
+    [SignalGraph.Signal]$ConductionSignal,
     [object]$Plan,
-    [Signal]$ItemSignal
+    [SignalGraph.Signal]$ItemSignal
 ) {
-        $opSignal = [Signal]::Start("MemoryCondenser.Invoke:Transform.Merge", $ItemSignal) | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start("MemoryCondenser.Invoke:Transform.Merge", $ItemSignal) | Select-Object -Last 1
 
         if ($Activity -notin @('Merge')) {
             $opSignal.LogCritical("Unsupported MergeCondenser activity: '$Activity'.")
@@ -109,20 +109,20 @@ class MergeCondenser {
         return $opSignal
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception during Merge: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("🔥 Exception during Merge: $($_.Exception.Message)", $null, $_.Exception)
         return $opSignal
     }
 }
 <#
     # Should we move Merge function into TransformCondenser?
-    [Signal] MergeJsonObject([Signal]$opSignal, [object]$Base, [object]$Overlay, [string]$MergeArrayHandling, [string]$MergeNullValueHandling, [int]$Depth, [bool]$IgnoreInternalObjects = $true) {
-        $opSignal = $opSignal ?? ([Signal]::Start("MergeCondenser.Merge") | Select-Object -Last 1)
+    [SignalGraph.Signal] MergeJsonObject([SignalGraph.Signal]$opSignal, [object]$Base, [object]$Overlay, [string]$MergeArrayHandling, [string]$MergeNullValueHandling, [int]$Depth, [bool]$IgnoreInternalObjects = $true) {
+        $opSignal = $opSignal ?? ([SignalGraph.Signal]::Start("MergeCondenser.Merge") | Select-Object -Last 1)
 
         return Invoke-MergeJson -OpSignal $OpSignal -Base $Base -Overlay $Overlay -MergeArrayHandling $MergeArrayHandling -MergeNullValueHandling $MergeNullValueHandling -Depth $Depth | Select-Object -Last 1
     }
 
-    [Signal] InvokeByParameter([object]$Base, [object]$Overlay, [bool]$IgnoreInternalObjects = $true) {
-        $opSignal = [Signal]::Start("MergeCondenser.Invoke-ByParameter") | Select-Object -Last 1
+    [SignalGraph.Signal] InvokeByParameter([object]$Base, [object]$Overlay, [bool]$IgnoreInternalObjects = $true) {
+        $opSignal = [SignalGraph.Signal]::Start("MergeCondenser.Invoke-ByParameter") | Select-Object -Last 1
 
         $mergeSignal = Invoke-TransformCondenserUnifiedMemory -Base $Base -Overlay $Overlay | Select-Object -Last 1
 

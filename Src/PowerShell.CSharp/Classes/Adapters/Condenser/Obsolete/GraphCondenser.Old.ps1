@@ -17,24 +17,24 @@ ActivityScope: None
 Activities: None; this legacy definition has no Activity dispatch.
 #>
 class GridCondenser {
-    [Conductor]$Conductor
-    [MappedCondenserAdapter]$MappedCondenserAdapter
-    [Signal]$Signal  # Sovereign control signal
+    [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor
+    [SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$MappedCondenserAdapter
+    [SignalGraph.Signal]$Signal  # Sovereign control signal
 
     GridCondenser() {
         # Constructor intentionally empty; use Start() method.
     }
 
-    static [GridCondenser] Start([MappedCondenserAdapter]$mappedAdapter, [Conductor]$conductor) {
+    static [GridCondenser] Start([SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$mappedAdapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
         $instance = [GridCondenser]::new()
         $instance.MappedCondenserAdapter = $mappedAdapter
         $instance.Conductor = $conductor
-        $instance.Signal = [Signal]::Start("GridCondenser.Control") | Select-Object -Last 1
+        $instance.Signal = [SignalGraph.Signal]::Start("GridCondenser.Control") | Select-Object -Last 1
         return $instance
     }
 
-    [Signal] CondenseMini([object]$Proposal, [object]$CancellationToken, [string]$OverrideTemplatePath = $null) {
-        $opSignal = [Signal]::Start("CondenseMini") | Select-Object -Last 1
+    [SignalGraph.Signal] CondenseMini([object]$Proposal, [object]$CancellationToken, [string]$OverrideTemplatePath = $null) {
+        $opSignal = [SignalGraph.Signal]::Start("CondenseMini") | Select-Object -Last 1
         $opSignal.Result = [PSCustomObject]@{ Content = "" }
 
         $variableTags = $this.GetVariableTags($Proposal.Content, $Proposal.ReplacementType)

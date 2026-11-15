@@ -6,7 +6,7 @@ ActivityScope: None
 Activities: None; Invoke takes a signal and entry without Activity.
 #>
 class SignalTelemeter {
-    [void] Invoke([Signal] $signal, [SignalEntry] $entry){
+    [void] Invoke([SignalGraph.Signal] $signal, [SignalGraph.SignalEntry] $entry){
         $this.Log($entry.Level, $entry.Message, $entry.Exception)
     }
 

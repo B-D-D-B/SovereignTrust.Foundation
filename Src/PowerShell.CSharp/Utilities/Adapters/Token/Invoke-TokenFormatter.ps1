@@ -1,8 +1,8 @@
 function Invoke-TokenFormatter {
     [CmdletBinding()]
     param (
-        [Conduit]$Conduit,
-        [Conductor]$Conductor,
+        [SovereignTrust.Foundation.Classes.Conduction.Conduit]$Conduit,
+        [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor,
         [string]$Path,
         [object]$Plan  # Typically a small PSObject or Phase class in the future
     )
@@ -11,7 +11,7 @@ function Invoke-TokenFormatter {
         throw "Conduction is not running. Cannot invoke Formatter Phase."
     }
 
-    $opSignal = [Signal]::Start("Invoke-TokenFormatter", $Conductor) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-TokenFormatter", $Conductor) | Select-Object -Last 1
 
     try {
         if ([string]::IsNullOrWhiteSpace($Path)) {
@@ -46,7 +46,7 @@ function Invoke-TokenFormatter {
         }
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception in Invoke-TokenFormatter: $_", $null, $_)
+        $opSignal.LogCritical("🔥 Exception in Invoke-TokenFormatter: $_", $null, $_.Exception)
     }
 
     return $opSignal

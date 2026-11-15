@@ -1,0 +1,135 @@
+{
+  "Schema": "ST.Wave2.MappedPolicies/1",
+  "Provenance": "Curated Activities from exact approved frozen original PS class contract headers; business providers are not invoked by component fixtures",
+  "Families": [
+    {
+      "Family": "Storage",
+      "Source": "Classes/Adapters/MappedStorageAdapter.ps1",
+      "SourceSha256": "4DBD5EF8DC1B9D141EB6FB6F7E7AB41A03DC52B7731840E6FA0DB7975C0A4AF3",
+      "Activities": [
+        "Read",
+        "Write",
+        "Delete",
+        "Exists",
+        "List"
+      ]
+    },
+    {
+      "Family": "Conduction",
+      "Source": "Classes/Adapters/MappedConductionAdapter.ps1",
+      "SourceSha256": "0EA34996E84E56C510E4719DA207174E08B6C5DC02A229683EBEC50F0DF6CB2B",
+      "Activities": [
+        "Invoke",
+        "Run",
+        "ST"
+      ]
+    },
+    {
+      "Family": "Data",
+      "Source": "Classes/Adapters/MappedDataAdapter.ps1",
+      "SourceSha256": "45CBA6E7D2C2955BD1820C0A81B6BA5859451990C418E0A32C63E9C1D5CB7464",
+      "Activities": [
+        "Write",
+        "Query",
+        "Delete",
+        "Admin",
+        "WriteItem",
+        "WriteBatch",
+        "OpenCanonical",
+        "CaptureWriter",
+        "ReadCaptured",
+        "PublishWriter",
+        "CreateEntry",
+        "OpenArtifactProcess",
+        "InspectArtifactParts",
+        "StartArtifactGeneration",
+        "PublishArtifactCandidate",
+        "FailArtifactGeneration",
+        "CompleteArtifactGeneration",
+        "RetryRejectedPart",
+        "IngestArtifactPart",
+        "ReconcileDelivery",
+        "ResumeDelivery",
+        "RetireDelivery",
+        "RepairUnpublished",
+        "SaveArtifactProcess",
+        "SyncArtifactProcess",
+        "ReconcileArtifactProcess"
+      ]
+    },
+    {
+      "Family": "Intelligence",
+      "Source": "Classes/Adapters/MappedIntelligenceAdapter.ps1",
+      "SourceSha256": "B36BC0B5D6416CF9785C14C44322A107F0A70F3D97CCADBA6D47F412C04D8D69",
+      "Activities": [
+        "SendMessage",
+        "HandleMessage"
+      ]
+    },
+    {
+      "Family": "Network",
+      "Source": "Classes/Adapters/MappedNetworkAdapter.ps1",
+      "SourceSha256": "BBA32609723509071469F6DD09D61B8868F957F840F29E83F67FF5A57CA3D842",
+      "Activities": [
+        "SendFile",
+        "SendMessage",
+        "ReadBatch",
+        "HandleMessage"
+      ]
+    },
+    {
+      "Family": "Queue",
+      "Source": "Classes/Adapters/MappedQueueAdapter.ps1",
+      "SourceSha256": "CE32FEAF2D2E6345DFEA467AF7E98D3E3B71204117A24D89B79C1CA4829AA902",
+      "Activities": [
+        "PeekBatch",
+        "HandleMessage",
+        "ReadBatch",
+        "WriteItem",
+        "AckItem",
+        "DeferItem"
+      ]
+    },
+    {
+      "Family": "Satellite",
+      "Source": "Classes/Adapters/MappedSatelliteAdapter.ps1",
+      "SourceSha256": "849D93BBFBECC5A509FF0202D529A0B282E451B772379F597E5A277A8F7DD4D7",
+      "Activities": [
+        "EmitEntries",
+        "EmitSignal",
+        "SendMessage",
+        "HandleResponse",
+        "EmitSignalFull"
+      ]
+    },
+    {
+      "Family": "Session",
+      "Source": "Classes/Adapters/MappedSessionAdapter.ps1",
+      "SourceSha256": "E56F67A2FEB4B9E2D4B7B48047F68C88F86EE558520C69B5A33FF07167D82D29",
+      "Activities": [
+        "RequestOrRegister"
+      ]
+    },
+    {
+      "Family": "Token",
+      "Source": "Classes/Adapters/MappedTokenAdapter.ps1",
+      "SourceSha256": "D347BC6E53C756C063FE098A63DFC94B1AEB6B9C4182E32ACE86EA6C8AAB7C2F",
+      "Activities": [
+        "Get"
+      ]
+    },
+    {
+      "Family": "Utility",
+      "Source": "Classes/Adapters/MappedUtilityAdapter.ps1",
+      "SourceSha256": "CDE92F51376D11DD23B01DC3E07AE37D9405C7B1914EC44E623FC3CB3FD7FBD7",
+      "Activities": [
+        "Resize",
+        "Overlay",
+        "Inspect",
+        "MaterializeGeneratedImage",
+        "ValidateVisionSelection",
+        "FinalizeGeneratedImage"
+      ]
+    }
+  ]
+}

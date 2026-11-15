@@ -4,7 +4,7 @@ function Invoke-FormatJson {
         [object]$Plan
     )
 
-    $opSignal = [Signal]::Start("Invoke-TokenFormatterJson") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-TokenFormatterJson") | Select-Object -Last 1
 
     try {
 
@@ -32,7 +32,7 @@ function Invoke-FormatJson {
         $opSignal.LogInformation("✅ Json Created from Path")
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception in Invoke-TokenFormatterJson: $_", $null, $_)
+        $opSignal.LogCritical("🔥 Exception in Invoke-TokenFormatterJson: $_", $null, $_.Exception)
     }
  
     return $opSignal

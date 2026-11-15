@@ -7,9 +7,9 @@ function Resolve-RemainingResourceRoutesJacket {
         [switch]$ValidateNormalizedV2
     )
 
-    $result = [Signal]::Start('Resolve-RemainingResourceRoutesJacket') | Select-Object -Last 1
+    $result = [SignalGraph.Signal]::Start('Resolve-RemainingResourceRoutesJacket') | Select-Object -Last 1
     try {
-        $value = if ($Jacket -is [Signal]) { $Jacket.GetResult($true) } else { $Jacket }
+        $value = if ($Jacket -is [SignalGraph.Signal]) { $Jacket.GetResult($true) } else { $Jacket }
         if ($null -eq $value) { return $result.LogCritical('Adapter jacket is absent.') }
         $get = {
             param($item, [string]$name)

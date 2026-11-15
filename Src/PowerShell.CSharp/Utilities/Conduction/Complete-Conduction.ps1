@@ -3,7 +3,7 @@ function Complete-Conduction {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
-        [Conduit]$Conduit
+        [SovereignTrust.Foundation.Classes.Conduction.Conduit]$Conduit
     )
 
     if (-not $Conduit.IsRunning) {

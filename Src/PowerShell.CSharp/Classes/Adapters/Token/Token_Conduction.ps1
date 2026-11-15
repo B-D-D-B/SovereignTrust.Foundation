@@ -10,24 +10,24 @@ UnsupportedActivity: FailedSignal
 ActivityComparison: CaseInsensitive
 #>
 class Token_Conduction {
-    [Signal]$Signal
-    [Conductor]$Conductor
-    [MappedTokenAdapter]$MappedAdapter
+    [SignalGraph.Signal]$Signal
+    [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor
+    [SovereignTrust.Foundation.Classes.Adapters.MappedTokenAdapter]$MappedAdapter
     [object]$Jacket
 
     Token_Conduction() {
     }
 
-    static [Token_Conduction] Start([MappedTokenAdapter]$mappedAdapter, [Conductor]$conductor) {
+    static [Token_Conduction] Start([SovereignTrust.Foundation.Classes.Adapters.MappedTokenAdapter]$mappedAdapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
         $instance = [Token_Conduction]::new()
         $instance.MappedAdapter = $mappedAdapter
         $instance.Conductor = $conductor
-        $instance.Signal = [Signal]::Start("GraphCondenser")
+        $instance.Signal = [SignalGraph.Signal]::Start("GraphCondenser")
         return $instance
     }
 
-    [Signal] Construct([object]$dictionary) {
-        $opSignal = [Signal]::Start("Construct-EmbeddedFileSystem") | Select-Object -Last 1
+    [SignalGraph.Signal] Construct([object]$dictionary) {
+        $opSignal = [SignalGraph.Signal]::Start("Construct-EmbeddedFileSystem") | Select-Object -Last 1
 
         try {
             if ($null -eq $dictionary) {
@@ -38,14 +38,14 @@ class Token_Conduction {
             $opSignal.LogInformation("EmbeddedFileSystem constructed successfully with provided jacket.")
         }
         catch {
-            $opSignal.LogCritical("Error constructing EmbeddedFileSystem: $_", $null, $_)
+            $opSignal.LogCritical("Error constructing EmbeddedFileSystem: $_", $null, $_.Exception)
         }
 
         return $opSignal
     }
 
-[Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
-        $opSignal = [Signal]::Start("Token_Conduction.Invoke") | Select-Object -Last 1
+[SignalGraph.Signal] Invoke([string]$Slot, [string]$Activity, $ConductionSignal, $Plan, $ItemSignal) {
+        $opSignal = [SignalGraph.Signal]::Start("Token_Conduction.Invoke") | Select-Object -Last 1
 
         if ($Activity -notin @('Get')) {
             $opSignal.LogCritical("Unsupported Token_Conduction activity: '$Activity'.")
@@ -65,7 +65,7 @@ class Token_Conduction {
         }
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception in Token_Conduction.Invoke: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("🔥 Exception in Token_Conduction.Invoke: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $opSignal

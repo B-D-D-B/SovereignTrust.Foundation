@@ -1,0 +1,1079 @@
+[
+  {
+    "Name": "STTest-Adapters-Storage",
+    "Order": 0,
+    "IsEnabled": true,
+    "Phases": [
+      {
+        "Name": "RunTests",
+        "Order": 0,
+        "Steps": [
+          {
+            "Name": "IterateAdapters",
+            "DeferredHydrationPlan": "@",
+            "Description": "Run common JSON lifecycle and supported file steps serially for each storage case.",
+            "Order": 0,
+            "Adapter": "Condenser.Plan",
+            "Activity": "IteratePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.Tests.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false,
+              "PlanName": "Tests",
+              "Activity": "InvokePhase",
+              "IterationArray": [
+                {
+                  "Slot": "LocalContent",
+                  "Container": "test",
+                  "Resource": "sttest-local",
+                  "FileTransfer": false
+                }
+              ],
+              "IterationName": "StorageCase",
+              "Threading": {
+                "Enabled": false
+              }
+            },
+            "IsEnabled": true
+          }
+        ],
+        "IsEnabled": true
+      },
+      {
+        "Name": "Tests",
+        "Order": 1,
+        "Steps": [
+          {
+            "Name": "InvokeWriteContentTest",
+            "Order": 0,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.WriteContentTest.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": true
+          },
+          {
+            "Name": "InvokeReadTest",
+            "Order": 1,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.ReadContentTest.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": true
+          },
+          {
+            "Name": "InvokeDeleteTest",
+            "Order": 2,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.DeleteContentTest.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": true
+          },
+          {
+            "Name": "InvokeExistsTest",
+            "Order": 3,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.ExistsTest.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": true
+          },
+          {
+            "Name": "InvokeWriteSourceTest",
+            "Order": 4,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.WriteSourceTest.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeReadTargetTest",
+            "Order": 5,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.ReadTargetTest.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeDeleteTargetTest",
+            "Order": 6,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.DeleteTargetTest.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeExistsTargetTest",
+            "Order": 7,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.ExistsTargetTest.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeDeleteSourceTest",
+            "Order": 8,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.DeleteSourceTest.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeExistsSourceTest",
+            "Order": 9,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.ExistsSourceTest.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": true
+      },
+      {
+        "Name": "WriteContentTest",
+        "Order": 2,
+        "Steps": [
+          {
+            "Name": "WriteContentFile",
+            "Description": "Write the JSON content to test-file.json in the test container through the current storage adapter.",
+            "Order": 0,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.[Memory.Item.*.#.StorageCase.@.Slot/]",
+            "Activity": "Write",
+            "Container": "[Memory.Item.*.#.StorageCase.@.Container|]",
+            "Resource": "[Memory.Item.*.#.StorageCase.@.Resource/]-[Memory.Item.*.#.TestRunId.@/]",
+            "Config": {
+              "Break": false,
+              "Content": "[Memory.Item.*.#.StorageContentCases.@.Cases.SharedJson.Inputs.Content|]"
+            },
+            "Key": "WrittenContentPath_[Memory.Item.*.#.StorageCase.@.Slot/]",
+            "IsEnabled": true
+          },
+          {
+            "Name": "RecordWriteContent",
+            "Order": 1,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RecordTestResults.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false,
+              "TestPlanName": "STTest-Adapters-Storage",
+              "TestGroup": "StorageAdapter",
+              "TestName": "[Memory.Item.*.#.StorageCase.@.Slot|].WriteContent",
+              "TestResult": "[Dynamic.IsNotNullOrEmpty([Memory.Item.*.#.WrittenContentPath_[Memory.Item.*.#.StorageCase.@.Slot/].@|])|]",
+              "TestValue": "[Memory.Item.*.#.WrittenContentPath_[Memory.Item.*.#.StorageCase.@.Slot/].@=__ST_OBSERVATION_MISSING__|]",
+              "TestDescription": "Actual WriteContent path or URI; expected nonempty. This does not verify content.",
+              "TestExpected": "nonempty path or URI"
+            },
+            "IsEnabled": true
+          }
+        ],
+        "IsEnabled": true
+      },
+      {
+        "Name": "ReadContentTest",
+        "Order": 3,
+        "Steps": [
+          {
+            "Name": "ReadWrittenTestFile",
+            "Description": "Read test-file.json through the current storage adapter and store the result under an adapter-specific WrittenTestFile key.",
+            "Order": 0,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.[Memory.Item.*.#.StorageCase.@.Slot/]",
+            "Activity": "Read",
+            "Container": "[Memory.Item.*.#.StorageCase.@.Container|]",
+            "Resource": "[Memory.Item.*.#.StorageCase.@.Resource/]-[Memory.Item.*.#.TestRunId.@/]",
+            "Format": "Json",
+            "Key": "WrittenTestFile_[Memory.Item.*.#.StorageCase.@.Slot/]",
+            "IsEnabled": true
+          },
+          {
+            "Name": "RecordRead",
+            "Order": 1,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RecordTestResults.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false,
+              "TestPlanName": "STTest-Adapters-Storage",
+              "TestGroup": "StorageAdapter",
+              "TestName": "[Memory.Item.*.#.StorageCase.@.Slot|].ReadContent",
+              "TestResult": "[Dynamic.Equals([Dynamic.ToJson([Memory.Item.*.#.WrittenTestFile_[Memory.Item.*.#.StorageCase.@.Slot/].@|])|],[Dynamic.ToJson([Memory.Item.*.#.StorageContentCases.@.Cases.SharedJson.Expected|])|])|]",
+              "TestValue": "[Memory.Item.*.#.WrittenTestFile_[Memory.Item.*.#.StorageCase.@.Slot/].@.Data=__ST_OBSERVATION_MISSING__|]",
+              "TestDescription": "Actual JSON Data field; expected Test. This does not describe other fields.",
+              "TestExpected": "Test"
+            },
+            "IsEnabled": true
+          }
+        ],
+        "IsEnabled": true
+      },
+      {
+        "Name": "DeleteContentTest",
+        "Order": 4,
+        "Steps": [
+          {
+            "Name": "DeleteWrittenTestFile",
+            "Description": "Delete test-file.json through the current storage adapter after the write/read check.",
+            "Order": 0,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.[Memory.Item.*.#.StorageCase.@.Slot/]",
+            "Activity": "Delete",
+            "Container": "[Memory.Item.*.#.StorageCase.@.Container|]",
+            "Resource": "[Memory.Item.*.#.StorageCase.@.Resource/]-[Memory.Item.*.#.TestRunId.@/]",
+            "Key": "Deleted_[Memory.Item.*.#.StorageCase.@.Slot/]",
+            "IsEnabled": true
+          },
+          {
+            "Name": "RecordDelete",
+            "Order": 1,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RecordTestResults.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false,
+              "TestPlanName": "STTest-Adapters-Storage",
+              "TestGroup": "StorageAdapter",
+              "TestName": "[Memory.Item.*.#.StorageCase.@.Slot|].DeleteContent",
+              "TestResult": "[Dynamic.Equals([Memory.Item.*.#.Deleted_[Memory.Item.*.#.StorageCase.@.Slot/].@=false|],[Memory.Item.*.#.StorageContentCases.@.Cases.DeleteContentTest.Expected.RecordDelete.TestResultOperands~])|]",
+              "TestValue": "[Memory.Item.*.#.Deleted_[Memory.Item.*.#.StorageCase.@.Slot/].@=__ST_OBSERVATION_MISSING__|]",
+              "TestDescription": "Actual DeleteContent result; expected true. Missing is a diagnostic marker.",
+              "TestExpected": true
+            },
+            "IsEnabled": true
+          }
+        ],
+        "IsEnabled": true
+      },
+      {
+        "Name": "ExistsTest",
+        "Order": 5,
+        "Steps": [
+          {
+            "Name": "CheckDeleteTestFile",
+            "Description": "Check whether test-file.json still exists after deletion and register the Boolean result under an adapter-specific key.",
+            "Order": 0,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.[Memory.Item.*.#.StorageCase.@.Slot/]",
+            "Activity": "Exists",
+            "Container": "[Memory.Item.*.#.StorageCase.@.Container|]",
+            "Resource": "[Memory.Item.*.#.StorageCase.@.Resource/]-[Memory.Item.*.#.TestRunId.@/]",
+            "Key": "Exists_[Memory.Item.*.#.StorageCase.@.Slot/]",
+            "IsEnabled": true
+          },
+          {
+            "Name": "RecordExists",
+            "Order": 1,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RecordTestResults.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false,
+              "TestPlanName": "STTest-Adapters-Storage",
+              "TestGroup": "StorageAdapter",
+              "TestName": "[Memory.Item.*.#.StorageCase.@.Slot|].ExistsContent",
+              "TestResult": "[Dynamic.Equals([Memory.Item.*.#.Exists_[Memory.Item.*.#.StorageCase.@.Slot/].@=true|],[Memory.Item.*.#.StorageContentCases.@.Cases.ExistsTest.Expected.RecordExists.TestResultOperands~])|]",
+              "TestValue": "[Memory.Item.*.#.Exists_[Memory.Item.*.#.StorageCase.@.Slot/].@=__ST_OBSERVATION_MISSING__|]",
+              "TestDescription": "Actual Exists result after content deletion; expected false. Missing is a diagnostic marker.",
+              "TestExpected": false
+            },
+            "IsEnabled": true
+          }
+        ],
+        "IsEnabled": true
+      },
+      {
+        "Name": "WriteSourceTest",
+        "Order": 6,
+        "Steps": [
+          {
+            "Name": "WriteSourceFile",
+            "Order": 0,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.[Memory.Item.*.#.StorageCase.@.Slot/]",
+            "Activity": "Write",
+            "Container": "test",
+            "Resource": "st-test-source-[Memory.Item.*.#.TestFileName.@/].png",
+            "Config": {
+              "Break": false,
+              "Content": null,
+              "SourcePath": "[System.STTestMediaRoot/]/st-test-08-red.png",
+              "ContentType": "image/png"
+            },
+            "Key": "WrittenSourcePath_[Memory.Item.*.#.StorageCase.@.Slot/]",
+            "IsEnabled": false
+          },
+          {
+            "Name": "RecordWriteSource",
+            "Order": 1,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RecordTestResults.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false,
+              "TestPlanName": "STTest-Adapters-Storage",
+              "TestGroup": "StorageAdapter",
+              "TestName": "[Memory.Item.*.#.StorageCase.@.Slot|].WriteSource",
+              "TestResult": "[Dynamic.IsNotNullOrEmpty([Memory.Item.*.#.WrittenSourcePath_[Memory.Item.*.#.StorageCase.@.Slot/].@|])|]",
+              "TestValue": "[Memory.Item.*.#.WrittenSourcePath_[Memory.Item.*.#.StorageCase.@.Slot/].@=__ST_OBSERVATION_MISSING__|]",
+              "TestDescription": "Actual source Write path or URI; expected nonempty. Source bytes are not recorded here.",
+              "TestExpected": "nonempty path or URI"
+            },
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "ReadTargetTest",
+        "Order": 7,
+        "Steps": [
+          {
+            "Name": "ReadSourceToTarget",
+            "Order": 0,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.[Memory.Item.*.#.StorageCase.@.Slot/]",
+            "Activity": "Read",
+            "Container": "test",
+            "Resource": "st-test-source-[Memory.Item.*.#.TestFileName.@/].png",
+            "Config": {
+              "TargetPath": "[System.STTestMediaRoot/]/test/st-test-target-[Memory.Item.*.#.TestFileName.@/].png"
+            },
+            "Key": "ReadTargetPath_[Memory.Item.*.#.StorageCase.@.Slot/]",
+            "IsEnabled": false
+          },
+          {
+            "Name": "RecordReadTarget",
+            "Order": 1,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RecordTestResults.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "TestPlanName": "STTest-Adapters-Storage",
+              "TestGroup": "StorageAdapter",
+              "TestName": "[Memory.Item.*.#.StorageCase.@.Slot|].ReadTarget",
+              "TestResult": "[Dynamic.IsNotNullOrEmpty([Memory.Item.*.#.ReadTargetPath_[Memory.Item.*.#.StorageCase.@.Slot/].@|])|]",
+              "TestValue": "[Memory.Item.*.#.ReadTargetPath_[Memory.Item.*.#.StorageCase.@.Slot/].@=__ST_OBSERVATION_MISSING__|]",
+              "TestDescription": "Actual target path returned by Read; expected nonempty. This result does not check bytes.",
+              "TestExpected": "nonempty path or URI"
+            },
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "DeleteTargetTest",
+        "Order": 8,
+        "Steps": [
+          {
+            "Name": "DeleteDownloadedTarget",
+            "Order": 0,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.LocalMedia",
+            "Activity": "Delete",
+            "Container": "test",
+            "Resource": "st-test-target-[Memory.Item.*.#.TestFileName.@/].png",
+            "Key": "DeletedTarget_[Memory.Item.*.#.StorageCase.@.Slot/]",
+            "IsEnabled": false
+          },
+          {
+            "Name": "RecordDeleteTarget",
+            "Order": 1,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RecordTestResults.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "TestPlanName": "STTest-Adapters-Storage",
+              "TestGroup": "StorageAdapter",
+              "TestName": "[Memory.Item.*.#.StorageCase.@.Slot|].DeleteTarget",
+              "TestResult": "[Dynamic.Equals([Memory.Item.*.#.DeletedTarget_[Memory.Item.*.#.StorageCase.@.Slot/].@=false|],[Memory.Item.*.#.StorageContentCases.@.Cases.DeleteTargetTest.Expected.RecordDeleteTarget.TestResultOperands~])|]",
+              "TestValue": "[Memory.Item.*.#.DeletedTarget_[Memory.Item.*.#.StorageCase.@.Slot/].@=__ST_OBSERVATION_MISSING__|]",
+              "TestDescription": "Actual LocalMedia target Delete result; expected true.",
+              "TestExpected": true
+            },
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "ExistsTargetTest",
+        "Order": 9,
+        "Steps": [
+          {
+            "Name": "CheckDeletedTarget",
+            "Order": 0,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.LocalMedia",
+            "Activity": "Exists",
+            "Container": "test",
+            "Resource": "st-test-target-[Memory.Item.*.#.TestFileName.@/].png",
+            "Key": "ExistsTarget_[Memory.Item.*.#.StorageCase.@.Slot/]",
+            "IsEnabled": false
+          },
+          {
+            "Name": "RecordExistsTarget",
+            "Order": 1,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RecordTestResults.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "TestPlanName": "STTest-Adapters-Storage",
+              "TestGroup": "StorageAdapter",
+              "TestName": "[Memory.Item.*.#.StorageCase.@.Slot|].ExistsTarget",
+              "TestResult": "[Dynamic.Equals([Memory.Item.*.#.ExistsTarget_[Memory.Item.*.#.StorageCase.@.Slot/].@=true|],[Memory.Item.*.#.StorageContentCases.@.Cases.ExistsTargetTest.Expected.RecordExistsTarget.TestResultOperands~])|]",
+              "TestValue": "[Memory.Item.*.#.ExistsTarget_[Memory.Item.*.#.StorageCase.@.Slot/].@=__ST_OBSERVATION_MISSING__|]",
+              "TestDescription": "Actual LocalMedia target Exists result after deletion; expected false.",
+              "TestExpected": false
+            },
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "DeleteSourceTest",
+        "Order": 10,
+        "Steps": [
+          {
+            "Name": "DeleteSourceFile",
+            "Order": 0,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.[Memory.Item.*.#.StorageCase.@.Slot/]",
+            "Activity": "Delete",
+            "Container": "test",
+            "Resource": "st-test-source-[Memory.Item.*.#.TestFileName.@/].png",
+            "Key": "DeletedSource_[Memory.Item.*.#.StorageCase.@.Slot/]",
+            "IsEnabled": false
+          },
+          {
+            "Name": "RecordDeleteSource",
+            "Order": 1,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RecordTestResults.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false,
+              "TestPlanName": "STTest-Adapters-Storage",
+              "TestGroup": "StorageAdapter",
+              "TestName": "[Memory.Item.*.#.StorageCase.@.Slot|].DeleteSource",
+              "TestResult": "[Dynamic.Equals([Memory.Item.*.#.DeletedSource_[Memory.Item.*.#.StorageCase.@.Slot/].@=false|],[Memory.Item.*.#.StorageContentCases.@.Cases.DeleteSourceTest.Expected.RecordDeleteSource.TestResultOperands~])|]",
+              "TestValue": "[Memory.Item.*.#.DeletedSource_[Memory.Item.*.#.StorageCase.@.Slot/].@=__ST_OBSERVATION_MISSING__|]",
+              "TestDescription": "Actual selected-adapter source Delete result; expected true.",
+              "TestExpected": true
+            },
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "ExistsSourceTest",
+        "Order": 11,
+        "Steps": [
+          {
+            "Name": "CheckDeletedSourceFile",
+            "Order": 0,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.[Memory.Item.*.#.StorageCase.@.Slot/]",
+            "Activity": "Exists",
+            "Container": "test",
+            "Resource": "st-test-source-[Memory.Item.*.#.TestFileName.@/].png",
+            "Key": "ExistsSource_[Memory.Item.*.#.StorageCase.@.Slot/]",
+            "IsEnabled": false
+          },
+          {
+            "Name": "RecordExistsSource",
+            "Order": 1,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RecordTestResults.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Break": false,
+              "TestPlanName": "STTest-Adapters-Storage",
+              "TestGroup": "StorageAdapter",
+              "TestName": "[Memory.Item.*.#.StorageCase.@.Slot|].ExistsSource",
+              "TestResult": "[Dynamic.Equals([Memory.Item.*.#.ExistsSource_[Memory.Item.*.#.StorageCase.@.Slot/].@=true|],[Memory.Item.*.#.StorageContentCases.@.Cases.ExistsSourceTest.Expected.RecordExistsSource.TestResultOperands~])|]",
+              "TestValue": "[Memory.Item.*.#.ExistsSource_[Memory.Item.*.#.StorageCase.@.Slot/].@=__ST_OBSERVATION_MISSING__|]",
+              "TestDescription": "Actual selected-adapter source Exists result after deletion; expected false.",
+              "TestExpected": false
+            },
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "RunResultDetailTests",
+        "Order": 12,
+        "Steps": [
+          {
+            "Name": "IterateResultDetailAdapters",
+            "Order": 0,
+            "Adapter": "Condenser.Plan",
+            "Activity": "IteratePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.ResultDetailTests.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Activity": "InvokePhase",
+              "IterationArray": [
+                "LocalContent",
+                "RemoteContent"
+              ],
+              "IterationName": "StorageAdapter",
+              "Threading": {
+                "Enabled": false
+              }
+            },
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "ResultDetailTests",
+        "Order": 13,
+        "Steps": [
+          {
+            "Name": "InvokeWriteSourceTest",
+            "Order": 0,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.WriteSourceTest.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeReadTargetDetailTest",
+            "Order": 1,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.ReadTargetDetailTest.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeDeleteTargetTest",
+            "Order": 2,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.DeleteTargetTest.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeExistsTargetTest",
+            "Order": 3,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.ExistsTargetTest.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeDeleteSourceTest",
+            "Order": 4,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.DeleteSourceTest.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeExistsSourceTest",
+            "Order": 5,
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.ExistsSourceTest.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          },
+          {
+            "Name": "InvokeSameSizeLocalResultDetailTest",
+            "Order": 6,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestAdaptersStoragePlan.@.Phases.SameSizeLocalResultDetailTest.Steps",
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "ReadTargetDetailTest",
+        "Order": 14,
+        "Steps": [
+          {
+            "Name": "ReadSourceToTarget",
+            "Order": 0,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.[Memory.Item.*.#.StorageAdapter.@/]",
+            "Activity": "Read",
+            "Container": "test",
+            "Resource": "st-test-source-[Memory.Item.*.#.TestFileName.@/].png",
+            "Config": {
+              "TargetPath": "[System.STTestMediaRoot/]/test/st-test-target-[Memory.Item.*.#.TestFileName.@/].png"
+            },
+            "Key": "ReadTargetPath_[Memory.Item.*.#.StorageAdapter.@/]",
+            "IsEnabled": false
+          },
+          {
+            "Name": "ReadSourceToTargetDetail",
+            "Order": 1,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.[Memory.Item.*.#.StorageAdapter.@/]",
+            "Activity": "Read",
+            "Container": "test",
+            "Resource": "st-test-source-[Memory.Item.*.#.TestFileName.@/].png",
+            "Config": {
+              "TargetPath": "[System.STTestMediaRoot/]/test/st-test-target-[Memory.Item.*.#.TestFileName.@/].png",
+              "ResultDetail": true
+            },
+            "ExitAfterAdapter": true,
+            "Key": "ReadTargetDetail_[Memory.Item.*.#.StorageAdapter.@/]",
+            "IsEnabled": false
+          },
+          {
+            "Name": "CheckReadTargetPath",
+            "Order": 2,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.C3ReadTargetPathCheck_[Memory.Item.*.#.StorageAdapter.@/].@",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Content": "[Dynamic.Equals([Memory.Item.*.#.ReadTargetDetail_[Memory.Item.*.#.StorageAdapter.@/].@.TargetPath=__MISSING__~],[Memory.Item.*.#.ReadTargetPath_[Memory.Item.*.#.StorageAdapter.@/].@=__OTHER__~])|]"
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "CheckReadTargetExpectedPath",
+            "Order": 3,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.C3ReadTargetExpectedPathCheck_[Memory.Item.*.#.StorageAdapter.@/].@",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Content": "[Dynamic.Equals([Memory.Item.*.#.ReadTargetDetail_[Memory.Item.*.#.StorageAdapter.@/].@.TargetPath=__MISSING__~],[System.STTestMediaRoot/]\\test\\st-test-target-[Memory.Item.*.#.TestFileName.@/].png)|]"
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "CheckReadTargetLength",
+            "Order": 4,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.C3ReadTargetLengthCheck_[Memory.Item.*.#.StorageAdapter.@/].@",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Content": "[Dynamic.Equals([Memory.Item.*.#.ReadTargetDetail_[Memory.Item.*.#.StorageAdapter.@/].@.ByteLength=__MISSING__~],[Memory.Item.*.#.StorageContentCases.@.Cases.ReadTargetDetailTest.Expected.CheckReadTargetLength.ContentOperands~])|]"
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "CheckReadTargetSha256",
+            "Order": 5,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.C3ReadTargetShaCheck_[Memory.Item.*.#.StorageAdapter.@/].@",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Content": "[Dynamic.Equals([Memory.Item.*.#.ReadTargetDetail_[Memory.Item.*.#.StorageAdapter.@/].@.Sha256=__MISSING__~],[Memory.Item.*.#.StorageContentCases.@.Cases.ReadTargetDetailTest.Expected.CheckReadTargetSha256.ContentOperands~])|]"
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "CheckExpectedTargetExists",
+            "Order": 6,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.LocalMedia",
+            "Activity": "Exists",
+            "Container": "test",
+            "Resource": "st-test-target-[Memory.Item.*.#.TestFileName.@/].png",
+            "ExitAfterAdapter": true,
+            "Key": "C3ExpectedTargetExists_[Memory.Item.*.#.StorageAdapter.@/]",
+            "IsEnabled": false
+          },
+          {
+            "Name": "RecordReadTarget",
+            "Order": 7,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RecordTestResults.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "TestPlanName": "STTest-Adapters-Storage",
+              "TestGroup": "StorageAdapter",
+              "TestName": "[Memory.Item.*.#.StorageAdapter.@|].ReadTargetDetail",
+              "TestResult": "[Dynamic.And([Memory.Item.*.#.C3ReadTargetPathCheck_[Memory.Item.*.#.StorageAdapter.@/].@=false~],[Memory.Item.*.#.C3ReadTargetExpectedPathCheck_[Memory.Item.*.#.StorageAdapter.@/].@=false~],[Memory.Item.*.#.C3ReadTargetLengthCheck_[Memory.Item.*.#.StorageAdapter.@/].@=false~],[Memory.Item.*.#.C3ReadTargetShaCheck_[Memory.Item.*.#.StorageAdapter.@/].@=false~],[Memory.Item.*.#.C3ExpectedTargetExists_[Memory.Item.*.#.StorageAdapter.@/].@=false~])|]",
+              "TestValue": "[Memory.Item.*.#.ReadTargetDetail_[Memory.Item.*.#.StorageAdapter.@/].@.ByteLength=__ST_OBSERVATION_MISSING__|]",
+              "TestDescription": "Actual ResultDetail byte length; expected 902. Boolean result also checks target paths, SHA-256 and target existence; this value alone does not.",
+              "TestExpected": 902
+            },
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "SameSizeLocalResultDetailTest",
+        "Order": 15,
+        "Steps": [
+          {
+            "Name": "WriteTextABCD",
+            "Order": 0,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Write",
+            "Container": "test",
+            "Resource": "st-test-c3-source-[Memory.Item.*.#.TestFileName.@/].txt",
+            "Config": {
+              "Content": "[Memory.Item.*.#.StorageContentCases.@.Cases.SameSizeLocalResultDetailTest.Inputs.WriteTextABCD.Content|]"
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "ReadTextABCDDetail",
+            "Order": 1,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "test",
+            "Resource": "st-test-c3-source-[Memory.Item.*.#.TestFileName.@/].txt",
+            "Config": {
+              "TargetPath": "[System.STTestMediaRoot/]/test/st-test-c3-target-[Memory.Item.*.#.TestFileName.@/].txt",
+              "ResultDetail": true
+            },
+            "ExitAfterAdapter": true,
+            "Key": "C3TextABCD_[Memory.Item.*.#.TestFileName.@/]",
+            "IsEnabled": false
+          },
+          {
+            "Name": "CheckTextABCDLength",
+            "Order": 2,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.C3TextABCDLengthCheck_[Memory.Item.*.#.TestFileName.@/].@",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Content": "[Dynamic.Equals([Memory.Item.*.#.C3TextABCD_[Memory.Item.*.#.TestFileName.@/].@.ByteLength=__MISSING__~],[Memory.Item.*.#.StorageContentCases.@.Cases.SameSizeLocalResultDetailTest.Expected.CheckTextABCDLength.ContentOperands~])|]"
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "CheckTextABCDSha256",
+            "Order": 3,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.C3TextABCDShaCheck_[Memory.Item.*.#.TestFileName.@/].@",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Content": "[Dynamic.Equals([Memory.Item.*.#.C3TextABCD_[Memory.Item.*.#.TestFileName.@/].@.Sha256=__MISSING__~],[Memory.Item.*.#.StorageContentCases.@.Cases.SameSizeLocalResultDetailTest.Expected.CheckTextABCDSha256.ContentOperands~])|]"
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "RecordTextABCD",
+            "Order": 4,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RecordTestResults.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "TestPlanName": "STTest-Adapters-Storage",
+              "TestGroup": "StorageAdapter",
+              "TestName": "LocalContent.ReadTargetDetailABCD",
+              "TestResult": "[Dynamic.And([Memory.Item.*.#.C3TextABCDLengthCheck_[Memory.Item.*.#.TestFileName.@/].@=false~],[Memory.Item.*.#.C3TextABCDShaCheck_[Memory.Item.*.#.TestFileName.@/].@=false~])|]",
+              "TestValue": "[Memory.Item.*.#.C3TextABCD_[Memory.Item.*.#.TestFileName.@/].@.Sha256=__ST_OBSERVATION_MISSING__|]",
+              "TestDescription": "Actual first local ResultDetail SHA-256; expected E12E115ACF4552B2568B55E93CBD39394C4EF81C82447FAFC997882A02D23677. Boolean result also checks length 4.",
+              "TestExpected": "E12E115ACF4552B2568B55E93CBD39394C4EF81C82447FAFC997882A02D23677"
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "WriteTextWXYZ",
+            "Order": 5,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Write",
+            "Container": "test",
+            "Resource": "st-test-c3-source-[Memory.Item.*.#.TestFileName.@/].txt",
+            "Config": {
+              "Content": "[Memory.Item.*.#.StorageContentCases.@.Cases.SameSizeLocalResultDetailTest.Inputs.WriteTextWXYZ.Content|]"
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "ReadTextWXYZDetail",
+            "Order": 6,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "test",
+            "Resource": "st-test-c3-source-[Memory.Item.*.#.TestFileName.@/].txt",
+            "Config": {
+              "TargetPath": "[System.STTestMediaRoot/]/test/st-test-c3-target-[Memory.Item.*.#.TestFileName.@/].txt",
+              "ResultDetail": true
+            },
+            "ExitAfterAdapter": true,
+            "Key": "C3TextWXYZ_[Memory.Item.*.#.TestFileName.@/]",
+            "IsEnabled": false
+          },
+          {
+            "Name": "ReadTextWXYZTarget",
+            "Order": 7,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.LocalMedia",
+            "Activity": "Read",
+            "Container": "test",
+            "Resource": "st-test-c3-target-[Memory.Item.*.#.TestFileName.@/].txt",
+            "ExitAfterAdapter": true,
+            "Key": "C3TextTarget_[Memory.Item.*.#.TestFileName.@/]",
+            "IsEnabled": false
+          },
+          {
+            "Name": "CheckTextWXYZLength",
+            "Order": 8,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.C3TextWXYZLengthCheck_[Memory.Item.*.#.TestFileName.@/].@",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Content": "[Dynamic.Equals([Memory.Item.*.#.C3TextWXYZ_[Memory.Item.*.#.TestFileName.@/].@.ByteLength=__MISSING__~],[Memory.Item.*.#.StorageContentCases.@.Cases.SameSizeLocalResultDetailTest.Expected.CheckTextWXYZLength.ContentOperands~])|]"
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "CheckTextWXYZSha256",
+            "Order": 9,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.C3TextWXYZShaCheck_[Memory.Item.*.#.TestFileName.@/].@",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Content": "[Dynamic.Equals([Memory.Item.*.#.C3TextWXYZ_[Memory.Item.*.#.TestFileName.@/].@.Sha256=__MISSING__~],[Memory.Item.*.#.StorageContentCases.@.Cases.SameSizeLocalResultDetailTest.Expected.CheckTextWXYZSha256.ContentOperands~])|]"
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "CheckTextWXYZReadback",
+            "Order": 10,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.C3TextWXYZReadbackCheck_[Memory.Item.*.#.TestFileName.@/].@",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Content": "[Dynamic.Equals([Memory.Item.*.#.C3TextTarget_[Memory.Item.*.#.TestFileName.@/].@=__MISSING__~],[Memory.Item.*.#.StorageContentCases.@.Cases.SameSizeLocalResultDetailTest.Expected.CheckTextWXYZReadback.ContentOperands~])|]"
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "RecordTextWXYZ",
+            "Order": 11,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RecordTestResults.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "TestPlanName": "STTest-Adapters-Storage",
+              "TestGroup": "StorageAdapter",
+              "TestName": "LocalContent.ReadTargetDetailWXYZ",
+              "TestResult": "[Dynamic.And([Memory.Item.*.#.C3TextWXYZLengthCheck_[Memory.Item.*.#.TestFileName.@/].@=false~],[Memory.Item.*.#.C3TextWXYZShaCheck_[Memory.Item.*.#.TestFileName.@/].@=false~],[Memory.Item.*.#.C3TextWXYZReadbackCheck_[Memory.Item.*.#.TestFileName.@/].@=false~])|]",
+              "TestValue": "[Memory.Item.*.#.C3TextWXYZ_[Memory.Item.*.#.TestFileName.@/].@.Sha256=__ST_OBSERVATION_MISSING__|]",
+              "TestDescription": "Actual second local ResultDetail SHA-256; expected 21E32F5321CAD49AB4CF78BA5ED231E0F36D0C78D34108FDA1BE939F33FBA149. Boolean result also checks length 4 and target readback.",
+              "TestExpected": "21E32F5321CAD49AB4CF78BA5ED231E0F36D0C78D34108FDA1BE939F33FBA149"
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "DeleteTextTarget",
+            "Order": 12,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.LocalMedia",
+            "Activity": "Delete",
+            "Container": "test",
+            "Resource": "st-test-c3-target-[Memory.Item.*.#.TestFileName.@/].txt",
+            "IsEnabled": false
+          },
+          {
+            "Name": "DeleteTextSource",
+            "Order": 13,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Delete",
+            "Container": "test",
+            "Resource": "st-test-c3-source-[Memory.Item.*.#.TestFileName.@/].txt",
+            "IsEnabled": false
+          },
+          {
+            "Name": "CheckTextTargetAbsent",
+            "Order": 14,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.LocalMedia",
+            "Activity": "Exists",
+            "Container": "test",
+            "Resource": "st-test-c3-target-[Memory.Item.*.#.TestFileName.@/].txt",
+            "ExitAfterAdapter": true,
+            "Key": "C3TextTargetAbsent_[Memory.Item.*.#.TestFileName.@/]",
+            "IsEnabled": false
+          },
+          {
+            "Name": "CheckTextSourceAbsent",
+            "Order": 15,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Exists",
+            "Container": "test",
+            "Resource": "st-test-c3-source-[Memory.Item.*.#.TestFileName.@/].txt",
+            "ExitAfterAdapter": true,
+            "Key": "C3TextSourceAbsent_[Memory.Item.*.#.TestFileName.@/]",
+            "IsEnabled": false
+          },
+          {
+            "Name": "CheckTextTargetCleanup",
+            "Order": 16,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.C3TextTargetCleanupCheck_[Memory.Item.*.#.TestFileName.@/].@",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Content": "[Dynamic.Not([Memory.Item.*.#.C3TextTargetAbsent_[Memory.Item.*.#.TestFileName.@/].@=true~])|]"
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "CheckTextSourceCleanup",
+            "Order": 17,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Transform",
+            "Activity": "Inject",
+            "Path": "*.#.C3TextSourceCleanupCheck_[Memory.Item.*.#.TestFileName.@/].@",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "Content": "[Dynamic.Not([Memory.Item.*.#.C3TextSourceAbsent_[Memory.Item.*.#.TestFileName.@/].@=true~])|]"
+            },
+            "IsEnabled": false
+          },
+          {
+            "Name": "RecordTextCleanup",
+            "Order": 18,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Condenser.Plan",
+            "Activity": "InvokePhase",
+            "Path": "*.#.STTestPlan.@.Phases.RecordTestResults.Steps",
+            "ExitAfterAdapter": true,
+            "Config": {
+              "TestPlanName": "STTest-Adapters-Storage",
+              "TestGroup": "StorageAdapter",
+              "TestName": "LocalContent.ReadTargetDetailCleanup",
+              "TestResult": "[Dynamic.And([Memory.Item.*.#.C3TextTargetCleanupCheck_[Memory.Item.*.#.TestFileName.@/].@=false~],[Memory.Item.*.#.C3TextSourceCleanupCheck_[Memory.Item.*.#.TestFileName.@/].@=false~])|]",
+              "TestValue": "[Memory.Item.*.#.C3TextTargetAbsent_[Memory.Item.*.#.TestFileName.@/].@=__ST_OBSERVATION_MISSING__|]",
+              "TestDescription": "Actual LocalMedia target Exists result after cleanup; expected false. Boolean result also checks source absence; this value does not.",
+              "TestExpected": false
+            },
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "InvalidResultDetailType",
+        "Order": 16,
+        "Description": "Selected adverse run only: the existing local plan source must not be copied when ResultDetail is a string.",
+        "Steps": [
+          {
+            "Name": "RejectStringResultDetailBeforeCopy",
+            "Order": 0,
+            "DeferredHydrationPlan": "@",
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test.json",
+            "Config": {
+              "TargetPath": "[System.STTestMediaRoot/]/test/st-test-c3-invalid-[Memory.Item.*.#.TestFileName.@/].txt",
+              "ResultDetail": "true"
+            },
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      },
+      {
+        "Name": "ResultDetailWithoutTarget",
+        "Order": 17,
+        "Description": "Selected adverse run only: true ResultDetail without TargetPath fails before reading an existing local plan source.",
+        "Steps": [
+          {
+            "Name": "RejectResultDetailWithoutTarget",
+            "Order": 0,
+            "Adapter": "Storage.LocalContent",
+            "Activity": "Read",
+            "Container": "plans",
+            "Resource": "st-test.json",
+            "Config": {
+              "ResultDetail": true
+            },
+            "ExitAfterAdapter": true,
+            "IsEnabled": false
+          }
+        ],
+        "IsEnabled": false
+      }
+    ]
+  },
+  {
+    "Name": "EmptyStorageTestPlan",
+    "Order": 1,
+    "IsEnabled": false,
+    "Phases": []
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "Scope": "Controlled request-dispatch fixtures only; no app registrations or live services",
+  "Cases": [
+    {"Slot":"Secrets","Vault":"fixture-vault","Address":"https://fixture-vault.vault.azure.net/","Resource":"fixture-secret","ExpectedUri":"https://fixture-vault.vault.azure.net/secrets/fixture-secret","ExpectedResult":"fixture-value","Response":{"StatusCode":200,"Response":{"value":"fixture-value"}}},
+    {"Slot":"RemoteContent","Container":"fixture-container","Address":"https://fixtureaccount.blob.core.windows.net","Resource":"fixture.json","ExpectedUri":"https://fixtureaccount.blob.core.windows.net/fixture-container/fixture.json","ExpectedResult":"{\"fixture\":false}","Response":"{\"fixture\":false}"}
+  ]
+}

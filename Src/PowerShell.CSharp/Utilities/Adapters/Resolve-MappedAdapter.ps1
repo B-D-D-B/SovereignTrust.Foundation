@@ -2,16 +2,16 @@ function Resolve-MappedAdapter {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
-        [Signal]$AdapterSignal,
+        [SignalGraph.Signal]$AdapterSignal,
 
         [Parameter(Mandatory)]
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
 
         [Parameter(Mandatory)]
         [object]$ConductionContext
     )
 
-    $opSignal = [Signal]::Start('Resolve-MappedAdapter', $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start('Resolve-MappedAdapter', $Signal) | Select-Object -Last 1
     $registration = $AdapterSignal.GetResult($true)
     $resolveSignal = Resolve-RegisteredAdapter `
         -Registration $registration `

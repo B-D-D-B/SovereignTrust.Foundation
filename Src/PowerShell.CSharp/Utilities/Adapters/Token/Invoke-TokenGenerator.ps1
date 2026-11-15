@@ -1,8 +1,8 @@
 function Invoke-TokenGenerator {
     [CmdletBinding()]
     param (
-        [Conduit]$Conduit,
-        [Conductor]$Conductor,
+        [SovereignTrust.Foundation.Classes.Conduction.Conduit]$Conduit,
+        [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor,
         [string]$Path,
         [object]$Plan  # Typically a small PSObject or Phase class in the future
     )
@@ -11,7 +11,7 @@ function Invoke-TokenGenerator {
         throw "Conduction is not running. Cannot invoke Phase."
     }
 
-    $opSignal = [Signal]::Start("Invoke-TokenGenerator", $Conductor) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-TokenGenerator", $Conductor) | Select-Object -Last 1
 
     try {
         if ([string]::IsNullOrWhiteSpace($Path)) {
@@ -59,7 +59,7 @@ function Invoke-TokenGenerator {
         }
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception during Invoke-TokenGenerator: $_", $null, $_)
+        $opSignal.LogCritical("🔥 Exception during Invoke-TokenGenerator: $_", $null, $_.Exception)
     }
 
     return $opSignal

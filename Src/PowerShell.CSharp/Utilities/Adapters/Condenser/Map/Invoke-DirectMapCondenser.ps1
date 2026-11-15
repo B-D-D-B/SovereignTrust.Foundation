@@ -1,13 +1,12 @@
-using module SignalGraph
 
 function Invoke-DirectMapCondenser {
     param (
-        [Signal]$Signal,
-        [Signal]$ProposalSignal,
+        [SignalGraph.Signal]$Signal,
+        [SignalGraph.Signal]$ProposalSignal,
         [object]$Context = $null
     )
 
-    $opSignal = [Signal]::Start("Invoke-DirectMapCondenser", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-DirectMapCondenser", $Signal) | Select-Object -Last 1
 
     $Data = $Signal.GetResult()
     $Proposal = $ProposalSignal.GetResult() 

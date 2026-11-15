@@ -37,14 +37,14 @@ ActivityForwarding: Canonical
 #>
 
 class MappedDataAdapter {
-    [Signal]$Signal
+    [SignalGraph.Signal]$Signal
 
     MappedDataAdapter() {
         # Use static Start() instead
     }
 
-    static [Signal] Start([object]$Conductor) {
-        $opSignal = [Signal]::Start("MappedDataAdapter.Start") | Select-Object -Last 1
+    static [SignalGraph.Signal] Start([object]$Conductor) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedDataAdapter.Start") | Select-Object -Last 1
 
         if (-not $Conductor) {
             $opSignal.LogCritical("Null Conductor passed to MappedDataAdapter.Start()")
@@ -52,28 +52,28 @@ class MappedDataAdapter {
         }
 
         try {
-            $adapter = [MappedDataAdapter]::new()
-            $adapter.Signal = [Signal]::Start("MappedDataAdapter") | Select-Object -Last 1
+            $adapter = [SovereignTrust.Foundation.Classes.Adapters.MappedDataAdapter]::new()
+            $adapter.Signal = [SignalGraph.Signal]::Start("MappedDataAdapter") | Select-Object -Last 1
             $adapter.Signal.SetJacket($Conductor)
             $adapter.Signal.SetReversePointer($Conductor)
 
-            $graphSignal = [Graph]::Start("MappedDataAdapter", $adapter, $false)
+            $graphSignal = [SignalGraph.Graph]::Start("MappedDataAdapter", $adapter, $false)
             $adapter.Signal.SetPointer($graphSignal.GetResult())
 
             $opSignal.SetResult($adapter)
             $opSignal.LogInformation("✅ MappedDataAdapter initialized.")
         }
         catch {
-            $opSignal.LogCritical("💥 Exception in MappedDataAdapter.Start(): $_", $null, $_)
+            $opSignal.LogCritical("💥 Exception in MappedDataAdapter.Start(): $_", $null, $_.Exception)
         }
 
         return $opSignal
     }
 
-    [Signal] RegisterAdapter([object]$AdapterInstance, [string]$Key = "QueueService") {
-        $opSignal = [Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
-        if ($AdapterInstance -isnot [Signal]) {
-            $adapterSignal = [Signal]::Start("Adapter:$Key") | Select-Object -Last 1
+    [SignalGraph.Signal] RegisterAdapter([object]$AdapterInstance, [string]$Key = "QueueService") {
+        $opSignal = [SignalGraph.Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
+        if ($AdapterInstance -isnot [SignalGraph.Signal]) {
+            $adapterSignal = [SignalGraph.Signal]::Start("Adapter:$Key") | Select-Object -Last 1
             $adapterSignal.SetResult($AdapterInstance)
         }
         else {
@@ -95,8 +95,8 @@ class MappedDataAdapter {
         return $opSignal
     }
 
-    [Signal] Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
-        $opSignal = [Signal]::Start("MappedDataAdapter.Invoke:$Slot") | Select-Object -Last 1
+    [SignalGraph.Signal] Invoke([string]$Slot, [string]$Activity, [SignalGraph.Signal]$ConductionSignal, [object]$Plan, [SignalGraph.Signal]$ItemSignal) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedDataAdapter.Invoke:$Slot") | Select-Object -Last 1
 
         $allowedActivities = @(
             'Write', 'Query', 'Delete', 'Admin', 'WriteItem', 'WriteBatch',

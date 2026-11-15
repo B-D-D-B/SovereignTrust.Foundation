@@ -5,7 +5,7 @@
   "activities": [
     {
       "name": "IteratePhase",
-      "whenToUse": "Use to dispatch a cloned plan for each retained Config.IterationArray item, using Config.Activity as the per-item activity. Optional filtering runs before iteration; threading settings choose the serial or worker path.",
+      "whenToUse": "Use to dispatch a cloned plan for each selected Config.IterationArray item, using Config.Activity as the per-item activity. Selection is Filter, stable OrderBy, then Limit before tracing, cloning or dispatch. Threading controls execution; parallel completion order is not guaranteed.",
       "description": "Iterate a plan phase.",
       "properties": [
         {
@@ -26,16 +26,16 @@
         },
         {
           "path": "Config.IterationArray",
-          "description": "Supply the iteration values and cardinality used to select serial and parallel work.",
-          "whenToUse": "Supply the collection whose values should drive the phase iterations. Filtering runs before work selection; an empty resulting collection performs no iterations.",
+          "description": "Supply iteration values; filtering, stable ordering and Limit determine the selected values and cardinality used everywhere downstream.",
+          "whenToUse": "Supply the collection whose selected values drive phase iterations. Filter runs first, OrderBy second and Limit last. Empty selection performs no clones or calls. Registered iteration signals receive the selected value, contiguous zero-based index and complete selected array.",
           "adapters": [
             "PlanCondenser"
           ]
         },
         {
           "path": "Config.Filter",
-          "description": "Optionally retain iteration items using one Path|Default string or a nonempty array of them. Missing or null Filter leaves the collection unchanged. Each path resolves against an item; an absent or null path uses its literal boolean default. Native booleans and trimmed true/false text determine membership; other resolved values are false. Invalid non-null criteria fail before iteration.",
-          "whenToUse": "Supply one Path|Default string or a nonempty array when only matching items should run. Use true or false as each missing/null-path fallback; omit or use null to keep every item. Native booleans and trimmed true/false text determine membership; other values do not match.",
+          "description": "Optionally retain iteration items using one Path|Default string or a nonempty array of them. Missing or null Filter leaves the collection unchanged. Each path resolves against an item; an absent or null path uses its literal boolean default. Native booleans and trimmed true/false text determine membership; other resolved values are false. Invalid non-null criteria fail before iteration. Filtering precedes OrderBy and Limit; excluded items have no ordering-key traversal.",
+          "whenToUse": "Supply one Path|Default string or a nonempty array when only matching items should run. Use true or false as each missing/null-path fallback; omit or use null to keep every item. Native booleans and trimmed true/false text determine membership; other values do not match. Filtering precedes ordering and limiting.",
           "adapters": [
             "PlanCondenser"
           ]
@@ -76,7 +76,7 @@
         {
           "path": "Config.Threading.DebugWorkItemIndex",
           "description": "Retain the compatibility work-item index; it is parsed as an integer but does not filter inline worker items.",
-          "whenToUse": "Normally omit this compatibility-only option. With Enabled true and filtered items remaining it is parsed as an integer, defaulting to the capped warmup count, but the current runspace pool ignores it for item selection: DebugInline executes every worker item.",
+          "whenToUse": "Normally omit this compatibility-only option. With Enabled true and selected items remaining it is parsed as an integer, defaulting to the capped warmup count, but the current runspace pool ignores it for item selection: DebugInline executes every worker item.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -90,7 +90,7 @@
         {
           "path": "Config.Threading.Enabled",
           "description": "Enable consideration of threaded iteration and validate that the option is boolean.",
-          "whenToUse": "Set true when this phase iteration should consider the worker execution path. Omit or set false for serial iteration; other Config.Threading options are read only when Enabled is true and filtered items remain. True alone does not guarantee parallel work: remaining items, warmup, environment support, MaxThreads and DebugInline determine the path.",
+          "whenToUse": "Set true when this phase iteration should consider the worker execution path. Omit or set false for serial iteration; other Config.Threading options are read only when Enabled is true and selected items remain. True alone does not guarantee parallel work: remaining items, warmup, environment support, MaxThreads and DebugInline determine the path.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -101,7 +101,7 @@
         {
           "path": "Config.Threading.MaxThreads",
           "description": "Set the iteration worker throttle, clamped to at least one.",
-          "whenToUse": "With Enabled true and filtered items remaining, supply an integer to override environment Config.MaxParallelism (fallback 1); values are clamped to at least one. Normal parallel work also needs environment support and multiple post-warmup items; the runspace-pool throttle accepts 1 through 1024.",
+          "whenToUse": "With Enabled true and selected items remaining, supply an integer to override environment Config.MaxParallelism (fallback 1); values are clamped to at least one. Normal parallel work also needs environment support and multiple post-warmup items; the runspace-pool throttle accepts 1 through 1024.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -115,7 +115,7 @@
         {
           "path": "Config.Threading.ReuseItemSignalGrid",
           "description": "Request reuse of the source ItemSignal grid in iteration workers.",
-          "whenToUse": "With Config.Threading.Enabled true and filtered items remaining, set true when iteration workers should receive a fork of the source ItemSignal grid; omit or set false for a fresh worker item signal. This affects worker-path items (including DebugInline), not serial or warmup items. With Enabled false this option is not read.",
+          "whenToUse": "With Config.Threading.Enabled true and selected items remaining, set true when iteration workers should receive a fork of the source ItemSignal grid; omit or set false for a fresh worker item signal. This affects worker-path items (including DebugInline), not serial or warmup items. With Enabled false this option is not read.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -125,8 +125,8 @@
         },
         {
           "path": "Config.Threading.Warmup",
-          "description": "Set the nonnegative number of warmup iterations before parallel work, capped by the iteration count.",
-          "whenToUse": "With Enabled true and filtered items remaining, supply a nonnegative integer for initial serial iterations before eligible worker execution; omission uses zero and the count is capped at the filtered collection size. If worker eligibility fails, all items run serially.",
+          "description": "Set the nonnegative number of initial serial iterations, capped by the selected count after Filter, OrderBy and Limit.",
+          "whenToUse": "With Enabled true and selected items remaining, supply a nonnegative integer for initial serial iterations before eligible worker execution; omission uses zero and the count is capped at the selected collection size. If worker eligibility fails, all items run serially.",
           "adapters": [
             "PlanCondenser"
           ],
@@ -173,6 +173,39 @@
           "adapters": [
             "PlanCondenser"
           ]
+        },
+        {
+          "path": "Config.OrderBy",
+          "description": "Optionally trim and select one item-relative dotted identifier path with ASCII segments [A-Za-z_][A-Za-z0-9_]*, such as Value or Meta.Rank. Reject @, blank, nonstring and unsupported syntax; there is no scalar-self selector. Missing/null preserves input order without item-key validation. Each retained nonnull item resolves the configured path through shared Resolve-PathFromDictionary with null default and Information level; null items become null keys. Shared container, property, case-matching and getter semantics apply. Missing/null/unresolved keys without observable failure remain last in both directions. Nonnull keys must share String (ordinal-ignore-case), Boolean (false first), or SByte/Byte/Int16/UInt16/Int32/UInt32/Int64/UInt64/Decimal category; integers normalize losslessly to Decimal. Reject Single/Double, enums, mixed categories and complex keys; ties retain input order.",
+          "whenToUse": "Set an item-relative path such as Meta.Rank; wrap scalar keys in records with Value and use OrderBy=Value. Omit/null for original order and unrestricted item types. All optional config/key lookups use Information. Merge each resolver Signal; Critical, structured SignalEntry.Exception or thrown lookup failure causes Critical before clone/call, even with Limit=0. Shared getters may execute and affect input objects. An unreported throwing ScriptProperty can return no result/exception and therefore becomes a null key; reflected getter exceptions reported structurally fail. Filtered-out keys are not resolved.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": null
+          }
+        },
+        {
+          "path": "Config.OrderDirection",
+          "description": "Trimmed case-insensitive ASC or DESC; shared resolver explicitly uses -Default \"Desc\" and Information level, so missing/null defaults to DESC. Every other nonnull value fails even without OrderBy or with empty input. DESC reverses key comparison only; ties remain stable and null keys stay last.",
+          "whenToUse": "Set ASC for lowest nonnull keys first; set DESC or omit/null for highest first. Direction alone preserves input order when OrderBy is absent/null. Observable resolver failures fail before cloning/dispatch.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": "Desc"
+          }
+        },
+        {
+          "path": "Config.Limit",
+          "description": "Shared resolver uses null default and Information level; missing/null is unlimited. Accept only native Int32/Int64 >= 0; reject Boolean, string, floating/fractional, negative, array or object values. Apply after Filter and stable ordering; zero selects nothing and positive N selects min(N, retained count), with Int64 capped before index conversion. Counts selected records regardless of child success or completion.",
+          "whenToUse": "Set a nonnegative native integer for the first N selected records; omit/null for all. Zero performs no cloning or dispatch while configuration and active ordering keys still validate through the shared resolver. Getter effects and unreported resolver exceptions retain shared lookup behavior. Warmup, trace count, serial/worker values and iteration signal array/index all use the selected array. Existing child-failure behavior and no-aggregate-Result boundary remain.",
+          "adapters": [
+            "PlanCondenser"
+          ],
+          "default": {
+            "PlanCondenser": null
+          }
         }
       ],
       "result": [],

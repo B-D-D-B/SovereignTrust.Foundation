@@ -3,13 +3,13 @@ function Resolve-TokenDynamic {
     param(
         # Parent signal for lineage
         [Parameter(Mandatory = $false)]
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
 
         [Parameter(Mandatory = $false)]
-        [Signal]$ItemSignal,
+        [SignalGraph.Signal]$ItemSignal,
 
         [Parameter(Mandatory = $false)]
-        [MappedTokenAdapter]$MappedAdapter,
+        [SovereignTrust.Foundation.Classes.Adapters.MappedTokenAdapter]$MappedAdapter,
 
         [Parameter(Mandatory = $false)]
         [object]$Plan,
@@ -23,7 +23,7 @@ function Resolve-TokenDynamic {
         [string]$Path
     )
 
-    $opSignal = [Signal]::Start("Resolve-TokenDynamic", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Resolve-TokenDynamic", $Signal) | Select-Object -Last 1
     function Convert-LocalDateTimeToUtc {
         [CmdletBinding()]
         param(
@@ -919,7 +919,7 @@ function Resolve-TokenDynamic {
                     throw "GreaterThan() requires two arguments. ($($resolvedArgs.Count) was supplied)"
                 }
 
-                $result = [int]$resolvedArgs[0] -gt [int]$resolvedArgs[1]
+                $result = [double]$resolvedArgs[0] -gt [double]$resolvedArgs[1]
 
                 $opSignal.SetResult($result)
                 return $opSignal
@@ -930,7 +930,7 @@ function Resolve-TokenDynamic {
                     throw "LesserThan() requires two arguments. ($($resolvedArgs.Count) was supplied)"
                 }
 
-                $result = [int]$resolvedArgs[0] -lt [int]$resolvedArgs[1]
+                $result = [decimal]$resolvedArgs[0] -lt [decimal]$resolvedArgs[1]
 
                 $opSignal.SetResult($result)
                 return $opSignal
@@ -1560,7 +1560,7 @@ function Resolve-TokenDynamic {
         }
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception during Resolve-DynamicPath ($Path): $_", $null, $_)
+        $opSignal.LogCritical("🔥 Exception during Resolve-DynamicPath ($Path): $_", $null, $_.Exception)
     }
 
     return $opSignal

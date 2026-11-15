@@ -20,24 +20,24 @@ UnsupportedActivity: FailedSignal
 ActivityComparison: CaseInsensitive
 #>
 class HydrationCondenser {
-    [Conductor]$Conductor
-    [MappedCondenserAdapter]$MappedCondenserAdapter
-    [Signal]$Signal  # Formerly ControlSignal
+    [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor
+    [SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$MappedCondenserAdapter
+    [SignalGraph.Signal]$Signal  # Formerly ControlSignal
 
     HydrationCondenser() {
         # Empty constructor — use Start() method instead.
     }
 
-    static [HydrationCondenser] Start([MappedCondenserAdapter]$mappedAdapter, [Conductor]$conductor) {
+    static [HydrationCondenser] Start([SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$mappedAdapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
         $instance = [HydrationCondenser]::new()
         $instance.MappedCondenserAdapter = $mappedAdapter
         $instance.Conductor = $conductor
-        $instance.Signal = [Signal]::Start("HydrationCondenser.Control") | Select-Object -Last 1
+        $instance.Signal = [SignalGraph.Signal]::Start("HydrationCondenser.Control") | Select-Object -Last 1
         return $instance
     }
 
-    [Signal]Invoke($Slot, $Activity, $Signal, $Plan, $ItemSignal) {
-        $opSignal = [Signal]::Start("HydrationCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
+    [SignalGraph.Signal]Invoke($Slot, $Activity, $Signal, $Plan, $ItemSignal) {
+        $opSignal = [SignalGraph.Signal]::Start("HydrationCondenser.Invoke", $ItemSignal) | Select-Object -Last 1
 
         if ($Activity -notin @('Invoke')) {
             $opSignal.LogCritical("Unsupported HydrationCondenser activity: '$Activity'.")

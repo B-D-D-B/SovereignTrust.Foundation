@@ -6,7 +6,7 @@
       "id": "s1",
       "repository": "SovereignTrust.Foundation",
       "path": "Src/PowerShell/Classes/Adapters/Condenser/PlanCondenser.ps1",
-      "sha256": "33377A60FEA9CAFA089E0C62BD8E0EC380A4EF0C4A8925B1740FE3715854EE35"
+      "sha256": "693B82AFC6888439400BFBE8457BD63C93A747577FAB8EEDCAAE9B2F81A79BD5"
     },
     {
       "id": "s2",
@@ -58,7 +58,7 @@
               {
                 "source": "s1",
                 "symbol": "'IteratePhase'",
-                "line": 138,
+                "line": 227,
                 "kind": "source-derived"
               },
               {
@@ -98,7 +98,7 @@
               {
                 "source": "s1",
                 "symbol": "'InvokePlan'",
-                "line": 138,
+                "line": 522,
                 "kind": "source-derived"
               },
               {
@@ -145,7 +145,7 @@
               {
                 "source": "s1",
                 "symbol": "'InvokePhase'",
-                "line": 138,
+                "line": 527,
                 "kind": "source-derived"
               },
               {
@@ -244,7 +244,7 @@
               {
                 "source": "s1",
                 "symbol": "'InvokePhaseAsync'",
-                "line": 138,
+                "line": 548,
                 "kind": "source-derived"
               },
               {
@@ -348,7 +348,7 @@
               {
                 "source": "s1",
                 "symbol": "'AwaitPhase'",
-                "line": 138,
+                "line": 622,
                 "kind": "source-derived"
               },
               {
@@ -460,7 +460,7 @@
               {
                 "source": "s1",
                 "symbol": "'AwaitAllPhases'",
-                "line": 138,
+                "line": 650,
                 "kind": "source-derived"
               },
               {
@@ -563,7 +563,7 @@
               {
                 "source": "s1",
                 "symbol": "'GetPhaseStatus'",
-                "line": 138,
+                "line": 678,
                 "kind": "source-derived"
               },
               {
@@ -702,7 +702,7 @@
               {
                 "source": "s1",
                 "symbol": "'StopPhase'",
-                "line": 138,
+                "line": 687,
                 "kind": "source-derived"
               },
               {
@@ -756,7 +756,7 @@
               {
                 "source": "s1",
                 "symbol": "'InsertPhaseSteps'",
-                "line": 138,
+                "line": 696,
                 "kind": "source-derived"
               },
               {
@@ -804,7 +804,7 @@
               {
                 "source": "s1",
                 "symbol": "'AddPhaseSteps'",
-                "line": 138,
+                "line": 739,
                 "kind": "source-derived"
               },
               {

@@ -3,7 +3,7 @@ function Read-HydrationFile {
         [Parameter(Mandatory)][string]$Path,
         [Parameter()][string]$Format = "json"
     )
-    $signal = [Signal]::Start("Read-HydrationFile:$Path") | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Read-HydrationFile:$Path") | Select-Object -Last 1
     try {
         if (-not (Test-Path $Path)) {
             return $signal.LogCritical("❌ File not found: $Path")

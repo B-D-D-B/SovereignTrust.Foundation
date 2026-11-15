@@ -1,11 +1,11 @@
 function Invoke-MappedAdapter-Obsolete {
     [CmdletBinding()]
     param (
-        [Signal]$Signal,
-        [Conductor]$Conductor
+        [SignalGraph.Signal]$Signal,
+        [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor
     )
 
-    $opSignal = [Signal]::Start("Invoke-MappedAdapter", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-MappedAdapter", $Signal) | Select-Object -Last 1
 
     $jacket = $Signal.GetJacket()
 
@@ -30,14 +30,14 @@ function Invoke-MappedAdapter-Obsolete {
 
 
                     foreach ($command in $commands) {
-                        $commandSignal = [Signal]::Start("Invoke-MappedAdapter", $Signal) | Select-Object -Last 1
+                        $commandSignal = [SignalGraph.Signal]::Start("Invoke-MappedAdapter", $Signal) | Select-Object -Last 1
                         $commandSignal.SetResult($command) | Out-Null
 
-                        $conductorSignal = [Signal]::Start("Invoke-MappedAdapter", $Signal) | Select-Object -Last 1
+                        $conductorSignal = [SignalGraph.Signal]::Start("Invoke-MappedAdapter", $Signal) | Select-Object -Last 1
                         $conductorSignal.SetResult($Conductor) | Out-Null
                         
                         $commandSignal.SetJacket($conductorSignal) | Out-Null
-                        $commandJacketSignal = [Signal]::Start("Invoke-MappedAdapter", $commandSignal) | Select-Object -Last 1
+                        $commandJacketSignal = [SignalGraph.Signal]::Start("Invoke-MappedAdapter", $commandSignal) | Select-Object -Last 1
                         $commandJacketSignal.SetJacket($commandSignal) | Out-Null
                         
                         $invokeFabCondenserSignal = Invoke-MappedAdapter -Signal $commandJacketSignal -Conductor $Conductor | Select-Object -Last 1
@@ -51,7 +51,7 @@ function Invoke-MappedAdapter-Obsolete {
             }
             else {
 
-                $conductorSignal = [Signal]::Start("Invoke-MappedAdapter", $Signal) | Select-Object -Last 1
+                $conductorSignal = [SignalGraph.Signal]::Start("Invoke-MappedAdapter", $Signal) | Select-Object -Last 1
                 $conductorSignal.SetJacket($Conductor.Signal) | Out-Null
 
                 $virtualPathSignal = Resolve-PathFromDictionary -Dictionary $jacket -Path "@.VirtualPath" | Select-Object -Last 1
@@ -72,7 +72,7 @@ function Invoke-MappedAdapter-Obsolete {
                 }
 
                 $adapter = $adapterSignal.GetResult() | Select-Object -Last 1
-                while ($adapter -is [Signal]) {
+                while ($adapter -is [SignalGraph.Signal]) {
                     $adapter = $adapter.GetResult()
                 }
 

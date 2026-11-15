@@ -135,38 +135,44 @@
     ]
   },
   "HistoricalScript": {
-    "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/resume-preimages/Wave1.Semantics.ps1",
+    "Path": "Wave1GraphJsonSourceGap/historical-fixture.ps1.txt",
     "Sha256": "65EDCFED4120D1388D397DDBED3F823524785D2DC7812A51E5684D4DFFDFB1EB",
-    "Length": 1
+    "Length": 8690,
+    "OriginPath": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/resume-preimages/Wave1.Semantics.ps1"
   },
   "HistoricalRuns": [
     {
       "Run": "source-semantic04",
       "Files": [
         {
-          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/source-semantic04/semantic-result.json",
+          "Path": "Wave1GraphJsonSourceGap/source-semantic04/semantic-result.json",
           "Sha256": "067E2BA8A407B2EF6C106F69B05A8CD735D92B5A94B5F93E31469C6E159396B7",
-          "Length": 3334
+          "Length": 3334,
+          "OriginPath": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/source-semantic04/semantic-result.json"
         },
         {
-          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/source-semantic04/assertions.json",
+          "Path": "Wave1GraphJsonSourceGap/source-semantic04/assertions.json",
           "Sha256": "3D2DEA9B9AB78638D066F74AE1884622D3802F75C51FEA02F92D5DE933E7CFBD",
-          "Length": 2854
+          "Length": 2854,
+          "OriginPath": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/source-semantic04/assertions.json"
         },
         {
-          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/source-semantic04/stderr.txt",
+          "Path": "Wave1GraphJsonSourceGap/source-semantic04/stderr.txt",
           "Sha256": "0D4316A61D5AF8C45C5218B25F00CEBD052634FA35CE986E6548EBC7B3BB51E5",
-          "Length": 56
+          "Length": 56,
+          "OriginPath": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/source-semantic04/stderr.txt"
         },
         {
-          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/source-semantic04/graph-raw.json",
+          "Path": "Wave1GraphJsonSourceGap/source-semantic04/graph-raw.json",
           "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
-          "Length": 0
+          "Length": 0,
+          "OriginPath": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/source-semantic04/graph-raw.json"
         },
         {
-          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/source-semantic04/loader-provenance.json",
+          "Path": "Wave1GraphJsonSourceGap/source-semantic04/loader-provenance.json",
           "Sha256": "FBB1E9AD4D36DAFAE352A0AD81B436F31F12744E5B211489E0D7F9EA79CEC506",
-          "Length": 1400
+          "Length": 1400,
+          "OriginPath": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/source-semantic04/loader-provenance.json"
         }
       ]
     },
@@ -174,29 +180,34 @@
       "Run": "copy-semantic04",
       "Files": [
         {
-          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/copy-semantic04/semantic-result.json",
+          "Path": "Wave1GraphJsonSourceGap/copy-semantic04/semantic-result.json",
           "Sha256": "4CB31E2EBBA1F8975A4C9F63FA05219A08E9C1B1E068DA9A00B6D43041AAC38A",
-          "Length": 3334
+          "Length": 3334,
+          "OriginPath": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/copy-semantic04/semantic-result.json"
         },
         {
-          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/copy-semantic04/assertions.json",
+          "Path": "Wave1GraphJsonSourceGap/copy-semantic04/assertions.json",
           "Sha256": "824F8FF13B6646A665546FE752FCCE59503345781BFD4888229DC665F33E149F",
-          "Length": 2854
+          "Length": 2854,
+          "OriginPath": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/copy-semantic04/assertions.json"
         },
         {
-          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/copy-semantic04/stderr.txt",
+          "Path": "Wave1GraphJsonSourceGap/copy-semantic04/stderr.txt",
           "Sha256": "0D4316A61D5AF8C45C5218B25F00CEBD052634FA35CE986E6548EBC7B3BB51E5",
-          "Length": 56
+          "Length": 56,
+          "OriginPath": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/copy-semantic04/stderr.txt"
         },
         {
-          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/copy-semantic04/graph-raw.json",
+          "Path": "Wave1GraphJsonSourceGap/copy-semantic04/graph-raw.json",
           "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
-          "Length": 0
+          "Length": 0,
+          "OriginPath": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/copy-semantic04/graph-raw.json"
         },
         {
-          "Path": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/copy-semantic04/loader-provenance.json",
+          "Path": "Wave1GraphJsonSourceGap/copy-semantic04/loader-provenance.json",
           "Sha256": "40AD4E106D305F389A83CAA3A674D7CEEDC48DD20DF60EEF080379BD6EC6F448",
-          "Length": 1414
+          "Length": 1414,
+          "OriginPath": "Documentation/Projects/Working/logs/CS-WAVE1-01-20261114/copy-semantic04/loader-provenance.json"
         }
       ]
     }
@@ -205,5 +216,6 @@
     "graph.roundtrip",
     "graph.cycle.roundtrip"
   ],
-  "NativeContract": "Independent documented version1 native contract; already accepted native evidence remains separate from PS capability classification"
+  "NativeContract": "Independent documented version1 native contract; already accepted native evidence remains separate from PS capability classification",
+  "DependencyIdentityScope": "GUID/version/relative membership/bytes; historical absolute origin is informational, current canonical origin comes from the reviewed selection packet"
 }

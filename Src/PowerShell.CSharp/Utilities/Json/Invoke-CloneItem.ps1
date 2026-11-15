@@ -6,7 +6,7 @@ function Invoke-CloneItem {
     )
 
     # ░▒▓█ SIGNAL START █▓▒░
-    $opSignal = [Signal]::Start("Invoke-CloneItem") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-CloneItem") | Select-Object -Last 1
 
     try {
         # ░▒▓█ VALIDATE INPUT █▓▒░
@@ -25,7 +25,7 @@ function Invoke-CloneItem {
         return $opSignal
     }
     catch {
-        $opSignal.LogCritical("Exception during cloning: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("Exception during cloning: $($_.Exception.Message)", $null, $_.Exception)
         return $opSignal
     }
 }

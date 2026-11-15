@@ -4,10 +4,10 @@ function Invoke-MappedAdapter {
         # Conductor / environment signal that contains adapters (mapped attachments)
 
         [Parameter(Mandatory = $false)]
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
 
         [Parameter(Mandatory = $false)]
-        [Signal]$ItemSignal,
+        [SignalGraph.Signal]$ItemSignal,
 
         [object]$Plan,
 
@@ -30,7 +30,7 @@ function Invoke-MappedAdapter {
 
         #Write-Host "abc"
     # ░▒▓█ SIGNAL START █▓▒░
-    $opSignal = [Signal]::Start("Invoke-StorageAdapter", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-StorageAdapter", $Signal) | Select-Object -Last 1
         #Write-Host "def"
 
     try {
@@ -62,13 +62,13 @@ function Invoke-MappedAdapter {
         <#
         # Build an item signal for the adapter invoke call (keeps contract similar to other adapters/condensers)
         # NOTE: Uses Add-PathToDictionary for mutations to stay doctrine-compliant.
-        $itemJacketSignal = [Signal]::Start("StorageAdapter.Item") | Select-Object -Last 1
+        $itemJacketSignal = [SignalGraph.Signal]::Start("StorageAdapter.Item") | Select-Object -Last 1
         $VirtualPath = $null -eq $VirtualPath -or $VirtualPath -eq "" ? ( @($Container, $Name) -join '/') : $VirtualPath
         $item = @{
             VirtualPath = $VirtualPath
         }
 
-        $itemSignal = [Signal]::Start("StorageAdapter.Item") | Select-Object -Last 1
+        $itemSignal = [SignalGraph.Signal]::Start("StorageAdapter.Item") | Select-Object -Last 1
         $itemSignal.SetResult($item)
 #>
 
@@ -76,7 +76,7 @@ function Invoke-MappedAdapter {
 
         # ░▒▓█ Invoke the resolved storage adapter █▓▒░
         # Contract: .Invoke($opSignal, $Signal, $ItemSignal)
-        $invokeSignal = $mappedAdapter.Invoke($adapterSlot, $Activity, $Signal, $Plan, $ItemSignal) | Select-Object -Last 1
+        $invokeSignal = Invoke-STNativeMappedAdapter -MappedAdapter $mappedAdapter -Family $adapterName -Slot $adapterSlot -Activity $Activity -ConductionSignal $Signal -Plan $Plan -ItemSignal $ItemSignal | Select-Object -Last 1
         if ($opSignal.MergeSignalAndVerifyFailure($invokeSignal)) {
             if ($invokeSignal.HasResult()) { $opSignal.SetResult($invokeSignal.GetResult()) }
             $opSignal.LogCritical("Storage adapter invoke failed (Adapter: $Adapter).")
@@ -88,7 +88,7 @@ function Invoke-MappedAdapter {
         }
     }
     catch {
-        $opSignal.LogCritical("Exception during storage adapter invoke: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("Exception during storage adapter invoke: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $opSignal

@@ -1,7 +1,7 @@
 function Resolve-DependencyModuleFromGraph {
     param (
         [Parameter(Mandatory = $true)]
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
 
         [Parameter(Mandatory = $true)]
         [object]$ConductionContext,
@@ -10,7 +10,7 @@ function Resolve-DependencyModuleFromGraph {
         [string]$WirePath
     )
 
-    $opSignal = [Signal]::Start("Resolve-DependencyModuleFromGraph:$WirePath") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Resolve-DependencyModuleFromGraph:$WirePath") | Select-Object -Last 1
 
     # ░▒▓█ RESOLVE MODULE SIGNAL █▓▒░
     $pathFormulaSignal = Resolve-ModulePathSignal -WirePath $WirePath | Select-Object -Last 1

@@ -5,7 +5,7 @@ function Resolve-RelativePathFromWirePath {
         [Parameter(Mandatory)] [string]$Type
     )
 
-    $signal = [Signal]::Start("ResolveRelativePath:$VirtualPath") | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("ResolveRelativePath:$VirtualPath") | Select-Object -Last 1
 
     switch ($Type) {
         "Module" {

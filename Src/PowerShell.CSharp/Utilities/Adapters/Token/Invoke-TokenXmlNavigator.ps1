@@ -1,8 +1,8 @@
 function Invoke-TokenNavigator {
     [CmdletBinding()]
     param (
-        [Conduit]$Conduit,
-        [Conductor]$Conductor,
+        [SovereignTrust.Foundation.Classes.Conduction.Conduit]$Conduit,
+        [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor,
         [string]$Path,
         [object]$Plan  # Typically a small PSObject or Phase class in the future
     ) 
@@ -11,7 +11,7 @@ function Invoke-TokenNavigator {
         throw "Conduction is not running. Cannot invoke Phase."
     }
 
-    $opSignal = [Signal]::Start("Invoke-TokenNavigator", $Conductor) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-TokenNavigator", $Conductor) | Select-Object -Last 1
 
     try {
         if ([string]::IsNullOrWhiteSpace($Path)) {
@@ -59,7 +59,7 @@ function Invoke-TokenNavigator {
         }
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception during Invoke-TokenNavigator: $_", $null, $_)
+        $opSignal.LogCritical("🔥 Exception during Invoke-TokenNavigator: $_", $null, $_.Exception)
     }
 
     return $opSignal

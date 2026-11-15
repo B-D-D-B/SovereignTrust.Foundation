@@ -1,0 +1,59 @@
+{
+  "Schema": "ST.C01/1",
+  "CaseId": "C01.LocalContent",
+  "AllowedBackend": [
+    "PowerShell",
+    "PowerShellNativeSignalGraph"
+  ],
+  "ExpectedResults": [
+    {
+      "Group": "StorageAdapter",
+      "Name": "LocalContent.WriteContent"
+    },
+    {
+      "Group": "StorageAdapter",
+      "Name": "LocalContent.ReadContent"
+    },
+    {
+      "Group": "StorageAdapter",
+      "Name": "LocalContent.DeleteContent"
+    },
+    {
+      "Group": "StorageAdapter",
+      "Name": "LocalContent.ExistsContent"
+    }
+  ],
+  "RegistrationFullType": "Storage_EmbeddedFileSystem",
+  "SelectedSlot": "LocalContent",
+  "FileTransfer": false,
+  "AllowedInitializationSteps": [
+    "GetAdapters",
+    "GridAdapters",
+    "Process Grid"
+  ],
+  "Provider": "Actual selected Foundation PS Storage_EmbeddedFileSystem",
+  "RuntimeEffects": "Read/write/delete only within fresh child runroot",
+  "SourceInputs": [
+    {
+      "Path": "config/STTestApp.json",
+      "Sha256": "C9EC5E8F0D572F66B0C99B432FFDCF471D598D9B46D15BB53F2CF80C4E46F6EA"
+    },
+    {
+      "Path": "test/config/STTestApp.json",
+      "Sha256": "FE73F06A40FA854CBC906641FA1916CE044BC35E75218BBA831A2728F400E782"
+    },
+    {
+      "Path": "test/plans/st-test.json",
+      "Sha256": "2410408E1AB36E2C7FD54F85800AF3F8F79848922EA6CD03572269C3BE04B482"
+    },
+    {
+      "Path": "test/plans/st-test-adapters-storage.json",
+      "Sha256": "BBFFA762C182A32BD40FCF1A2A43614D3794E1974AED93BF7A131D38C42039F0"
+    },
+    {
+      "Path": "test/fixtures/storage/content-cases.json",
+      "Sha256": "69B705DE24B3FEBCEAB67B69C0C58BB69E2D5E66A09AE66E0175A9D6D041006F"
+    }
+  ],
+  "Patch": "Explicit st-test role envelope+2builtin local registrations;LocalContent slot binding; root/storage disabled accounting; single local iteration FileTransfer true→false;no telemetry/cloud init"
+}

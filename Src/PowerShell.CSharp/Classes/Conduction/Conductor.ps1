@@ -6,26 +6,27 @@
 
 function New-Conductor {
     param (
-        [Parameter(Mandatory = $false)][Conductor]$HostConductor,
+        [Parameter(Mandatory = $false)][SovereignTrust.Foundation.Classes.Conduction.Conductor]$HostConductor,
         [Parameter(Mandatory = $false)]$ConductionSignal
     )
 
-    $opSignal = [Conductor]::Start($HostConductor, $ConductionSignal) | Select-Object -Last 1
+    $opSignal = [SovereignTrust.Foundation.Classes.Conduction.Conductor]::Start($HostConductor, $ConductionSignal) | Select-Object -Last 1
     return $opSignal
 }
 
 class Conductor {
-    [Signal]$Signal  # 🧠 Sovereign memory vessel for this Conductor
+    [SovereignTrust.Foundation.Classes.Conduction.Conductor]$NativeRuntime
+    [SignalGraph.Signal]$Signal  # 🧠 Sovereign memory vessel for this Conductor
 
     Conductor() {
         # Instance constructor should not be used directly
     }
 
-    static [Signal] Start([Conductor]$hostConductor, $conductionSignal) {
-        $opSignal = [Signal]::Start("Conductor.Start") | Select-Object -Last 1
+    static [SignalGraph.Signal] Start([SovereignTrust.Foundation.Classes.Conduction.Conductor]$hostConductor, $conductionSignal) {
+        $opSignal = [SignalGraph.Signal]::Start("Conductor.Start") | Select-Object -Last 1
 
-        $conductor = [Conductor]::new()
-        $conductor.Signal = [Signal]::Start("Conductor") | Select-Object -Last 1
+        $conductor = [SovereignTrust.Foundation.Classes.Conduction.Conductor]::new()
+        $conductor.Signal = [SignalGraph.Signal]::Start("Conductor") | Select-Object -Last 1
 
         $opSignal.SetResult($conductor)
         $jacketSignal = $conductionSignal#Resolve-PathFromDictionary -Dictionary $conductionSignal -Path "%" | Select-Object -Last 1
@@ -37,6 +38,7 @@ class Conductor {
         #        Add-PathToDictionary -Dictionary $conductor -Path "$.%.IsHostConductor" -Value ($null -eq $hostConductor) | Out-Null
 
         if ($conductor.Signal.MergeSignalAndVerifyFailure(@($conductor.InitializeMemory()    | Select-Object -Last 1))) { return $opSignal }
+        $conductor.NativeRuntime=[SovereignTrust.Foundation.Classes.Conduction.Conductor]::Adopt($conductor.Signal,$conductionSignal)
         if ($conductor.Signal.MergeSignalAndVerifyFailure(@($conductor.LoadMappedAdapters() | Select-Object -Last 1))) { return $opSignal }
 
         if ($conductor.Signal.MergeSignalAndVerifyFailure(@($conductor.LoadEnvironmentAdapters()     | Select-Object -Last 1))) { return $opSignal }
@@ -49,20 +51,20 @@ class Conductor {
         return $opSignal
     }
 
-    [Signal] InitializeMemory() {
-        $opSignal = [Signal]::Start("Conductor.InitializeMemory") | Select-Object -Last 1
+    [SignalGraph.Signal] InitializeMemory() {
+        $opSignal = [SignalGraph.Signal]::Start("Conductor.InitializeMemory") | Select-Object -Last 1
 
         $envSignal = Resolve-PathFromDictionary -Dictionary $this -Path "$.%" | Select-Object -Last 1
         if ($envSignal.Failure()) { return $opSignal.MergeSignal($envSignal) }
 
-        $graph = [Graph]::Start("Conductor:Memory", $envSignal.GetResult(), $true) | Select-Object -Last 1
+        $graph = [SignalGraph.Graph]::Start("Conductor:Memory", $envSignal.GetResult(), $true) | Select-Object -Last 1
         $this.Signal.SetPointer($graph)
 
         return $opSignal
     }
 
-    [Signal] LoadMappedAdapters() {
-        $opSignal = [Signal]::Start("Conductor.LoadMappedAdapters") | Select-Object -Last 1
+    [SignalGraph.Signal] LoadMappedAdapters() {
+        $opSignal = [SignalGraph.Signal]::Start("Conductor.LoadMappedAdapters") | Select-Object -Last 1
 
         # ░▒▓█ ENSURE ADAPTERS GRID EXISTS █▓▒░
         $adaptersGridSignal = Add-PathToDictionary -Dictionary $this.Signal -Path "*.#.Adapters.*" | Select-Object -Last 1
@@ -73,16 +75,16 @@ class Conductor {
 
         # ░▒▓█ DEFINE ADAPTERS TO LOAD █▓▒░
         $adaptersToRegister = @(
-            @{ Name = "MappedToken"; Instance = [MappedTokenAdapter]::Start($this) },
-            @{ Name = "MappedConduction"; Instance = [MappedConductionAdapter]::Start($this) },
-            @{ Name = "MappedStorage"; Instance = [MappedStorageAdapter]::Start($this) },
-            @{ Name = "MappedNetwork"; Instance = [MappedNetworkAdapter]::Start($this) },
-            @{ Name = "MappedData"; Instance = [MappedDataAdapter]::Start($this) },
-            @{ Name = "MappedQueue"; Instance = [MappedQueueAdapter]::Start($this) },
-            @{ Name = "MappedIntelligence"; Instance = [MappedIntelligenceAdapter]::Start($this) },
-            @{ Name = "MappedSatellite"; Instance = [MappedSatelliteAdapter]::Start($this) },
-            @{ Name = "MappedSession"; Instance = [MappedSessionAdapter]::Start($this) }
-            @{ Name = "MappedUtility"; Instance = [MappedUtilityAdapter]::Start($this) }
+            @{ Name = "MappedToken"; Instance = [SovereignTrust.Foundation.Classes.Adapters.MappedTokenAdapter]::Start($this) },
+            @{ Name = "MappedConduction"; Instance = [SovereignTrust.Foundation.Classes.Adapters.MappedConductionAdapter]::Start($this) },
+            @{ Name = "MappedStorage"; Instance = [SovereignTrust.Foundation.Classes.Adapters.MappedStorageAdapter]::Start($this) },
+            @{ Name = "MappedNetwork"; Instance = [SovereignTrust.Foundation.Classes.Adapters.MappedNetworkAdapter]::Start($this) },
+            @{ Name = "MappedData"; Instance = [SovereignTrust.Foundation.Classes.Adapters.MappedDataAdapter]::Start($this) },
+            @{ Name = "MappedQueue"; Instance = [SovereignTrust.Foundation.Classes.Adapters.MappedQueueAdapter]::Start($this) },
+            @{ Name = "MappedIntelligence"; Instance = [SovereignTrust.Foundation.Classes.Adapters.MappedIntelligenceAdapter]::Start($this) },
+            @{ Name = "MappedSatellite"; Instance = [SovereignTrust.Foundation.Classes.Adapters.MappedSatelliteAdapter]::Start($this) },
+            @{ Name = "MappedSession"; Instance = [SovereignTrust.Foundation.Classes.Adapters.MappedSessionAdapter]::Start($this) }
+            @{ Name = "MappedUtility"; Instance = [SovereignTrust.Foundation.Classes.Adapters.MappedUtilityAdapter]::Start($this) }
         )
 
         # 🔁 Load MappedCondenserAdapter and add to list
@@ -116,8 +118,8 @@ class Conductor {
         return $opSignal
     }
 
-    [Signal] LoadEnvironmentAdapters() {
-        $opSignal = [Signal]::Start("Conductor.LoadAgentGraph") | Select-Object -Last 1
+    [SignalGraph.Signal] LoadEnvironmentAdapters() {
+        $opSignal = [SignalGraph.Signal]::Start("Conductor.LoadAgentGraph") | Select-Object -Last 1
 
         try {
             $memoryCondenserSignal = Resolve-PathFromDictionary -Dictionary $this -Path "$.*.#.Adapters.*.#.MappedCondenser.@.$.*.#.MemoryCondenser.@.@" | Select-Object -Last 1
@@ -164,8 +166,8 @@ class Conductor {
         return $opSignal
     }
 
-    [Signal] LoadAgentGraph() {
-        $opSignal = [Signal]::Start("Conductor.LoadAgentGraph") | Select-Object -Last 1
+    [SignalGraph.Signal] LoadAgentGraph() {
+        $opSignal = [SignalGraph.Signal]::Start("Conductor.LoadAgentGraph") | Select-Object -Last 1
 
         try {
             $memoryCondenserSignal = Resolve-PathFromDictionary -Dictionary $this -Path "$.*.#.Adapters.*.#.MappedCondenser.@.$.*.#.MemoryCondenser.@.@" | Select-Object -Last 1
@@ -212,8 +214,8 @@ class Conductor {
         return $opSignal
     }
 
-    [Signal] LoadMappedCondenserAdapter() {
-        $opSignal = [Signal]::Start("Conductor.LoadMappedCondenserAdapter") | Select-Object -Last 1
+    [SignalGraph.Signal] LoadMappedCondenserAdapter() {
+        $opSignal = [SignalGraph.Signal]::Start("Conductor.LoadMappedCondenserAdapter") | Select-Object -Last 1
 
         # 🔧 Create the actual adapter instance
         $condenserSignal = New-MappedCondenserAdapterFromGraph -Conductor $this | Select-Object -Last 1
@@ -226,8 +228,8 @@ class Conductor {
         return $opSignal
     }
 
-    [Signal] AttachPrimaryConduit([Conduit]$conduit) {
-        $opSignal = [Signal]::Start("Conductor.AttachPrimaryConduit") | Select-Object -Last 1
+    [SignalGraph.Signal] AttachPrimaryConduit([SovereignTrust.Foundation.Classes.Conduction.Conduit]$conduit) {
+        $opSignal = [SignalGraph.Signal]::Start("Conductor.AttachPrimaryConduit") | Select-Object -Last 1
 
         $graphSignal = Resolve-PathFromDictionary -Dictionary $this -Path "$.*" | Select-Object -Last 1
         $graph = $graphSignal.GetResult()
@@ -237,8 +239,8 @@ class Conductor {
         return $opSignal
     }
 
-    [Signal] AttachSecondaryAgentObsolete([object]$agent) {
-        $opSignal = [Signal]::Start("Conductor.AttachSecondaryAgent") | Select-Object -Last 1
+    [SignalGraph.Signal] AttachSecondaryAgentObsolete([object]$agent) {
+        $opSignal = [SignalGraph.Signal]::Start("Conductor.AttachSecondaryAgent") | Select-Object -Last 1
 
         $agentsPath = "$.*.SecondaryAgents"
         $listSignal = Resolve-PathFromDictionary -Dictionary $this -Path $agentsPath | Select-Object -Last 1

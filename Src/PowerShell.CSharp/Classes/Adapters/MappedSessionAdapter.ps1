@@ -11,14 +11,14 @@ ActivityComparison: CaseInsensitive
 #>
 
 class MappedSessionAdapter {
-    [Signal]$Signal
+    [SignalGraph.Signal]$Signal
 
     MappedSessionAdapter() {
         # Use static Start() instead
     }
 
-    static [Signal] Start([object]$Conductor) {
-        $opSignal = [Signal]::Start("MappedSessionAdapter.Start") | Select-Object -Last 1
+    static [SignalGraph.Signal] Start([object]$Conductor) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedSessionAdapter.Start") | Select-Object -Last 1
 
         if (-not $Conductor) {
             $opSignal.LogCritical("Null Conductor passed to MappedSessionAdapter.Start()")
@@ -26,28 +26,28 @@ class MappedSessionAdapter {
         }
 
         try {
-            $adapter = [MappedSessionAdapter]::new()
-            $adapter.Signal = [Signal]::Start("MappedSessionAdapter") | Select-Object -Last 1
+            $adapter = [SovereignTrust.Foundation.Classes.Adapters.MappedSessionAdapter]::new()
+            $adapter.Signal = [SignalGraph.Signal]::Start("MappedSessionAdapter") | Select-Object -Last 1
             $adapter.Signal.SetJacket($Conductor)
             $adapter.Signal.SetReversePointer($Conductor)
 
-            $graphSignal = [Graph]::Start("MappedSessionAdapter", $adapter, $false)
+            $graphSignal = [SignalGraph.Graph]::Start("MappedSessionAdapter", $adapter, $false)
             $adapter.Signal.SetPointer($graphSignal.GetResult())
 
             $opSignal.SetResult($adapter)
             $opSignal.LogInformation("✅ MappedSessionAdapter initialized.")
         }
         catch {
-            $opSignal.LogCritical("💥 Exception in MappedSessionAdapter.Start(): $_", $null, $_)
+            $opSignal.LogCritical("💥 Exception in MappedSessionAdapter.Start(): $_", $null, $_.Exception)
         }
 
         return $opSignal
     }
 
-    [Signal] RegisterAdapter([object]$AdapterInstance, [string]$Key = "SessionService") {
-        $opSignal = [Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
-        if ($AdapterInstance -isnot [Signal]) {
-            $adapterSignal = [Signal]::Start("Adapter:$Key") | Select-Object -Last 1
+    [SignalGraph.Signal] RegisterAdapter([object]$AdapterInstance, [string]$Key = "SessionService") {
+        $opSignal = [SignalGraph.Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
+        if ($AdapterInstance -isnot [SignalGraph.Signal]) {
+            $adapterSignal = [SignalGraph.Signal]::Start("Adapter:$Key") | Select-Object -Last 1
             $adapterSignal.SetResult($AdapterInstance)
         }
         else {
@@ -69,8 +69,8 @@ class MappedSessionAdapter {
         return $opSignal
     }
 
-    [Signal] Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
-        $opSignal = [Signal]::Start("MappedDataAdapter.Invoke:$Slot") | Select-Object -Last 1
+    [SignalGraph.Signal] Invoke([string]$Slot, [string]$Activity, [SignalGraph.Signal]$ConductionSignal, [object]$Plan, [SignalGraph.Signal]$ItemSignal) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedDataAdapter.Invoke:$Slot") | Select-Object -Last 1
 
         if ($Activity -notin @('RequestOrRegister')) {
             $opSignal.LogCritical("Unsupported MappedSessionAdapter activity: '$Activity'.")

@@ -7,28 +7,28 @@ Activities: None; Invoke takes a proposal without Activity.
 class GlobalCondenser {
     [object]$MappedCondenserAdapter
     [object]$Conductor
-    [Signal]$Signal  # Sovereign control signal
+    [SignalGraph.Signal]$Signal  # Sovereign control signal
 
     GlobalCondenser() {
     }
 
-    static [GlobalCondenser] Start([MappedCondenserAdapter]$mappedAdapter, [Conductor]$conductor) {
+    static [GlobalCondenser] Start([SovereignTrust.Foundation.Classes.Adapters.MappedCondenserAdapter]$mappedAdapter, [SovereignTrust.Foundation.Classes.Conduction.Conductor]$conductor) {
         $instance = [GlobalCondenser]::new()
         $instance.MappedCondenserAdapter = $mappedAdapter
         $instance.Conductor = $conductor
-        $instance.Signal = [Signal]::Start("GraphCondenser")
+        $instance.Signal = [SignalGraph.Signal]::Start("GraphCondenser")
         return $instance
     }
 
     [object] Condense($CondenseProposal, $CancellationToken = $null) {
-        $opSignal = [Signal]::Start([object]::new()) | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start([object]::new()) | Select-Object -Last 1
         $result = $this.LoadItem($CondenseProposal, $opSignal.Result, $CondenseProposal.Wire, $CondenseProposal.WireMergeType, $CondenseProposal.Reload, $CondenseProposal.LoadLevel, $CondenseProposal.AutoRunConductionLevel)
         $opSignal.MergeSignal($result)
         return $opSignal
     }
 
     [object] Invoke($Slot, $Proposal, $CancellationToken = $null) {
-        $opSignal = [Signal]::Start() | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start() | Select-Object -Last 1
         $result = $this.Condense($Proposal)
         $opSignal.MergeSignal($result)
         $opSignal.Result = $result.Result
@@ -36,7 +36,7 @@ class GlobalCondenser {
     }
 
     [object] LoadItemContent($Wire, [bool]$Reload = $false) {
-        $opSignal = [Signal]::Start() | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start() | Select-Object -Last 1
 
         if ([string]::IsNullOrWhiteSpace($Wire.VirtualPath)) {
             $opSignal.LogCritical("Wire has empty VirtualPath: $($Wire.Identifier)")
@@ -56,7 +56,7 @@ class GlobalCondenser {
             )
         }
 
-        if (-not $documentSignal -or $documentSignal.Failure) {
+        if (-not $documentSignal -or $documentSignal.Failure()) {
             $documentSignal = $this.Conductor.MappedStorageService.ReadDynamic(
                 $Wire.VirtualPath,
                 $Wire.DocumentFormat,
@@ -86,7 +86,7 @@ class GlobalCondenser {
     }
 
     [object] LoadItemLeadContent($Proposal, $Feedback, $Wire, [bool]$Reload = $false) {
-        $opSignal = [Signal]::Start() | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start() | Select-Object -Last 1
 
         if ($Wire.LeadWireIdentifier) {
             $opSignal.Result = ($Proposal.GetWires() | Where-Object { $_.Identifier -eq $Wire.LeadWireIdentifier -and $_.CatalogService -eq $Wire.CatalogService })[0]
@@ -105,7 +105,7 @@ class GlobalCondenser {
     }
 
     [object] LoadItemJacketContent($Proposal, $Feedback, $Wire, [bool]$Reload = $false) {
-        $opSignal = [Signal]::Start() | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start() | Select-Object -Last 1
 
         if ($Wire.MergeJacket -and $Wire.JacketIdentifier) {
             $opSignal.Result = ($Proposal.GetWires() | Where-Object { $_.Identifier -eq $Wire.JacketIdentifier -and $_.CatalogService -eq $Wire.CatalogService })[0]
@@ -124,7 +124,7 @@ class GlobalCondenser {
     }
 
     [object] LoadItemGroundContent($Proposal, $Feedback, $Wire, [bool]$Reload = $false) {
-        $opSignal = [Signal]::Start() | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start() | Select-Object -Last 1
 
         if ($Wire.GroundWireIdentifier) {
             $opSignal.Result = ($Proposal.GetWires() | Where-Object { ($_.Version -eq $Wire.GroundWireIdentifier -or $_.Identifier -eq $Wire.GroundWireIdentifier) -and $_.CatalogService -eq $Wire.CatalogService })[0]
@@ -143,7 +143,7 @@ class GlobalCondenser {
     }
 
     [object] LoadItemCrossContent($Proposal, $Feedback, $Wire, [bool]$Reload = $false) {
-        $opSignal = [Signal]::Start() | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start() | Select-Object -Last 1
 
         if ($Wire.CrossWireIdentifier) {
             $opSignal.Result = ($Proposal.GetWires() | Where-Object { $_.Identifier -eq $Wire.CrossWireIdentifier })[0]
@@ -157,7 +157,7 @@ class GlobalCondenser {
     }
 
     [object] CondenseWires($Proposal, $Feedback, $LeadWire, $CircuitWire, [bool]$Force, [bool]$MergeOnly, $Token = $null, $LeadNestPath = $null) {
-        $opSignal = [Signal]::Start() | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start() | Select-Object -Last 1
 
         $mergeProposal = [PSCustomObject]@{
             LeadWire       = $LeadWire.ContentDynamic
@@ -168,7 +168,7 @@ class GlobalCondenser {
 
         $mergeSignal = $this.Conductor.MappedCondenserAdapter.MergeCondenser.Invoke("", $mergeProposal)
 
-        if ($mergeSignal.Success) {
+        if ($mergeSignal.Success()) {
             $opSignal.Result = $mergeSignal.Result
             $CircuitWire.CondensedDynamic = $opSignal.Result.Result
         }
@@ -177,7 +177,7 @@ class GlobalCondenser {
     }
 
     [object] LoadItem($Proposal, $Feedback, $Wire, $WireMergeType = "Unspecified", [bool]$Reload = $false, [int]$LoadLevel = 0, [int]$AutoRunConductionLevel = -1) {
-        $opSignal = [Signal]::Start($Feedback) | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start($Feedback) | Select-Object -Last 1
 
         if ($Reload) {
             $loadResult = $this.LoadItemContent($Wire, $Reload)

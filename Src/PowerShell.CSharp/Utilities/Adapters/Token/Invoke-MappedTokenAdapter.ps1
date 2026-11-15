@@ -1,14 +1,14 @@
 function Invoke-MappedTokenAdapter {
     [CmdletBinding()]
     param (
-        [MappedTokenAdapter]$MappedAdapter,
+        [SovereignTrust.Foundation.Classes.Adapters.MappedTokenAdapter]$MappedAdapter,
         [string]$Slot,
         # Conductor / environment signal that contains adapters (mapped attachments)
         [Parameter(Mandatory = $false)]
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
 
         [Parameter(Mandatory = $false)]
-        [Signal]$ItemSignal,
+        [SignalGraph.Signal]$ItemSignal,
 
         [object]$Plan,
 
@@ -23,7 +23,7 @@ function Invoke-MappedTokenAdapter {
         [object]$Path
     )
 
-    $opSignal = [Signal]::Start("Invoke-MappedTokenAdapter") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-MappedTokenAdapter") | Select-Object -Last 1
 
     $stTrace=$null;$stThrew=$false
     try {
@@ -83,7 +83,7 @@ function Invoke-MappedTokenAdapter {
         }
         $adapter = $resolvedAdapterSignal.GetResult()
 
-#        while ($adapter -is [Signal]) {
+#        while ($adapter -is [SignalGraph.Signal]) {
 #            $adapter = $adapter.GetResult()
 #        }
 
@@ -116,7 +116,7 @@ function Invoke-MappedTokenAdapter {
     }
     catch {
         $stThrew=$true
-        $opSignal.LogCritical("🔥 Exception in Invoke-MappedTokenAdapter: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("🔥 Exception in Invoke-MappedTokenAdapter: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     finally { Exit-STExecutionTrace $stTrace $opSignal $stThrew }

@@ -3,7 +3,7 @@
 function Resolve-AdapterFromJacket {
     param (
         [Parameter(Mandatory = $true)]
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
 
         [Parameter(Mandatory)]
         [object]$ConductionContext,
@@ -12,7 +12,7 @@ function Resolve-AdapterFromJacket {
         [object]$Jacket
     )
 
-    $opSignal = [Signal]::Start("ResolveAdapter:$($Jacket.Name)") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("ResolveAdapter:$($Jacket.Name)") | Select-Object -Last 1
 
     try {
         # ░▒▓█ RESOLVE VIRTUAL PATH █▓▒░
@@ -45,7 +45,7 @@ function Resolve-AdapterFromJacket {
                     $sourceWasEmbeddedV2 = $true
                     $selectedEmbeddedAddresses = @($storageResolution.GetResult().Addresses)
                 }
-                $sourceClone = [Signal]::Start('StorageJacketSource', $Jacket) | Select-Object -Last 1
+                $sourceClone = [SignalGraph.Signal]::Start('StorageJacketSource', $Jacket) | Select-Object -Last 1
                 $sourceClone.SetResult($storageResolution.GetResult())
                 $Jacket = $sourceClone
             }
@@ -67,7 +67,7 @@ function Resolve-AdapterFromJacket {
                 return $opSignal.MergeSignal($remainingResolution).LogCritical('Adapter jacket is invalid before merge.')
             }
             if ($sourceWasRemainingV2) {
-                $sourceClone = [Signal]::Start('RemainingJacketSource', $Jacket) | Select-Object -Last 1
+                $sourceClone = [SignalGraph.Signal]::Start('RemainingJacketSource', $Jacket) | Select-Object -Last 1
                 $sourceClone.SetResult($remainingResolution.GetResult())
                 $Jacket = $sourceClone
             }
@@ -98,7 +98,7 @@ function Resolve-AdapterFromJacket {
         # ░▒▓█ INSTANCE CREATION █▓▒░
         if ($moduleGraphSignal.HasResult()) {
             $typeClass = $moduleGraphSignal.GetResult()
-            while ($typeClass -is [Signal] -and $typeClass.HasResult()) {
+            while ($typeClass -is [SignalGraph.Signal] -and $typeClass.HasResult()) {
                 $typeClass = $typeClass.GetResult() | Select-Object -Last 1
             }
 
@@ -157,7 +157,7 @@ function Resolve-AdapterFromJacket {
         }
 
         # Change this to memory generator call to merge and then run hydration in deferred
-        $mergeItemSignal = [Signal]::Start("MergeSignal") | Select-Object -Last 1
+        $mergeItemSignal = [SignalGraph.Signal]::Start("MergeSignal") | Select-Object -Last 1
         Add-PathToDictionary -Dictionary $mergeItemSignal -Path "@.Base" -Value $manifestSignal.GetResult($true)  | Select-Object 
         Add-PathToDictionary -Dictionary $mergeItemSignal -Path "@.Overlay" -Value $Jacket.GetResult($true)  | Select-Object 
 
@@ -166,7 +166,7 @@ function Resolve-AdapterFromJacket {
             $opSignal.LogCritical("MergeCondenser resolved without an invokable adapter instance.")
             return $opSignal
         }
-        $mergeItemSignalJacket = [Signal]::Start("MergeSignal") | Select-Object -Last 1
+        $mergeItemSignalJacket = [SignalGraph.Signal]::Start("MergeSignal") | Select-Object -Last 1
         $mergeItemSignalJacket.SetJacket($mergeItemSignal)
 
         $mergedSignal = $mergeService.Invoke("Merge", "Merge", $Signal, $mergePlan, $mergeItemSignalJacket) | Select-Object -Last 1 #$manifestSignal.GetResult(), $Jacket, $true) | Select-Object -Last 1
@@ -204,7 +204,7 @@ function Resolve-AdapterFromJacket {
 
         # $Jacket needs to be hydrated after the merge for any tokens that couldn't be hydrated during load and required deferred token lookups
 #        if ($HydrationPlanSignal.HasResult()) {
-            $HydrationSignal= [Signal]::Start("Resolve-AdapterFromJacket.Invoke.Hydrate", $Jacket) | Select-Object -Last 1
+            $HydrationSignal= [SignalGraph.Signal]::Start("Resolve-AdapterFromJacket.Invoke.Hydrate", $Jacket) | Select-Object -Last 1
             $HydrationSignal.SetJacket($mergedSignal)
 #            $HydrationSignal.SetPointer($ItemSignal.GetPointer())
 
@@ -257,7 +257,7 @@ function Resolve-AdapterFromJacket {
         $opSignal.LogInformation("📦 Adapter '$($Jacket.Name)' resolved and returned successfully.")
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception during adapter resolution: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("🔥 Exception during adapter resolution: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $opSignal

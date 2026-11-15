@@ -4,14 +4,14 @@ function Resolve-Conductor {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
-        [Signal]$Signal
+        [SignalGraph.Signal]$Signal
     )
 
-    $opSignal = [Signal]::Start("Resolve-Conductor") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Resolve-Conductor") | Select-Object -Last 1
 
     try {
         # ░▒▓█ INSTANTIATE CONDUCTOR █▓▒░
-        $conductorSignal = [Conductor]::Start($null, $Signal) | Select-Object -Last 1
+        $conductorSignal = [SovereignTrust.Foundation.Classes.Conduction.Conductor]::Start($null, $Signal) | Select-Object -Last 1
 
         if ($opSignal.MergeSignalAndVerifyFailure($conductorSignal)){
             return $opSignal
@@ -59,7 +59,7 @@ function Resolve-Conductor {
         $opSignal.LogInformation("🎯 BondingConductor started and ConductionPlan graph resolved.")
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception during Resolve-Conductor: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("🔥 Exception during Resolve-Conductor: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $opSignal

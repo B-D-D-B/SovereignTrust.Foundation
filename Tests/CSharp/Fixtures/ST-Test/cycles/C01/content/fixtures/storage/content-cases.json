@@ -1,0 +1,107 @@
+[
+  {
+    "Name": "STTest-Storage-Fixtures",
+    "Cases": {
+      "SharedJson": {
+        "Inputs": { "Content": { "Data": "Test" } },
+        "Expected": { "Data": "Test" }
+      },
+      "WriteContentTest": {
+        "Inputs": {
+          "WriteContentFile": {
+            "Content": {
+              "Data": "Test"
+            }
+          }
+        }
+      },
+      "SameSizeLocalResultDetailTest": {
+        "Inputs": {
+          "WriteTextABCD": {
+            "Content": "ABCD"
+          },
+          "WriteTextWXYZ": {
+            "Content": "WXYZ"
+          }
+        },
+        "Expected": {
+          "CheckTextABCDLength": {
+            "ContentOperands": "4"
+          },
+          "CheckTextABCDSha256": {
+            "ContentOperands": "E12E115ACF4552B2568B55E93CBD39394C4EF81C82447FAFC997882A02D23677"
+          },
+          "CheckTextWXYZLength": {
+            "ContentOperands": "4"
+          },
+          "CheckTextWXYZSha256": {
+            "ContentOperands": "21E32F5321CAD49AB4CF78BA5ED231E0F36D0C78D34108FDA1BE939F33FBA149"
+          },
+          "CheckTextWXYZReadback": {
+            "ContentOperands": "WXYZ"
+          }
+        }
+      },
+      "ReadContentTest": {
+        "Expected": {
+          "RecordRead": {
+            "TestResultOperands": "Test"
+          }
+        }
+      },
+      "DeleteContentTest": {
+        "Expected": {
+          "RecordDelete": {
+            "TestResultOperands": "true"
+          }
+        }
+      },
+      "ExistsTest": {
+        "Expected": {
+          "RecordExists": {
+            "TestResultOperands": "false"
+          }
+        }
+      },
+      "DeleteTargetTest": {
+        "Expected": {
+          "RecordDeleteTarget": {
+            "TestResultOperands": "true"
+          }
+        }
+      },
+      "ExistsTargetTest": {
+        "Expected": {
+          "RecordExistsTarget": {
+            "TestResultOperands": "false"
+          }
+        }
+      },
+      "DeleteSourceTest": {
+        "Expected": {
+          "RecordDeleteSource": {
+            "TestResultOperands": "true"
+          }
+        }
+      },
+      "ExistsSourceTest": {
+        "Expected": {
+          "RecordExistsSource": {
+            "TestResultOperands": "false"
+          }
+        }
+      },
+      "ReadTargetDetailTest": {
+        "Expected": {
+          "CheckReadTargetLength": {
+            "ContentOperands": "902"
+          },
+          "CheckReadTargetSha256": {
+            "ContentOperands": "B85CF1EF768DA38C013247404AD852482BBE2765D5BB6C320CFA52396CCEF03A"
+          }
+        }
+      }
+    }
+  },
+  {}
+]

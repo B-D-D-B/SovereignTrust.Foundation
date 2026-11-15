@@ -1,14 +1,14 @@
 function Invoke-TokenDynamic {
     [CmdletBinding()]
     param (
-        [MappedTokenAdapter]$MappedAdapter,
+        [SovereignTrust.Foundation.Classes.Adapters.MappedTokenAdapter]$MappedAdapter,
         [string]$Slot,
 
         [Parameter(Mandatory = $false)]
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
 
         [Parameter(Mandatory = $false)]
-        [Signal]$ItemSignal,
+        [SignalGraph.Signal]$ItemSignal,
 
         [object]$Plan,
 
@@ -16,7 +16,7 @@ function Invoke-TokenDynamic {
         [string]$Activity
     )
 
-    $opSignal = [Signal]::Start("Invoke-TokenDynamic", $ItemSignal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-TokenDynamic", $ItemSignal) | Select-Object -Last 1
 
     try {
         # Path is ONLY the dynamic expression portion to translate
@@ -53,7 +53,7 @@ function Invoke-TokenDynamic {
         }
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception during Invoke-TokenDynamic: $_", $null, $_)
+        $opSignal.LogCritical("🔥 Exception during Invoke-TokenDynamic: $_", $null, $_.Exception)
     }
 
     return $opSignal

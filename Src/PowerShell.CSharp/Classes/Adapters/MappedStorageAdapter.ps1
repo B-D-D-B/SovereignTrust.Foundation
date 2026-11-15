@@ -14,14 +14,14 @@ UnsupportedActivity: FailedSignal
 ActivityComparison: CaseInsensitive
 #>
 class MappedStorageAdapter {
-    [Signal]$Signal
+    [SignalGraph.Signal]$Signal
 
     MappedStorageAdapter() {
         # Use static Start() instead
     }
 
-    static [Signal] Start([object]$Conductor) {
-        $opSignal = [Signal]::Start("MappedStorageAdapter.Start") | Select-Object -Last 1
+    static [SignalGraph.Signal] Start([object]$Conductor) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedStorageAdapter.Start") | Select-Object -Last 1
 
         if (-not $Conductor) {
             $opSignal.LogCritical("Null Conductor passed to MappedStorageAdapter.Start()")
@@ -29,12 +29,12 @@ class MappedStorageAdapter {
         }
 
         try {
-            $adapter = [MappedStorageAdapter]::new()
-            $adapter.Signal = [Signal]::Start("MappedStorageAdapter") | Select-Object -Last 1
+            $adapter = [SovereignTrust.Foundation.Classes.Adapters.MappedStorageAdapter]::new()
+            $adapter.Signal = [SignalGraph.Signal]::Start("MappedStorageAdapter") | Select-Object -Last 1
             $adapter.Signal.SetJacket($Conductor)
             $adapter.Signal.SetReversePointer($Conductor)
 
-            $graphSignal = [Graph]::Start("MappedStorageAdapter", $adapter, $false)
+            $graphSignal = [SignalGraph.Graph]::Start("MappedStorageAdapter", $adapter, $false)
             $adapter.Signal.SetResult($graphSignal.GetResult())
             $adapter.Signal.SetPointer($graphSignal.GetResult())
 
@@ -42,16 +42,16 @@ class MappedStorageAdapter {
             $opSignal.LogInformation("✅ MappedStorageAdapter initialized.")
         }
         catch {
-            $opSignal.LogCritical("💥 Exception in MappedStorageAdapter.Start(): $_", $null, $_)
+            $opSignal.LogCritical("💥 Exception in MappedStorageAdapter.Start(): $_", $null, $_.Exception)
         }
 
         return $opSignal
     }
 
-    [Signal] RegisterAdapter([object]$AdapterInstance, [string]$Key = "StorageService") {
-        $opSignal = [Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
-        if ($AdapterInstance -isnot [Signal]) {
-            $adapterSignal = [Signal]::Start("Adapter:$Key") | Select-Object -Last 1
+    [SignalGraph.Signal] RegisterAdapter([object]$AdapterInstance, [string]$Key = "StorageService") {
+        $opSignal = [SignalGraph.Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
+        if ($AdapterInstance -isnot [SignalGraph.Signal]) {
+            $adapterSignal = [SignalGraph.Signal]::Start("Adapter:$Key") | Select-Object -Last 1
             $adapterSignal.SetResult($AdapterInstance)
         }
         else {
@@ -61,7 +61,7 @@ class MappedStorageAdapter {
         $graph = $this.Signal.GetPointer()
         $registeredAdapter = $adapterSignal.GetResult()
         if ([bool]$registeredAdapter.IsAdapterRegistration) {
-            if ($registeredAdapter.Jacket -is [Signal]) {
+            if ($registeredAdapter.Jacket -is [SignalGraph.Signal]) {
                 $adapterSignal.SetJacket($registeredAdapter.Jacket)
             }
         }
@@ -81,17 +81,17 @@ class MappedStorageAdapter {
         return $opSignal
     }
 
-    [Signal] Invoke([object]$Context) {
+    [SignalGraph.Signal] Invoke([object]$Context) {
         return $this.Invoke($null, $Context) | Select-Object -Last 1
     }
 
-    [Signal] Invoke([string]$Slot, [object]$Context) {
+    [SignalGraph.Signal] Invoke([string]$Slot, [object]$Context) {
         return $this.Invoke($Slot, $Context) | Select-Object -Last 1
     }
 
-    [Signal]Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
+    [SignalGraph.Signal]Invoke([string]$Slot, [string]$Activity, [SignalGraph.Signal]$ConductionSignal, [object]$Plan, [SignalGraph.Signal]$ItemSignal) {
 
-        $opSignal = [Signal]::Start("MappedStorageAdapter.Invoke:$Slot") | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start("MappedStorageAdapter.Invoke:$Slot") | Select-Object -Last 1
 
         if ($Activity -notin @('Read', 'Write', 'Delete', 'Exists', 'List')) {
             $opSignal.LogCritical("Unsupported MappedStorageAdapter activity: '$Activity'.")

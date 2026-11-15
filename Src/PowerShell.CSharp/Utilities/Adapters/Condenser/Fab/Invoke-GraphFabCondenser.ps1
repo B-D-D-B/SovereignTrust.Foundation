@@ -31,16 +31,16 @@
 
 function Invoke-GraphFabCondenser {
     param (
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
         [object]$Plan,
         [object]$ItemSignal,
         [string]$PlanWirePathPrefix = "%.%.%.@"  # <- new param with default
     )
 
-    $opSignal = [Signal]::Start("Invoke-GraphFabCondenser:$Plan.Name", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-GraphFabCondenser:$Plan.Name", $Signal) | Select-Object -Last 1
 
     $PlanName = $Plan.Name
-  #  $subSignal = [Signal]::Start("GraphPlan:$PlanName", $Signal) | Select-Object -Last 1
+  #  $subSignal = [SignalGraph.Signal]::Start("GraphPlan:$PlanName", $Signal) | Select-Object -Last 1
   #  $subSignal.SetJacket($ItemSignal) | Out-Null
 
     
@@ -120,7 +120,7 @@ function Invoke-GraphFabCondenser {
             }
             else {
                 $mappedAdapter = $mappedAdapterSignal.GetResult()
-                while ($mappedAdapter -is [Signal]) {
+                while ($mappedAdapter -is [SignalGraph.Signal]) {
                     $mappedAdapter = $mappedAdapter.GetResult()
                 }
 
@@ -152,7 +152,7 @@ function Invoke-GraphFabCondenser {
 
     $graphResult = $graphSignal.GetResult()
 
-    $wrappedGraphSignal = [Signal]::Start("Graph:$PlanName", $Signal) | Select-Object -Last 1
+    $wrappedGraphSignal = [SignalGraph.Signal]::Start("Graph:$PlanName", $Signal) | Select-Object -Last 1
     $wrappedGraphSignal.SetPointer($graphResult) | Out-Null
 
     if ($Plan.TargetWirePath) {

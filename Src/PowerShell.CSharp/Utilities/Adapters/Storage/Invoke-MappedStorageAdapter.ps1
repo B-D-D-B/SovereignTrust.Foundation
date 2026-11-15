@@ -1,9 +1,9 @@
 function Invoke-MappedStorageAdapter {
     [CmdletBinding()]
     param (
-        [Signal]$MappedAdapterSignal,
-        [Conduit]$Conduit,
-        [Conductor]$Conductor,
+        [SignalGraph.Signal]$MappedAdapterSignal,
+        [SovereignTrust.Foundation.Classes.Conduction.Conduit]$Conduit,
+        [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor,
         [string]$Path,
         [string]$Slot,
         [object]$Plan  # Typically a small PSObject or Phase class in the future
@@ -13,7 +13,7 @@ function Invoke-MappedStorageAdapter {
         throw "Conduction is not running. Cannot invoke Phase."
     }
 
-    $opSignal = [Signal]::Start("Invoke-MappedStorageAdapter", $Conductor) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-MappedStorageAdapter", $Conductor) | Select-Object -Last 1
 
 
     try {
@@ -60,7 +60,7 @@ function Invoke-MappedStorageAdapter {
 
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception during Invoke-TokenStorage: $_", $null, $_)
+        $opSignal.LogCritical("🔥 Exception during Invoke-TokenStorage: $_", $null, $_.Exception)
     }
 
     return $opSignal}

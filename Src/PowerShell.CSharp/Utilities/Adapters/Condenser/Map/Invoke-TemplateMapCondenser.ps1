@@ -1,12 +1,12 @@
 
 function Invoke-TemplateMapCondenser {
     param (
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
         [object]$Proposal,
         [object]$Context
     )
 
-    $opSignal = [Signal]::Start("Invoke-TemplateMapCondenser", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-TemplateMapCondenser", $Signal) | Select-Object -Last 1
 
     if (-not $Proposal -or -not $Proposal.Content) {
         $opSignal.LogCritical("❌ Invalid or missing Proposal.Content for condensation.")

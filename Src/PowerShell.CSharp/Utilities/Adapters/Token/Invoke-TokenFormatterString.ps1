@@ -4,7 +4,7 @@ function Invoke-TokenFormatterString {
         [object]$Plan
     )
 
-    $opSignal = [Signal]::Start("Invoke-TokenFormatterString") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-TokenFormatterString") | Select-Object -Last 1
 
     try {
         # everything after the 2nd '.'
@@ -17,7 +17,7 @@ function Invoke-TokenFormatterString {
         $opSignal.LogInformation("✅ String Created from Path")
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception in Invoke-TokenFormatterString: $_", $null, $_)
+        $opSignal.LogCritical("🔥 Exception in Invoke-TokenFormatterString: $_", $null, $_.Exception)
     }
 
     return $opSignal

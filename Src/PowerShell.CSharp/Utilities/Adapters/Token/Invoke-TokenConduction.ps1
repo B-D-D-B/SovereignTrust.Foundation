@@ -1,8 +1,8 @@
 function Invoke-TokenConduction {
     [CmdletBinding()]
     param (
-        [Conduit]$Conduit,
-        [Conductor]$Conductor,
+        [SovereignTrust.Foundation.Classes.Conduction.Conduit]$Conduit,
+        [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor,
         [object]$Path,
         [object]$Plan  # Typically a small PSObject or Phase class in the future
     )
@@ -11,7 +11,7 @@ function Invoke-TokenConduction {
         throw "Conduction is not running. Cannot invoke Phase."
     }
 
-    $opSignal = [Signal]::Start("Invoke-TokenConduction", $Conductor) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-TokenConduction", $Conductor) | Select-Object -Last 1
 
     try {
         if ($null -eq $Path) {
@@ -59,7 +59,7 @@ function Invoke-TokenConduction {
         }
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception during Invoke-TokenConduction: $_", $null, $_)
+        $opSignal.LogCritical("🔥 Exception during Invoke-TokenConduction: $_", $null, $_.Exception)
     }
 
     return $opSignal

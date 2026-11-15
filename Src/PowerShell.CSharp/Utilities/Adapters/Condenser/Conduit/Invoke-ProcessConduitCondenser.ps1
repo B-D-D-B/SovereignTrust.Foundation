@@ -1,4 +1,3 @@
-using module SignalGraph
 # =============================================================================
 # 📍 Invoke-ConduitCondenser (Declarative Graph Builder + Injector)
 #  License: MIT License • Copyright (c) 2025 Silicon Dream Artists. Current copyright holder: BDDB LLC.
@@ -28,12 +27,12 @@ using module SignalGraph
 
 function Invoke-ProcessConduitCondenser {
     param (
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
         [object]$Plan,
-        [Signal]$ItemSignal
+        [SignalGraph.Signal]$ItemSignal
     )
 
-    $opSignal = [Signal]::Start("Invoke-ConduitCondenser:$($Plan.Name)", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-ConduitCondenser:$($Plan.Name)", $Signal) | Select-Object -Last 1
 
     $SourceData = $ItemSignal.GetResult($true)
     $SupportParallelismSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "SupportParallelism" -Default $false | Select-Object -Last 1
@@ -87,7 +86,7 @@ function Invoke-ProcessConduitCondenser {
             $stResult=$MappingResultSignal
             } catch {
                 $stThrew=$true
-                return $opSignal.LogCritical("Conduit.Process child '$($item.Key)' threw: $($_.Exception.Message)", $null, $_)
+                return $opSignal.LogCritical("Conduit.Process child '$($item.Key)' threw: $($_.Exception.Message)", $null, $_.Exception)
             }
             finally { Exit-STExecutionTrace $stTrace $stResult $stThrew }
             if ($null -eq $MappingResultSignal -or $opSignal.MergeSignalAndVerifyFailure($MappingResultSignal)) {
@@ -142,7 +141,7 @@ function Invoke-ProcessConduitCondenser {
         $conduitSelection = Get-STWorkerSelection
         $conduitBootstrap = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../../../Bootstrap/STFoundationSelection.ps1'))
         $conduitManifest = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../../../SovereignTrust.Foundation.psd1'))
-        $conduitKnownAssembly = & (Get-Module SignalGraph) { [Signal].Assembly.FullName }
+        $conduitKnownAssembly = & (Get-Module SignalGraph) { [SignalGraph.Signal].Assembly.FullName }
         $isSuccessArray = $indices | ForEach-Object -Parallel {
             $global:STSelectedWorkerContext=$true
             . $using:conduitBootstrap
@@ -169,7 +168,7 @@ function Invoke-ProcessConduitCondenser {
             Write-Host ($myvalues[$_].Name) 
             Write-Host ($myvalues.GetType())
             Write-Host $isnull
-            Write-Host $item #-is [Signal])
+            Write-Host $item #-is [SignalGraph.Signal])
             Write-Host $using:SourceAdapter
 
             #Write-Host $using:SourceData.Grid.Values

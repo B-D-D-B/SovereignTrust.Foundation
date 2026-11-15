@@ -1,38 +1,38 @@
 function Invoke-TraceSignalTree {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory)][Signal]$Signal,
+        [Parameter(Mandatory)][SignalGraph.Signal]$Signal,
         [string]$TraceID = "",
         [string]$Prefix = "",
         [string]$KeyHint = "",
         [bool]$VisualizeFinal = $false
     )
 
-    $opSignal = [Signal]::Start("TraceSignalTree", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("TraceSignalTree", $Signal) | Select-Object -Last 1
     $opSignal.SetJacket($Signal)
 
-    $diagramSignal = [Signal]::Start("SignalTree:Diagram", $Signal) | Select-Object -Last 1
+    $diagramSignal = [SignalGraph.Signal]::Start("SignalTree:Diagram", $Signal) | Select-Object -Last 1
     $diagramSignal.SetJacket($Signal)
 
     if (-not $TraceID) {
         $TraceID = $opSignal.Name
     }
 
-    $branch = if ($Prefix -eq "") { "[Signal]" } else { "├──" }
+    $branch = if ($Prefix -eq "") { "[SignalGraph.Signal]" } else { "├──" }
 
     $lines = @()
     $lines += "$Prefix│   $branch .Name = `"$($Signal.Name)`"" + ($(if ($KeyHint) { " (key: $KeyHint)" } else { "" }))
     $lines += "$Prefix│   ├── .Jacket = " + ($(if ($null -ne $Signal.Jacket) { "`$Jacket" } else { "`$null" }))
 
     $resultLabel = "`$null"
-    if ($Signal.Result -is [Signal]) {
+    if ($Signal.Result -is [SignalGraph.Signal]) {
         $resultLabel = "`$Result (Signal)"
     }
     elseif ($null -ne $Signal.Result) {
         $resolved = Resolve-PathFromDictionary -Dictionary $Signal.Result -Path "Signal" | Select-Object -Last 1
         if ($resolved.MergeSignalAndVerifySuccess(@())) {
             $resolvedResult = $resolved.GetResult()
-            if ($resolvedResult -is [Signal]) {
+            if ($resolvedResult -is [SignalGraph.Signal]) {
                 $resultLabel = "`$Result (Resolved→Signal:$($resolved.Name))"
             }
         }
@@ -57,7 +57,7 @@ function Invoke-TraceSignalTree {
             @{ Label = "Pointer"; Value = $Signal.Pointer }#,
             #@{ Label = "ReversePointer"; Value = $Signal.ReversePointer }
         )) {
-        if ($child.Value -is [Signal]) {
+        if ($child.Value -is [SignalGraph.Signal]) {
             $childSignal = Invoke-TraceSignalTree -Signal $child.Value -TraceID $TraceID -Prefix "$Prefix│   " | Select-Object -Last 1
             if ($diagramSignal.MergeSignalAndVerifyFailure(@($childSignal))) { return $diagramSignal }
         }
@@ -68,7 +68,7 @@ function Invoke-TraceSignalTree {
         $grid = $Graph.Grid
         foreach ($key in $grid.Keys) {
             $child = $grid[$key]
-            if ($child -is [Signal]) {
+            if ($child -is [SignalGraph.Signal]) {
                 $gridSignal = Invoke-TraceSignalTree -Signal $child -TraceID $TraceID -Prefix "$Prefix│   │   " -KeyHint $key | Select-Object -Last 1
                 if ($diagramSignal.MergeSignalAndVerifyFailure(@($gridSignal))) { return $diagramSignal }
             }
@@ -86,10 +86,10 @@ function Invoke-TraceSignalTree {
 
             $graphObject = $graphSignal.GetResult()
             if ( $opSignal.MergeSignalAndVerifySuccess(@($graphSignal))) {
-                if ($graphObject -is [Graph] -and $null -ne $graphObject.Grid) {
+                if ($graphObject -is [SignalGraph.Graph] -and $null -ne $graphObject.Grid) {
                     foreach ($key in $graphObject.Grid.Keys) {
                         $entry = $graphObject.Grid[$key]
-                        if ($entry -is [Signal]) {
+                        if ($entry -is [SignalGraph.Signal]) {
                             $childTrace = Invoke-TraceSignalTree -Signal $entry -TraceID $TraceID -Prefix "$Prefix│   │   " -KeyHint $key | Select-Object -Last 1
                             if ($diagramSignal.MergeSignalAndVerifyFailure(@($childTrace))) { return $diagramSignal }
                         }
@@ -113,7 +113,7 @@ function Invoke-TraceSignalTree {
             if ( $null -ne $graphObject) {
                 foreach ($key in $graphObject.Keys) {
                     $entry = $graphObject[$key]
-                    if ($entry -is [Signal]) {
+                    if ($entry -is [SignalGraph.Signal]) {
                         $childTrace = Invoke-TraceSignalTree -Signal $entry -TraceID $TraceID -Prefix "$Prefix│   │   " -KeyHint $key | Select-Object -Last 1
                         if ($diagramSignal.MergeSignalAndVerifyFailure(@($childTrace))) { return $diagramSignal }
                     }

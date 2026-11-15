@@ -2,10 +2,10 @@ function Invoke-PlanIteration {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
-        [Signal]$ConductionSignal,
+        [SignalGraph.Signal]$ConductionSignal,
 
         [Parameter(Mandatory)]
-        [Signal]$ItemSignal,
+        [SignalGraph.Signal]$ItemSignal,
 
         [Parameter(Mandatory)]
         [object]$Plan,
@@ -29,7 +29,7 @@ function Invoke-PlanIteration {
     }
     $stTrace = Enter-STExecutionTrace -BoundaryKind 'PlanIteration' -Name $IterationName -Adapter ([string]$Plan.Adapter) -Activity ([string]$Plan.Config.Activity) -Iteration $stIteration
     $stThrew=$false
-    $opSignal = [Signal]::Start("Invoke-PlanIteration:$IterationIndex", $ItemSignal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-PlanIteration:$IterationIndex", $ItemSignal) | Select-Object -Last 1
 
     try {
         $cloneSignal = Resolve-ClonePlan -Plan $Plan | Select-Object -Last 1
@@ -40,13 +40,13 @@ function Invoke-PlanIteration {
         $iterationPlan = $cloneSignal.GetResult()
         $iterationPlan.Activity = $Plan.Config.Activity
 
-        $iterationSignal = [Signal]::Start($IterationName, $ItemSignal) | Select-Object -Last 1
+        $iterationSignal = [SignalGraph.Signal]::Start($IterationName, $ItemSignal) | Select-Object -Last 1
         $iterationSignal.SetResult($Iteration)
         $null = $iterationSignal.AddProperty('IterationIndex', $IterationIndex)
         $null = $iterationSignal.AddProperty('IterationArray', @($IterationArray))
 
         $itemGraph = $ItemSignal.GetPointer()
-        if ($itemGraph -isnot [Graph]) {
+        if ($itemGraph -isnot [SignalGraph.Graph]) {
             $null = $opSignal.LogCritical("Iteration ItemSignal does not have a Graph pointer.")
             return $opSignal
         }
@@ -79,7 +79,7 @@ function Invoke-PlanIteration {
     }
     catch {
         $stThrew=$true
-        $null = $opSignal.LogCritical("Iteration $IterationIndex failed: $($_.Exception.Message)", $null, $_)
+        $null = $opSignal.LogCritical("Iteration $IterationIndex failed: $($_.Exception.Message)", $null, $_.Exception)
     }
     finally { Exit-STExecutionTrace $stTrace $opSignal $stThrew }
 

@@ -21,7 +21,7 @@ function Invoke-MergeJson {
         [int]$Depth = 50
     )
 
-    $opSignal = [Signal]::Start("Merge-JsonObjects") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Merge-JsonObjects") | Select-Object -Last 1
 
     try {
         if (-not ('Newtonsoft.Json.Linq.JToken' -as [type])) {
@@ -46,7 +46,7 @@ function Invoke-MergeJson {
         $opSignal.LogInformation("✅ Merge completed successfully (Array=$MergeArrayHandling, Nulls=$MergeNullValueHandling).")
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception in Merge-JsonObjects: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("🔥 Exception in Merge-JsonObjects: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $opSignal
@@ -57,20 +57,20 @@ function Invoke-ConvertToUnifiedHashtable {
         [Parameter(Mandatory)][object]$InputObject
     )
 
-    $signal = [Signal]::Start("Invoke-ConvertToUnifiedHashtable") | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Invoke-ConvertToUnifiedHashtable") | Select-Object -Last 1
 
     function Convert-Node {
         param([object]$node)
 
         # Unwrap Signal -> Result
-        if ($node -is [Signal]) {
+        if ($node -is [SignalGraph.Signal]) {
             $node = $node.GetResult()
         }
 
         if ($null -eq $node) { return $null }
 
         # Graph -> use Grid as the working memory dictionary
-        if ($node -is [Graph]) {
+        if ($node -is [SignalGraph.Graph]) {
             $node = $node.Grid
         }
 
@@ -154,7 +154,7 @@ function Invoke-TransformCondenserDictionaries {
         [bool]$CloneBase = $true
     )
 
-    $signal = [Signal]::Start("Invoke-TransformCondenserDictionaries") | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Invoke-TransformCondenserDictionaries") | Select-Object -Last 1
 
     function Clone-Dict {
         param([System.Collections.IDictionary]$d)
@@ -245,7 +245,7 @@ function Invoke-TransformCondenserDictionaries {
         $signal.LogInformation("✅ Dictionary merge completed successfully (Recursive=$Recursive, ArrayHandling=$ArrayHandling, NullHandling=$NullHandling, CloneBase=$CloneBase).")
     }
     catch {
-        $signal.LogCritical("🔥 Exception in Invoke-TransformCondenserDictionaries: $($_.Exception.Message)", $null, $_)
+        $signal.LogCritical("🔥 Exception in Invoke-TransformCondenserDictionaries: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $signal
@@ -266,7 +266,7 @@ function Invoke-TransformCondenserUnifiedMemory {
         [bool]$CloneBase = $true
     )
 
-    $signal = [Signal]::Start("Invoke-TransformCondenserUnifiedMemory") | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Invoke-TransformCondenserUnifiedMemory") | Select-Object -Last 1
 
     try {
         $baseHash    = Invoke-ConvertToUnifiedHashtable -InputObject $Base   | Select-Object -Last 1
@@ -297,7 +297,7 @@ function Invoke-TransformCondenserUnifiedMemory {
         }
     }
     catch {
-        $signal.LogCritical("🔥 Exception during unified memory merge: $($_.Exception.Message)", $null, $_)
+        $signal.LogCritical("🔥 Exception during unified memory merge: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $signal

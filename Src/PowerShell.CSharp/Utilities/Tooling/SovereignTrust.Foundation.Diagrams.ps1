@@ -1,7 +1,7 @@
 function Emit-SignalTreeLine {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory)][Signal]$Target,
+        [Parameter(Mandatory)][SignalGraph.Signal]$Target,
         [Parameter(Mandatory)][string]$Line,
         [string]$Level = "Information",
         [string]$TraceID,
@@ -9,7 +9,7 @@ function Emit-SignalTreeLine {
         [bool]$Minimal = $false
     )
 
-    $emit = [Signal]::Start("Emit:") | Select-Object -Last 1
+    $emit = [SignalGraph.Signal]::Start("Emit:") | Select-Object -Last 1
 
     # Only prefix if not already present
     $formatted = if ($Minimal) {
@@ -40,7 +40,7 @@ function Emit-SignalTreeLine {
 
 function Emit-SignalTreeBoundary {
     param (
-        [Parameter(Mandatory)][Signal]$Target,
+        [Parameter(Mandatory)][SignalGraph.Signal]$Target,
         [Parameter(Mandatory)][string]$Direction,  # Begin or End
         [Parameter()][string]$TraceID,
         [Parameter()][string]$TraceScope

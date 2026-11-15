@@ -1,13 +1,13 @@
 function Resolve-ModulePathFromAdapter {
     [CmdletBinding()]
     param (
-        [Signal]$Signal,
-        [MappedStorageAdapter]$Adapter,
+        [SignalGraph.Signal]$Signal,
+        [SovereignTrust.Foundation.Classes.Adapters.MappedStorageAdapter]$Adapter,
         [string]$Slot,
         [string]$RelativePath
     )
 
-    $opSignal = [Signal]::Start("Get-ModulePathFromAdapter") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Get-ModulePathFromAdapter") | Select-Object -Last 1
 
     try {
         $root = Resolve-PathFromDictionary -Dictionary $Adapter -Path "$.*.#.$Slot" | Select-Object -Last 1
@@ -16,7 +16,7 @@ function Resolve-ModulePathFromAdapter {
         }
 
         $rootAdapterSignal = $root.GetResult()
-        if ($rootAdapterSignal -isnot [Signal]) {
+        if ($rootAdapterSignal -isnot [SignalGraph.Signal]) {
             $rootAdapterSignal = $root.GetResultSignal()
         }
 
@@ -54,7 +54,7 @@ function Resolve-ModulePathFromAdapter {
         }
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception while resolving module path: $_", $null, $_)
+        $opSignal.LogCritical("🔥 Exception while resolving module path: $_", $null, $_.Exception)
     }
 
     return $opSignal

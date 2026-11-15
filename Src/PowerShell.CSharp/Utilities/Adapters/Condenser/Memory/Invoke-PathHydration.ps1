@@ -8,10 +8,10 @@
 function Invoke-PathHydration {
     param (
         [Parameter(Mandatory)][string]$Path,
-        [Parameter(Mandatory)][Signal]$Signal
+        [Parameter(Mandatory)][SignalGraph.Signal]$Signal
     )
 
-    $opSignal = [Signal]::Start("Invoke-PathHydration", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-PathHydration", $Signal) | Select-Object -Last 1
 
     $reserved = @("Signal", "Result", "Pointer", "Grid", "Jacket")
     $containsSymbols = $Path -match '[$@%*#]'

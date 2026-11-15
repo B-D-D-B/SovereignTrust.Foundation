@@ -2,14 +2,14 @@
 function Export-STSignalGraphSnapshot {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory)][Signal]$ItemSignal,
-        [Signal]$Signal
+        [Parameter(Mandatory)][SignalGraph.Signal]$ItemSignal,
+        [SignalGraph.Signal]$Signal
     )
 
-    $opSignal = [Signal]::Start('Export-STSignalGraphSnapshot', $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start('Export-STSignalGraphSnapshot', $Signal) | Select-Object -Last 1
     try {
         $graph = $ItemSignal.GetPointer()
-        if ($graph -isnot [Graph]) {
+        if ($graph -isnot [SignalGraph.Graph]) {
             throw 'ItemSignal does not have a Graph pointer.'
         }
 
@@ -38,7 +38,7 @@ function Export-STSignalGraphSnapshot {
         $opSignal.SetResult($json)
     }
     catch {
-        $null = $opSignal.LogCritical("Failed to export signal graph snapshot: $($_.Exception.Message)", $null, $_)
+        $null = $opSignal.LogCritical("Failed to export signal graph snapshot: $($_.Exception.Message)", $null, $_.Exception)
     }
     return $opSignal
 }

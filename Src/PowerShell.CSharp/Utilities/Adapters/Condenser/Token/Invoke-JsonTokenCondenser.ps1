@@ -11,16 +11,16 @@
 function Invoke-JsonTokenCondenser {
     [CmdletBinding()]
     param (
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
         [object]$Plan,
-        [Signal]$ItemSignal,
+        [SignalGraph.Signal]$ItemSignal,
         [string]$RegexPattern = "(?s)\[((?>[^\[\]/]|(?<open>\[)|(?<-open>\]))+(?(open)(?!)))\/\]"
     )
 
     $opSignal = $null
 
     try {
-        $opSignal = [Signal]::Start("Invoke-JsonTokenCondenser", $Signal) | Select-Object -Last 1
+        $opSignal = [SignalGraph.Signal]::Start("Invoke-JsonTokenCondenser", $Signal) | Select-Object -Last 1
 
         try {
             $sourceContentPathSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Path" | Select-Object -Last 1
@@ -129,9 +129,9 @@ function Invoke-JsonTokenCondenser {
 function Invoke-TokenCrawl {
     [CmdletBinding()]
     param (
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
         [object]$Plan,
-        [Signal]$ItemSignal,
+        [SignalGraph.Signal]$ItemSignal,
         [object]$MergeCondenserFeedback,
         [object]$CurrentObject,
         [bool]$ReturnRequiredValues = $true,
@@ -198,9 +198,9 @@ function Invoke-TokenCrawl {
 
     function _ResolveAndDeserializeProperty {
         param (
-            [Signal]$Signal,
+            [SignalGraph.Signal]$Signal,
             [object]$Plan,
-            [Signal]$ItemSignal,
+            [SignalGraph.Signal]$ItemSignal,
             [object]$MergeCondenserFeedback,
             [object]$Parent,
             [string]$Key,
@@ -306,9 +306,9 @@ function Invoke-TokenCrawl {
 
     function _Walk {
         param (
-            [Signal]$Signal,
+            [SignalGraph.Signal]$Signal,
             [object]$Plan,
-            [Signal]$ItemSignal,
+            [SignalGraph.Signal]$ItemSignal,
             [object]$Parent,
             [object]$Key,
             [string]$RegexPattern

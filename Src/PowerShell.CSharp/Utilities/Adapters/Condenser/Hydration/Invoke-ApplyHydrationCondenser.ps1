@@ -13,12 +13,12 @@ $TokenDispatch = @{
 
 function Invoke-ApplyHydrationCondenser {
     param (
-        [Parameter(Mandatory)] [Signal]$Signal,
+        [Parameter(Mandatory)] [SignalGraph.Signal]$Signal,
         [Parameter(Mandatory)] [object]$Plan,
         [Parameter(Mandatory)] [object]$ItemSignal
     )
 
-    $opSignal = [Signal]::Start("HydrationCondenser", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("HydrationCondenser", $Signal) | Select-Object -Last 1
 
     
  #   $hydrationStyleSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "HydrationStyle" -SignalLevel "Information" | Select-Object -Last 1

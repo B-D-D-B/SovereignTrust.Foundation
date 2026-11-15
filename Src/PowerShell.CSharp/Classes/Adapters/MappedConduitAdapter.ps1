@@ -6,18 +6,18 @@ Activities: None; Invoke takes context and plan without an Activity argument.
 #>
 
 class MappedConduitAdapter {
-    [Signal]$Signal
+    [SignalGraph.Signal]$Signal
 
     MappedConduitAdapter() {
         # Use static Start() to initialize
     }
 
-    static [Signal] Start() {
-        return [Signal]::Start($null)
+    static [SignalGraph.Signal] Start() {
+        return [SignalGraph.Signal]::Start($null)
     }
 
-    static [Signal] Start([object]$conductor) {
-        $opSignal = [Signal]::Start("MappedConduitAdapter.Start") | Select-Object -Last 1
+    static [SignalGraph.Signal] Start([object]$conductor) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedConduitAdapter.Start") | Select-Object -Last 1
 
         if (-not $conductor) {
             $opSignal.LogCritical("Null Conductor passed to Start().")
@@ -25,12 +25,12 @@ class MappedConduitAdapter {
         }
 
         try {
-            $adapter = [MappedConduitAdapter]::new()
-            $adapter.Signal = [Signal]::Start("MappedConduitAdapter") | Select-Object -Last 1
+            $adapter = [SovereignTrust.Foundation.Classes.Adapters.MappedConduitAdapter]::new()
+            $adapter.Signal = [SignalGraph.Signal]::Start("MappedConduitAdapter") | Select-Object -Last 1
             $adapter.Signal.SetJacket($conductor)
             $adapter.Signal.SetReversePointer($conductor)
 
-            $graphSignal = [Graph]::Start("MappedConduitAdapter", $adapter, $false)
+            $graphSignal = [SignalGraph.Graph]::Start("MappedConduitAdapter", $adapter, $false)
             $adapter.Signal.SetResult($graphSignal, $true)
             $adapter.Signal.SetPointer($graphSignal.GetResult()) 
 
@@ -38,15 +38,15 @@ class MappedConduitAdapter {
             $opSignal.LogInformation("✅ MappedConduitAdapter initialized successfully.")
         }
         catch {
-            $opSignal.LogCritical("💥 Exception during adapter setup: $_", $null, $_)
+            $opSignal.LogCritical("💥 Exception during adapter setup: $_", $null, $_.Exception)
         }
 
         return $opSignal
     }
 
-    [Signal] RegisterAdapter([object]$ConduitAdapter, [string]$Key) {
-        $opSignal = [Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
-        $adapterSignal = [Signal]::Start("Adapter:$Key") | Select-Object -Last 1
+    [SignalGraph.Signal] RegisterAdapter([object]$ConduitAdapter, [string]$Key) {
+        $opSignal = [SignalGraph.Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
+        $adapterSignal = [SignalGraph.Signal]::Start("Adapter:$Key") | Select-Object -Last 1
         $adapterSignal.SetResult($ConduitAdapter)
 
         $graph = $this.Signal.GetResult() | Select-Object -Last 1
@@ -63,8 +63,8 @@ class MappedConduitAdapter {
         return $opSignal
     }
 
-    [Signal] Invoke([object]$Context, [object]$Plan) {
-        $opSignal = [Signal]::Start("MappedConduitAdapter.Invoke") | Select-Object -Last 1
+    [SignalGraph.Signal] Invoke([object]$Context, [object]$Plan) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedConduitAdapter.Invoke") | Select-Object -Last 1
         $graph = $this.Signal.GetResult() | Select-Object -Last 1
 
         foreach ($key in $graph.Grid.Keys) {

@@ -10,7 +10,7 @@ function Read-JsonFileAsSignal {
         $Path = Join-Path -Path $RootPath -ChildPath $Path
     }
 
-    $opSignal = [Signal]::Start("Read-JsonFileAsSignal") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Read-JsonFileAsSignal") | Select-Object -Last 1
     $opSignal.LogVerbose("📖 Reading JSON file from: $Path")
 
     if (-not (Test-Path -Path $Path)) {

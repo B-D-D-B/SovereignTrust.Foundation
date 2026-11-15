@@ -1,19 +1,19 @@
 function Invoke-FabCondenser {
     [CmdletBinding()]
     param (
-        [Signal]$Signal,
-        [Signal]$ItemSignal
+        [SignalGraph.Signal]$Signal,
+        [SignalGraph.Signal]$ItemSignal
     )
 
     # ░▒▓█ SIGNAL START █▓▒░
-    $opSignal = [Signal]::Start("Invoke-FabCondenser") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-FabCondenser") | Select-Object -Last 1
 
     try {
         $consdenserPath = "%.*.#.Adapters.*.#.MappedCondenser.@.$.*.#.FabCondenser"
         $consdenserSignal = Resolve-PathFromDictionary -Dictionary ($Signal.GetControl($true)) -Path $consdenserPath -SignalLevel "Information" | Select-Object -Last 1
 
         $consdenser = $consdenserSignal.GetResult()
-        while ($consdenser -is [Signal])
+        while ($consdenser -is [SignalGraph.Signal])
         {
             $consdenser = $consdenser.GetResult()
         }
@@ -29,7 +29,7 @@ function Invoke-FabCondenser {
         }
     }
     catch {
-        $opSignal.LogCritical("Exception during conduction condenser run: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("Exception during conduction condenser run: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $opSignal

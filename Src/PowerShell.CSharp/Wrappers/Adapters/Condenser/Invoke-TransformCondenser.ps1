@@ -1,7 +1,7 @@
 function Invoke-TransformCondenser {
     [CmdletBinding()]
     param (
-        [Signal]$Signal,
+        [SignalGraph.Signal]$Signal,
 
         [string]$Activity,
 
@@ -14,7 +14,7 @@ function Invoke-TransformCondenser {
     )
 
     # ░▒▓█ SIGNAL START █▓▒░
-    $opSignal = [Signal]::Start("Invoke-TransformCondenser", $Signal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-TransformCondenser", $Signal) | Select-Object -Last 1
 
 
     # Activity Parameters
@@ -32,10 +32,10 @@ function Invoke-TransformCondenser {
     }
     # Activity Parameters
 
-    $itemSignalResultSignal = [Signal]::Start("Merge.Input", $opSignal) | Select-Object -Last 1
+    $itemSignalResultSignal = [SignalGraph.Signal]::Start("Merge.Input", $opSignal) | Select-Object -Last 1
     $itemSignalResultSignal.SetResult($itemSignalResult)
 
-    $itemSignal = [Signal]::Start("Merge.Item", $opSignal) | Select-Object -Last 1
+    $itemSignal = [SignalGraph.Signal]::Start("Merge.Item", $opSignal) | Select-Object -Last 1
     $null = $itemSignal.SetJacket($itemSignalResultSignal)
 
     # ░▒▓█ INVOKE VIA ADAPTER (NOT DIRECT) █▓▒░

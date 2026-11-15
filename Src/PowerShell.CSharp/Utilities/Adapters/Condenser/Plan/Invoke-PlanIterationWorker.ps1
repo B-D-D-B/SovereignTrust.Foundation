@@ -11,11 +11,11 @@ function Invoke-PlanIterationWorker {
         [object]$Context
     )
 
-    $opSignal = [Signal]::Start("Invoke-PlanIterationWorker:$($WorkItem.Index)", $Runtime.ConductionSignal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-PlanIterationWorker:$($WorkItem.Index)", $Runtime.ConductionSignal) | Select-Object -Last 1
     Write-Verbose "Invoke-PlanIterationWorker: $($WorkItem.Index) - $($WorkItem.Value)"
     try {
         $targetGraph = $Runtime.ConductionSignal.GetPointer()
-        if ($targetGraph -isnot [Graph]) {
+        if ($targetGraph -isnot [SignalGraph.Graph]) {
             $null = $opSignal.LogCritical("Worker runtime does not have a Graph pointer.")
             return $opSignal
         }
@@ -38,7 +38,7 @@ function Invoke-PlanIterationWorker {
             $workerItemSignal = $forkSignal.GetResult()
         }
         else {
-            $workerItemSignal = [Signal]::Start("IterationItem:$($WorkItem.Index)", $Runtime.ConductionSignal) | Select-Object -Last 1
+            $workerItemSignal = [SignalGraph.Signal]::Start("IterationItem:$($WorkItem.Index)", $Runtime.ConductionSignal) | Select-Object -Last 1
             $null = $workerItemSignal.SetPointer($targetGraph)
 
             if ($null -ne $Context.SourceItemSignal.Jacket) {
@@ -66,7 +66,7 @@ function Invoke-PlanIterationWorker {
         })
     }
     catch {
-        $null = $opSignal.LogCritical("Iteration worker $($WorkItem.Index) failed: $($_.Exception.Message)", $null, $_)
+        $null = $opSignal.LogCritical("Iteration worker $($WorkItem.Index) failed: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $opSignal

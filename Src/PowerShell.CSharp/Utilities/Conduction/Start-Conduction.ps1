@@ -16,7 +16,7 @@ function Start-Conduction {
     # (Later: load Wire/Jacket files into memory here)
 
     # Create the Conduit
-    $conduit = [Conduit]::new()
+    $conduit = [SovereignTrust.Foundation.Classes.Conduction.Conduit]::new()
 
     # Set up context (basic metadata)
     $conduit.Context.WirePath = $WirePath

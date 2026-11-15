@@ -1,10 +1,10 @@
 function Invoke-MappedAdapterCore {
     [CmdletBinding()]
     param (
-        [Signal]$MappedAdapterSignal,
-#        [Conduit]$Conduit,
-#        [Conductor]$Conductor,
-        [Signal]$ConductionSignal,
+        [SignalGraph.Signal]$MappedAdapterSignal,
+#        [SovereignTrust.Foundation.Classes.Conduction.Conduit]$Conduit,
+#        [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor,
+        [SignalGraph.Signal]$ConductionSignal,
         [string]$Slot,
         [object]$Plan,  # Typically a small PSObject or Phase class in the future
         $Activity,
@@ -15,7 +15,7 @@ function Invoke-MappedAdapterCore {
  ##       throw "Conduction is not running. Cannot invoke Phase."
  #   }
 
-    $opSignal = [Signal]::Start("Invoke-TokenConduction", $ConductionSignal) | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Invoke-TokenConduction", $ConductionSignal) | Select-Object -Last 1
 
     $slotParts = $Slot -Split '\.'
     $slotParts = @($slotParts)
@@ -60,7 +60,7 @@ function Invoke-MappedAdapterCore {
 
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception during Invoke-ConductionAdapter: $_", $null, $_)
+        $opSignal.LogCritical("🔥 Exception during Invoke-ConductionAdapter: $_", $null, $_.Exception)
     }
 
     return $opSignal}

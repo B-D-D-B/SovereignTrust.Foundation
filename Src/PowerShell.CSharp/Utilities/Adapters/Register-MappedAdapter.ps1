@@ -1,11 +1,11 @@
 function Register-MappedAdapter {
     param (
-        [Parameter(Mandatory)][Graph]$ServiceCollection,
+        [Parameter(Mandatory)][SignalGraph.Graph]$ServiceCollection,
         [Parameter(Mandatory)][object]$Adapter,
         [string]$Label = "Adapter"
     )
 
-    $signal = [Signal]::Start("Register-$Label") | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Register-$Label") | Select-Object -Last 1
 
     try {
         if ($null -eq $Adapter) {
@@ -27,7 +27,7 @@ function Register-MappedAdapter {
         }
         
         # ░▒▓█ ADD SIGNALIZED ATTACHMENT TO GRAPH █▓▒░
-        $wrappedSignal = [Signal]::Start("Adapter:$slot") | Select-Object -Last 1
+        $wrappedSignal = [SignalGraph.Signal]::Start("Adapter:$slot") | Select-Object -Last 1
         $wrappedSignal.SetResult($Adapter)
         
         $addSignal = $ServiceCollection.RegisterSignal($slot, $wrappedSignal) | Select-Object -Last 1
@@ -45,7 +45,7 @@ function Register-MappedAdapter {
         $x = ""
     }
     catch {
-        $signal.LogCritical("🔥 Exception while registering $($Label): $($_.Exception.Message)", $null, $_)
+        $signal.LogCritical("🔥 Exception while registering $($Label): $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $signal

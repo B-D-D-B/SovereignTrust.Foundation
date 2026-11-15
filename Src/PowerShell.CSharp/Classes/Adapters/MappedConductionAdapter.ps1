@@ -13,14 +13,14 @@ ActivityComparison: CaseInsensitive
 #>
 
 class MappedConductionAdapter {
-    [Signal]$Signal
+    [SignalGraph.Signal]$Signal
 
     MappedConductionAdapter() {
         # Use static Start() instead
     }
 
-    static [Signal] Start([object]$Conductor) {
-        $opSignal = [Signal]::Start("MappedConductionAdapter.Start") | Select-Object -Last 1
+    static [SignalGraph.Signal] Start([object]$Conductor) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedConductionAdapter.Start") | Select-Object -Last 1
 
         if (-not $Conductor) {
             $opSignal.LogCritical("Null Conductor passed to MappedConductionAdapter.Start()")
@@ -28,28 +28,28 @@ class MappedConductionAdapter {
         }
 
         try {
-            $adapter = [MappedConductionAdapter]::new()
-            $adapter.Signal = [Signal]::Start("MappedConductionAdapter") | Select-Object -Last 1
+            $adapter = [SovereignTrust.Foundation.Classes.Adapters.MappedConductionAdapter]::new()
+            $adapter.Signal = [SignalGraph.Signal]::Start("MappedConductionAdapter") | Select-Object -Last 1
             $adapter.Signal.SetJacket($Conductor)
             $adapter.Signal.SetReversePointer($Conductor)
 
-            $graphSignal = [Graph]::Start("MappedConductionAdapter", $adapter, $false)
+            $graphSignal = [SignalGraph.Graph]::Start("MappedConductionAdapter", $adapter, $false)
             $adapter.Signal.SetPointer($graphSignal.GetResult())
 
             $opSignal.SetResult($adapter)
             $opSignal.LogInformation("✅ MappedConductionAdapter initialized.")
         }
         catch {
-            $opSignal.LogCritical("💥 Exception in MappedConductionAdapter.Start(): $_", $null, $_)
+            $opSignal.LogCritical("💥 Exception in MappedConductionAdapter.Start(): $_", $null, $_.Exception)
         }
 
         return $opSignal
     }
 
-    [Signal] RegisterAdapter([object]$AdapterInstance, [string]$Key = "ConductionService") {
-        $opSignal = [Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
-        if ($AdapterInstance -isnot [Signal]) {
-            $adapterSignal = [Signal]::Start("Adapter:$Key") | Select-Object -Last 1
+    [SignalGraph.Signal] RegisterAdapter([object]$AdapterInstance, [string]$Key = "ConductionService") {
+        $opSignal = [SignalGraph.Signal]::Start("RegisterMappedAdapter:$Key") | Select-Object -Last 1
+        if ($AdapterInstance -isnot [SignalGraph.Signal]) {
+            $adapterSignal = [SignalGraph.Signal]::Start("Adapter:$Key") | Select-Object -Last 1
             $adapterSignal.SetResult($AdapterInstance)
         }
         else {
@@ -71,8 +71,8 @@ class MappedConductionAdapter {
         return $opSignal
     }
 
-    [Signal] Invoke([string]$Slot, [string]$Activity, [Signal]$ConductionSignal, [object]$Plan, [Signal]$ItemSignal) {
-        $opSignal = [Signal]::Start("MappedConductionAdapter.Invoke:$Slot") | Select-Object -Last 1
+    [SignalGraph.Signal] Invoke([string]$Slot, [string]$Activity, [SignalGraph.Signal]$ConductionSignal, [object]$Plan, [SignalGraph.Signal]$ItemSignal) {
+        $opSignal = [SignalGraph.Signal]::Start("MappedConductionAdapter.Invoke:$Slot") | Select-Object -Last 1
 
         if ($Activity -notin @('Invoke', 'Run', 'ST')) {
             $opSignal.LogCritical("Unsupported MappedConductionAdapter activity: '$Activity'.")

@@ -1,7 +1,7 @@
 function Register-AdapterToMappedSlot {
     param (
-        [Signal]$ConductorJacketSignal,
-        [Signal]$Signal,
+        [SignalGraph.Signal]$ConductorJacketSignal,
+        [SignalGraph.Signal]$Signal,
 
         [object]$ConductionContext,
 
@@ -18,7 +18,7 @@ function Register-AdapterToMappedSlot {
         $ConductorJacketSignal = $Signal
     }
     
-    $opSignal = [Signal]::Start("Register-AdapterToMappedSlot") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Register-AdapterToMappedSlot") | Select-Object -Last 1
 
     try {
         function Resolve-AdapterMetadataValue {
@@ -47,7 +47,7 @@ function Register-AdapterToMappedSlot {
         }
 
         # ░▒▓█ UNWRAP SIGNAL IF NECESSARY █▓▒░
-        $resolvedAdapter = if ($Adapter -is [Signal]) {
+        $resolvedAdapter = if ($Adapter -is [SignalGraph.Signal]) {
             $Adapter.GetResult()
         } else {
             $Adapter
@@ -126,7 +126,7 @@ function Register-AdapterToMappedSlot {
         $opSignal.SetResult($registrationValue)
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception during MappedAdapter registration: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("🔥 Exception during MappedAdapter registration: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     # ░▒▓█ OPTIONAL: MERGE INTO CONDUCTOR CONTROL SIGNAL █▓▒░
@@ -140,17 +140,17 @@ function Register-AdapterToMappedSlot {
 function Register-AdapterToMappedSlot-NonGrid {
     param (
         [Parameter(Mandatory)]
-        [Conductor]$Conductor,
+        [SovereignTrust.Foundation.Classes.Conduction.Conductor]$Conductor,
 
         [Parameter(Mandatory)]
         [object]$Adapter
     )
 
-    $opSignal = [Signal]::Start("Register-AdapterToMappedSlot") | Select-Object -Last 1
+    $opSignal = [SignalGraph.Signal]::Start("Register-AdapterToMappedSlot") | Select-Object -Last 1
 
     try {
         # ░▒▓█ UNWRAP SIGNAL IF NECESSARY █▓▒░
-        $resolvedAdapter = if ($Adapter -is [Signal]) {
+        $resolvedAdapter = if ($Adapter -is [SignalGraph.Signal]) {
             $Adapter.GetResult()
         } else {
             $Adapter
@@ -191,7 +191,7 @@ function Register-AdapterToMappedSlot-NonGrid {
         $opSignal.SetResult($mappedAdapterContainer)
     }
     catch {
-        $opSignal.LogCritical("🔥 Exception during MappedAdapter registration: $($_.Exception.Message)", $null, $_)
+        $opSignal.LogCritical("🔥 Exception during MappedAdapter registration: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     # ░▒▓█ OPTIONAL: MERGE INTO CONDUCTOR CONTROL SIGNAL █▓▒░

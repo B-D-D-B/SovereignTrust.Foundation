@@ -3,7 +3,7 @@ $ErrorActionPreference='Stop'
 # Parsed only after the launcher's exact selected modules are loaded.
 $module=Get-Module SovereignTrust.Foundation
 & $module {
-    param($RunRoot,$TestScript)
+    param($RunRoot,$TestScript,$Selection)
     $cases=[Collections.Generic.List[object]]::new()
     function Check($Id,[bool]$Condition,$Value) {
         $cases.Add([ordered]@{Id=$Id;Pass=$Condition;Value=$Value})
@@ -40,8 +40,10 @@ $module=Get-Module SovereignTrust.Foundation
     Check 'graph.case.shared' ($g.Grid.Count -eq 1 -and $s.GetResult().Count -eq 2) @{Count=$s.GetResult().Count;Keys=@($g.GetKeys())}
     # Missing PS helpers are documented native repairs, not a successful PS oracle.
     # Retain both required IDs and immutable historical failures without PASS.
-    foreach($id in 'graph.roundtrip','graph.cycle.roundtrip') {
-        $cases.Add([ordered]@{Id=$id;Pass=$null;Status='KnownUnsupportedSource';RequiredNativeCase=$id;Evidence='CS-WAVE1-01-20261114 source-semantic04/copy-semantic04; SG CONVERSION_PLAN section3/item7 and CONVERSION_MAPPING serialization contract'})
+    . (Join-Path (Split-Path $TestScript) 'Assert-Wave1SourceCapability.ps1')
+    $classification=Assert-STWave1SourceCapability -Selection $Selection -TestRoot (Split-Path $TestScript)
+    foreach($id in $classification.Labels) {
+        $cases.Add([ordered]@{Id=$id;Pass=$null;Status='KnownUnsupportedSource';FixtureId=$classification.FixtureId;RequiredNativeCase=$id;EvidenceSha256=$classification.ManifestSha256;HistoricalReceipts=$classification.HistoricalReceipts})
     }
     $dictionary=@([pscustomobject]@{Name='Key';Value=0},[pscustomobject]@{Name='key';Value=$false})|Convert-ToDictionary -ValueProperty Value
     Check 'dictionary.case.overwrite' ($dictionary.Count -eq 1 -and $dictionary['KEY'] -is [bool] -and $dictionary['KEY'] -eq $false) @{Count=$dictionary.Count;Value=$dictionary['KEY']}
@@ -82,8 +84,8 @@ $module=Get-Module SovereignTrust.Foundation
     $unsupported=@($cases|Where-Object {$_.Contains('Status') -and $_.Status -ceq 'KnownUnsupportedSource' -and $null -eq $_.Pass})
     if($supported.Count -ne 16 -or $unsupported.Count -ne 2 -or $cases.Count -ne 18 -or @($unsupported.Id|Sort-Object) -join ',' -cne 'graph.cycle.roundtrip,graph.roundtrip'){throw 'ST_WAVE1_CASE_INVENTORY: expected16 supported and2 named KnownUnsupportedSource cases'}
     $failed=@($supported|Where-Object {$_.Pass -eq $false})
-    $receipt=[pscustomobject]@{Backend='PowerShell';Scope='Supported copied-tree PS parity only';Command=[Environment]::GetCommandLineArgs();Cases=$cases.ToArray();Count=$cases.Count;SupportedCount=$supported.Count;SupportedPassCount=($supported.Count-$failed.Count);SupportedFailCount=$failed.Count;SkipCount=0;KnownUnsupportedSourceCount=$unsupported.Count;PendingNativeCases=@($unsupported.RequiredNativeCase);Pass=($failed.Count -eq 0);CompleteWave1=$false;ControlledPlanDownstream=$true;NativeStorageIntegration=$false}
+    $receipt=[pscustomobject]@{Backend='PowerShell';Scope='Supported copied-tree PS parity only';Command=[Environment]::GetCommandLineArgs();Cases=$cases.ToArray();Count=$cases.Count;SupportedCount=$supported.Count;SupportedPassCount=($supported.Count-$failed.Count);SupportedFailCount=$failed.Count;SkipCount=0;KnownUnsupportedSourceCount=$unsupported.Count;RequiredNativeCases=@($unsupported.RequiredNativeCase);ClassificationEvidence=$classification;Pass=($failed.Count -eq 0);ControlledPlanDownstream=$true;NativeStorageIntegration=$false}
     $receipt|ConvertTo-Json -Depth 16|Set-Content (Join-Path $RunRoot 'semantic-result.json') -Encoding utf8NoBOM
     if($failed.Count){throw "ST_WAVE1_ASSERT: $($failed.Id -join ',')"}
     $receipt
-} $RunRoot $PSCommandPath
+} $RunRoot $PSCommandPath $Selection

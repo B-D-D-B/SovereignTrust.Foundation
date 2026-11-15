@@ -8,35 +8,35 @@ function Convert-JsonToGraph {
         [bool]$IgnoreInternalObjects = $false
     )
 
-    $signal = [Signal]::Start("Convert-JsonToGraph") | Select-Object -Last 1
+    $signal = [SignalGraph.Signal]::Start("Convert-JsonToGraph") | Select-Object -Last 1
 
     try {
         $parsed = $Json | ConvertFrom-Json -Depth 25
-        $graph = [Graph]::Start("Convert-JsonToGraph")
+        $graph = [SignalGraph.Graph]::Start("Convert-JsonToGraph")
 
         if (-not $IgnoreInternalObjects -and $parsed.GraphSignal) {
-            $graph.GraphSignal = [Signal]::FromJson(($parsed.GraphSignal | ConvertTo-Json -Depth 25))
+            $graph.GraphSignal = [SignalGraph.Signal]::FromJson(($parsed.GraphSignal | ConvertTo-Json -Depth 25))
         }
 
         foreach ($key in $parsed.Grid.PSObject.Properties.Name) {
             $entry = $parsed.Grid[$key]
             $signalObj = if ($IgnoreInternalObjects) {
-                $sig = [Signal]::new($key)
+                $sig = [SignalGraph.Signal]::new($key)
                 $sig.SetResult($entry)
                 $sig
             } else {
-                [Signal]::FromJson(($entry | ConvertTo-Json -Depth 25))
+                [SignalGraph.Signal]::FromJson(($entry | ConvertTo-Json -Depth 25))
             }
 
             $graph.RegisterNewSignal($key, $signalObj)
         }
 
-        $graph.Finalize()
+        $graph.Complete()
         $signal.SetResult($graph)
         $signal.LogInformation("✅ Graph successfully reconstructed from JSON.")
     }
     catch {
-        $signal.LogCritical("🔥 Exception: Failed to convert JSON to Graph: $($_.Exception.Message)", $null, $_)
+        $signal.LogCritical("🔥 Exception: Failed to convert JSON to Graph: $($_.Exception.Message)", $null, $_.Exception)
     }
 
     return $signal
