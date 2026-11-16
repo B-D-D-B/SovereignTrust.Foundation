@@ -95,11 +95,13 @@ function Invoke-STRunspacePool {
         }
 
         foreach ($entry in @($Record.Entries)) {
+            $entryCount=$localSignal.Entries.Count
             $null = $localSignal.LogMessage(
                 [string]$entry.Level,
                 [string]$entry.Message,
                 @($entry.Tags)
             )
+            if($localSignal.Entries.Count -gt $entryCount -and $entry.PSObject.Properties['ContextJson']){Restore-STEntryFailureContext $localSignal.Entries[-1] $entry.ContextJson}
         }
 
         if ([bool]$Record.HasResult) {
@@ -202,6 +204,7 @@ function Invoke-STRunspacePool {
                         Level   = [string]$entry.Level
                         Message = [string]$entry.Message
                         Tags    = @($entry.Tags)
+                        ContextJson = Get-STEntryFailureContextJson $entry
                     }
                 }
 

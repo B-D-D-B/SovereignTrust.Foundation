@@ -14,6 +14,7 @@ function Invoke-PlanIterationWorker {
     $opSignal = [SignalGraph.Signal]::Start("Invoke-PlanIterationWorker:$($WorkItem.Index)", $Runtime.ConductionSignal) | Select-Object -Last 1
     Write-Verbose "Invoke-PlanIterationWorker: $($WorkItem.Index) - $($WorkItem.Value)"
     try {
+        Set-STFailureWorkerContext $WorkItem.Plan (Get-STFailureOptionalString $Context 'FailureScopeId') $Runtime ([int]$WorkItem.Index) $null @(Get-STFailureWorkerProofs $Context)
         $targetGraph = $Runtime.ConductionSignal.GetPointer()
         if ($targetGraph -isnot [SignalGraph.Graph]) {
             $null = $opSignal.LogCritical("Worker runtime does not have a Graph pointer.")
@@ -68,6 +69,7 @@ function Invoke-PlanIterationWorker {
     catch {
         $null = $opSignal.LogCritical("Iteration worker $($WorkItem.Index) failed: $($_.Exception.Message)", $null, $_.Exception)
     }
+    finally { $frame=New-STFailureFrame $WorkItem.Plan $Runtime.ConductionSignal 'IterationWorker' $null $null; $frame.WorkerIndex=[int]$WorkItem.Index; Add-STFailureBoundary $opSignal $frame $Runtime.ConductionSignal.Id }
 
     return $opSignal
 }

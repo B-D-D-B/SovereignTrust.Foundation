@@ -65,6 +65,7 @@ class MemoryCondenser {
                     $step = $this.GetNextStep($null, $Plan, $ItemSignal, $ConductionSignal)
                     while ($step) {
                         $stTrace = Enter-STExecutionTrace -BoundaryKind 'Step' -Name ([string]$step.Name) -Adapter ([string]$step.Adapter) -Activity ([string]$step.Activity)
+                        $stFailureFrame=New-STFailureFrame $step $ConductionSignal 'Step' ([string]$step.Adapter) ([string]$step.Activity)
                         $stThrew=$false
                         $stStatus=$null
                         try {
@@ -92,11 +93,17 @@ class MemoryCondenser {
                                 HydrationPlan  = $DeferredHydrationPlanSignal.GetResult()
                                 Config         = $step.Config
                             }
+                            Copy-STFailureContextToFreshNode $step $HydrationPlan $ConductionSignal.Id
 
                             # Perform Hydration
-                            $StepHydrateResultSignal = Invoke-CondenserAdapter -Slot "Hydration" -Plan $HydrationPlan -Signal $ConductionSignal -ItemSignal $HydrationSignal | Select-Object -Last 1
+                            $suspendedFailureContext=Suspend-STFailureHydrationContext $step $ConductionSignal.Id
+                            $StepHydrateResultSignal=$null
+                            try { $StepHydrateResultSignal = Invoke-CondenserAdapter -Slot "Hydration" -Plan $HydrationPlan -Signal $ConductionSignal -ItemSignal $HydrationSignal | Select-Object -Last 1 }
+                            finally { Restore-STFailureHydrationContext $step $suspendedFailureContext $ConductionSignal.Id }
                             if (    $opSignal.MergeSignalAndVerifyFailure($StepHydrateResultSignal)) { return $opSignal }
-                            $step = $StepHydrateResultSignal.GetResult()
+                            $hydratedStep = $StepHydrateResultSignal.GetResult()
+                            Copy-STFailureContextToFreshNode $step $hydratedStep $ConductionSignal.Id
+                            $step = $hydratedStep
 
                             if ($breakSignal.GetResult()) {
                                 $Check = ""
@@ -206,6 +213,7 @@ class MemoryCondenser {
 
                                 # Re-use the step in case hydration needs to come from
                                 $HydrationPlan = (Resolve-ClonePlan -Plan $step | Select-Object -Last 1).GetResult()
+                                Copy-STFailureNodeOwnership $step $HydrationPlan
                                 
                                 $null = Add-PathToDictionary -Dictionary $HydrationPlan -Path "HydrationPlan" -Value $HydrationPlanSignal.GetResult()
                                 $null = Add-PathToDictionary -Dictionary $HydrationPlan -Path "Path" -Value "%.@"
@@ -239,7 +247,7 @@ class MemoryCondenser {
 
                         $step = $this.GetNextStep($step, $Plan, $ItemSignal, $ConductionSignal)
                         } catch { $stThrew=$true; throw }
-                        finally { Exit-STExecutionTrace $stTrace $opSignal $stThrew $stStatus }
+                        finally { Add-STFailureBoundary $opSignal $stFailureFrame $ConductionSignal.Id; Exit-STExecutionTrace $stTrace $opSignal $stThrew $stStatus }
                     }
 
                     # Structured-concurrency boundary: the parent was free to
@@ -352,7 +360,9 @@ class MemoryCondenser {
             #            $step.Name = "$($step.Name)_$($iteration)"
         }
 
-        $step = (Resolve-ClonePlan -Plan $step | Select-Object -Last 1).GetResult()
+        $clonedStep = (Resolve-ClonePlan -Plan $step | Select-Object -Last 1).GetResult()
+        Copy-STFailureNodeOwnership $step $clonedStep
+        $step = $clonedStep
         return $step
     }
 

@@ -23,6 +23,8 @@ function Invoke-RestCondenserCore {
     # Build headers based on if there's a body to send.
     $headers = @{
     }
+    $Body = $null
+    $JsonBody = $null
 
     if ($null -eq $Body -and $null -ne $JsonBody) {
         $Body = $JsonBody | ConvertTo-Json -Depth 10
@@ -88,7 +90,7 @@ function Invoke-RestCondenserCore {
             $responseHeaders = $null
             $ContentType = $ContentTypeSignal.HasResult() ? $ContentTypeSignal.GetResult() : $null
             $InFile = $InFileSignal.HasResult() ? $InFileSignal.GetResult() : $null
-            if ($Body -and ($Body -isnot [string])) {
+            if ($null -ne $Body -and $Body -isnot [string] -and $Body -isnot [byte[]]) {
                 $Body = $Body | ConvertTo-Json -Depth 100
             }
 
@@ -116,12 +118,16 @@ function Invoke-RestCondenserCore {
                     $Method = "Put"
                 }
 
-                Invoke-RestMethod `
+                if ($returnHttpStatus) {
+                    $response = Invoke-RestMethod -Uri $FinalUrl -Method $Method -Headers $headers -ContentType $ContentType -InFile $InFile -SkipHttpErrorCheck -StatusCodeVariable httpStatus -ResponseHeadersVariable responseHeaders
+                    if ([int]$httpStatus -eq 401) { throw '401 (Unauthorized)' }
+                }
+                else { $response = Invoke-RestMethod `
                     -Uri $FinalUrl `
                     -Method $Method `
                     -Headers $headers `
                     -ContentType $ContentType `
-                    -InFile $InFile            
+                    -InFile $InFile }
             }
             elseif ($null -ne $Body) {
                 if (-not $Method) {
@@ -129,7 +135,7 @@ function Invoke-RestCondenserCore {
                 }
 
                 # TODO: Do Externally and pass in through config.
-                if ($Body) {
+                if ($null -ne $Body) {
                     if ($ContentType) {
                         $headers["Content-Type"] = $ContentType
                     }

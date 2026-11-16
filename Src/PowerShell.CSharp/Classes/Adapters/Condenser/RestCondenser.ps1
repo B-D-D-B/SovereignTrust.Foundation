@@ -73,6 +73,11 @@ class RestCondenser {
 
         # Clone Plan before Mutate
         $clonePlan = (Resolve-ClonePlan -Plan $Plan | Select-Object -Last 1).GetResult()
+        Copy-STFailureNodeOwnership $Plan $clonePlan
+        # JSON plan cloning cannot preserve the binary transport representation.
+        if ($Plan.Config.Body -is [byte[]]) {
+            $clonePlan.Config.Body = [byte[]]$Plan.Config.Body.Clone()
+        }
 
         if ($headersSignal.HasResult()){
             Add-PathToDictionary -Dictionary $clonePlan -Path "Config.Headers" -Value $headersSignal.GetResult()

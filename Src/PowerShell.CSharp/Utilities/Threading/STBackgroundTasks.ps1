@@ -38,7 +38,9 @@ function ConvertFrom-STSignalRecord {
     $signal = [SignalGraph.Signal]::Start([string]$Record.Name) | Select-Object -Last 1
     if ($null -ne $Record.Meta) { $signal.SetMeta($Record.Meta) }
     foreach ($entry in @($Record.Entries)) {
+        $entryCount=$signal.Entries.Count
         $null = $signal.LogMessage([string]$entry.Level, [string]$entry.Message, @($entry.Tags))
+        if($signal.Entries.Count -gt $entryCount -and $entry.PSObject.Properties['ContextJson']){Restore-STEntryFailureContext $signal.Entries[-1] $entry.ContextJson}
     }
     if ([bool]$Record.HasResult) { $signal.SetResult($Record.Result) }
     return $signal
@@ -81,6 +83,7 @@ function Start-STBackgroundTaskExecution {
                     Level   = [string]$entry.Level
                     Message = [string]$entry.Message
                     Tags    = @($entry.Tags)
+                    ContextJson = Get-STEntryFailureContextJson $entry
                 }
             }
 
@@ -115,6 +118,7 @@ function Start-STBackgroundTaskExecution {
                 throw 'Background runtime initialization failed.'
             }
 
+            if($null -ne $workerContext){$workerContext | Add-Member -NotePropertyName FailureTaskId -NotePropertyValue $TaskId -Force}
             $workerSignal = & $WorkerCommand `
                 -Runtime $initializationSignal.GetResult() `
                 -WorkItem $workItem `

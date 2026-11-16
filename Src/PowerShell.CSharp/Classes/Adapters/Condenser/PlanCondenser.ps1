@@ -149,6 +149,7 @@ class PlanCondenser {
 #        if ($opSignal.MergeSignalAndVerifyFailure($planStepsSignal)) { return $opSignal }
 
         $phaseSteps = $phaseStepsSignal.GetResult()
+        $diagnosticSourceSteps = $phaseSteps
 #        $planSteps = $planStepsSignal.GetResult()
         $currentPlanName = $Plan.Name
 
@@ -187,6 +188,9 @@ class PlanCondenser {
         if ($opSignal.MergeSignalAndVerifyFailure($stepHydrateResultSignal)) { return $opSignal }
 
         $phaseSteps = $stepHydrateResultSignal.GetResult()
+        $diagnosticPhase = Set-STFailureSelectedSteps $phaseSteps $diagnosticSourceSteps ([string]$Plan.Path) $ItemSignal $ConductionSignal $Plan
+        $diagnosticNode = [pscustomobject]@{}
+        if (Set-STFailureNodeContext $diagnosticNode $diagnosticPhase $ConductionSignal.Id) { $null = $opSignal.AddProperty('__STFailureContextJson', $diagnosticNode.__STFailureContextJson); Set-STFailureOwnership $opSignal $diagnosticNode.__STFailureContextJson $ConductionSignal.Id }
 
         $skipRenameSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Config.SkipRename" -Default $false | Select-Object -Last 1
         if (-not $skipRenameSignal.GetResult()) {
@@ -219,6 +223,7 @@ class PlanCondenser {
 
         Assert-STExecutionTraceSerial ($Activity -in @('InvokePhaseAsync','AwaitPhase','AwaitAllPhases','GetPhaseStatus','StopPhase'))
         $stPlanTrace=Enter-STExecutionTrace -BoundaryKind 'Plan' -Name ([string]$Plan.Name) -Adapter 'Condenser.Plan' -Activity $Activity
+        $stFailureFrame=New-STFailureFrame $Plan $ConductionSignal 'Plan' 'Condenser.Plan' $Activity
         $stPlanThrew=$false
         try {
         $PlanPathSignal = Resolve-PathFromDictionary -Dictionary $Plan -Path "Path" | Select-Object -Last 1
@@ -491,6 +496,8 @@ class PlanCondenser {
                     }
 
                     $workerContext = [PSCustomObject]@{
+                        FailureScopeId      = $ConductionSignal.Id
+                        FailureNodeProofs   = @(Get-STFailureTransferProofs $Plan)
                         SourceItemSignal    = $ItemSignal
                         IterationName       = $iterationName
                         IterationArray      = $iterationArray
@@ -560,6 +567,7 @@ class PlanCondenser {
                         Name = [string]$Plan.Name
                         Steps = @($resolveStepsSignal.GetResult())
                     }
+                    Copy-STFailurePhaseContext $resolveStepsSignal $phase $ConductionSignal
 
                     $phaseSignal = Invoke-PlanPhase `
                         -ConductionSignal $ConductionSignal `
@@ -621,9 +629,12 @@ class PlanCondenser {
                     }
 
                     $phase = [PSCustomObject]@{ Steps = @($resolveStepsSignal.GetResult()) }
+                    Copy-STFailurePhaseContext $resolveStepsSignal $phase $ConductionSignal
                     $ownerId = "Item:$([System.Runtime.CompilerServices.RuntimeHelpers]::GetHashCode($ItemSignal))"
                     $workItem = [PSCustomObject]@{ Index = 0; Phase = $phase }
                     $workerContext = [PSCustomObject]@{
+                        FailureScopeId = $ConductionSignal.Id
+                        FailureNodeProofs = @(Get-STFailureTransferProofs $phase)
                         SnapshotJson = [string]$snapshotSignal.GetResult()
                         ReturnKeys   = @($returnKeysSignal.GetResult())
                     }
@@ -783,7 +794,7 @@ class PlanCondenser {
         }
 
         } catch { $stPlanThrew=$true; throw }
-        finally { Exit-STExecutionTrace $stPlanTrace $opSignal $stPlanThrew }
+        finally { Add-STFailureBoundary $opSignal $stFailureFrame $ConductionSignal.Id; Exit-STExecutionTrace $stPlanTrace $opSignal $stPlanThrew }
         return $opSignal
     }
 }

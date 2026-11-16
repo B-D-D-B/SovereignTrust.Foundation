@@ -346,3 +346,4 @@ Export-ModuleMember -Function Invoke-Telemetry
 Export-ModuleMember -Function Get-STFoundationSelection, Assert-STFoundationSelection, Read-STSelectionPacket, Import-STSelectedFoundation, Get-STSelectionProvenance, New-STSelectedRunspace, Get-STWorkerSelection, New-STSelectedInitialSessionState
 
 Export-ModuleMember -Function Resolve-PathFromDictionary,Start-Signal,Resolve-Graph,Resolve-GraphForJsonArray,Resolve-PathHydration,Add-PathToDictionary,Remove-PathFromDictionary,Move-PathInDictionary,Resolve-InnerPathFromDictionary,Get-ResolvedValueFromPathSignal,Invoke-ParseFilterSegment
+Export-ModuleMember -Function Copy-STFailureNodeOwnership

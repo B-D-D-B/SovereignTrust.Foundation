@@ -29,6 +29,9 @@ function Invoke-PlanIteration {
     }
     $stTrace = Enter-STExecutionTrace -BoundaryKind 'PlanIteration' -Name $IterationName -Adapter ([string]$Plan.Adapter) -Activity ([string]$Plan.Config.Activity) -Iteration $stIteration
     $stThrew=$false
+    $stFailureFrame=New-STFailureFrame $Plan $ConductionSignal 'Iteration' ([string]$Plan.Adapter) ([string]$Plan.Config.Activity)
+    $stFailureFrame.IterationIndex=$IterationIndex
+    $stFailureFrame.IterationName=Get-STFailureScalar $IterationName
     $opSignal = [SignalGraph.Signal]::Start("Invoke-PlanIteration:$IterationIndex", $ItemSignal) | Select-Object -Last 1
 
     try {
@@ -38,6 +41,8 @@ function Invoke-PlanIteration {
         }
 
         $iterationPlan = $cloneSignal.GetResult()
+        Copy-STFailureNodeOwnership $Plan $iterationPlan
+        $null=Set-STFailureNodeContext $iterationPlan $stFailureFrame $ConductionSignal.Id -ReplaceVerified
         $iterationPlan.Activity = $Plan.Config.Activity
 
         $iterationSignal = [SignalGraph.Signal]::Start($IterationName, $ItemSignal) | Select-Object -Last 1
@@ -81,7 +86,7 @@ function Invoke-PlanIteration {
         $stThrew=$true
         $null = $opSignal.LogCritical("Iteration $IterationIndex failed: $($_.Exception.Message)", $null, $_.Exception)
     }
-    finally { Exit-STExecutionTrace $stTrace $opSignal $stThrew }
+    finally { Add-STFailureBoundary $opSignal $stFailureFrame $ConductionSignal.Id; Exit-STExecutionTrace $stTrace $opSignal $stThrew }
 
     return $opSignal
 }

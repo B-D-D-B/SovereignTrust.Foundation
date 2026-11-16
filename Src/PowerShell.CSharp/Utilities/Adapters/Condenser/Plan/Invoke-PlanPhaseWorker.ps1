@@ -8,6 +8,8 @@ function Invoke-PlanPhaseWorker {
 
     $opSignal = [SignalGraph.Signal]::Start("Invoke-PlanPhaseWorker:$($WorkItem.Index)", $Runtime.ConductionSignal) | Select-Object -Last 1
     try {
+        $failureTaskId=Get-STFailureOptionalString $Context 'FailureTaskId'
+        Set-STFailureWorkerContext $WorkItem.Phase (Get-STFailureOptionalString $Context 'FailureScopeId') $Runtime ([int]$WorkItem.Index) $failureTaskId @(Get-STFailureWorkerProofs $Context)
         $importSignal = Import-STSignalGraphSnapshot `
             -SnapshotJson ([string]$Context.SnapshotJson) `
             -ConductionSignal $Runtime.ConductionSignal `
@@ -29,5 +31,6 @@ function Invoke-PlanPhaseWorker {
     catch {
         $null = $opSignal.LogCritical("Background phase worker failed: $($_.Exception.Message)", $null, $_.Exception)
     }
+    finally { $frame=New-STFailureFrame $WorkItem.Phase $Runtime.ConductionSignal 'PhaseWorker' $null $null; $frame.WorkerIndex=[int]$WorkItem.Index; Add-STFailureBoundary $opSignal $frame $Runtime.ConductionSignal.Id }
     return $opSignal
 }
